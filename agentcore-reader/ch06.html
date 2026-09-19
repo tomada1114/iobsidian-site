@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AgentCore Reader 06 Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
+  --think:#2F5E8C; --think-bg:#E6EEF6;
+  --reach:#2E7560; --reach-bg:#E3F1EB;
+  --guard:#9A4B2F; --guard-bg:#F6E9E2;
+  --run:#6A5A1E;   --run-bg:#F1ECD9;
+  --accent:var(--think); --accent-bg:var(--think-bg);
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+}
+.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
+.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
+.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
+.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
+h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
+h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
+h3{font-size:17.5px;font-weight:700;margin-top:8px}
+p,ul,ol,dl,figure,table{margin:0}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:4px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
+.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
+.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
+.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.flow{display:grid;gap:22px;margin-top:40px}
+section{display:grid;gap:16px}
+section+section{margin-top:28px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
+.map ul{margin:0}
+/* asides */
+.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
+.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
+.metaphor{background:var(--accent-bg)}
+.metaphor .label{color:var(--accent)}
+.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
+.enterprise .label{color:var(--guard)}
+.route{background:var(--paper);border:1px dashed var(--ink-soft)}
+.route .label{color:var(--ink-soft)}
+.route ul{font-size:14.5px}
+.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
+/* figures */
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
+.fig .scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.fig svg.wide{min-width:560px}
+.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
+.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
+.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
+.fig svg .ta{fill:var(--accent)}
+.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
+.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
+.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
+.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
+.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
+.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
+.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
+.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
+.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+.fig svg .ah{fill:var(--ink-soft)}
+.fig svg .ah-accent{fill:var(--accent)}
+.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+/* terms */
+dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
+dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
+/* end */
+.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
+.summary h2{font-size:17px;padding:0}
+.summary ol{margin:0}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
+.next b{color:var(--ink);font-family:var(--font-display)}
+.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+</style>
+<div class="wrap acc-reach">
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 6 / 11 chapters</span></p>
+  <h1>Gateway: one entry point for internal tools</h1>
+  <p class="lead">To do real work, an agent needs "tools" that connect to internal APIs and databases. But a company often has dozens of APIs. If each team writes its own connection code for every agent, the same logic gets copied many times, and access rules end up different in every team. Gateway, the topic of this chapter, brings these internal resources together into one entry point, so agents can use them all the same way.</p>
+  <p class="meta"><span>Reading time: about 12 min</span><span>Roadmap stage S2-S3</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>How internal APIs, Lambda functions, and existing MCP servers become "targets"</li>
+      <li>Two-way authentication: agent to Gateway, and Gateway to target</li>
+      <li>Tool search by meaning, used when there are hundreds of tools</li>
+      <li>Why tool size and description text decide how well a tool gets picked</li>
+      <li>The built-in tools Code Interpreter and Browser</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">Too many separate toolboxes</h2>
+    <p>A company has billing systems, HR systems, inventory systems, and more, each built up over time by a different department. There can be dozens of these APIs, and each one is a possible tool for an agent. If every team writes its own connection code, the same kind of login check (authentication) gets rewritten again and again.</p>
+    <p>Access rules often differ between teams too. One team checks every caller carefully, while another team lets everything through with a single API key. <strong>As the number of agents grows, this duplicate work and uneven access control keep piling up</strong>.</p>
+    <p>Gateway solves the problem of "how to expose these tools" only once. Many agents can then reuse that same setup. The next sections look at how it works.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">Register existing resources as "targets"</h2>
+    <p>Anything you register with Gateway is called a target. The advantage is that you can register a resource that is already running, without rewriting it.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Target type</th><th>What you register</th><th>Good for</th></tr></thead>
+      <tbody>
+        <tr><td>Lambda function</td><td>Code you already wrote</td><td>Turning your own logic into a tool without changes</td></tr>
+        <tr><td>REST API</td><td>An existing API with an OpenAPI definition</td><td>When your system already has a public API</td></tr>
+        <tr><td>Smithy model</td><td>An API defined with Smithy</td><td>When AWS manages your API with Smithy</td></tr>
+        <tr><td>Existing MCP server</td><td>An MCP server that is already running</td><td>When another team has already set up MCP</td></tr>
+      </tbody>
+    </table></div>
+    <p>Once you register targets, Gateway publishes all of them as one single MCP endpoint (a single connection point). The agent does not need to know how each target is different. As we saw in Chapter 1, it just connects as an MCP client to this one endpoint, and it can then use every tool behind it.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 250" role="img" aria-label="Several agents connect through Gateway to a Lambda function, a REST API, a Smithy model, and an existing MCP server. Inside Gateway, calls pass through entry check, tool search, Policy, and exit check.">
+        <defs><marker id="a61" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <text x="85" y="16" text-anchor="middle" class="ts">Agents</text>
+        <rect x="15" y="30" width="140" height="36" rx="6" class="b-think"/><text x="85" y="53" text-anchor="middle">Sales agent</text>
+        <rect x="15" y="86" width="140" height="36" rx="6" class="b-think"/><text x="85" y="109" text-anchor="middle">HR agent</text>
+        <rect x="15" y="142" width="140" height="36" rx="6" class="b-think"/><text x="85" y="165" text-anchor="middle">Finance agent</text>
+
+        <path d="M155 48 L205 123" class="ln" marker-end="url(#a61)"/>
+        <path d="M155 104 L205 123" class="ln" marker-end="url(#a61)"/>
+        <path d="M155 160 L205 123" class="ln" marker-end="url(#a61)"/>
+        <text x="178" y="95" text-anchor="middle" class="ts">MCP link</text>
+
+        <rect x="205" y="10" width="270" height="225" rx="10" class="frame"/>
+        <text x="340" y="28" text-anchor="middle" class="th ta">Gateway</text>
+        <text x="340" y="44" text-anchor="middle" class="ts">One gateway for internal resources</text>
+
+        <rect x="225" y="54" width="230" height="34" rx="6" class="b-guard"/><text x="340" y="76" text-anchor="middle">Entry check (who called)</text>
+        <rect x="225" y="94" width="230" height="34" rx="6" class="b-think"/><text x="340" y="116" text-anchor="middle">Tool search (by meaning)</text>
+        <rect x="225" y="134" width="230" height="34" rx="6" class="b-reach"/><text x="340" y="156" text-anchor="middle">Policy check (Ch. 8)</text>
+        <rect x="225" y="174" width="230" height="34" rx="6" class="b-guard"/><text x="340" y="196" text-anchor="middle">Exit check (target side)</text>
+
+        <path d="M475 123 L515 46" class="ln" marker-end="url(#a61)"/>
+        <path d="M475 123 L515 84" class="ln" marker-end="url(#a61)"/>
+        <path d="M475 123 L515 122" class="ln" marker-end="url(#a61)"/>
+        <path d="M475 123 L515 160" class="ln" marker-end="url(#a61)"/>
+        <text x="500" y="140" text-anchor="middle" class="ts">Add target</text>
+
+        <text x="592" y="16" text-anchor="middle" class="ts">Targets</text>
+        <rect x="515" y="30" width="155" height="32" rx="6" class="b"/><text x="592" y="51" text-anchor="middle">Lambda function</text>
+        <rect x="515" y="68" width="155" height="32" rx="6" class="b"/><text x="592" y="89" text-anchor="middle">REST API</text>
+        <rect x="515" y="106" width="155" height="32" rx="6" class="b"/><text x="592" y="127" text-anchor="middle">Smithy model</text>
+        <rect x="515" y="144" width="155" height="32" rx="6" class="b"/><text x="592" y="165" text-anchor="middle">Existing MCP server</text>
+      </svg>
+      </div>
+      <figcaption>An agent only needs to connect to one MCP endpoint, Gateway, to use a Lambda function, a REST API with OpenAPI, a Smithy model, and an existing MCP server as tools. Inside Gateway, each call passes through four checks in order: entry check, tool search, Policy check, and exit check.</figcaption>
+    </figure>
+    <p>When a new internal API appears, you do not need to change the agent's code. Just add it as a new target in Gateway, and existing agents can use it right away.</p>
+    <div class="aside metaphor">
+      <p class="label">Analogy: the toolbox front desk</p>
+      <p>The new employee (the agent) does not need to remember where every tool is kept. They just tell the front desk (Gateway), "I want to do this," and the desk finds the right tool. The desk always checks an ID before handing out a tool, and it records who received which tool. Searching through hundreds of tools on the shelf is the desk's job, not the new employee's.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Authentication goes in two directions</h2>
+    <p>The key point about Gateway is that authentication (checking who someone is) happens in two separate directions. The first is when the agent calls Gateway. This uses JWT or OAuth to check "who is making this call." The second is when Gateway calls the target. Here it uses IAM, OAuth, or an API key, depending on the type of target.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Direction</th><th>What is checked</th><th>Method used</th></tr></thead>
+      <tbody>
+        <tr><td>Agent to Gateway</td><td>Who is making this call</td><td>JWT, OAuth</td></tr>
+        <tr><td>Gateway to target</td><td>Which rights to use on the target side</td><td>IAM, OAuth, API key</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>The agent itself never handles these credentials (login secrets) directly</strong>. Deciding where to store each credential is the job of Identity, covered in the next chapter, Chapter 7. Gateway only decides which authentication method to use; the credentials themselves are stored on the Identity side.</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">When tools grow in number, narrow them down first</h2>
+    <p>As you register more targets, the number of tools available through Gateway can reach hundreds. A problem appears if you send every tool's description to the LLM. Too much description text fills up the context window (the space the LLM uses to hold information for one request), and having many similar tools also makes wrong choices more likely.</p>
+    <p>Gateway can search by meaning (semantic search) to find only the tools that match a request. The agent then only sees a short list of tools that fit the request, so the choice does not get harder as the total number of tools grows. For example, if one department has 100 tools but only a few match the current request, Gateway can pull out just those few, and the LLM can then pick the right one with no confusion.</p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">Tool size and description text decide accuracy</h2>
+    <p>Publishing a target as-is is not enough. Part of designing Gateway is shaping tools to a size that is easy to use. If one tool matches a single API call, it can be too small, and the agent ends up needing many calls. If one tool tries to do too many things at once, it becomes hard to reuse in other situations.</p>
+    <p><strong>How you write a tool's description also decides how often it gets picked</strong>. Adding a clear note about when to use the tool, not just its name and arguments, improves the accuracy of semantic search and the LLM's choice. This tool design is also what Policy, covered in Chapter 8, checks when it decides whether to allow a call.</p>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6">An isolated workspace: Code Interpreter and Browser</h2>
+    <p>Besides connecting internal APIs, Gateway also offers built-in tools that AWS provides. One is Code Interpreter. It runs code inside an isolated sandbox (a safe, separate space) to do data analysis and calculations.</p>
+    <p>The other is Browser. An agent can control a browser that runs in an isolated space in the cloud. This lets it work with internal systems that only have a screen and no API. A person can also watch the actions live or keep a record of them. Normal API calls cannot do that.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 210" role="img" aria-label="Code Interpreter and Browser run inside a workspace that is separated from production.">
+        <rect x="40" y="55" width="160" height="70" rx="8" class="b"/>
+        <text x="120" y="86" text-anchor="middle" class="th">Production</text>
+        <text x="120" y="106" text-anchor="middle" class="ts">Sales & customer data</text>
+
+        <line x1="200" y1="90" x2="280" y2="90" class="ln-dash"/>
+
+        <rect x="280" y="20" width="360" height="160" rx="10" class="frame"/>
+        <text x="460" y="42" text-anchor="middle" class="th ta">Workspace (isolated)</text>
+
+        <rect x="300" y="60" width="160" height="60" rx="8" class="b-reach"/>
+        <text x="380" y="86" text-anchor="middle" class="th">Code Interpreter</text>
+        <text x="380" y="106" text-anchor="middle" class="ts">Data analysis, math</text>
+
+        <rect x="480" y="60" width="140" height="60" rx="8" class="b-reach"/>
+        <text x="550" y="86" text-anchor="middle" class="th">Browser</text>
+        <text x="550" y="106" text-anchor="middle" class="ts">Clicks & logs</text>
+
+        <text x="340" y="200" text-anchor="middle" class="ts">No real data goes in; only results come out</text>
+      </svg>
+      </div>
+      <figcaption>Code Interpreter and Browser both run in an isolated environment, separate from production. If something fails, it does not affect the real systems or data.</figcaption>
+    </figure>
+    <div class="aside enterprise">
+      <p class="label">Where companies get stuck</p>
+      <p>IT security reviews always flag the same problem: every time a new tool is added, teams give it slightly more access than needed. Before long, every agent has admin-level rights. Another concern is indirect prompt injection, where a tool follows hidden instructions placed inside an outside web page or file. Tools that touch outside content directly, like Browser, need even stronger isolation from production.</p>
+    </div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">2-2</span>Phase 1 (the Gateway lab): register targets and try tool search yourself.</li>
+      <li><span class="rid">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Gateway chapter)</li>
+      <li><span class="rid">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (Built-in tools chapter): covers Code Interpreter and Browser</li>
+      <li><span class="rid">3-4</span>Deep Dive: Connect your agent to anything</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>Gateway registers internal APIs, Lambda functions, and existing MCP servers as "targets," and combines them into one MCP endpoint.</li>
+      <li>Authentication happens in two directions, agent to Gateway and Gateway to target, and Identity, in the next chapter, stores the credentials.</li>
+      <li>As tools grow in number, semantic search narrows them down, and good tool size and descriptions decide how well they get chosen.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 7, Identity</b></span><span>Deciding who an agent acts for, and what it may do</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>
+
+</div>

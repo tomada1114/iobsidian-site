@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AgentCore Reader 03 Strands Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
+  --think:#2F5E8C; --think-bg:#E6EEF6;
+  --reach:#2E7560; --reach-bg:#E3F1EB;
+  --guard:#9A4B2F; --guard-bg:#F6E9E2;
+  --run:#6A5A1E;   --run-bg:#F1ECD9;
+  --accent:var(--think); --accent-bg:var(--think-bg);
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+}
+.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
+.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
+.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
+.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
+h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
+h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
+h3{font-size:17.5px;font-weight:700;margin-top:8px}
+p,ul,ol,dl,figure,table{margin:0}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:4px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
+.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
+.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
+.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.flow{display:grid;gap:22px;margin-top:40px}
+section{display:grid;gap:16px}
+section+section{margin-top:28px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
+.map ul{margin:0}
+/* asides */
+.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
+.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
+.metaphor{background:var(--accent-bg)}
+.metaphor .label{color:var(--accent)}
+.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
+.enterprise .label{color:var(--guard)}
+.route{background:var(--paper);border:1px dashed var(--ink-soft)}
+.route .label{color:var(--ink-soft)}
+.route ul{font-size:14.5px}
+.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
+/* figures */
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
+.fig .scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.fig svg.wide{min-width:560px}
+.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
+.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
+.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
+.fig svg .ta{fill:var(--accent)}
+.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
+.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
+.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
+.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
+.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
+.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
+.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
+.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
+.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+.fig svg .ah{fill:var(--ink-soft)}
+.fig svg .ah-accent{fill:var(--accent)}
+.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+/* terms */
+dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
+dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
+/* end */
+.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
+.summary h2{font-size:17px;padding:0}
+.summary ol{margin:0}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
+.next b{color:var(--ink);font-family:var(--font-display)}
+.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+</style>
+<div class="wrap acc-think">
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 3 / 11 chapters</span></p>
+  <h1>Strands Agents: Let the Model Run the Loop</h1>
+  <p class="lead">In the last chapter, you saw a map of the AgentCore parts. In this chapter, you will see how to write the agent itself, the part that runs on top of those pieces. AWS recommends an open-source SDK called Strands Agents. Once you understand its idea and the six layers of the harness (the program that runs the loop), the parts covered in later chapters will make more sense.</p>
+  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S1-S2</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>What it means that Strands Agents is "model-driven"</li>
+      <li>How to pass tools and a system prompt in a minimal example</li>
+      <li>The six layers of the harness (loop, tools, hooks, skills, steering, session)</li>
+      <li>Three ways to build multi-agent systems, and A2A support</li>
+      <li>How it differs from other frameworks, such as LangGraph</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">A model-driven way to write agents</h2>
+    <p>In Chapter 1, you saw the agent loop. How do you write this loop in real code? AWS recommends an open-source SDK called <strong>Strands Agents</strong>. It has a Python version and a TypeScript version, and AWS maintains both.</p>
+    <p>The main idea of Strands Agents is called <strong>model-driven</strong> design. You do not write each step in detail, like "call A, check a condition, then call B", as a graph or in code. Instead, you give the model a system prompt and a list of tools it can use. The model decides what to do next. In the three stages from Chapter 1, this is the style furthest to the right.</p>
+    <p>A minimal example is very simple. You just pass a model, some tools, and a system prompt to a class called <code>Agent</code>, and the loop is ready to run.</p>
+    <pre><code>from strands import Agent, tool
+
+@tool
+def get_weather(city: str) -> str:
+    """Return the weather for the given city."""
+    return lookup_weather(city)
+
+agent = Agent(model="...", tools=[get_weather], system_prompt="You are a weather guide.")
+agent("What is the weather in Tokyo?")</code></pre>
+    <p><strong>A tool is just a normal function</strong> with <code>@tool</code> added above it. The function name, the argument types, and the docstring (the description written inside the function) become the instructions for the model. You do not need to write a separate spec file for each tool.</p>
+    <p>By default, Strands Agents uses Bedrock as the model provider, but you can also choose others, such as Anthropic, OpenAI, Ollama, or LiteLLM. It can also act as an MCP client (MCP is a shared way for tools to connect to models). Because of this, you can pass tools from an outside MCP server to your agent, just like your own functions.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">The six layers of the harness</h2>
+    <p>In Chapter 1, we called the program that runs the loop around the LLM a "harness". The official Strands Workshop lists six layers inside this harness. Let's look at each one.</p>
+    <dl class="terms">
+      <dt>Loop</dt>
+      <dd>This is the repeated cycle from Chapter 1: think, use a tool, look at the result.</dd>
+      <dt>Tools</dt>
+      <dd>These are normal functions, or outside tools reached through MCP. The model picks which tool to call, and the harness runs it.</dd>
+      <dt>Hooks</dt>
+      <dd>Hooks step into events inside the loop, such as before and after a tool call. You can use them to block a dangerous action, write a call to a log, or change the arguments.</dd>
+      <dt>Skills</dt>
+      <dd>Skills are instructions that the agent loads only when needed. Most of the time, the model sees only the skill's name and a short description. It loads the full text only when it actually needs to use it.</dd>
+      <dt>Steering</dt>
+      <dd>Steering adds new instructions to a running agent, based on the current situation, to adjust its direction.</dd>
+      <dt>Session</dt>
+      <dd>A session saves the state of a conversation so you can start it again later. When a conversation gets long, a part called the conversation manager decides what to drop or summarize.</dd>
+    </dl>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 380" role="img" aria-label="A diagram with the loop in the center, and layers for hooks, skills, steering, and session stacked around it">
+        <defs><marker id="a31" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="20" y="20" width="640" height="340" rx="14" class="frame"/>
+        <text x="350" y="42" text-anchor="middle" class="ts">Session: stores and summarizes conversation state</text>
+        <rect x="55" y="55" width="570" height="270" rx="12" class="frame"/>
+        <text x="350" y="77" text-anchor="middle" class="ts">Steering: adds instructions while it runs</text>
+        <rect x="90" y="90" width="500" height="200" rx="10" class="frame"/>
+        <text x="350" y="112" text-anchor="middle" class="ts">Skills: instructions loaded only when needed</text>
+        <rect x="125" y="125" width="430" height="130" rx="8" class="frame"/>
+        <text x="350" y="147" text-anchor="middle" class="ts">Hooks: step in before and after a call</text>
+        <text x="350" y="172" text-anchor="middle" class="th ta">Loop</text>
+        <rect x="190" y="185" width="130" height="40" rx="6" class="b-think"/>
+        <text x="255" y="210" text-anchor="middle" class="th">LLM</text>
+        <rect x="390" y="185" width="130" height="40" rx="6" class="b-reach"/>
+        <text x="455" y="210" text-anchor="middle" class="th">Tool</text>
+        <path d="M320 198 L388 198" class="ln-accent" marker-end="url(#a31)"/>
+        <text x="354" y="190" text-anchor="middle" class="ts">Request</text>
+        <path d="M388 212 L322 212" class="ln-accent" marker-end="url(#a31)"/>
+        <text x="354" y="228" text-anchor="middle" class="ts">Result</text>
+      </svg>
+      </div>
+      <figcaption>The center is the loop itself (the LLM and the tool going back and forth). Each layer further out controls a wider range. Hooks step in before and after a tool call. Skills load only when needed. Steering adds instructions while the agent runs. Session keeps state across the whole conversation.</figcaption>
+    </figure>
+    <p>The layers closer to the center relate to one tool call. The layers further out relate to the whole conversation or the whole run. <strong>Think about which layer should control the agent's behavior. This helps you decide whether to stop an action with a hook, or a simple request in the system prompt is enough</strong>.</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Multi-agent: how to combine agents</h2>
+    <p>In Chapter 1, we talked about a "conductor and workers" pattern. Strands Agents lets you build this in three ways. <strong>Calling an agent as a tool</strong> is the simplest way. From the parent agent's view, the child agent looks like a single function call.</p>
+    <p>A <strong>Swarm</strong> is a group of equal agents that hand work to each other. When one agent decides a task is too hard for it, it passes the conversation to the next agent. A <strong>Graph</strong> moves work between agents along a path that you set in advance. This fits cases where you want to fix the order of steps yourself.</p>
+    <p>When agents need to talk across different systems or teams, Strands Agents also supports A2A, the protocol for agent-to-agent calls from Chapter 1. For example, an agent built inside your company can be called by another team's agent through A2A.</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">How this differs from LangGraph</h2>
+    <p><strong>LangGraph</strong> is another well-known tool for building agents. Its design writes state changes as an explicit graph. You decide in code which node comes after which node. This makes the behavior easier to predict, even with complex branches.</p>
+    <p>Strands Agents is different because it lets the model make that decision. But <strong>agents built with either tool run the same way on AgentCore Runtime</strong>. AgentCore does not require a specific framework, so this difference is just a choice between two design styles. It does not limit whether you can use AgentCore.</p>
+    <div class="aside enterprise">
+      <p class="label">Where companies get stuck</p>
+      <p>Writing "do not handle personal data" in the system prompt is only a <strong>request</strong>. If the model misreads the instruction, or a clever input pushes it past the rule, the rule breaks easily. For rules you truly need to enforce, use something on the harness side, such as a hook, or the Policy tool from Chapter 8. These stop the action in code, not just by asking.</p>
+    </div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">1-4</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 2, the Strands Agents section: check the layers from this chapter by writing real code</li>
+      <li><span class="rid">2-1</span>Strands Agents Hands-On Workshop: modules 1-5 are the core; modules 6-7 are optional and cover deployment, multi-agent setups, and automatic evaluation</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>Strands Agents is a "model-driven" SDK. It lets the model decide the steps, instead of writing them as a graph.</li>
+      <li>The harness has six layers: loop, tools, hooks, skills, steering, and session.</li>
+      <li>Multi-agent setups come in three forms: calling an agent as a tool, Swarm, and Graph. AgentCore Runtime treats agents built with either design the same way.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 4, Runtime</b></span><span>Where the agent actually runs</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>
+
+</div>

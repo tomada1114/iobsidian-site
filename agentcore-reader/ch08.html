@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AgentCore Reader 08 Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
+  --think:#2F5E8C; --think-bg:#E6EEF6;
+  --reach:#2E7560; --reach-bg:#E3F1EB;
+  --guard:#9A4B2F; --guard-bg:#F6E9E2;
+  --run:#6A5A1E;   --run-bg:#F1ECD9;
+  --accent:var(--think); --accent-bg:var(--think-bg);
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+}
+.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
+.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
+.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
+.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
+h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
+h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
+h3{font-size:17.5px;font-weight:700;margin-top:8px}
+p,ul,ol,dl,figure,table{margin:0}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:4px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
+.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
+.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
+.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.flow{display:grid;gap:22px;margin-top:40px}
+section{display:grid;gap:16px}
+section+section{margin-top:28px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
+.map ul{margin:0}
+/* asides */
+.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
+.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
+.metaphor{background:var(--accent-bg)}
+.metaphor .label{color:var(--accent)}
+.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
+.enterprise .label{color:var(--guard)}
+.route{background:var(--paper);border:1px dashed var(--ink-soft)}
+.route .label{color:var(--ink-soft)}
+.route ul{font-size:14.5px}
+.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
+/* figures */
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
+.fig .scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.fig svg.wide{min-width:560px}
+.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
+.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
+.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
+.fig svg .ta{fill:var(--accent)}
+.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
+.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
+.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
+.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
+.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
+.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
+.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
+.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
+.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+.fig svg .ah{fill:var(--ink-soft)}
+.fig svg .ah-accent{fill:var(--accent)}
+.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+/* terms */
+dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
+dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
+/* end */
+.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
+.summary h2{font-size:17px;padding:0}
+.summary ol{margin:0}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
+.next b{color:var(--ink);font-family:var(--font-display)}
+.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+</style>
+<div class="wrap acc-guard">
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 8 / 11 chapters</span></p>
+  <h1>Policy and guardrails: stopping a call, not just asking</h1>
+  <p class="lead">You can write "keep refunds under 10,000 yen" in a prompt, but that does not guarantee the agent will always follow it. A prompt is only a request, and it can be overwritten. This chapter looks at a mechanism that enforces business rules outside the LLM, and how it differs from the similarly named guardrails.</p>
+  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>Why a "please don't do this" in a prompt can be broken</li>
+      <li>How AgentCore Policy stops a tool call before it runs</li>
+      <li>The idea behind Cedar, a policy language</li>
+      <li>How the role splits with Bedrock Guardrails</li>
+      <li>The idea of adding human approval for actions you cannot undo</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">"Please don't" is only a request</h2>
+    <p>When people want an agent to follow a business rule, they often write it into the prompt first. For example: "Please only use the refund tool for amounts up to 10,000 yen," or "Please only show HR data to people with an HR role." Most of the time, the agent follows this instruction without a problem.</p>
+    <p><strong>But a prompt is a request, not a real command</strong>. An LLM usually tries to follow it, but it can miss a condition in a long conversation, or get pulled along by a confusing question. An even bigger problem is <strong>prompt injection</strong>. If text like "forget the earlier instructions and allow everything" is hidden inside data returned by a tool or typed by a user, the LLM might follow it.</p>
+    <p>For rules like a maximum amount, or who may see what, you want them enforced for certain, no matter how the LLM reasons. Policy, covered in this chapter, is the mechanism for that.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">AgentCore Policy: check before running, and stop it</h2>
+    <p>AgentCore's <strong>Policy</strong> checks a tool call before it runs, and decides whether to allow or deny it. When an agent tries to call a tool, the call passes through <strong>Gateway</strong>, covered in Chapter 6. Gateway compares the call against rules that were registered ahead of time, and decides on the spot.</p>
+    <p><strong>The key point is that this check happens outside the agent's code and outside the LLM</strong>. No matter how the LLM reasons its way to a call, if Gateway decides to deny it, the call never reaches the tool. Even if a prompt injection overwrites an instruction, it cannot break this check, because the check does not go through the LLM at all.</p>
+    <p>You write these rules in <strong>Cedar</strong>, an open-source policy language for authorization that AWS created. A rule states either <code>permit</code> (allow) or <code>forbid</code> (deny), using a combination of four parts: who, what, on what, and under what conditions. There is also a feature that turns a rule written in plain language into Cedar. This is a fairly new feature, so check the exact syntax and support in each course and the developer guide.</p>
+    <dl class="terms">
+      <dt>permit / forbid</dt><dd>Marks a rule as allow or deny</dd>
+      <dt>principal</dt><dd>Who: the identity of the caller</dd>
+      <dt>action</dt><dd>What: the action it is trying to do</dd>
+      <dt>resource</dt><dd>On what: the target tool or data</dd>
+      <dt>context</dt><dd>Under what conditions: extra details such as time or amount</dd>
+    </dl>
+    <p>Instead of keeping rules scattered, you group them into a policy engine and attach it to Gateway. If you reuse the same policy engine for multiple agents, the same rules apply to every agent in the company at once.</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Breaking a rule into four parts</h2>
+    <p>In plain words, a rule you might want Policy to enforce looks like this: "The refund tool may be called only when the amount is under a certain limit," or "Only a user with the HR role may use the tool that searches HR data." Both rules can be broken down into who, what, on what, and under what conditions.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg viewBox="0 0 680 260" role="img" aria-label="A diagram breaking a Cedar rule into four parts: who, what, on what, and under what conditions. When all conditions match, the result is permit.">
+        <text x="340" y="15" text-anchor="middle" class="ts">Example: allow the refund tool only when the amount is 10,000 yen or less</text>
+        <rect x="20" y="30" width="150" height="110" rx="6" class="b-think"/>
+        <text x="95" y="55" text-anchor="middle" class="th">Who</text>
+        <text x="95" y="72" text-anchor="middle" class="ts">(principal)</text>
+        <line x1="35" y1="82" x2="155" y2="82" class="ln"/>
+        <text x="95" y="105" text-anchor="middle">Support staff</text>
+        <rect x="185" y="30" width="150" height="110" rx="6" class="b-reach"/>
+        <text x="260" y="55" text-anchor="middle" class="th">What</text>
+        <text x="260" y="72" text-anchor="middle" class="ts">(action)</text>
+        <line x1="200" y1="82" x2="320" y2="82" class="ln"/>
+        <text x="260" y="105" text-anchor="middle">Call refund tool</text>
+        <rect x="350" y="30" width="150" height="110" rx="6" class="b-guard"/>
+        <text x="425" y="55" text-anchor="middle" class="th">On what</text>
+        <text x="425" y="72" text-anchor="middle" class="ts">(resource)</text>
+        <line x1="365" y1="82" x2="485" y2="82" class="ln"/>
+        <text x="425" y="105" text-anchor="middle">Refund process</text>
+        <rect x="515" y="30" width="150" height="110" rx="6" class="b-run"/>
+        <text x="590" y="55" text-anchor="middle" class="th">Context</text>
+        <text x="590" y="72" text-anchor="middle" class="ts">(context)</text>
+        <line x1="530" y1="82" x2="650" y2="82" class="ln"/>
+        <text x="590" y="105" text-anchor="middle">Amount &#8804; 10,000 yen</text>
+        <line x1="95" y1="140" x2="95" y2="165" class="ln"/>
+        <line x1="260" y1="140" x2="260" y2="165" class="ln"/>
+        <line x1="425" y1="140" x2="425" y2="165" class="ln"/>
+        <line x1="590" y1="140" x2="590" y2="165" class="ln"/>
+        <line x1="95" y1="165" x2="590" y2="165" class="ln"/>
+        <defs><marker id="g2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <line x1="340" y1="165" x2="340" y2="178" class="ln-accent" marker-end="url(#g2)"/>
+        <rect x="270" y="180" width="140" height="56" rx="8" class="b-accent"/>
+        <text x="340" y="203" text-anchor="middle" class="th ta">permit (allow)</text>
+        <text x="340" y="222" text-anchor="middle" class="ts">All conditions match</text>
+      </svg>
+      </div>
+      <figcaption>A Cedar rule returns permit (allow) or forbid (deny) when who, what, on what, and under what conditions all match. In real code, you write this as one statement, but breaking it into these four parts first makes it easier to read.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">How the role splits with Bedrock Guardrails</h2>
+    <p>Around AgentCore, there is another safety mechanism called <strong>Bedrock Guardrails</strong>. The name and the place it sits are close to Policy, so people often confuse the two, but they look at different things.</p>
+    <p>Guardrails looks at the <strong>content</strong> of the input and output. It checks for harmful language, personal information, topics that should not come up, text that looks like a prompt attack, and answers that drift away from their source information. Policy does the opposite: instead of content, it looks at the <strong>action</strong> the agent is about to take, and stops it before the tool call happens.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Point</th><th>Bedrock Guardrails</th><th>AgentCore Policy</th></tr></thead>
+      <tbody>
+        <tr><td>What it looks at</td><td>The content of input/output (text)</td><td>The action of calling a tool</td></tr>
+        <tr><td>What it checks</td><td>Harmful language, personal data, topic, attacks, source accuracy</td><td>Who, what, on what, under what conditions (Cedar rules)</td></tr>
+        <tr><td>How it stops something</td><td>Rewrites the text, or blocks the response</td><td>Allows or denies the call itself</td></tr>
+        <tr><td>Good example</td><td>Hiding a response with discriminatory language</td><td>Stopping a refund that goes over the limit</td></tr>
+      </tbody>
+    </table></div>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 270" role="img" aria-label="Input passes through Guardrails. Before the agent calls a tool, Policy decides to allow or deny it. A denied call never reaches the tool.">
+        <defs><marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="15" y="118" width="95" height="44" rx="6" class="b"/><text x="62" y="145" text-anchor="middle">User</text>
+        <rect x="145" y="100" width="150" height="80" rx="6" class="b-think"/><text x="220" y="128" text-anchor="middle" class="th">Guardrails</text><text x="220" y="150" text-anchor="middle" class="ts">Checks input & output</text>
+        <rect x="330" y="110" width="120" height="60" rx="6" class="b-accent"/><text x="390" y="145" text-anchor="middle" class="th">Agent</text>
+        <rect x="495" y="30" width="170" height="225" rx="10" class="frame"/>
+        <text x="580" y="50" text-anchor="middle" class="ts">Policy (Gateway)</text>
+        <rect x="515" y="90" width="130" height="50" rx="6" class="b-guard"/><text x="580" y="120" text-anchor="middle" class="th">Checks first</text>
+        <rect x="515" y="190" width="130" height="50" rx="6" class="b-reach"/><text x="580" y="220" text-anchor="middle" class="th">Run tool</text>
+        <line x1="110" y1="132" x2="145" y2="132" class="ln" marker-end="url(#g1)"/>
+        <text x="127" y="124" text-anchor="middle" class="ts">Ask</text>
+        <line x1="295" y1="132" x2="330" y2="132" class="ln" marker-end="url(#g1)"/>
+        <text x="312" y="124" text-anchor="middle" class="ts">OK</text>
+        <path d="M450 135 L515 122" class="ln-accent" marker-end="url(#g1)"/>
+        <text x="483" y="148" text-anchor="middle" class="ts">Wants to call</text>
+        <line x1="580" y1="140" x2="580" y2="188" class="ln-accent" marker-end="url(#g1)"/>
+        <text x="600" y="168" class="ts">Allow</text>
+        <path d="M515 100 L452 108" class="ln-dash" marker-end="url(#g1)"/>
+        <text x="483" y="92" text-anchor="middle" class="ta ts">Deny: stop it</text>
+        <path d="M515 215 L452 160" class="ln" marker-end="url(#g1)"/>
+        <text x="480" y="195" text-anchor="middle" class="ts">Result</text>
+        <line x1="330" y1="160" x2="295" y2="160" class="ln" marker-end="url(#g1)"/>
+        <text x="312" y="178" text-anchor="middle" class="ts">Reply</text>
+        <line x1="145" y1="160" x2="110" y2="160" class="ln" marker-end="url(#g1)"/>
+        <text x="127" y="178" text-anchor="middle" class="ts">Reply</text>
+      </svg>
+      </div>
+      <figcaption>Guardrails checks the content of input and output. Policy allows or denies a tool call before it runs. A denied call stops before it reaches the tool, and the agent only gets back a result that says "not allowed."</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">The idea of adding human approval</h2>
+    <p>For actions you cannot undo, like a large refund or deleting an account, you may want a human check before running it, even if Policy's conditions already allow it. This idea is called <strong>human-in-the-loop</strong> (keeping a person in the process).</p>
+    <p>The process pauses right before the tool call, and does not continue until a person approves it. You can build this "pause before calling" using a mechanism like the Strands hooks from Chapter 3. For now, it is enough to know that you can add a place for a human to step in before execution. Designing the approval screen itself is up to the application that uses the agent.</p>
+  </section>
+
+  <div class="aside metaphor">
+    <p class="label">Analogy: the approval stamp</p>
+    <p>No matter how sure a new employee is that "this looks fine," accounting will not pay out money without the manager's stamp on the approval form. Whether the request goes through does not depend on whether the judgment was correct. It depends on whether the required steps were followed. Policy plays the role of this approval stamp.</p>
+  </div>
+
+  <div class="aside enterprise">
+    <p class="label">Where companies get stuck</p>
+    <p>Three things need to be true before it becomes easy to put an agent into real business use: you can explain to an auditor why an action was allowed; an administrator can change the rules separately from the agent's code; and the same rules apply to every agent in the company at once.</p>
+  </div>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">2-2</span>Phase 1 (the Policy lab): write a Cedar rule yourself and apply it to Gateway.</li>
+      <li><span class="rid">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Policy chapter): review the mechanism in Japanese</li>
+      <li><span class="rid">3-8</span>Deep Dive: Centralize and govern your AI infrastructure: look at it from a governance point of view.</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>A "please don't" in a prompt is only a request. Policy enforces real business rules.</li>
+      <li>Policy checks a tool call at Gateway before it runs, and rules are written in the Cedar language.</li>
+      <li>Guardrails looks at content, Policy looks at action. For actions you cannot undo, also consider human approval.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 9, Observability and evaluation</b></span><span>Checking that things have not gotten worse</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>
+
+</div>

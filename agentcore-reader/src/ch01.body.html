@@ -1,0 +1,203 @@
+<!-- title: AgentCore Reader 01 What an Agent Really Is | accent: think -->
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 1 / 11 chapters</span></p>
+  <h1>An Agent Is Really Just a Loop</h1>
+  <p class="lead">People use the words "AI agent" in many different ways, so the meaning is often unclear. In this chapter, you will see the difference between a system that calls an LLM once and a system we call an agent. Once you understand this, it will be easier to see why each AgentCore part in later chapters is useful.</p>
+  <p class="meta"><span>Reading time: about 12 min</span><span>Roadmap stage S1</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>The difference between an LLM call, a workflow, and an agent</li>
+      <li>Inside the agent loop: think, use a tool, check the result</li>
+      <li>What MCP and A2A connect</li>
+      <li>Why AWS moved from the old Bedrock Agents to AgentCore plus Strands</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">Three levels: call it, arrange it, or let it decide</h2>
+    <p>You can sort apps that use an LLM into three levels. At each level, the LLM controls more of the decisions.</p>
+    <p><strong>The first level calls the LLM only once.</strong> You send a message like "Summarize this text," and you show the answer you get back. This is enough for tasks like translation or classification, where one input always gives one output.</p>
+    <p><strong>The second level calls the LLM several times, following steps that a person designed.</strong> We call this a workflow. For example: classify the question, write an answer with a different prompt for each type, then check the answer for banned words. The code decides the order of the steps. The LLM only handles the work inside each step.</p>
+    <p><strong>The third level is the agent.</strong> Here, the LLM decides the steps itself. It looks at the goal and the list of tools it can use. A tool is an action the agent can call, such as a search or a database lookup. The LLM chooses what to do next, each time: "First, search for customer information." "That is not enough, so check the order history too." "Now I can answer."</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 250" role="img" aria-label="Three levels: LLM call, workflow, and agent. Moving right, the LLM decides more of the steps">
+        <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <text x="110" y="24" text-anchor="middle" class="th">LLM call</text>
+        <text x="340" y="24" text-anchor="middle" class="th">Workflow</text>
+        <text x="570" y="24" text-anchor="middle" class="th ta">Agent</text>
+        <!-- single -->
+        <rect x="60" y="60" width="100" height="36" rx="6" class="b"/><text x="110" y="83" text-anchor="middle">Input</text>
+        <line x1="110" y1="96" x2="110" y2="118" class="ln" marker-end="url(#a1)"/>
+        <rect x="60" y="120" width="100" height="36" rx="6" class="b-think"/><text x="110" y="143" text-anchor="middle">LLM</text>
+        <line x1="110" y1="156" x2="110" y2="178" class="ln" marker-end="url(#a1)"/>
+        <rect x="60" y="180" width="100" height="36" rx="6" class="b"/><text x="110" y="203" text-anchor="middle">Output</text>
+        <!-- workflow -->
+        <rect x="245" y="60" width="190" height="36" rx="6" class="b-think"/><text x="340" y="83" text-anchor="middle">LLM: classify</text>
+        <line x1="340" y1="96" x2="340" y2="118" class="ln" marker-end="url(#a1)"/>
+        <rect x="245" y="120" width="190" height="36" rx="6" class="b-think"/><text x="340" y="143" text-anchor="middle">LLM: write answer</text>
+        <line x1="340" y1="156" x2="340" y2="178" class="ln" marker-end="url(#a1)"/>
+        <rect x="245" y="180" width="190" height="36" rx="6" class="b-think"/><text x="340" y="203" text-anchor="middle">LLM: check it</text>
+        <text x="340" y="240" text-anchor="middle" class="ts">Code decides the order</text>
+        <!-- agent -->
+        <rect x="505" y="80" width="130" height="44" rx="6" class="b-accent"/><text x="570" y="107" text-anchor="middle">LLM picks next</text>
+        <rect x="505" y="170" width="130" height="36" rx="6" class="b-reach"/><text x="570" y="193" text-anchor="middle">Tool</text>
+        <path d="M540 124 L540 168" class="ln-accent" marker-end="url(#a1)"/>
+        <path d="M600 170 L600 126" class="ln-accent" marker-end="url(#a1)"/>
+        <text x="532" y="152" text-anchor="end" class="ts">use</text>
+        <text x="608" y="152" class="ts">result</text>
+        <text x="570" y="240" text-anchor="middle" class="ts">Repeats until done</text>
+      </svg>
+      </div>
+      <figcaption>Moving to the right, the job of deciding the order moves from human code to the LLM. An agent has no fixed number of steps. It keeps going until the LLM decides it has reached the goal.</figcaption>
+    </figure>
+    <p>It is important to know that being further right does not mean being better. If you turn a fixed task into an agent task, it only becomes slower, more expensive, and less predictable. <strong>Deciding what to fix in code and what to leave to the LLM is the real skill in good design.</strong></p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">Inside the agent loop</h2>
+    <p>The heart of an agent is a very simple loop.</p>
+    <ol>
+      <li>Give the LLM the user's request and a list of the tools it can use (name, what it does, and its arguments).</li>
+      <li>The LLM answers, or it asks to call a tool with certain arguments.</li>
+      <li>If it asks for a tool, the program runs that tool.</li>
+      <li>Add the result to the conversation, and send it back to the LLM (go back to step 2).</li>
+      <li>Stop when the LLM chooses to answer.</li>
+    </ol>
+    <p>It is important to know that <strong>the LLM never runs a tool itself.</strong> It only writes a text request that asks for a tool call. The program that receives this request is the one that actually calls the API. We sometimes call this program a harness (a harness is the straps and gear you put on a horse). It runs the loop, calls the tools, and manages the conversation history. Think of the LLM as a horse, and the harness as the reins and saddle you put on it.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 230" role="img" aria-label="The agent loop. The harness moves back and forth between the LLM and the tools">
+        <defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="20" y="90" width="110" height="44" rx="6" class="b"/><text x="75" y="117" text-anchor="middle">User</text>
+        <rect x="180" y="30" width="320" height="170" rx="10" class="frame"/>
+        <text x="340" y="52" text-anchor="middle" class="ts">Harness (the program that runs the loop)</text>
+        <rect x="210" y="80" width="120" height="64" rx="6" class="b-think"/><text x="270" y="108" text-anchor="middle" class="th">LLM</text><text x="270" y="128" text-anchor="middle" class="ts">Decides next move</text>
+        <rect x="360" y="80" width="120" height="64" rx="6" class="b-reach"/><text x="420" y="108" text-anchor="middle" class="th">Runs tool</text><text x="420" y="128" text-anchor="middle" class="ts">API, search, math</text>
+        <path d="M330 96 L358 96" class="ln-accent" marker-end="url(#a2)"/>
+        <path d="M360 128 L332 128" class="ln-accent" marker-end="url(#a2)"/>
+        <text x="345" y="88" text-anchor="middle" class="ts">ask</text>
+        <text x="345" y="160" text-anchor="middle" class="ts">result</text>
+        <path d="M130 106 L208 106" class="ln" marker-end="url(#a2)"/>
+        <path d="M208 124 L132 124" class="ln" marker-end="url(#a2)"/>
+        <text x="168" y="98" text-anchor="middle" class="ts">ask</text>
+        <text x="168" y="142" text-anchor="middle" class="ts">answer</text>
+        <rect x="540" y="60" width="120" height="36" rx="6" class="bg"/><text x="600" y="83" text-anchor="middle" class="ts">Chat history</text>
+        <rect x="540" y="130" width="120" height="36" rx="6" class="bg"/><text x="600" y="153" text-anchor="middle" class="ts">Stop condition</text>
+        <line x1="500" y1="78" x2="538" y2="78" class="ln-dash"/>
+        <line x1="500" y1="148" x2="538" y2="148" class="ln-dash"/>
+      </svg>
+      </div>
+      <figcaption>The dashed box is the harness. The program outside the LLM handles everything: going back and forth between the LLM and the tools, keeping the chat history, and deciding when to stop.</figcaption>
+    </figure>
+    <p>The harness does more than just run the loop. It can stop a dangerous action before a tool runs. It can summarize old messages when a conversation gets too long. It can also record what happens along the way. Chapter 3, on Strands Agents, looks at which layer handles this kind of control outside the LLM.</p>
+    <div class="aside metaphor">
+      <p class="label">Analogy: the new employee</p>
+      <p>The LLM is like a new employee who thinks fast. But this new employee cannot leave the desk, and cannot make phone calls. The employee writes a note: "I want to see this customer's order history." The colleague at the next desk (the harness) uses the system and hands back the result. The new employee reads it and writes the next note. An agent is this exchange between the new employee and the colleague. This book uses the analogy of <b>hiring a new employee</b> from start to finish.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Common workflow patterns</h2>
+    <p>Before you build an agent, it is good practice to check if a workflow pattern can do the job. Here are some patterns that already have common names. The Skill Builder intro course also covers this kind of pattern as "agent workflow patterns."</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Pattern</th><th>What it does</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Chaining</td><td>Use the output of one step as the input for the next</td><td>Draft &rarr; translate &rarr; proofread</td></tr>
+        <tr><td>Routing</td><td>Classify first, then send each type to a different process</td><td>Sort questions into billing, technical, or cancellation</td></tr>
+        <tr><td>Parallel</td><td>Send the same input to several processes at once, then combine the results</td><td>Review something from several angles at the same time</td></tr>
+        <tr><td>Orchestrator-workers</td><td>A parent LLM splits the work and gives pieces to child LLMs</td><td>Split a research topic into parts and study them in parallel</td></tr>
+        <tr><td>Evaluator-optimizer</td><td>Split the work into a creator role and a scorer role, and redo it until it passes</td><td>Write code &rarr; score it with tests &rarr; fix it</td></tr>
+      </tbody>
+    </table></div>
+    <p>The "orchestrator-workers" pattern is also the first step into multi-agent systems. The parent agent calls child agents the way it would call tools. Chapter 3 touches on this briefly.</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">MCP and A2A: what do they connect?</h2>
+    <p>You often hear about two standards in the world of agents. They connect different things.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 200" role="img" aria-label="MCP connects an agent to tools. A2A connects agents to each other">
+        <defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="250" y="70" width="180" height="56" rx="8" class="b-think"/><text x="340" y="103" text-anchor="middle" class="th">Our agent</text>
+        <rect x="20" y="30" width="150" height="38" rx="6" class="b-reach"/><text x="95" y="54" text-anchor="middle">Internal API</text>
+        <rect x="20" y="80" width="150" height="38" rx="6" class="b-reach"/><text x="95" y="104" text-anchor="middle">Database</text>
+        <rect x="20" y="130" width="150" height="38" rx="6" class="b-reach"/><text x="95" y="154" text-anchor="middle">SaaS (like Slack)</text>
+        <path d="M248 98 L172 49" class="ln" marker-start="url(#a3)" marker-end="url(#a3)"/>
+        <path d="M248 98 L172 99" class="ln" marker-start="url(#a3)" marker-end="url(#a3)"/>
+        <path d="M248 98 L172 149" class="ln" marker-start="url(#a3)" marker-end="url(#a3)"/>
+        <text x="205" y="190" text-anchor="middle" class="th ta">MCP: connects tools</text>
+        <rect x="510" y="45" width="150" height="44" rx="6" class="b-think"/><text x="585" y="72" text-anchor="middle">Finance agent</text>
+        <rect x="510" y="110" width="150" height="44" rx="6" class="b-think"/><text x="585" y="137" text-anchor="middle">Partner's agent</text>
+        <path d="M432 92 L508 67" class="ln-dash" marker-start="url(#a3)" marker-end="url(#a3)"/>
+        <path d="M432 106 L508 132" class="ln-dash" marker-start="url(#a3)" marker-end="url(#a3)"/>
+        <text x="520" y="190" text-anchor="middle" class="th">A2A: agent to agent</text>
+      </svg>
+      </div>
+      <figcaption>MCP is a shared connector that lets an agent use tools and data. A2A is a shared way for agents to ask each other for work.</figcaption>
+    </figure>
+    <p><strong>MCP (Model Context Protocol)</strong> is a standard for describing tools and calling them in one common way. If you wrap an internal API as an MCP server once, you can use it the same way from an agent built with Strands, from Claude Code, or from any other framework. It is like making every plug fit the same USB port. In AgentCore, the Gateway in Chapter 6 handles this job.</p>
+    <p><strong>A2A (Agent2Agent)</strong> is a standard that lets one agent ask another agent to do a job. You do not need to know what is inside the other agent, such as its framework or its model. You can still send "please do this job" and get back "it is done." This is similar to how employees in different departments ask each other for help.</p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">The old Bedrock Agents, and today's AgentCore</h2>
+    <p>AWS used to offer a service called <strong>Amazon Bedrock Agents</strong>. You wrote instructions in the console and registered tools as an "Action Group." Then the agent ran on a loop that AWS built for you, like ready-made furniture. This was easy to use, but hard to change on the inside. You also could not bring in an agent built with an outside framework, such as LangGraph.</p>
+    <p>Later, AWS changed direction and released <strong>Amazon Bedrock AgentCore</strong>. This is not a service for building the agent itself. It is a set of parts that let you run an agent built with any framework in production. You write the agent itself in code, and AWS recommends <strong>Strands Agents</strong>, an open-source SDK, as the way to write it.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Point</th><th>Old Bedrock Agents</th><th>AgentCore + Strands</th></tr></thead>
+      <tbody>
+        <tr><td>How you build it</td><td>Set it up in the console</td><td>Write it in code</td></tr>
+        <tr><td>The loop</td><td>Use the one AWS gives you</td><td>Comes from the framework; you fully control it</td></tr>
+        <tr><td>Framework</td><td>You cannot choose</td><td>Any framework, such as Strands, LangGraph, or CrewAI</td></tr>
+        <tr><td>Model</td><td>Bedrock models only</td><td>You can also use models outside Bedrock</td></tr>
+        <tr><td>The future</td><td>No new use allowed after 2026-08-01</td><td>AWS's main choice going forward</td></tr>
+      </tbody>
+    </table></div>
+    <p>If a course focuses on "Action Group" or "Supervisor Agent," it is teaching the old way. This is why the roadmap is built only around AgentCore and Strands.</p>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6">The wall between a personal project and a company</h2>
+    <p>You can write the agent loop itself in a few dozen lines of code. You could get it running on your own computer today. The hard part comes later: making it work for thousands of people at a company.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Point</th><th>A test on your computer</th><th>Production at a company</th></tr></thead>
+      <tbody>
+        <tr><td>Who uses it</td><td>Just you</td><td>Thousands of people, each allowed to see different information</td></tr>
+        <tr><td>Running at the same time</td><td>One at a time</td><td>Many people at once, without mixing up conversations</td></tr>
+        <tr><td>Permissions</td><td>One API key</td><td>Checked for every action: who it is for, and what is allowed</td></tr>
+        <tr><td>Quality</td><td>OK if it seems to work</td><td>Measured with scores, checked after every change</td></tr>
+        <tr><td>When it fails</td><td>Try again</td><td>Trace the cause from records, and explain what happened</td></tr>
+      </tbody>
+    </table></div>
+    <div class="aside enterprise">
+      <p class="label">Where companies get stuck</p>
+      <p>Many teams build a working PoC (proof of concept) but cannot move it to production. This is usually not because the LLM is not smart enough. The real problem is missing support systems, such as authentication, permissions, monitoring, evaluation, and cost control. These are the things you naturally need once you hire a new employee. AgentCore provides these support systems as ready-made parts, and starting in the next chapter, we look at each part one by one.</p>
+    </div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">1-1</span>Introduction to Agentic AI on AWS: hear AWS explain the same content from this chapter (the three levels, workflow patterns, MCP/A2A). You can skim the part about the old Bedrock Agents.</li>
+      <li><span class="rid">1-3</span>The book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 1: the basics of generative AI and Bedrock, in Japanese.</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>An agent is a loop: the LLM picks the next move, and the harness runs the tool.</li>
+      <li>Write fixed-order tasks as a workflow. Good design means choosing what to leave to the LLM.</li>
+      <li>The hard part is not the loop, but the support systems needed to use it at a company. AgentCore turns that into ready-made parts.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 2, Map of AgentCore</b></span><span>Look at all the parts together</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>

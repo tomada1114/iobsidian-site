@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AgentCore Reader 05 Memory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
+  --think:#2F5E8C; --think-bg:#E6EEF6;
+  --reach:#2E7560; --reach-bg:#E3F1EB;
+  --guard:#9A4B2F; --guard-bg:#F6E9E2;
+  --run:#6A5A1E;   --run-bg:#F1ECD9;
+  --accent:var(--think); --accent-bg:var(--think-bg);
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+}
+.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
+.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
+.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
+.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
+h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
+h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
+h3{font-size:17.5px;font-weight:700;margin-top:8px}
+p,ul,ol,dl,figure,table{margin:0}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:4px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
+.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
+.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
+.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.flow{display:grid;gap:22px;margin-top:40px}
+section{display:grid;gap:16px}
+section+section{margin-top:28px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
+.map ul{margin:0}
+/* asides */
+.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
+.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
+.metaphor{background:var(--accent-bg)}
+.metaphor .label{color:var(--accent)}
+.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
+.enterprise .label{color:var(--guard)}
+.route{background:var(--paper);border:1px dashed var(--ink-soft)}
+.route .label{color:var(--ink-soft)}
+.route ul{font-size:14.5px}
+.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
+/* figures */
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
+.fig .scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.fig svg.wide{min-width:560px}
+.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
+.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
+.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
+.fig svg .ta{fill:var(--accent)}
+.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
+.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
+.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
+.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
+.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
+.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
+.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
+.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
+.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+.fig svg .ah{fill:var(--ink-soft)}
+.fig svg .ah-accent{fill:var(--accent)}
+.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+/* terms */
+dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
+dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
+/* end */
+.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
+.summary h2{font-size:17px;padding:0}
+.summary ol{margin:0}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
+.next b{color:var(--ink);font-family:var(--font-display)}
+.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+</style>
+<div class="wrap acc-think">
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 5 / 11 chapters</span></p>
+  <h1>Memory: The LLM Remembers Nothing</h1>
+  <p class="lead">In the last chapter, Runtime gave each session its own private room. But what was said inside that room disappears as soon as the room is cleaned up. In this chapter, you will see how Memory saves conversations and uses them again in later conversations.</p>
+  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>The starting point: the LLM itself remembers nothing</li>
+      <li>Short-term memory: keeping the conversation from one session, as it is</li>
+      <li>Long-term memory: pulling out the key points from conversations and storing them</li>
+      <li>How the next conversation searches for memories and adds them in</li>
+      <li>The idea of managing what goes into the context window</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">The LLM does not remember the last conversation</h2>
+    <p>Here is an important starting point: <strong>the LLM itself has no built-in way to remember a conversation</strong>. When you say "as I mentioned before" and get a natural reply, it looks like the model remembers. In fact, the whole conversation history is sent again with every message.</p>
+    <p>This container that carries the conversation history is called the <strong>context window</strong>. It has a limit. As the history gets longer, you send more tokens (small pieces of text that the model reads), which makes the answer slower and raises the cost. When you pack in too much history, the LLM can also have trouble finding the part it really needs, so the answer can get worse. A longer conversation does not make the model smarter. If you handle it badly, it just becomes extra weight.</p>
+    <p>The tricky part is that making the window bigger does not solve the problem. Even with a larger window, if you keep sending every unrelated message, the LLM can lose track of the instructions that really matter. <strong>The real question is not how much to pack in, but what to keep and what to drop</strong>. This design question leads directly to the role of Memory, which we look at in this chapter.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">Short-term memory: keeping the session's conversation as it is</h2>
+    <p>The first job of Memory is <strong>short-term memory</strong>. It saves every message in a session as an event, without changing it. Each event is tracked by an actor ID (who is talking) and a session ID (which conversation it belongs to). This lets Memory handle several sessions from the same user without mixing them up.</p>
+    <p>Short-term memory is like a raw record of the conversation. Even after a Runtime session ends and its microVM is thrown away, this record stays in Memory. When the session starts again, the conversation can continue by loading this record.</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Long-term memory: pulling out and storing just the key points</h2>
+    <p>If you just keep storing the whole conversation, it will eventually not fit in the context window. So Memory pulls out the key points from the saved events, in the background and asynchronously (not while the user waits), and stores them separately as <strong>long-term memory</strong>.</p>
+    <p>You can choose a strategy for what to pull out: semantic memory, which collects facts; summary, which sums up the whole conversation; user preference, which remembers what the user likes; episodic memory, which learns from events that went well or badly; and a custom strategy, where you write your own prompt to decide what to extract. One agent can also combine several strategies.</p>
+    <p>The extracted memories are stored in separate <strong>namespaces</strong>, like separate shelves. For example, one shelf for "this user's preferences" and another for "the history of this case". Keeping shelves separate helps avoid mixing up whose memory is whose.</p>
+    <p>The extraction does not happen during the conversation. It runs in the background, asynchronously. <strong>This means the response to the user is never slowed down by the extraction step.</strong> Because it is asynchronous, you can choose a strategy that takes some time, without affecting the conversation the user is having right now.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 210" role="img" aria-label="A conversation is saved as short-term memory, goes through an extraction strategy, is stored in long-term memory by namespace, and is later searched and added into the next conversation">
+        <defs><marker id="a51" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="20" y="40" width="90" height="44" rx="6" class="b"/><text x="65" y="66" text-anchor="middle">Chat</text>
+        <rect x="150" y="40" width="110" height="44" rx="6" class="b-think"/><text x="205" y="60" text-anchor="middle">Short-term</text><text x="205" y="76" text-anchor="middle" class="ts">Raw events</text>
+        <rect x="300" y="40" width="120" height="44" rx="6" class="b-accent"/><text x="360" y="60" text-anchor="middle">Extract strategy</text><text x="360" y="76" text-anchor="middle" class="ts">Runs async</text>
+        <rect x="455" y="5" width="140" height="110" rx="8" class="frame"/><text x="465" y="20" class="ts">Long-term memory</text>
+        <rect x="470" y="25" width="110" height="34" rx="6" class="b-reach"/><text x="525" y="47" text-anchor="middle" class="ts">Namespace A</text>
+        <rect x="470" y="70" width="110" height="34" rx="6" class="b-reach"/><text x="525" y="92" text-anchor="middle" class="ts">Namespace B</text>
+        <line x1="110" y1="62" x2="148" y2="62" class="ln" marker-end="url(#a51)"/>
+        <line x1="260" y1="62" x2="298" y2="62" class="ln" marker-end="url(#a51)"/>
+        <path d="M420 55 L468 42" class="ln" marker-end="url(#a51)"/>
+        <path d="M420 69 L468 87" class="ln" marker-end="url(#a51)"/>
+        <rect x="20" y="150" width="140" height="44" rx="6" class="b"/><text x="90" y="176" text-anchor="middle">Next chat</text>
+        <path d="M525 116 L525 172 L162 172" class="ln-dash" marker-end="url(#a51)"/>
+        <text x="340" y="163" text-anchor="middle" class="ts">Searches for similar memories and adds them in</text>
+      </svg>
+      </div>
+      <figcaption>A conversation stays in short-term memory as it is. It also goes through an extraction strategy in the background and settles into long-term memory, sorted by namespace. When the next conversation begins, Memory searches for memories close in meaning and adds them into the prompt.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">Retrieval: adding memory into the next conversation</h2>
+    <p>Long-term memory is not useful if you just store it and never use it. When the next conversation starts, Memory searches long-term memory for entries close in meaning to the user's question, and adds them into the prompt. <strong>It searches by meaning, not by matching exact keywords</strong>, so it can find a related memory even when the wording is different.</p>
+    <p>From the agent's side, you barely need to think about this search and insertion step. If you point your calls to Memory, the conversation already starts with likely relevant memories added to the prompt.</p>
+    <div class="aside metaphor">
+      <p class="label">Analogy: a work note and a patient chart</p>
+      <p>Short-term memory is like a work note where a new employee writes down everything from today's meeting, just as it happened. Long-term memory is like a customer chart, where only the key points are copied from that note. Charts are kept on separate shelves for each case and each customer. They are taken down and placed on the desk only when that customer comes up again.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">The context window: a container with a limit</h2>
+    <p>Adding more memory is not always better. The context window is shared between the conversation history, the retrieved memories, the system prompt, and the tool descriptions. <strong>Deciding what to keep and what to drop</strong> is the job of the conversation manager, the part of Strands Agents we saw in Chapter 3.</p>
+    <p>In practice, it replaces old messages with a summary, or removes the oldest parts once the history passes a certain size. What matters most to keep depends on the agent's purpose. Deciding whether to use the default behavior, or adjust it yourself, is a real design choice.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 130" role="img" aria-label="What is inside the context window: the system prompt, tool descriptions, conversation history, and retrieved memories share the space">
+        <defs><marker id="a52" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <text x="340" y="16" text-anchor="middle" class="th ta">Inside the context window</text>
+        <rect x="40" y="32" width="600" height="58" rx="6" class="frame"/>
+        <rect x="42" y="34" width="86" height="54" class="b-think"/>
+        <rect x="128" y="34" width="140" height="54" class="b-reach"/>
+        <rect x="268" y="34" width="260" height="54" class="b-accent"/>
+        <rect x="528" y="34" width="110" height="54" class="b-run"/>
+        <line x1="637" y1="26" x2="637" y2="94" class="ln-dash"/>
+        <text x="85" y="106" text-anchor="middle" class="ts">System</text>
+        <text x="198" y="106" text-anchor="middle" class="ts">Tool descriptions</text>
+        <text x="398" y="106" text-anchor="middle" class="ts">Chat history</text>
+        <text x="583" y="106" text-anchor="middle" class="ts">Retrieved memory</text>
+        <text x="637" y="122" text-anchor="middle" class="ts">Limit</text>
+      </svg>
+      </div>
+      <figcaption>Inside the context window, the system prompt, tool descriptions, conversation history, and retrieved memory all share the space. As the conversation gets longer, history takes up a bigger share and leaves less room for the rest. The Deep Dive module "Manage context of your agent" covers this design in more detail.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6">Do not mix up whose memory it is</h2>
+    <p>When companies use long-term memory, they especially worry about <strong>mixing up whose memory it is</strong>. A poor namespace design can cause accidents, such as one customer's preferences leaking into another's data. For example, if you build namespaces around individual people rather than departments, it is easier to avoid mixed-up memories when staff change.</p>
+    <div class="aside enterprise">
+      <p class="label">Where companies get stuck</p>
+      <p>Points that you barely think about in personal use become important in production. Can you delete just one user's memory when they ask for it? How long should memory be kept? Is it fine to keep personal data in long-term memory as it is? Is the stored data encrypted? These questions are not only about Memory's settings. They also affect how you choose an extraction strategy, since that strategy decides what goes into long-term memory in the first place.</p>
+    </div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">2-2</span>Official Workshop Phase 1: the Memory lab. Try short-term and long-term memory yourself</li>
+      <li><span class="rid">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Memory chapter again in Japanese</li>
+      <li><span class="rid">3-5</span>Deep Dive: Manage context of your agent</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>The LLM itself remembers nothing. The context window, which carries the conversation history, has a limit.</li>
+      <li>Short-term memory keeps the whole conversation. Long-term memory uses an extraction strategy to store just the key points, by namespace.</li>
+      <li>The next conversation searches for memories that are close in meaning and adds them in. Managing what to keep and what to drop is essential too.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 6, Gateway and Tools</b></span><span>One standard way to plug in tools</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>
+
+</div>

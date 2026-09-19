@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AgentCore Reader Contents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
+  --think:#2F5E8C; --think-bg:#E6EEF6;
+  --reach:#2E7560; --reach-bg:#E3F1EB;
+  --guard:#9A4B2F; --guard-bg:#F6E9E2;
+  --run:#6A5A1E;   --run-bg:#F1ECD9;
+  --accent:var(--think); --accent-bg:var(--think-bg);
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
+  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
+  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+}
+.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
+.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
+.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
+.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
+.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
+h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
+h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
+h3{font-size:17.5px;font-weight:700;margin-top:8px}
+p,ul,ol,dl,figure,table{margin:0}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:4px}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
+.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
+.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
+.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.flow{display:grid;gap:22px;margin-top:40px}
+section{display:grid;gap:16px}
+section+section{margin-top:28px}
+.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
+.map ul{margin:0}
+/* asides */
+.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
+.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
+.metaphor{background:var(--accent-bg)}
+.metaphor .label{color:var(--accent)}
+.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
+.enterprise .label{color:var(--guard)}
+.route{background:var(--paper);border:1px dashed var(--ink-soft)}
+.route .label{color:var(--ink-soft)}
+.route ul{font-size:14.5px}
+.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
+/* figures */
+.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
+.fig .scroll{overflow-x:auto}
+.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
+.fig svg.wide{min-width:560px}
+.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
+.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
+.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
+.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
+.fig svg .ta{fill:var(--accent)}
+.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
+.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
+.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
+.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
+.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
+.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
+.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
+.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
+.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
+.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
+.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
+.fig svg .ah{fill:var(--ink-soft)}
+.fig svg .ah-accent{fill:var(--accent)}
+.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
+/* tables */
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+/* terms */
+dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
+dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
+/* end */
+.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
+.summary h2{font-size:17px;padding:0}
+.summary ol{margin:0}
+.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
+.next b{color:var(--ink);font-family:var(--font-display)}
+.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
+@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+</style>
+<div class="wrap acc-think">
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Contents / 11 chapters</span></p>
+  <h1>AgentCore Reader</h1>
+  <p class="lead">This reader gives you a quick look at the whole topic before you start the learning roadmap. The roadmap teaches you how to build AI agents for companies on AWS. This reader has no hands-on steps. Each chapter takes about 12 to 15 minutes to read. The whole reader takes about two and a half hours. Read it in order, and the map grows step by step: first how agents work, then the AgentCore parts, then how to design them for a company.</p>
+  <p class="meta"><span>11 chapters, about 2.5 hours</span><span>Matches roadmap stages S1 to S5</span></p>
+</header>
+
+<div class="flow">
+  <div class="aside metaphor">
+    <p class="label">Analogy for this whole book</p>
+    <p>This reader compares an AI agent to <b>hiring a new employee</b> who thinks fast. The new employee's brain is the LLM, and Strands Agents plans the steps of the work. When you hire someone, you also need other things: a private room, memory, a toolbox, an ID badge, company rules, and a daily report. These are the AgentCore parts.</p>
+  </div>
+
+  <section aria-labelledby="p1">
+    <h2 id="p1">Part 1: What an Agent Really Is, and the Map</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
+      <tbody>
+        <tr><td><a href="ch01.html">1 What an Agent Really Is</a></td><td>The difference between an LLM call, a workflow, and an agent. The loop and the harness. MCP and A2A. How this compares with the old Bedrock Agents.</td><td><span class="rid">1-1</span><span class="rid">1-3</span></td></tr>
+        <tr><td><a href="ch02.html">2 Map of the Parts</a></td><td>What each AgentCore part does for you, and the order to add them, from a test project to a real product.</td><td><span class="rid">1-2</span><span class="rid">2-2</span></td></tr>
+        <tr><td><a href="ch03.html">3 Strands Agents</a></td><td>How to write model-driven code, the layers of the harness (tools, hooks, skills, steering, sessions), and multiple agents working together.</td><td><span class="rid">1-4</span><span class="rid">2-1</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="p2">
+    <h2 id="p2">Part 2: The AgentCore Parts, One by One</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
+      <tbody>
+        <tr><td><a href="ch04.html">4 Runtime</a></td><td>Keeping each session separate, running for a long time, and how to deploy and manage versions.</td><td><span class="rid">2-3</span><span class="rid">3-3</span></td></tr>
+        <tr><td><a href="ch05.html">5 Memory</a></td><td>Short-term and long-term memory, strategies for pulling out information, and managing context.</td><td><span class="rid">2-3</span><span class="rid">3-5</span></td></tr>
+        <tr><td><a href="ch06.html">6 Gateway</a></td><td>Turning existing APIs into MCP tools, searching for tools, Code Interpreter, and Browser.</td><td><span class="rid">2-3</span><span class="rid">3-4</span></td></tr>
+        <tr><td><a href="ch07.html">7 Identity</a></td><td>Checking identity coming in and going out, acting on behalf of a user, and storing tokens safely.</td><td><span class="rid">2-3</span><span class="rid">3-6</span></td></tr>
+        <tr><td><a href="ch08.html">8 Policy</a></td><td>Stopping a tool call before it runs, Cedar, and how this is different from Guardrails.</td><td><span class="rid">2-3</span><span class="rid">3-8</span></td></tr>
+        <tr><td><a href="ch09.html">9 Observability and Evaluations</a></td><td>Traces and spans, evaluators, and the loop for making the agent better.</td><td><span class="rid">2-4</span><span class="rid">3-7</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="p3">
+    <h2 id="p3">Part 3: Design and Final Details</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
+      <tbody>
+        <tr><td><a href="ch10.html">10 A Designer's Eye</a></td><td>Governance, cost, prompt injection, read permissions for RAG, the Generative AI Lens, and GenU.</td><td><span class="rid">4-1</span><span class="rid">4-3</span></td></tr>
+        <tr><td><a href="ch11.html">11 Map of Certifications</a></td><td>What AIP-C01 covers, and topics this reader does not cover.</td><td><span class="rid">5-1</span><span class="rid">5-5</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">How to read this</p>
+    <ul>
+      <li>If you are short on time, read only Chapters 1 and 2. You will still understand the whole roadmap.</li>
+      <li>At the end of each chapter, "Where you meet this on the roadmap" shows the row ID (the number in the course catalog) of the course where you use this content.</li>
+      <li>Each chapter's "Where companies get stuck" can also help you when you write Deep Dive notes in S3.</li>
+    </ul>
+  </div>
+
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>
+
+</div>

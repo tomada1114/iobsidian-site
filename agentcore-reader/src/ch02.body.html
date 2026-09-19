@@ -1,0 +1,176 @@
+<!-- title: AgentCore Reader 02 Map of AgentCore | accent: think -->
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 2 / 11 chapters</span></p>
+  <h1>Map of AgentCore: what does it do for you?</h1>
+  <p class="lead">In Chapter 1, we saw that an agent is really a loop between the LLM and the harness. In this chapter, we look at the full picture of Amazon Bedrock AgentCore, the set of parts that AWS built to run that harness in production. There are about eight parts. You can use each one alone, or combine them. First, let's build a map in our heads. Then, from the next chapter, we will look at each part in detail.</p>
+  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S1</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>AgentCore is not the agent itself. It is a set of parts that handle production support</li>
+      <li>What each part does for you, and which chapter covers it</li>
+      <li>You can use each part alone or combine them</li>
+      <li>The order of adding parts, shown by the official workshop</li>
+      <li>Pricing is pay-per-use, for each part</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">Parts that support the agent, not the agent itself</h2>
+    <p>As we saw in the last chapter, you write the agent itself in code. This includes the harness that runs the loop, and the model it uses. <strong>Amazon Bedrock AgentCore is not a service for building that agent.</strong> It is a service that gives you the support features you need to run the agent in production, such as authentication, memory, and monitoring.</p>
+    <p>Each part is a separate AWS feature. You can call it from an agent built with any framework, such as Strands, LangGraph, or CrewAI, and with any model. Chapter 3 still assumes you build your agent with Strands Agents, but AgentCore itself is not tied to one way of writing code.</p>
+    <p>Another important point: you only need to use the parts you need. For example, some teams use Memory without Runtime, or add Gateway first, before anything else. You do not need to use every part together.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">All the parts at a glance</h2>
+    <p>Here are the eight parts. For each one, we give a short description and an analogy. Later chapters cover each part in detail, as shown in the table.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Part</th><th>In short</th><th>Analogy</th><th>Chapter</th></tr></thead>
+      <tbody>
+        <tr><td>Runtime</td><td>Runs the agent without servers to manage. Keeps each user's session in its own separate space</td><td>A private room</td><td>Ch. 4</td></tr>
+        <tr><td>Memory</td><td>Holds the short-term conversation and the long-term memory</td><td>A work notebook and a customer file</td><td>Ch. 5</td></tr>
+        <tr><td>Gateway</td><td>Turns your existing APIs and Lambda functions into MCP tools</td><td>A toolbox front desk</td><td>Ch. 6</td></tr>
+        <tr><td>Code Interpreter / Browser</td><td>Runs code in an isolated space, and controls an isolated cloud browser</td><td>An isolated workroom</td><td>Ch. 6</td></tr>
+        <tr><td>Identity</td><td>Holds the agent's ID and the login details for outside services</td><td>An ID badge and a spare key</td><td>Ch. 7</td></tr>
+        <tr><td>Policy</td><td>Decides to allow or block a tool call, before it runs</td><td>Company rules</td><td>Ch. 8</td></tr>
+        <tr><td>Observability</td><td>Records what the agent does as a trace (a record of every step in one request)</td><td>A daily work report</td><td>Ch. 9</td></tr>
+        <tr><td>Evaluations</td><td>Scores the quality of the agent's answers and behavior</td><td>A performance review</td><td>Ch. 9</td></tr>
+      </tbody>
+    </table></div>
+    <div class="aside metaphor">
+      <p class="label">Analogy: the new employee</p>
+      <p>When a company places a new employee (the LLM), it does not rely on that person's skill alone. It also gives them a seat, a work notebook, a toolbox front desk, an ID badge, rules to follow, a daily report, and a yearly performance review. The AgentCore parts match this whole set. We used this analogy in Chapter 1, and it will come back for each part in later chapters.</p>
+    </div>
+    <p>Two more topics are not in the table above. <strong>Payments</strong> are covered in an official Deep Dive module called "Agents that transact." It looks at cases where an agent makes a payment. We will not go deep here; Chapter 10 covers this again, when we talk about agents that make payments.</p>
+    <p>The <strong>AgentCore CLI</strong> is where development starts. It is a development tool for creating an agent, running it locally, and deploying it, all with commands. It replaces the old Starter Toolkit.</p>
+    <p>Another word you often see in the official courses is <strong>Harness</strong>. Some Labs in the official Workshop, and some Tracks in the official Deep Dive, have a module named "Harness." This is the same idea from Chapter 1: the program outside the LLM that runs the loop. Here we only cover the idea; Chapter 3, on Strands Agents, looks at the details. Different courses describe this in different ways, so we will not state exactly what AgentCore itself provides for it.</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">A diagram of how the parts fit together</h2>
+    <p>Let's arrange these parts in the order a request flows through them. The colors in the diagram show four groups: blue is for thinking (Runtime, Memory), green is for acting (Gateway, Code Interpreter, Browser), orange is for guarding (Identity, Policy), and yellow-brown is for running the whole cycle (Observability, Evaluations).</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 460" role="img" aria-label="Diagram of the parts. A request goes from the user through Identity for authentication, then to the agent inside Runtime. It passes through Policy for approval, then Gateway calls internal APIs or SaaS. Code Interpreter and Browser are tools the agent uses directly. Observability and Evaluations cover everything">
+        <defs><marker id="a21" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="60" y="18" width="140" height="32" rx="6" class="b-guard"/><text x="130" y="39" text-anchor="middle" class="ts">Identity</text>
+        <line x1="130" y1="50" x2="130" y2="168" class="ln-dash"/>
+        <rect x="20" y="150" width="90" height="40" rx="6" class="b"/><text x="65" y="174" text-anchor="middle">User</text>
+        <path d="M110 170 L148 170" class="ln-accent" marker-end="url(#a21)"/>
+        <text x="129" y="163" text-anchor="middle" class="ts">auth</text>
+        <rect x="150" y="60" width="220" height="140" rx="10" class="frame"/>
+        <text x="260" y="80" text-anchor="middle" class="th ta">Runtime</text>
+        <rect x="170" y="98" width="180" height="82" rx="6" class="b-think"/>
+        <text x="260" y="134" text-anchor="middle" class="th">Agent itself</text>
+        <text x="260" y="154" text-anchor="middle" class="ts">Framework + model</text>
+        <rect x="410" y="98" width="140" height="82" rx="6" class="b-think"/>
+        <text x="480" y="134" text-anchor="middle" class="th">Memory</text>
+        <text x="480" y="154" text-anchor="middle" class="ts">Short &amp; long memory</text>
+        <path d="M350 139 L408 139" class="ln" marker-start="url(#a21)" marker-end="url(#a21)"/>
+        <text x="379" y="131" text-anchor="middle" class="ts">read/write</text>
+        <rect x="60" y="225" width="100" height="32" rx="6" class="b-guard"/><text x="110" y="245" text-anchor="middle" class="ts">Policy</text>
+        <line x1="160" y1="241" x2="258" y2="241" class="ln-dash"/>
+        <path d="M260 200 L260 270" class="ln-accent" marker-end="url(#a21)"/>
+        <text x="288" y="222" text-anchor="middle" class="ts">call</text>
+        <rect x="170" y="272" width="180" height="50" rx="6" class="b-reach"/>
+        <text x="260" y="293" text-anchor="middle" class="th">Gateway</text>
+        <text x="260" y="311" text-anchor="middle" class="ts">Turns APIs into MCP tools</text>
+        <path d="M260 322 L260 345" class="ln" marker-end="url(#a21)"/>
+        <rect x="170" y="347" width="180" height="40" rx="6" class="b"/>
+        <text x="260" y="371" text-anchor="middle">Internal API / SaaS</text>
+        <rect x="420" y="222" width="140" height="40" rx="6" class="b-reach"/>
+        <text x="490" y="246" text-anchor="middle" class="ts">Code Interpreter</text>
+        <rect x="420" y="272" width="140" height="40" rx="6" class="b-reach"/>
+        <text x="490" y="296" text-anchor="middle" class="ts">Browser</text>
+        <path d="M350 165 L418 240" class="ln-dash" marker-end="url(#a21)"/>
+        <path d="M350 178 L418 290" class="ln-dash" marker-end="url(#a21)"/>
+        <text x="396" y="200" text-anchor="middle" class="ts">use</text>
+        <rect x="20" y="400" width="620" height="46" rx="8" class="b-run"/>
+        <text x="330" y="420" text-anchor="middle" class="th">Observability + Evaluations</text>
+        <text x="330" y="437" text-anchor="middle" class="ts">Records everything and scores quality</text>
+      </svg>
+      </div>
+      <figcaption>A request from the user goes through Identity, which checks who the user is. Then it reaches the agent inside Runtime. The agent thinks by going back and forth with Memory. When it wants to act outside, it first needs approval from Policy, then it calls internal APIs or SaaS through Gateway. Code Interpreter and Browser work the same way: they are tools that the agent uses directly, inside an isolated space. Observability and Evaluations cover this whole process, recording what happens and scoring the quality.</figcaption>
+    </figure>
+    <p>As the diagram shows, each part has its own job: Runtime is the place, Memory is the memory, and Gateway is the toolbox front desk. The roles do not overlap. <strong>Each part handles one concern</strong>, so you can add only the parts you need.</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">What the order of adding parts teaches us</h2>
+    <p>The official Phase 1 workshop, "Getting Started with Amazon Bedrock AgentCore," shows a real example of the order to add these parts. It builds one customer support agent, and adds production features to it, one at a time.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 300" role="img" aria-label="A staircase diagram of the 9 labs in the official Phase 1 workshop. It goes from building locally, to memory, Gateway, deploying to Runtime, evaluation, frontend, policy, harness, and finally optimization">
+        <defs><marker id="a22" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <path d="M40 250 L115 228" class="ln" marker-end="url(#a22)"/>
+        <path d="M115 228 L190 205" class="ln" marker-end="url(#a22)"/>
+        <path d="M190 205 L265 183" class="ln" marker-end="url(#a22)"/>
+        <path d="M265 183 L340 160" class="ln" marker-end="url(#a22)"/>
+        <path d="M340 160 L415 138" class="ln" marker-end="url(#a22)"/>
+        <path d="M415 138 L490 115" class="ln" marker-end="url(#a22)"/>
+        <path d="M490 115 L565 93" class="ln" marker-end="url(#a22)"/>
+        <path d="M565 93 L640 70" class="ln" marker-end="url(#a22)"/>
+        <text x="40" y="222" text-anchor="middle" class="ts ta">1</text>
+        <rect x="8" y="233" width="64" height="34" rx="6" class="b-think"/><text x="40" y="254" text-anchor="middle" class="ts">Local</text>
+        <text x="115" y="200" text-anchor="middle" class="ts ta">2</text>
+        <rect x="83" y="211" width="64" height="34" rx="6" class="b-think"/><text x="115" y="232" text-anchor="middle" class="ts">Memory</text>
+        <text x="190" y="177" text-anchor="middle" class="ts ta">3</text>
+        <rect x="158" y="188" width="64" height="34" rx="6" class="b-reach"/><text x="190" y="209" text-anchor="middle" class="ts">Gateway</text>
+        <text x="265" y="155" text-anchor="middle" class="ts ta">4</text>
+        <rect x="233" y="166" width="64" height="34" rx="6" class="b-think"/><text x="265" y="187" text-anchor="middle" class="ts">Deploy</text>
+        <text x="340" y="132" text-anchor="middle" class="ts ta">5</text>
+        <rect x="308" y="143" width="64" height="34" rx="6" class="b-run"/><text x="340" y="164" text-anchor="middle" class="ts">Evaluate</text>
+        <text x="415" y="110" text-anchor="middle" class="ts ta">6</text>
+        <rect x="383" y="121" width="64" height="34" rx="6" class="b"/><text x="415" y="142" text-anchor="middle" class="ts">UI</text>
+        <text x="490" y="87" text-anchor="middle" class="ts ta">7</text>
+        <rect x="458" y="98" width="64" height="34" rx="6" class="b-guard"/><text x="490" y="119" text-anchor="middle" class="ts">Policy</text>
+        <text x="565" y="65" text-anchor="middle" class="ts ta">8</text>
+        <rect x="533" y="76" width="64" height="34" rx="6" class="b"/><text x="565" y="97" text-anchor="middle" class="ts">harness</text>
+        <text x="640" y="42" text-anchor="middle" class="ts ta">9</text>
+        <rect x="608" y="53" width="64" height="34" rx="6" class="b-run"/><text x="640" y="74" text-anchor="middle" class="ts">Optimize</text>
+      </svg>
+      </div>
+      <figcaption>Start by building an agent that runs locally. Then add memory. Use Gateway to gather tools. Deploy it to Runtime. Add a way to evaluate it. Add a frontend. Control it with policy. Adjust the harness. Finally, optimize it. The workshop has 9 labs, takes about 3.5 hours, and is also available in Japanese.</figcaption>
+    </figure>
+    <p><strong>This order of adding parts is the same order you need when moving from a PoC to production.</strong> You start with something that runs, then strengthen it step by step with memory, tools, authentication, evaluation, and control. This flow also matches the chapters that come later in this reader.</p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">The official courses follow two phases</h2>
+    <p>The official AgentCore courses are split into two main phases. <strong>Phase 1, "Getting Started,"</strong> is the 9 labs we just saw, done in order. It is for people who are new to AgentCore.</p>
+    <p><strong>Phase 2, "Diving Deep,"</strong> has 8 modules that you can study in any order, working together with Claude Code. Since there is no fixed order, you can go deep into the part you need first. This reader's roadmap points you to both phases, depending on the situation.</p>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6">Pricing: pay for each part you use</h2>
+    <p>AgentCore uses pay-per-use pricing. You only pay for what you use. Parts like Runtime, Memory, and Gateway are each billed separately, and you pay nothing for a part you do not use. The exact prices change often, so this reader will not give numbers here. Just remember the idea.</p>
+    <div class="aside enterprise">
+      <p class="label">Where companies get stuck</p>
+      <p>If you built these eight parts yourself, even just separating each session's environment, storing login details safely, and collecting traces of every call would each take weeks of work. Many companies stop after the PoC stage, not because the agent is not smart enough, but because they do not have the resources to build all of this support themselves. The value of AgentCore is that it already has these parts ready for you.</p>
+    </div>
+  </section>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">1-2</span>Amazon Bedrock AgentCore Getting Started (Skill Builder): check how much AWS says each part in this chapter handles for you.</li>
+      <li><span class="rid">2-2</span>Official Workshop Phase 1: try the order of adding parts yourself, with hands-on work.</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>AgentCore is not the agent itself. It is a set of parts that handle what you need for production.</li>
+      <li>You can use each part alone or together. Each one has its own chapter and its own price.</li>
+      <li>The order in the official workshop is also the order you follow from PoC to production.</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>Next: <b>Chapter 3, Strands Agents</b></span><span>See how to write the loop in code</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>

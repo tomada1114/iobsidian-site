@@ -1,0 +1,127 @@
+<!-- title: AgentCore Reader 11 The Certification Map | accent: think -->
+<header class="ch-head">
+  <p class="series"><b>AgentCore Reader</b><span>Chapter 11 / 11 chapters</span></p>
+  <h1>The certification map: AIP-C01, and what is outside this reader</h1>
+  <p class="lead">This reader is meant to give you the big picture before you start hands-on work. It is not a study guide for a certification exam. Still, it helps to know where the topics in this reader overlap with the exam, and where they do not. This makes it easier to choose how to study next. In this last chapter, we use the AIP-C01 certification as an outer frame for the map, and look back at the whole reader.</p>
+  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S5</span></p>
+</header>
+
+<div class="flow">
+  <nav class="map" aria-label="In this chapter">
+    <h2>In this chapter</h2>
+    <ul>
+      <li>Basic facts about AIP-C01 (AWS Certified Generative AI Developer – Professional)</li>
+      <li>How the chapters of this reader match the exam topics</li>
+      <li>A map of the exam topics this reader does not cover</li>
+      <li>How to work through S5, the last stage of the roadmap</li>
+      <li>Looking back at the whole reader</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">What is AIP-C01?</h2>
+    <p><strong>AWS Certified Generative AI Developer – Professional (AIP-C01)</strong> is the top-level certification in the field of generative AI and agents. It has 65 scored questions and 10 unscored questions. You pass with a score of 750 or higher. The exam fee is 300 dollars, and the certification stays valid for 3 years. You can take the exam in Japanese too.</p>
+    <p>An update to the standard version, published in March 2026, added AgentCore to the exam scope. The recommended experience is at least 2 years with AWS and at least 1 year with generative AI. It is easy to forget that the exam also covers <strong>SageMaker</strong> widely, not just AgentCore. The exam has about 5 domains (topic areas). We will not make up numbers for the name and share of each domain here. Check the exam guide (roadmap item 5-1) for that.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">How this reader maps to the exam</h2>
+    <p>Here is a rough map from the content of this reader to exam topics. <strong>The chapter boundaries are only a guide. They do not match the domain boundaries in the exam guide.</strong> Do not try to memorize the exact lines. Use this map to check if you are missing a whole area.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Reader chapters</th><th>Likely exam topics</th></tr></thead>
+      <tbody>
+        <tr><td>Chapters 2-3</td><td>Bedrock and model choice, agent orchestration</td></tr>
+        <tr><td>Chapters 4-6</td><td>Connecting agents, tools, and MCP</td></tr>
+        <tr><td>Chapters 7-8</td><td>Guardrails, security, and authorization</td></tr>
+        <tr><td>Chapter 9</td><td>Evaluation and observability</td></tr>
+        <tr><td>Chapter 10</td><td>Cost optimization and governance</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">What this reader does not cover</h2>
+    <p>Some areas often appear on the exam but are not covered in this reader. Keep them in mind as areas outside this map, when you do hands-on work.</p>
+    <dl class="terms">
+      <dt>SageMaker</dt>
+      <dd>A group of services for customizing, training, and deploying models. This reader focuses only on the Bedrock side.</dd>
+      <dt>Model customization, such as fine-tuning</dt>
+      <dd>A way to adjust how a model behaves, by training it further. It is used when a prompt alone is not enough.</dd>
+      <dt>Data preparation</dt>
+      <dd>The process of collecting, formatting, and checking the quality of data used for training or search. It looks simple, but it has a direct effect on accuracy.</dd>
+      <dt>The details of RAG (chunking, embeddings, and vector stores)</dt>
+      <dd>The detailed design of how you split documents into chunks, how you turn them into numbers (embeddings), and where you store them. Choices for a vector store include OpenSearch Serverless, Aurora with pgvector, and S3 Vectors.</dd>
+      <dt>The different inference modes in Bedrock</dt>
+      <dd>The differences between on-demand, provisioned throughput, cross-region inference, and batch: different ways to call a model, and different ways you are billed for it.</dd>
+      <dt>Prompt management</dt>
+      <dd>A system for keeping prompts separate from your code, and improving them over time with version control.</dd>
+      <dt>Model evaluation</dt>
+      <dd>A system for comparing several models or prompts using the same standard, to decide which one to use. This is different from the agent evaluation in Chapter 9.</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">How to work through S5</h2>
+    <p>The certification sits at the end of the roadmap because <strong>the more hands-on work you do first, the less new material you need to memorize for the exam</strong>. In S5, follow this order.</p>
+    <p>First, read through the exam guide (5-1) and mark the parts you already covered in S2 to S4. Next, use the Udemy course (5-2) to fill in only the parts you did not mark. Last, take the practice exam (5-4). For each question you get wrong, do not just memorize the right answer. Instead, ask yourself: which part from S2 to S4 explains this? This kind of review, not memorizing, is the fastest way to raise your score.</p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">Looking back at the whole reader</h2>
+    <p>In Chapter 1, we used the analogy of hiring a new employee. Now, at the end, let's place all the parts of this reader back onto that same analogy.</p>
+    <figure class="fig">
+      <div class="scroll">
+      <svg class="wide" viewBox="0 0 680 400" role="img" aria-label="A user goes through a building pass into a private room. Inside are the new employee and memory. A front desk connects the room to a workroom. Work reports and reviews sit outside the room, and Chapter 10's designer's eye surrounds everything">
+        <defs><marker id="a11a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
+        <rect x="15" y="50" width="650" height="330" rx="10" class="frame"/>
+        <text x="340" y="38" text-anchor="middle" class="ts ta">Chapter 10, the designer's eye: checks everything from outside</text>
+        <rect x="30" y="195" width="100" height="48" rx="6" class="b"/><text x="80" y="224" text-anchor="middle">User</text>
+        <path d="M130 219 L168 219" class="ln" marker-end="url(#a11a)"/>
+        <rect x="170" y="195" width="130" height="48" rx="6" class="b-guard"/><text x="235" y="215" text-anchor="middle" class="th">Building pass</text><text x="235" y="233" text-anchor="middle" class="ts">Identity, Ch.7</text>
+        <path d="M300 219 L328 219" class="ln" marker-end="url(#a11a)"/>
+        <rect x="330" y="90" width="300" height="230" rx="8" class="frame"/>
+        <text x="480" y="112" text-anchor="middle" class="th">Private room: Runtime (Ch.4)</text>
+        <rect x="350" y="130" width="130" height="58" rx="6" class="b-accent"/><text x="415" y="152" text-anchor="middle" class="th">New employee</text><text x="415" y="172" text-anchor="middle" class="ts">Strands + model, 2-3</text>
+        <rect x="500" y="130" width="110" height="58" rx="6" class="bg"/><text x="555" y="152" text-anchor="middle" class="th">Memory</text><text x="555" y="172" text-anchor="middle" class="ts">Chapter 5</text>
+        <rect x="350" y="210" width="130" height="58" rx="6" class="b-reach"/><text x="415" y="225" text-anchor="middle" class="th">Workroom</text><text x="415" y="241" text-anchor="middle" class="ts">Code Interpreter</text><text x="415" y="255" text-anchor="middle" class="ts">/ Browser, Ch.6</text>
+        <rect x="500" y="210" width="110" height="58" rx="6" class="b-reach"/><text x="555" y="225" text-anchor="middle" class="th">Desk &amp; rules</text><text x="555" y="241" text-anchor="middle" class="ts">Gateway, Ch.6</text><text x="555" y="255" text-anchor="middle" class="ts">Policy, Ch.8</text>
+        <rect x="330" y="335" width="300" height="40" rx="6" class="bg"/><text x="480" y="352" text-anchor="middle" class="ts">Reports &amp; reviews</text><text x="480" y="366" text-anchor="middle" class="ts">Observability / Evaluations, Ch.9</text>
+      </svg>
+      </div>
+      <figcaption>The user goes through a building pass (Identity, Chapter 7) to enter a private room (Runtime, Chapter 4). Inside the room are a new employee (Strands plus a model, Chapters 2-3) and memory (Memory, Chapter 5). Through the front desk (Gateway, Chapter 6) and the rules (Policy, Chapter 8), the room borrows a workroom (Code Interpreter/Browser, Chapter 6). Reports and reviews (Observability/Evaluations, Chapter 9) record the daily work from outside the room, and Chapter 10's designer's eye surrounds everything.</figcaption>
+    </figure>
+  </section>
+
+  <div class="aside metaphor">
+    <p class="label">Analogy: a promotion exam</p>
+    <p>AIP-C01 is not a hiring exam that a new employee takes before joining a company. It is closer to an internal promotion exam, taken some time after you start the job. It checks whether you have real hands-on experience, so memorizing alone is not enough to pass. If you have read this reader from Chapter 1, think of this certification as a final step, to check whether you can explain, in words, the work you have actually done.</p>
+  </div>
+
+  <div class="aside enterprise">
+    <p class="label">Where companies get stuck</p>
+    <p>Having this certification can help you in a job interview. But it is not what a company checks on a real project. What matters there is whether you can explain a whole design, from authentication to evaluation to operations, and why you designed it that way. A certification is only one entry point. It is not the goal.</p>
+  </div>
+
+  <div class="aside route">
+    <p class="label">Where you meet this on the roadmap</p>
+    <ul>
+      <li><span class="rid">5-1</span>AIP-C01 exam guide (Japanese PDF). Check the exam domains and their share here</li>
+      <li><span class="rid">5-2</span>Udemy course "Ultimate AWS Certified Generative AI Developer Professional". Fill in the areas you have not covered yet</li>
+      <li><span class="rid">5-3</span>Skill Builder course "Exam Prep Plan: AWS Certified Generative AI Developer – Professional". The Domain Review part is free</li>
+      <li><span class="rid">5-4</span>Udemy course "[Practice Exams] AWS Certified Generative AI Developer Pro". A final practice exam</li>
+      <li><span class="rid">5-5</span>Take the exam. You can take it in Japanese. It stays valid for 3 years</li>
+    </ul>
+  </div>
+
+  <section class="summary" aria-labelledby="sum">
+    <h2 id="sum">Summary in three lines</h2>
+    <ol>
+      <li>AIP-C01 is an advanced certification. An update in March 2026 added AgentCore to its scope. SageMaker is also tested widely</li>
+      <li>This reader covers only part of the agent side. SageMaker, RAG details, inference modes, and model evaluation are outside this map</li>
+      <li>The certification comes last because the more hands-on work you do first, the less new material you need to memorize for the exam</li>
+    </ol>
+  </section>
+
+  <p class="next"><span>This is the end of the reader</span><span>Start from roadmap item 1-1</span></p>
+  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+</div>

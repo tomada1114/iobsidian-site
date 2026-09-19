@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>tomada's Bookshelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap">
+<style>
+:root{--ground:#F3F4F1;--paper:#FFFFFF;--ink:#1D2320;--ink-soft:#4E5752;--line:#D6DAD4;--accent:#2F5E8C;
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#151917;--paper:#1D2220;--ink:#E7EAE6;--ink-soft:#A6AEA9;--line:#343B37;--accent:#8DB4DC}}
+:root[data-theme="dark"]{--ground:#151917;--paper:#1D2220;--ink:#E7EAE6;--ink-soft:#A6AEA9;--line:#343B37;--accent:#8DB4DC}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.8;margin:0;padding:0 16px}
+.wrap{max-width:720px;margin:0 auto;padding-block:48px 96px}
+h1{font-family:var(--font-display);font-weight:900;font-size:clamp(26px,5vw,34px);margin:0}
+.lead{color:var(--ink-soft);margin:8px 0 32px}
+ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.book{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+.book h2{font-family:var(--font-display);font-size:19px;font-weight:900;margin:0}
+.book p{margin:4px 0 10px;color:var(--ink-soft);font-size:14.5px}
+.links{display:flex;flex-wrap:wrap;gap:8px 20px;font-weight:700}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+</style>
+<div class="wrap">
+  <h1>Bookshelf</h1>
+  <p class="lead">Readers I made for my own study.</p>
+  <ul>
+    <li class="book">
+      <h2>AgentCore Reader</h2>
+      <p>A quick tour of building AI agents for companies on AWS, before the hands-on study. 11 chapters, about 2.5 hours.</p>
+      <p class="links"><a href="agentcore-reader/ch00.html">Read the contents</a></p>
+    </li>
+  </ul>
+</div>
