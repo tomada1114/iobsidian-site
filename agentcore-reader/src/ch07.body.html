@@ -1,14 +1,14 @@
 <!-- title: AgentCore Reader 07 Identity | accent: guard -->
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 7 / 11 chapters</span></p>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 7 / 11 chapters</span></p>
   <h1>Identity: who an agent acts for, and what it may do</h1>
   <p class="lead">In enterprise projects, Identity is often the topic that people discuss the longest. It splits into two questions. The first is the entry side (inbound): who is calling the agent? The second is the exit side (outbound): whose rights does the agent use to touch outside services? This chapter looks at how AgentCore handles each question.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>The difference between the entry (inbound) and exit (outbound) questions</li>
       <li>The agent's own workload ID (an identity for the agent itself)</li>
@@ -19,120 +19,106 @@
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">Two questions: entry and exit</h2>
+    <h2 id="s1"><span class="no">01</span>Two questions: entry and exit</h2>
     <p>Identity handles two main questions. The first is on the entry side: it checks "who is calling this agent." The second is on the exit side: it decides "whose rights the agent uses when it touches an outside service."</p>
     <p><strong>These two questions are handled by separate mechanisms</strong>. Finishing the entry-side check does not automatically decide the exit-side rights. If you design a system without this clear separation, you can run into the "confused deputy" problem, explained later in this chapter.</p>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">Entry side: who is calling the agent</h2>
+    <h2 id="s2"><span class="no">02</span>Entry side: who is calling the agent</h2>
     <p>There are two ways to check who is calling an agent. The first uses an IAM SigV4 signature (a way AWS confirms an identity), for when the caller already has AWS credentials. The second accepts a JWT (a signed token that proves an identity) issued by your company's existing ID system, such as Cognito, Microsoft Entra ID, or Okta.</p>
     <div class="tbl"><table>
       <thead><tr><th>Method</th><th>When to use it</th><th>Example</th></tr></thead>
       <tbody>
-        <tr><td>IAM (SigV4)</td><td>The caller already has AWS credentials</td><td>A call from another AWS service</td></tr>
-        <tr><td>JWT</td><td>A user or system already signed in through your company's ID system</td><td>Cognito, Microsoft Entra ID, Okta</td></tr>
+        <tr><td class="key">IAM (SigV4)</td><td>The caller already has AWS credentials</td><td>A call from another AWS service</td></tr>
+        <tr><td class="key">JWT</td><td>A user or system already signed in through your company's ID system</td><td>Cognito, Microsoft Entra ID, Okta</td></tr>
       </tbody>
     </table></div>
     <p>In addition, the agent itself gets its own ID, called a workload ID. Registering the agent as its own identity lets you trace "which agent did what" later. For example, if a finance agent that handles expense approvals has its own workload ID, you can quickly find which agent approved a large batch of requests overnight, just by checking the logs.</p>
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Exit side: where to keep the keys for outside services</h2>
+    <h2 id="s3"><span class="no">03</span>Exit side: where to keep the keys for outside services</h2>
     <p>To use outside services like Google, Slack, Salesforce, or GitHub, an agent needs credentials for each one. You register these credentials with Identity as a "credential provider," using OAuth2 or an API key. Identity then stores them safely in a token vault (a secure storage place for tokens).</p>
     <p><strong>This means you can avoid writing API keys directly into code or environment variables</strong>. The agent's code only asks Identity, "I want to use this credential provider." The actual tokens are handled outside the code.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 220" role="img" aria-label="A two-lane diagram of entry and exit. A JWT flows from the user through the ID system to the agent on Runtime. The agent then gets that user's token from Identity's token vault and reaches an outside SaaS.">
-        <defs><marker id="a71" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-
-        <rect x="10" y="85" width="80" height="55" rx="6" class="b"/><text x="50" y="118" text-anchor="middle">User</text>
-        <rect x="115" y="85" width="110" height="55" rx="6" class="b-think"/><text x="170" y="118" text-anchor="middle">ID system</text>
-        <rect x="250" y="85" width="140" height="55" rx="6" class="b-accent"/>
-        <text x="320" y="108" text-anchor="middle" class="th">Agent</text>
-        <text x="320" y="128" text-anchor="middle" class="ts">(Runtime)</text>
-        <rect x="415" y="85" width="140" height="55" rx="6" class="b-guard"/>
-        <text x="485" y="108" text-anchor="middle" class="th">Identity</text>
-        <text x="485" y="128" text-anchor="middle" class="ts">Token vault</text>
-        <rect x="580" y="85" width="90" height="55" rx="6" class="b-reach"/><text x="625" y="118" text-anchor="middle">SaaS, etc.</text>
-
-        <path d="M90 113 L115 113" class="ln" marker-end="url(#a71)"/><text x="102" y="100" text-anchor="middle" class="ts">Auth</text>
-        <path d="M225 113 L250 113" class="ln" marker-end="url(#a71)"/><text x="237" y="100" text-anchor="middle" class="ts">JWT</text>
-        <path d="M390 113 L415 113" class="ln" marker-end="url(#a71)"/><text x="402" y="100" text-anchor="middle" class="ts">Ask</text>
-        <path d="M555 113 L580 113" class="ln" marker-end="url(#a71)"/><text x="567" y="100" text-anchor="middle" class="ts">Send</text>
-
-        <line x1="10" y1="155" x2="390" y2="155" class="ln"/>
-        <line x1="10" y1="150" x2="10" y2="160" class="ln"/>
-        <line x1="390" y1="150" x2="390" y2="160" class="ln"/>
-        <text x="200" y="172" text-anchor="middle" class="ts ta">Entry: who is calling</text>
-
-        <line x1="250" y1="185" x2="670" y2="185" class="ln"/>
-        <line x1="250" y1="180" x2="250" y2="190" class="ln"/>
-        <line x1="670" y1="180" x2="670" y2="190" class="ln"/>
-        <text x="460" y="202" text-anchor="middle" class="ts">Exit: whose rights are used</text>
+      <svg viewBox="0 0 400 400" role="img" aria-label="A two-part chain: on the entry side, a user authenticates through an ID system and reaches the agent running on Runtime; on the exit side, that same agent asks Identity's token vault for the user's token and sends it to reach an outside SaaS">
+        <line x1="30" y1="40" x2="30" y2="352" class="ln-acc"/>
+        <circle cx="30" cy="40" r="6" class="node-acc"/>
+        <circle cx="30" cy="114" r="6" class="node-acc"/>
+        <circle cx="30" cy="192" r="6" class="node-acc"/>
+        <circle cx="30" cy="274" r="6" class="node-acc"/>
+        <circle cx="30" cy="352" r="8" class="f-acc"/>
+        <text x="56" y="10" class="t-sm">Entry — who is calling</text>
+        <rect x="56" y="16" width="328" height="48" rx="6" class="node"/><text x="72" y="45">User</text>
+        <rect x="56" y="90" width="328" height="48" rx="6" class="node"/><text x="72" y="119">ID system</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node-c3"/>
+        <text x="72" y="188" class="t-hd">Agent</text><text x="72" y="208" class="t-sm">(Runtime)</text>
+        <text x="56" y="240" class="t-sm">Exit — whose rights are used</text>
+        <rect x="56" y="246" width="328" height="56" rx="6" class="node-c4"/>
+        <text x="72" y="270" class="t-hd">Identity</text><text x="72" y="290" class="t-sm">Token vault</text>
+        <rect x="56" y="328" width="328" height="48" rx="6" class="node-acc"/>
+        <text x="72" y="357" class="t-hd t-acc">Outside SaaS</text>
       </svg>
-      </div>
       <figcaption>On the entry side, the ID system checks the user and issues a JWT, which goes to the agent running on Runtime. On the exit side, that agent gets the token for that user from Identity's token vault, and uses it to reach an outside SaaS.</figcaption>
     </figure>
-    <div class="aside metaphor">
+    <div class="aside analogy">
       <p class="label">Analogy: the building pass and the key safe</p>
       <p>The entry side is like a building pass. The guard (the ID system) checks who has arrived before letting them in. The exit side is like a safe (the token vault) that keeps spare keys collected from employees. The new employee (the agent) never gets the company's master key. Instead, they take only the one spare key they need from the safe, each time they need it.</p>
     </div>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">Whose rights to use on exit: two patterns</h2>
+    <h2 id="s4"><span class="no">04</span>Whose rights to use on exit: two patterns</h2>
     <p>There are two patterns for exit-side rights. <strong>The first is acting on behalf of the user</strong>. The agent uses that user's rights, limited to what the user allowed on a consent screen. This is the three-way OAuth exchange, known as 3LO (3-legged OAuth).</p>
     <p>The second pattern uses the agent's own rights. Systems exchange client credentials (a fixed system-to-system login) directly, with no user involved. This is 2LO (2-legged OAuth).</p>
     <div class="tbl"><table>
       <thead><tr><th>Point</th><th>On behalf of user (3LO)</th><th>Agent's own rights (2LO)</th></tr></thead>
       <tbody>
-        <tr><td>Whose rights</td><td>The user who gave consent</td><td>The agent itself</td></tr>
-        <tr><td>Consent</td><td>Needs an OAuth consent screen</td><td>Not needed (client credentials)</td></tr>
-        <tr><td>Good for</td><td>Sending or approving something for the user</td><td>Batch jobs and other work not tied to one user</td></tr>
+        <tr><td class="key">Whose rights</td><td>The user who gave consent</td><td>The agent itself</td></tr>
+        <tr><td class="key">Consent</td><td>Needs an OAuth consent screen</td><td>Not needed (client credentials)</td></tr>
+        <tr><td class="key">Good for</td><td>Sending or approving something for the user</td><td>Batch jobs and other work not tied to one user</td></tr>
       </tbody>
     </table></div>
     <p>A good rule is to ask: "in whose name should this action happen?" Sending or approving something for a user fits the on-behalf-of-user pattern. Summing up data across users, or running a routine batch job, fits the agent's own rights. For example, if the agent sends a Slack message for a user, use access on behalf of the user, so the message truly looks like it came from that user. On the other hand, pulling together a nightly inventory report from an outside SaaS is not tied to any one user, so the agent's own rights are enough.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">Avoiding a "confused deputy"</h2>
+    <h2 id="s5"><span class="no">05</span>Avoiding a "confused deputy"</h2>
     <p>If you give an agent strong rights, such as admin-level access, then even a user with weaker rights can reach any information through that agent. This is a long-known problem called the "confused deputy." It happens when the deputy, in this case the agent, mixes up its own rights with the rights of the person it is acting for.</p>
     <p><strong>The fix is to design the agent so it can only touch what the current user is allowed to see</strong>. Instead of giving the agent stronger rights than it needs, always narrow it down to the rights of the user it is acting for at that moment. In practice, the agent should carry over the user's existing rights, and never issue extra rights of its own. When you review access rights later, checking the rights of the represented user is enough; you do not need a separate check for the agent's own rights.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 200" role="img" aria-label="A comparison: delegated access is limited to what the user may see, but a shared admin account can see all the data.">
-        <text x="170" y="24" text-anchor="middle" class="th ta">Acting for the user</text>
-        <rect x="60" y="45" width="220" height="120" rx="8" class="frame"/>
-        <text x="170" y="62" text-anchor="middle" class="ts">All company data</text>
-        <rect x="90" y="110" width="160" height="45" rx="6" class="b-think"/>
-        <text x="170" y="136" text-anchor="middle" class="ts">What user A can see</text>
+      <svg viewBox="0 0 400 210" role="img" aria-label="Comparing two ways an agent can access company data: acting on behalf of user A limits it to what A may see, but running under a shared admin account lets even a low-rights request see all company data">
+        <text x="101" y="30" text-anchor="middle" class="t-hd">Acting for the user</text>
+        <rect x="16" y="48" width="170" height="140" rx="8" class="zone-soft"/>
+        <text x="101" y="68" text-anchor="middle" class="t-sm">All company data</text>
+        <rect x="32" y="128" width="138" height="48" rx="6" class="node"/>
+        <text x="101" y="156" text-anchor="middle" class="t-sm">What A sees</text>
 
-        <text x="510" y="24" text-anchor="middle" class="th ta">Shared admin account</text>
-        <rect x="400" y="45" width="220" height="120" rx="8" class="frame"/>
-        <rect x="410" y="55" width="200" height="100" rx="6" class="b-guard"/>
-        <text x="510" y="108" text-anchor="middle" class="ts">Sees all the data</text>
+        <text x="299" y="30" text-anchor="middle" class="t-hd t-acc">Shared admin</text>
+        <rect x="214" y="48" width="170" height="140" rx="8" class="zone-soft"/>
+        <rect x="218" y="58" width="158" height="118" rx="6" class="node-acc"/>
+        <text x="299" y="121" text-anchor="middle" class="t-acc">Sees all data</text>
       </svg>
-      </div>
       <figcaption>With the same agent, acting for the user limits it to what that user is allowed to see. Run it under a shared admin account instead, and even a request from a low-rights user can see all the data.</figcaption>
     </figure>
-    <div class="aside enterprise">
+    <div class="aside caution">
       <p class="label">Where companies get stuck</p>
       <p>IT security reviews almost always ask the same three questions: "Whose rights does this agent run with?" "Where are the tokens stored?" and "How do you stop the rights of an employee who has left?" <strong>Whether your design can answer these on the spot often decides if a proof of concept can move to production</strong>. Building Identity into the design from the start lets you answer all three questions with confidence.</p>
     </div>
   </section>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Phase 1: set up the entry and exit steps from this chapter yourself.</li>
-      <li><span class="rid">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Identity chapter)</li>
-      <li><span class="rid">3-6</span>Deep Dive: Authenticate and authorize: it helps to listen with the idea that this is where most enterprise projects get stuck.</li>
+      <li><span class="tag">2-2</span>Phase 1: set up the entry and exit steps from this chapter yourself.</li>
+      <li><span class="tag">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Identity chapter)</li>
+      <li><span class="tag">3-6</span>Deep Dive: Authenticate and authorize: it helps to listen with the idea that this is where most enterprise projects get stuck.</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Identity handles entry (who is calling) and exit (whose rights reach the outside) as two separate questions.</li>
       <li>On the exit side, choose between acting for the user (3LO) and the agent's own rights (2LO), and keep tokens in the vault.</li>
@@ -140,6 +126,9 @@
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 8, Policy and guardrails</b></span><span>Checking a call before it runs</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch06.html"><span>Previous</span><b>Chapter 6</b></a>
+    <a class="next" href="ch08.html"><span>Next</span><b>Chapter 8, Policy and guardrails</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>

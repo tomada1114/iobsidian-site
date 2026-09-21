@@ -1,132 +1,232 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
 <title>AgentCore Reader 09 Observability and Evaluations</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
 :root{
-  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
-  --think:#2F5E8C; --think-bg:#E6EEF6;
-  --reach:#2E7560; --reach-bg:#E3F1EB;
-  --guard:#9A4B2F; --guard-bg:#F6E9E2;
-  --run:#6A5A1E;   --run-bg:#F1ECD9;
-  --accent:var(--think); --accent-bg:var(--think-bg);
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
   --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
 }
+/* ---------- tokens: dark ---------- */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
 }
-.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
-.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
-.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
-.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
-*{box-sizing:border-box}
-body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
-.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
-h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
-h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
-h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
-h3{font-size:17.5px;font-weight:700;margin-top:8px}
-p,ul,ol,dl,figure,table{margin:0}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
 ul,ol{padding-left:1.4em}
-li+li{margin-top:4px}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
 strong{font-weight:700}
-code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
-.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
-.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
-.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
-.flow{display:grid;gap:22px;margin-top:40px}
-section{display:grid;gap:16px}
-section+section{margin-top:28px}
-.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
-.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
-.map ul{margin:0}
-/* asides */
-.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
-.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
-.metaphor{background:var(--accent-bg)}
-.metaphor .label{color:var(--accent)}
-.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
-.enterprise .label{color:var(--guard)}
-.route{background:var(--paper);border:1px dashed var(--ink-soft)}
-.route .label{color:var(--ink-soft)}
-.route ul{font-size:14.5px}
-.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
-/* figures */
-.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
-.fig .scroll{overflow-x:auto}
-.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
-.fig svg.wide{min-width:560px}
-.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
-.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
-.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
-.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
-.fig svg .ta{fill:var(--accent)}
-.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
-.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
-.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
-.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
-.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
-.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
-.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
-.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
-.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
-.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
-.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
-.fig svg .ah{fill:var(--ink-soft)}
-.fig svg .ah-accent{fill:var(--accent)}
-.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
-/* tables */
-.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:14.5px}
-th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
-th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
-tr:last-child td{border-bottom:0}
-td:first-child{font-weight:700;white-space:nowrap}
-/* terms */
-dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
-dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
-dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
-/* end */
-.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
-.summary h2{font-size:17px;padding:0}
-.summary ol{margin:0}
-.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
-.next b{color:var(--ink);font-family:var(--font-display)}
-.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
-@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
-<div class="wrap acc-run">
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 9 / 11 chapters</span></p>
+</head>
+<body>
+<div class="page acc-3">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 9 / 11 chapters</span></p>
   <h1>Observability and Evaluations: how do you know it is not getting worse?</h1>
   <p class="lead">An agent may not follow the same path every time, even for the same question. Sometimes you get a strange answer today, though yesterday it was fine. To find the cause, you need a record of what the agent thought, and which tools it called, in what order. This chapter looks at Observability, which keeps this record, and Evaluations, which uses the record to score quality.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>Traces and spans: the units of the record</li>
       <li>What you can see in CloudWatch and other tools</li>
@@ -137,39 +237,28 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">The path changes every time</h2>
-    <p>If you ask an agent the same question twice, it may not call its tools in the same order each time. This is because the LLM (the AI model behind the agent) chooses the next step every time. This is the same nature of agents that we saw in Chapter 1.</p>
+    <h2 id="s1"><span class="no">01</span>The path changes every time</h2>
+    <p>If you ask an agent the same question twice, it may not call its tools in the same order each time. This is because the LLM (the AI model behind the agent) chooses the next step every time.</p>
     <p>In other words, the results are hard to reproduce. Say the agent gave the right answer yesterday, but a strange answer today. You cannot find the cause just by reading the code line by line, like normal bug-hunting.</p>
     <p>What you need is a record: what the agent thought during that exchange, which tools it called and with what arguments, and what came back. <strong>Observability</strong> is the system that keeps this record. <strong>Evaluations</strong> is the system that turns the record into a score for good or bad.</p>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">Observability: traces and spans</h2>
+    <h2 id="s2"><span class="no">02</span>Observability: traces and spans</h2>
     <p>AgentCore Observability follows <strong>OpenTelemetry</strong>, a common industry format for recording data. One user request becomes one <strong>trace</strong> (a record of everything that happens for that request). Inside that trace, each LLM call and each tool call by the agent becomes one <strong>span</strong> (a record of a single step).</p>
     <p>If your agent runs on Runtime, this kind of recording is easy to set up. You can check the traces you collect in a CloudWatch dashboard built for generative AI.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 225" role="img" aria-label="A waterfall chart showing LLM calls and tool calls, in order, as spans inside one request. The Tool B step is long and shows a delay">
-        <defs><marker id="r1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <line x1="100" y1="18" x2="650" y2="18" class="ln-dash"/>
-        <line x1="100" y1="14" x2="100" y2="22" class="ln"/>
-        <line x1="650" y1="14" x2="650" y2="22" class="ln"/>
-        <text x="375" y="11" text-anchor="middle" class="ts">One request = one trace</text>
-        <text x="90" y="47" text-anchor="end" class="ts">LLM 1</text>
-        <rect x="100" y="30" width="85" height="26" rx="6" class="b-think"/>
-        <text x="90" y="83" text-anchor="end" class="ts">Tool A</text>
-        <rect x="185" y="66" width="80" height="26" rx="6" class="b-reach"/>
-        <text x="90" y="119" text-anchor="end" class="ts">LLM 2</text>
-        <rect x="265" y="102" width="60" height="26" rx="6" class="b-think"/>
-        <text x="90" y="155" text-anchor="end" class="ts">Tool B</text>
-        <rect x="325" y="138" width="240" height="26" rx="6" class="b-guard"/>
-        <text x="445" y="155" text-anchor="middle" class="ts">Waiting here</text>
-        <text x="90" y="191" text-anchor="end" class="ts">LLM 3</text>
-        <rect x="565" y="174" width="60" height="26" rx="6" class="b-think"/>
-        <line x1="95" y1="205" x2="650" y2="205" class="ln" marker-end="url(#r1)"/>
-        <text x="655" y="209" class="ts">Time</text>
+      <svg viewBox="0 0 400 256" role="img" aria-label="A waterfall of five spans in one request: LLM 1, Tool A, LLM 2, Tool B and LLM 3. Each bar's length is how long it took; Tool B's bar is by far the longest, so that is where the agent waits">
+        <line x1="104" y1="8" x2="104" y2="226" class="ln"/>
+        <text x="94" y="34" text-anchor="end">LLM 1</text><rect x="105" y="16" width="50" height="26" class="bar"/>
+        <text x="94" y="76" text-anchor="end">Tool A</text><rect x="155" y="58" width="28" height="26" class="bar"/>
+        <text x="94" y="118" text-anchor="end">LLM 2</text><rect x="183" y="100" width="50" height="26" class="bar"/>
+        <text x="94" y="160" text-anchor="end" class="t-hd t-acc">Tool B</text><rect x="233" y="142" width="118" height="26" class="bar-acc"/>
+        <text x="224" y="160" text-anchor="end" class="t-sm t-acc">waits here</text>
+        <text x="94" y="202" text-anchor="end">LLM 3</text><rect x="351" y="184" width="33" height="26" class="bar"/>
+        <line x1="104" y1="226" x2="388" y2="226" class="ln-base" marker-end="url(#arw)"/>
+        <text x="384" y="248" text-anchor="end" class="t-sm">time</text>
       </svg>
-      </div>
       <figcaption>Inside one request, each LLM call and tool call is recorded in order, as a span. The length of each bar shows how long it took. You can see at a glance where it was slow, or where it took an unexpected path.</figcaption>
     </figure>
     <p>Because it follows OpenTelemetry, you are not limited to CloudWatch. You can send the same data, in the same format, to outside observability tools such as Langfuse or Datadog. If your company already has a monitoring system, you can choose to send the data there instead.</p>
@@ -177,7 +266,7 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Evaluations: turning quality into a score</h2>
+    <h2 id="s3"><span class="no">03</span>Evaluations: turning quality into a score</h2>
     <p>Even with a good record, you still cannot tell if an answer was good. This is what <strong>Evaluations</strong> does: it turns the quality of a response into a score.</p>
     <p>AgentCore comes with built-in evaluators (tools that check a response and give it a score). They can check if an answer is correct, if it is useful, if the agent chose the right tools, and if it is safe. You can also build a <strong>custom evaluator</strong> that matches your own company's standards.</p>
     <p>Most scoring uses <strong>LLM-as-a-judge</strong>, a method where another LLM does the grading. Reading every conversation by hand is not realistic, so you give the judging LLM a set of standards, and it gives back a score and a reason.</p>
@@ -185,67 +274,59 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">The design of the evaluation makes the difference</h2>
+    <h2 id="s4"><span class="no">04</span>The design of the evaluation makes the difference</h2>
     <p>The Evaluations feature is ready to use, but having the feature is not what matters. What matters is how well you design the evaluation.</p>
     <p>This means: how you build a test data set with common questions, edge-case questions, and tricky questions; how you decide the standard for a passing score; and how you set up a <strong>regression test</strong> (a check that catches new problems caused by a change) that runs every time you change a prompt or a tool.</p>
     <p>A team that builds this carefully will catch far more problems in production than a team that just turns on an evaluator.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">The loop: observe, evaluate, fix</h2>
+    <h2 id="s5"><span class="no">05</span>The loop: observe, evaluate, fix</h2>
     <p>Evaluation is not just about measuring. It gives you <strong>material for fixing problems</strong>. Look at the parts that scored low. Check whether the problem is in how you wrote the prompt, which model you used, or how you described a tool. Fix it, then run the same evaluation again to see if the score went up.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg viewBox="0 0 680 230" role="img" aria-label="An improvement loop with four steps: observe, evaluate, fix, and re-evaluate. After re-evaluating, the loop goes back to observing">
-        <defs><marker id="r2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="20" y="40" width="120" height="60" rx="6" class="b-think"/>
-        <text x="80" y="65" text-anchor="middle" class="th">Observe</text>
-        <text x="80" y="85" text-anchor="middle" class="ts">Check the records</text>
-        <rect x="190" y="40" width="120" height="60" rx="6" class="b-reach"/>
-        <text x="250" y="65" text-anchor="middle" class="th">Evaluate</text>
-        <text x="250" y="85" text-anchor="middle" class="ts">Give it a score</text>
-        <rect x="360" y="40" width="120" height="60" rx="6" class="b-guard"/>
-        <text x="420" y="65" text-anchor="middle" class="th">Fix</text>
-        <text x="420" y="85" text-anchor="middle" class="ts">Fix the cause</text>
-        <rect x="530" y="40" width="120" height="60" rx="6" class="b-accent"/>
-        <text x="590" y="65" text-anchor="middle" class="th">Re-evaluate</text>
-        <text x="590" y="85" text-anchor="middle" class="ts">Measure again</text>
-        <line x1="140" y1="70" x2="190" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="165" y="62" text-anchor="middle" class="ts">Look</text>
-        <line x1="310" y1="70" x2="360" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="335" y="62" text-anchor="middle" class="ts">If low</text>
-        <line x1="480" y1="70" x2="530" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="505" y="62" text-anchor="middle" class="ts">Fixed</text>
-        <path d="M590 100 C590 190 80 190 80 100" class="ln-dash" marker-end="url(#r2)"/>
-        <text x="335" y="205" text-anchor="middle" class="ts">Observe again</text>
+      <svg viewBox="0 0 400 320" role="img" aria-label="Four steps run in order: observe, evaluate, fix, and re-evaluate. After re-evaluating, the loop goes back to observing again">
+        <line x1="44" y1="44" x2="44" y2="266" class="ln"/>
+        <circle cx="44" cy="44" r="4" class="dot"/>
+        <circle cx="44" cy="118" r="4" class="dot"/>
+        <circle cx="44" cy="192" r="4" class="dot"/>
+        <circle cx="44" cy="266" r="4" class="dot"/>
+        <rect x="70" y="16" width="260" height="56" rx="6" class="node-c1"/>
+        <text x="200" y="40" text-anchor="middle" class="t-hd">Observe</text><text x="200" y="61" text-anchor="middle" class="t-sm">Check the records</text>
+        <rect x="70" y="90" width="260" height="56" rx="6" class="node-c2"/>
+        <text x="200" y="114" text-anchor="middle" class="t-hd">Evaluate</text><text x="200" y="135" text-anchor="middle" class="t-sm">Give it a score</text>
+        <rect x="70" y="164" width="260" height="56" rx="6" class="node-c4"/>
+        <text x="200" y="188" text-anchor="middle" class="t-hd">Fix</text><text x="200" y="209" text-anchor="middle" class="t-sm">Fix the cause</text>
+        <rect x="70" y="238" width="260" height="56" rx="6" class="node-acc"/>
+        <text x="200" y="262" text-anchor="middle" class="t-hd t-acc">Re-evaluate</text><text x="200" y="283" text-anchor="middle" class="t-sm">Measure again</text>
+        <path d="M330,266 C380,266 380,44 330,44" class="ln-dash" marker-end="url(#arw)"/>
+        <text x="344" y="159" class="t-sm">Again</text>
       </svg>
-      </div>
       <figcaption>Take the traces from observing and run them through evaluation. Fix the parts that do not meet your standard, in the prompt or in a tool's description. Then run the same evaluation again. Repeating this is the optimization loop.</figcaption>
     </figure>
     <p>The final lab in the official Phase 1, and the Deep Dive module called "Observe, evaluate, optimize", let you practice this whole loop yourself: observe, evaluate, fix, and evaluate again.</p>
   </section>
 
-  <div class="aside metaphor">
+  <div class="aside analogy">
     <p class="label">Analogy: daily work reports and performance reviews</p>
     <p>Without a daily work report that says what a new employee did, and in what order, you cannot judge how well they worked that day. Observability is like this report. Evaluations is like the performance review that scores the work, based on that report and a set of standards. Without the report, you cannot even explain why you gave a score.</p>
   </div>
 
-  <div class="aside enterprise">
+  <div class="aside caution">
     <p class="label">Where companies get stuck</p>
     <p>If you cannot show numbers proving that a new model version is better or worse, it is hard to get approval to release it. Also, a trace keeps the full conversation with a customer. This can leave personal data in the logs. Before you go live, you need to decide how long you are allowed to keep these logs.</p>
   </div>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Phase 1 (evaluation and optimization lab): practice running an evaluator and fixing a prompt</li>
-      <li><span class="rid">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (observability and evaluation chapters): reread the mechanism in Japanese</li>
-      <li><span class="rid">3-7</span>Deep Dive: Observe, evaluate, optimize your agent: try the whole content of this chapter yourself</li>
+      <li><span class="tag">2-2</span>Phase 1 (evaluation and optimization lab): practice running an evaluator and fixing a prompt</li>
+      <li><span class="tag">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (observability and evaluation chapters): reread the mechanism in Japanese</li>
+      <li><span class="tag">3-7</span>Deep Dive: Observe, evaluate, optimize your agent: try the whole content of this chapter yourself</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>An agent's path changes every time, so you need traces and spans to keep a record. Without them, you cannot find the cause of a problem</li>
       <li>Evaluations turns responses into scores, using evaluators and LLM-as-a-judge. Use online evaluation and CI evaluation for different purposes</li>
@@ -253,8 +334,12 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 10, The Designer's Eye</b></span><span>Connect all the parts so far into one view</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch08.html"><span>Previous</span><b>Chapter 8</b></a>
+    <a class="next" href="ch10.html"><span>Next</span><b>Chapter 10, The Designer's Eye</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>
-
 </div>
+</body>
+</html>

@@ -1,14 +1,14 @@
 <!-- title: AgentCore Reader 09 Observability and Evaluations | accent: run -->
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 9 / 11 chapters</span></p>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 9 / 11 chapters</span></p>
   <h1>Observability and Evaluations: how do you know it is not getting worse?</h1>
   <p class="lead">An agent may not follow the same path every time, even for the same question. Sometimes you get a strange answer today, though yesterday it was fine. To find the cause, you need a record of what the agent thought, and which tools it called, in what order. This chapter looks at Observability, which keeps this record, and Evaluations, which uses the record to score quality.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>Traces and spans: the units of the record</li>
       <li>What you can see in CloudWatch and other tools</li>
@@ -19,39 +19,28 @@
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">The path changes every time</h2>
-    <p>If you ask an agent the same question twice, it may not call its tools in the same order each time. This is because the LLM (the AI model behind the agent) chooses the next step every time. This is the same nature of agents that we saw in Chapter 1.</p>
+    <h2 id="s1"><span class="no">01</span>The path changes every time</h2>
+    <p>If you ask an agent the same question twice, it may not call its tools in the same order each time. This is because the LLM (the AI model behind the agent) chooses the next step every time.</p>
     <p>In other words, the results are hard to reproduce. Say the agent gave the right answer yesterday, but a strange answer today. You cannot find the cause just by reading the code line by line, like normal bug-hunting.</p>
     <p>What you need is a record: what the agent thought during that exchange, which tools it called and with what arguments, and what came back. <strong>Observability</strong> is the system that keeps this record. <strong>Evaluations</strong> is the system that turns the record into a score for good or bad.</p>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">Observability: traces and spans</h2>
+    <h2 id="s2"><span class="no">02</span>Observability: traces and spans</h2>
     <p>AgentCore Observability follows <strong>OpenTelemetry</strong>, a common industry format for recording data. One user request becomes one <strong>trace</strong> (a record of everything that happens for that request). Inside that trace, each LLM call and each tool call by the agent becomes one <strong>span</strong> (a record of a single step).</p>
     <p>If your agent runs on Runtime, this kind of recording is easy to set up. You can check the traces you collect in a CloudWatch dashboard built for generative AI.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 225" role="img" aria-label="A waterfall chart showing LLM calls and tool calls, in order, as spans inside one request. The Tool B step is long and shows a delay">
-        <defs><marker id="r1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <line x1="100" y1="18" x2="650" y2="18" class="ln-dash"/>
-        <line x1="100" y1="14" x2="100" y2="22" class="ln"/>
-        <line x1="650" y1="14" x2="650" y2="22" class="ln"/>
-        <text x="375" y="11" text-anchor="middle" class="ts">One request = one trace</text>
-        <text x="90" y="47" text-anchor="end" class="ts">LLM 1</text>
-        <rect x="100" y="30" width="85" height="26" rx="6" class="b-think"/>
-        <text x="90" y="83" text-anchor="end" class="ts">Tool A</text>
-        <rect x="185" y="66" width="80" height="26" rx="6" class="b-reach"/>
-        <text x="90" y="119" text-anchor="end" class="ts">LLM 2</text>
-        <rect x="265" y="102" width="60" height="26" rx="6" class="b-think"/>
-        <text x="90" y="155" text-anchor="end" class="ts">Tool B</text>
-        <rect x="325" y="138" width="240" height="26" rx="6" class="b-guard"/>
-        <text x="445" y="155" text-anchor="middle" class="ts">Waiting here</text>
-        <text x="90" y="191" text-anchor="end" class="ts">LLM 3</text>
-        <rect x="565" y="174" width="60" height="26" rx="6" class="b-think"/>
-        <line x1="95" y1="205" x2="650" y2="205" class="ln" marker-end="url(#r1)"/>
-        <text x="655" y="209" class="ts">Time</text>
+      <svg viewBox="0 0 400 256" role="img" aria-label="A waterfall of five spans in one request: LLM 1, Tool A, LLM 2, Tool B and LLM 3. Each bar's length is how long it took; Tool B's bar is by far the longest, so that is where the agent waits">
+        <line x1="104" y1="8" x2="104" y2="226" class="ln"/>
+        <text x="94" y="34" text-anchor="end">LLM 1</text><rect x="105" y="16" width="50" height="26" class="bar"/>
+        <text x="94" y="76" text-anchor="end">Tool A</text><rect x="155" y="58" width="28" height="26" class="bar"/>
+        <text x="94" y="118" text-anchor="end">LLM 2</text><rect x="183" y="100" width="50" height="26" class="bar"/>
+        <text x="94" y="160" text-anchor="end" class="t-hd t-acc">Tool B</text><rect x="233" y="142" width="118" height="26" class="bar-acc"/>
+        <text x="224" y="160" text-anchor="end" class="t-sm t-acc">waits here</text>
+        <text x="94" y="202" text-anchor="end">LLM 3</text><rect x="351" y="184" width="33" height="26" class="bar"/>
+        <line x1="104" y1="226" x2="388" y2="226" class="ln-base" marker-end="url(#arw)"/>
+        <text x="384" y="248" text-anchor="end" class="t-sm">time</text>
       </svg>
-      </div>
       <figcaption>Inside one request, each LLM call and tool call is recorded in order, as a span. The length of each bar shows how long it took. You can see at a glance where it was slow, or where it took an unexpected path.</figcaption>
     </figure>
     <p>Because it follows OpenTelemetry, you are not limited to CloudWatch. You can send the same data, in the same format, to outside observability tools such as Langfuse or Datadog. If your company already has a monitoring system, you can choose to send the data there instead.</p>
@@ -59,7 +48,7 @@
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Evaluations: turning quality into a score</h2>
+    <h2 id="s3"><span class="no">03</span>Evaluations: turning quality into a score</h2>
     <p>Even with a good record, you still cannot tell if an answer was good. This is what <strong>Evaluations</strong> does: it turns the quality of a response into a score.</p>
     <p>AgentCore comes with built-in evaluators (tools that check a response and give it a score). They can check if an answer is correct, if it is useful, if the agent chose the right tools, and if it is safe. You can also build a <strong>custom evaluator</strong> that matches your own company's standards.</p>
     <p>Most scoring uses <strong>LLM-as-a-judge</strong>, a method where another LLM does the grading. Reading every conversation by hand is not realistic, so you give the judging LLM a set of standards, and it gives back a score and a reason.</p>
@@ -67,67 +56,59 @@
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">The design of the evaluation makes the difference</h2>
+    <h2 id="s4"><span class="no">04</span>The design of the evaluation makes the difference</h2>
     <p>The Evaluations feature is ready to use, but having the feature is not what matters. What matters is how well you design the evaluation.</p>
     <p>This means: how you build a test data set with common questions, edge-case questions, and tricky questions; how you decide the standard for a passing score; and how you set up a <strong>regression test</strong> (a check that catches new problems caused by a change) that runs every time you change a prompt or a tool.</p>
     <p>A team that builds this carefully will catch far more problems in production than a team that just turns on an evaluator.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">The loop: observe, evaluate, fix</h2>
+    <h2 id="s5"><span class="no">05</span>The loop: observe, evaluate, fix</h2>
     <p>Evaluation is not just about measuring. It gives you <strong>material for fixing problems</strong>. Look at the parts that scored low. Check whether the problem is in how you wrote the prompt, which model you used, or how you described a tool. Fix it, then run the same evaluation again to see if the score went up.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg viewBox="0 0 680 230" role="img" aria-label="An improvement loop with four steps: observe, evaluate, fix, and re-evaluate. After re-evaluating, the loop goes back to observing">
-        <defs><marker id="r2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="20" y="40" width="120" height="60" rx="6" class="b-think"/>
-        <text x="80" y="65" text-anchor="middle" class="th">Observe</text>
-        <text x="80" y="85" text-anchor="middle" class="ts">Check the records</text>
-        <rect x="190" y="40" width="120" height="60" rx="6" class="b-reach"/>
-        <text x="250" y="65" text-anchor="middle" class="th">Evaluate</text>
-        <text x="250" y="85" text-anchor="middle" class="ts">Give it a score</text>
-        <rect x="360" y="40" width="120" height="60" rx="6" class="b-guard"/>
-        <text x="420" y="65" text-anchor="middle" class="th">Fix</text>
-        <text x="420" y="85" text-anchor="middle" class="ts">Fix the cause</text>
-        <rect x="530" y="40" width="120" height="60" rx="6" class="b-accent"/>
-        <text x="590" y="65" text-anchor="middle" class="th">Re-evaluate</text>
-        <text x="590" y="85" text-anchor="middle" class="ts">Measure again</text>
-        <line x1="140" y1="70" x2="190" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="165" y="62" text-anchor="middle" class="ts">Look</text>
-        <line x1="310" y1="70" x2="360" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="335" y="62" text-anchor="middle" class="ts">If low</text>
-        <line x1="480" y1="70" x2="530" y2="70" class="ln-accent" marker-end="url(#r2)"/>
-        <text x="505" y="62" text-anchor="middle" class="ts">Fixed</text>
-        <path d="M590 100 C590 190 80 190 80 100" class="ln-dash" marker-end="url(#r2)"/>
-        <text x="335" y="205" text-anchor="middle" class="ts">Observe again</text>
+      <svg viewBox="0 0 400 320" role="img" aria-label="Four steps run in order: observe, evaluate, fix, and re-evaluate. After re-evaluating, the loop goes back to observing again">
+        <line x1="44" y1="44" x2="44" y2="266" class="ln"/>
+        <circle cx="44" cy="44" r="4" class="dot"/>
+        <circle cx="44" cy="118" r="4" class="dot"/>
+        <circle cx="44" cy="192" r="4" class="dot"/>
+        <circle cx="44" cy="266" r="4" class="dot"/>
+        <rect x="70" y="16" width="260" height="56" rx="6" class="node-c1"/>
+        <text x="200" y="40" text-anchor="middle" class="t-hd">Observe</text><text x="200" y="61" text-anchor="middle" class="t-sm">Check the records</text>
+        <rect x="70" y="90" width="260" height="56" rx="6" class="node-c2"/>
+        <text x="200" y="114" text-anchor="middle" class="t-hd">Evaluate</text><text x="200" y="135" text-anchor="middle" class="t-sm">Give it a score</text>
+        <rect x="70" y="164" width="260" height="56" rx="6" class="node-c4"/>
+        <text x="200" y="188" text-anchor="middle" class="t-hd">Fix</text><text x="200" y="209" text-anchor="middle" class="t-sm">Fix the cause</text>
+        <rect x="70" y="238" width="260" height="56" rx="6" class="node-acc"/>
+        <text x="200" y="262" text-anchor="middle" class="t-hd t-acc">Re-evaluate</text><text x="200" y="283" text-anchor="middle" class="t-sm">Measure again</text>
+        <path d="M330,266 C380,266 380,44 330,44" class="ln-dash" marker-end="url(#arw)"/>
+        <text x="344" y="159" class="t-sm">Again</text>
       </svg>
-      </div>
       <figcaption>Take the traces from observing and run them through evaluation. Fix the parts that do not meet your standard, in the prompt or in a tool's description. Then run the same evaluation again. Repeating this is the optimization loop.</figcaption>
     </figure>
     <p>The final lab in the official Phase 1, and the Deep Dive module called "Observe, evaluate, optimize", let you practice this whole loop yourself: observe, evaluate, fix, and evaluate again.</p>
   </section>
 
-  <div class="aside metaphor">
+  <div class="aside analogy">
     <p class="label">Analogy: daily work reports and performance reviews</p>
     <p>Without a daily work report that says what a new employee did, and in what order, you cannot judge how well they worked that day. Observability is like this report. Evaluations is like the performance review that scores the work, based on that report and a set of standards. Without the report, you cannot even explain why you gave a score.</p>
   </div>
 
-  <div class="aside enterprise">
+  <div class="aside caution">
     <p class="label">Where companies get stuck</p>
     <p>If you cannot show numbers proving that a new model version is better or worse, it is hard to get approval to release it. Also, a trace keeps the full conversation with a customer. This can leave personal data in the logs. Before you go live, you need to decide how long you are allowed to keep these logs.</p>
   </div>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Phase 1 (evaluation and optimization lab): practice running an evaluator and fixing a prompt</li>
-      <li><span class="rid">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (observability and evaluation chapters): reread the mechanism in Japanese</li>
-      <li><span class="rid">3-7</span>Deep Dive: Observe, evaluate, optimize your agent: try the whole content of this chapter yourself</li>
+      <li><span class="tag">2-2</span>Phase 1 (evaluation and optimization lab): practice running an evaluator and fixing a prompt</li>
+      <li><span class="tag">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (observability and evaluation chapters): reread the mechanism in Japanese</li>
+      <li><span class="tag">3-7</span>Deep Dive: Observe, evaluate, optimize your agent: try the whole content of this chapter yourself</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>An agent's path changes every time, so you need traces and spans to keep a record. Without them, you cannot find the cause of a problem</li>
       <li>Evaluations turns responses into scores, using evaluators and LLM-as-a-judge. Use online evaluation and CI evaluation for different purposes</li>
@@ -135,6 +116,9 @@
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 10, The Designer's Eye</b></span><span>Connect all the parts so far into one view</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch08.html"><span>Previous</span><b>Chapter 8</b></a>
+    <a class="next" href="ch10.html"><span>Next</span><b>Chapter 10, The Designer's Eye</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>

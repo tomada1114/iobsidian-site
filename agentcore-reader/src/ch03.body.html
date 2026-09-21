@@ -1,14 +1,14 @@
 <!-- title: AgentCore Reader 03 Strands Agents | accent: think -->
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 3 / 11 chapters</span></p>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 3 / 11 chapters</span></p>
   <h1>Strands Agents: Let the Model Run the Loop</h1>
-  <p class="lead">In the last chapter, you saw a map of the AgentCore parts. In this chapter, you will see how to write the agent itself, the part that runs on top of those pieces. AWS recommends an open-source SDK called Strands Agents. Once you understand its idea and the six layers of the harness (the program that runs the loop), the parts covered in later chapters will make more sense.</p>
+  <p class="lead">In this chapter, you will see how to write the agent itself, the part that runs on top of AgentCore's parts. AWS recommends an open-source SDK called Strands Agents.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S1-S2</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>What it means that Strands Agents is "model-driven"</li>
       <li>How to pass tools and a system prompt in a minimal example</li>
@@ -19,9 +19,9 @@
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">A model-driven way to write agents</h2>
-    <p>In Chapter 1, you saw the agent loop. How do you write this loop in real code? AWS recommends an open-source SDK called <strong>Strands Agents</strong>. It has a Python version and a TypeScript version, and AWS maintains both.</p>
-    <p>The main idea of Strands Agents is called <strong>model-driven</strong> design. You do not write each step in detail, like "call A, check a condition, then call B", as a graph or in code. Instead, you give the model a system prompt and a list of tools it can use. The model decides what to do next. In the three stages from Chapter 1, this is the style furthest to the right.</p>
+    <h2 id="s1"><span class="no">01</span>A model-driven way to write agents</h2>
+    <p>How do you write the agent loop in real code? AWS recommends an open-source SDK called <strong>Strands Agents</strong>. It has a Python version and a TypeScript version, and AWS maintains both.</p>
+    <p>The main idea of Strands Agents is called <strong>model-driven</strong> design. You do not write each step in detail, like "call A, check a condition, then call B", as a graph or in code. Instead, you give the model a system prompt and a list of tools it can use. The model decides what to do next. Of the three levels of using an LLM, this is the last one: the agent.</p>
     <p>A minimal example is very simple. You just pass a model, some tools, and a system prompt to a class called <code>Agent</code>, and the loop is ready to run.</p>
     <pre><code>from strands import Agent, tool
 
@@ -37,11 +37,11 @@ agent("What is the weather in Tokyo?")</code></pre>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">The six layers of the harness</h2>
-    <p>In Chapter 1, we called the program that runs the loop around the LLM a "harness". The official Strands Workshop lists six layers inside this harness. Let's look at each one.</p>
+    <h2 id="s2"><span class="no">02</span>The six layers of the harness</h2>
+    <p>The program that runs the loop around the LLM is called a "harness." The official Strands Workshop lists six layers inside this harness. Let's look at each one.</p>
     <dl class="terms">
       <dt>Loop</dt>
-      <dd>This is the repeated cycle from Chapter 1: think, use a tool, look at the result.</dd>
+      <dd>This is the repeated cycle: think, use a tool, look at the result.</dd>
       <dt>Tools</dt>
       <dd>These are normal functions, or outside tools reached through MCP. The model picks which tool to call, and the harness runs it.</dd>
       <dt>Hooks</dt>
@@ -54,60 +54,55 @@ agent("What is the weather in Tokyo?")</code></pre>
       <dd>A session saves the state of a conversation so you can start it again later. When a conversation gets long, a part called the conversation manager decides what to drop or summarize.</dd>
     </dl>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 380" role="img" aria-label="A diagram with the loop in the center, and layers for hooks, skills, steering, and session stacked around it">
-        <defs><marker id="a31" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="20" y="20" width="640" height="340" rx="14" class="frame"/>
-        <text x="350" y="42" text-anchor="middle" class="ts">Session: stores and summarizes conversation state</text>
-        <rect x="55" y="55" width="570" height="270" rx="12" class="frame"/>
-        <text x="350" y="77" text-anchor="middle" class="ts">Steering: adds instructions while it runs</text>
-        <rect x="90" y="90" width="500" height="200" rx="10" class="frame"/>
-        <text x="350" y="112" text-anchor="middle" class="ts">Skills: instructions loaded only when needed</text>
-        <rect x="125" y="125" width="430" height="130" rx="8" class="frame"/>
-        <text x="350" y="147" text-anchor="middle" class="ts">Hooks: step in before and after a call</text>
-        <text x="350" y="172" text-anchor="middle" class="th ta">Loop</text>
-        <rect x="190" y="185" width="130" height="40" rx="6" class="b-think"/>
-        <text x="255" y="210" text-anchor="middle" class="th">LLM</text>
-        <rect x="390" y="185" width="130" height="40" rx="6" class="b-reach"/>
-        <text x="455" y="210" text-anchor="middle" class="th">Tool</text>
-        <path d="M320 198 L388 198" class="ln-accent" marker-end="url(#a31)"/>
-        <text x="354" y="190" text-anchor="middle" class="ts">Request</text>
-        <path d="M388 212 L322 212" class="ln-accent" marker-end="url(#a31)"/>
-        <text x="354" y="228" text-anchor="middle" class="ts">Result</text>
+      <svg viewBox="0 0 400 308" role="img" aria-label="Session, Steering, Skills and Hooks nest around the loop, from widest scope to narrowest, with the LLM and tool exchange at the center">
+        <rect x="8" y="8" width="384" height="292" rx="14" class="zone-soft"/>
+        <text x="24" y="32" class="t-sm">Session: stores conversation state</text>
+        <rect x="26" y="42" width="348" height="240" rx="12" class="node"/>
+        <text x="42" y="66" class="t-sm">Steering: adds new instructions</text>
+        <rect x="44" y="76" width="312" height="188" rx="10" class="node"/>
+        <text x="60" y="100" class="t-sm">Skills: loaded only when needed</text>
+        <rect x="62" y="110" width="276" height="136" rx="8" class="node"/>
+        <text x="78" y="134" class="t-sm">Hooks: before and after a call</text>
+        <text x="200" y="162" text-anchor="middle" class="t-hd t-acc">Loop</text>
+        <rect x="72" y="176" width="96" height="44" rx="6" class="node-c1"/><text x="120" y="203" text-anchor="middle" class="t-hd">LLM</text>
+        <rect x="232" y="176" width="96" height="44" rx="6" class="node-c2"/><text x="280" y="203" text-anchor="middle" class="t-hd">Tool</text>
+        <line x1="170" y1="190" x2="230" y2="190" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <text x="200" y="183" text-anchor="middle" class="t-sm">ask</text>
+        <line x1="230" y1="206" x2="170" y2="206" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <text x="200" y="226" text-anchor="middle" class="t-sm">back</text>
       </svg>
-      </div>
       <figcaption>The center is the loop itself (the LLM and the tool going back and forth). Each layer further out controls a wider range. Hooks step in before and after a tool call. Skills load only when needed. Steering adds instructions while the agent runs. Session keeps state across the whole conversation.</figcaption>
     </figure>
     <p>The layers closer to the center relate to one tool call. The layers further out relate to the whole conversation or the whole run. <strong>Think about which layer should control the agent's behavior. This helps you decide whether to stop an action with a hook, or a simple request in the system prompt is enough</strong>.</p>
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Multi-agent: how to combine agents</h2>
-    <p>In Chapter 1, we talked about a "conductor and workers" pattern. Strands Agents lets you build this in three ways. <strong>Calling an agent as a tool</strong> is the simplest way. From the parent agent's view, the child agent looks like a single function call.</p>
+    <h2 id="s3"><span class="no">03</span>Multi-agent: how to combine agents</h2>
+    <p>Strands Agents lets you build multi-agent systems in three ways. <strong>Calling an agent as a tool</strong> is the simplest way. From the parent agent's view, the child agent looks like a single function call.</p>
     <p>A <strong>Swarm</strong> is a group of equal agents that hand work to each other. When one agent decides a task is too hard for it, it passes the conversation to the next agent. A <strong>Graph</strong> moves work between agents along a path that you set in advance. This fits cases where you want to fix the order of steps yourself.</p>
-    <p>When agents need to talk across different systems or teams, Strands Agents also supports A2A, the protocol for agent-to-agent calls from Chapter 1. For example, an agent built inside your company can be called by another team's agent through A2A.</p>
+    <p>When agents need to talk across different systems or teams, Strands Agents also supports A2A, the protocol for agent-to-agent calls. For example, an agent built inside your company can be called by another team's agent through A2A.</p>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">How this differs from LangGraph</h2>
+    <h2 id="s4"><span class="no">04</span>How this differs from LangGraph</h2>
     <p><strong>LangGraph</strong> is another well-known tool for building agents. Its design writes state changes as an explicit graph. You decide in code which node comes after which node. This makes the behavior easier to predict, even with complex branches.</p>
     <p>Strands Agents is different because it lets the model make that decision. But <strong>agents built with either tool run the same way on AgentCore Runtime</strong>. AgentCore does not require a specific framework, so this difference is just a choice between two design styles. It does not limit whether you can use AgentCore.</p>
-    <div class="aside enterprise">
+    <div class="aside caution">
       <p class="label">Where companies get stuck</p>
-      <p>Writing "do not handle personal data" in the system prompt is only a <strong>request</strong>. If the model misreads the instruction, or a clever input pushes it past the rule, the rule breaks easily. For rules you truly need to enforce, use something on the harness side, such as a hook, or the Policy tool from Chapter 8. These stop the action in code, not just by asking.</p>
+      <p>Writing "do not handle personal data" in the system prompt is only a <strong>request</strong>. If the model misreads the instruction, or a clever input pushes it past the rule, the rule breaks easily. For rules you truly need to enforce, use something on the harness side, such as a hook, or the Policy tool. These stop the action in code, not just by asking.</p>
     </div>
   </section>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">1-4</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 2, the Strands Agents section: check the layers from this chapter by writing real code</li>
-      <li><span class="rid">2-1</span>Strands Agents Hands-On Workshop: modules 1-5 are the core; modules 6-7 are optional and cover deployment, multi-agent setups, and automatic evaluation</li>
+      <li><span class="tag">1-4</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 2, the Strands Agents section: check the layers from this chapter by writing real code</li>
+      <li><span class="tag">2-1</span>Strands Agents Hands-On Workshop: modules 1-5 are the core; modules 6-7 are optional and cover deployment, multi-agent setups, and automatic evaluation</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Strands Agents is a "model-driven" SDK. It lets the model decide the steps, instead of writing them as a graph.</li>
       <li>The harness has six layers: loop, tools, hooks, skills, steering, and session.</li>
@@ -115,6 +110,9 @@ agent("What is the weather in Tokyo?")</code></pre>
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 4, Runtime</b></span><span>Where the agent actually runs</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch02.html"><span>Previous</span><b>Chapter 2</b></a>
+    <a class="next" href="ch04.html"><span>Next</span><b>Chapter 4, Runtime</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>

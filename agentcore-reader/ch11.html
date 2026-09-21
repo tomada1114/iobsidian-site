@@ -1,132 +1,232 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
 <title>AgentCore Reader 11 The Certification Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
 :root{
-  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
-  --think:#2F5E8C; --think-bg:#E6EEF6;
-  --reach:#2E7560; --reach-bg:#E3F1EB;
-  --guard:#9A4B2F; --guard-bg:#F6E9E2;
-  --run:#6A5A1E;   --run-bg:#F1ECD9;
-  --accent:var(--think); --accent-bg:var(--think-bg);
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
   --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
 }
+/* ---------- tokens: dark ---------- */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
 }
-.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
-.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
-.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
-.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
-*{box-sizing:border-box}
-body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
-.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
-h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
-h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
-h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
-h3{font-size:17.5px;font-weight:700;margin-top:8px}
-p,ul,ol,dl,figure,table{margin:0}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
 ul,ol{padding-left:1.4em}
-li+li{margin-top:4px}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
 strong{font-weight:700}
-code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
-.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
-.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
-.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
-.flow{display:grid;gap:22px;margin-top:40px}
-section{display:grid;gap:16px}
-section+section{margin-top:28px}
-.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
-.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
-.map ul{margin:0}
-/* asides */
-.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
-.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
-.metaphor{background:var(--accent-bg)}
-.metaphor .label{color:var(--accent)}
-.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
-.enterprise .label{color:var(--guard)}
-.route{background:var(--paper);border:1px dashed var(--ink-soft)}
-.route .label{color:var(--ink-soft)}
-.route ul{font-size:14.5px}
-.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
-/* figures */
-.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
-.fig .scroll{overflow-x:auto}
-.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
-.fig svg.wide{min-width:560px}
-.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
-.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
-.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
-.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
-.fig svg .ta{fill:var(--accent)}
-.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
-.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
-.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
-.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
-.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
-.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
-.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
-.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
-.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
-.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
-.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
-.fig svg .ah{fill:var(--ink-soft)}
-.fig svg .ah-accent{fill:var(--accent)}
-.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
-/* tables */
-.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:14.5px}
-th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
-th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
-tr:last-child td{border-bottom:0}
-td:first-child{font-weight:700;white-space:nowrap}
-/* terms */
-dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
-dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
-dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
-/* end */
-.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
-.summary h2{font-size:17px;padding:0}
-.summary ol{margin:0}
-.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
-.next b{color:var(--ink);font-family:var(--font-display)}
-.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
-@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
-<div class="wrap acc-think">
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 11 / 11 chapters</span></p>
+</head>
+<body>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 11 / 11 chapters</span></p>
   <h1>The certification map: AIP-C01, and what is outside this reader</h1>
   <p class="lead">This reader is meant to give you the big picture before you start hands-on work. It is not a study guide for a certification exam. Still, it helps to know where the topics in this reader overlap with the exam, and where they do not. This makes it easier to choose how to study next. In this last chapter, we use the AIP-C01 certification as an outer frame for the map, and look back at the whole reader.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S5</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>Basic facts about AIP-C01 (AWS Certified Generative AI Developer – Professional)</li>
       <li>How the chapters of this reader match the exam topics</li>
@@ -137,28 +237,28 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">What is AIP-C01?</h2>
+    <h2 id="s1"><span class="no">01</span>What is AIP-C01?</h2>
     <p><strong>AWS Certified Generative AI Developer – Professional (AIP-C01)</strong> is the top-level certification in the field of generative AI and agents. It has 65 scored questions and 10 unscored questions. You pass with a score of 750 or higher. The exam fee is 300 dollars, and the certification stays valid for 3 years. You can take the exam in Japanese too.</p>
     <p>An update to the standard version, published in March 2026, added AgentCore to the exam scope. The recommended experience is at least 2 years with AWS and at least 1 year with generative AI. It is easy to forget that the exam also covers <strong>SageMaker</strong> widely, not just AgentCore. The exam has about 5 domains (topic areas). We will not make up numbers for the name and share of each domain here. Check the exam guide (roadmap item 5-1) for that.</p>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">How this reader maps to the exam</h2>
+    <h2 id="s2"><span class="no">02</span>How this reader maps to the exam</h2>
     <p>Here is a rough map from the content of this reader to exam topics. <strong>The chapter boundaries are only a guide. They do not match the domain boundaries in the exam guide.</strong> Do not try to memorize the exact lines. Use this map to check if you are missing a whole area.</p>
     <div class="tbl"><table>
       <thead><tr><th>Reader chapters</th><th>Likely exam topics</th></tr></thead>
       <tbody>
-        <tr><td>Chapters 2-3</td><td>Bedrock and model choice, agent orchestration</td></tr>
-        <tr><td>Chapters 4-6</td><td>Connecting agents, tools, and MCP</td></tr>
-        <tr><td>Chapters 7-8</td><td>Guardrails, security, and authorization</td></tr>
-        <tr><td>Chapter 9</td><td>Evaluation and observability</td></tr>
-        <tr><td>Chapter 10</td><td>Cost optimization and governance</td></tr>
+        <tr><td class="key">Chapters 2-3</td><td>Bedrock and model choice, agent orchestration</td></tr>
+        <tr><td class="key">Chapters 4-6</td><td>Connecting agents, tools, and MCP</td></tr>
+        <tr><td class="key">Chapters 7-8</td><td>Guardrails, security, and authorization</td></tr>
+        <tr><td class="key">Chapter 9</td><td>Evaluation and observability</td></tr>
+        <tr><td class="key">Chapter 10</td><td>Cost optimization and governance</td></tr>
       </tbody>
     </table></div>
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">What this reader does not cover</h2>
+    <h2 id="s3"><span class="no">03</span>What this reader does not cover</h2>
     <p>Some areas often appear on the exam but are not covered in this reader. Keep them in mind as areas outside this map, when you do hands-on work.</p>
     <dl class="terms">
       <dt>SageMaker</dt>
@@ -174,65 +274,71 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
       <dt>Prompt management</dt>
       <dd>A system for keeping prompts separate from your code, and improving them over time with version control.</dd>
       <dt>Model evaluation</dt>
-      <dd>A system for comparing several models or prompts using the same standard, to decide which one to use. This is different from the agent evaluation in Chapter 9.</dd>
+      <dd>A system for comparing several models or prompts using the same standard, to decide which one to use. This is different from the agent evaluation this reader covers.</dd>
     </dl>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">How to work through S5</h2>
+    <h2 id="s4"><span class="no">04</span>How to work through S5</h2>
     <p>The certification sits at the end of the roadmap because <strong>the more hands-on work you do first, the less new material you need to memorize for the exam</strong>. In S5, follow this order.</p>
     <p>First, read through the exam guide (5-1) and mark the parts you already covered in S2 to S4. Next, use the Udemy course (5-2) to fill in only the parts you did not mark. Last, take the practice exam (5-4). For each question you get wrong, do not just memorize the right answer. Instead, ask yourself: which part from S2 to S4 explains this? This kind of review, not memorizing, is the fastest way to raise your score.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">Looking back at the whole reader</h2>
-    <p>In Chapter 1, we used the analogy of hiring a new employee. Now, at the end, let's place all the parts of this reader back onto that same analogy.</p>
+    <h2 id="s5"><span class="no">05</span>Looking back at the whole reader</h2>
+    <p>Let's place all the parts of this reader back onto the new employee analogy, one more time.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 400" role="img" aria-label="A user goes through a building pass into a private room. Inside are the new employee and memory. A front desk connects the room to a workroom. Work reports and reviews sit outside the room, and Chapter 10's designer's eye surrounds everything">
-        <defs><marker id="a11a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="15" y="50" width="650" height="330" rx="10" class="frame"/>
-        <text x="340" y="38" text-anchor="middle" class="ts ta">Chapter 10, the designer's eye: checks everything from outside</text>
-        <rect x="30" y="195" width="100" height="48" rx="6" class="b"/><text x="80" y="224" text-anchor="middle">User</text>
-        <path d="M130 219 L168 219" class="ln" marker-end="url(#a11a)"/>
-        <rect x="170" y="195" width="130" height="48" rx="6" class="b-guard"/><text x="235" y="215" text-anchor="middle" class="th">Building pass</text><text x="235" y="233" text-anchor="middle" class="ts">Identity, Ch.7</text>
-        <path d="M300 219 L328 219" class="ln" marker-end="url(#a11a)"/>
-        <rect x="330" y="90" width="300" height="230" rx="8" class="frame"/>
-        <text x="480" y="112" text-anchor="middle" class="th">Private room: Runtime (Ch.4)</text>
-        <rect x="350" y="130" width="130" height="58" rx="6" class="b-accent"/><text x="415" y="152" text-anchor="middle" class="th">New employee</text><text x="415" y="172" text-anchor="middle" class="ts">Strands + model, 2-3</text>
-        <rect x="500" y="130" width="110" height="58" rx="6" class="bg"/><text x="555" y="152" text-anchor="middle" class="th">Memory</text><text x="555" y="172" text-anchor="middle" class="ts">Chapter 5</text>
-        <rect x="350" y="210" width="130" height="58" rx="6" class="b-reach"/><text x="415" y="225" text-anchor="middle" class="th">Workroom</text><text x="415" y="241" text-anchor="middle" class="ts">Code Interpreter</text><text x="415" y="255" text-anchor="middle" class="ts">/ Browser, Ch.6</text>
-        <rect x="500" y="210" width="110" height="58" rx="6" class="b-reach"/><text x="555" y="225" text-anchor="middle" class="th">Desk &amp; rules</text><text x="555" y="241" text-anchor="middle" class="ts">Gateway, Ch.6</text><text x="555" y="255" text-anchor="middle" class="ts">Policy, Ch.8</text>
-        <rect x="330" y="335" width="300" height="40" rx="6" class="bg"/><text x="480" y="352" text-anchor="middle" class="ts">Reports &amp; reviews</text><text x="480" y="366" text-anchor="middle" class="ts">Observability / Evaluations, Ch.9</text>
+      <svg viewBox="0 0 400 570" role="img" aria-label="The user passes through a building pass into a private room. Inside are the new employee and memory. The room reaches a workroom through the desk and rules. Reports and reviews record everything from outside the room, and the designer's eye wraps the whole design">
+        <rect x="8" y="54" width="384" height="492" rx="10" class="zone"/>
+        <text x="24" y="76" class="t-sm t-acc">The designer's eye checks it all</text>
+        <rect x="24" y="90" width="100" height="40" rx="6" class="node"/>
+        <text x="74" y="114" text-anchor="middle">User</text>
+        <line x1="124" y1="110" x2="138" y2="110" class="ln" marker-end="url(#arw)"/>
+        <rect x="140" y="84" width="180" height="52" rx="6" class="node-c4"/>
+        <text x="230" y="106" text-anchor="middle" class="t-hd">Building pass</text><text x="230" y="127" text-anchor="middle" class="t-sm">Identity</text>
+        <line x1="230" y1="136" x2="230" y2="162" class="ln" marker-end="url(#arw)"/>
+        <rect x="24" y="166" width="352" height="142" rx="8" class="zone"/>
+        <text x="40" y="188" class="t-sm t-acc">Private room: Runtime</text>
+        <rect x="40" y="198" width="160" height="62" rx="6" class="node-acc"/>
+        <text x="120" y="222" text-anchor="middle" class="t-hd t-acc">New employee</text><text x="120" y="243" text-anchor="middle" class="t-sm t-acc">Strands + model</text>
+        <rect x="216" y="198" width="144" height="62" rx="6" class="node-soft"/>
+        <text x="288" y="222" text-anchor="middle" class="t-hd">Memory</text><text x="288" y="243" text-anchor="middle" class="t-sm">Memory</text>
+        <line x1="200" y1="308" x2="200" y2="334" class="ln" marker-end="url(#arw)"/>
+        <rect x="40" y="334" width="320" height="56" rx="6" class="node-c2"/>
+        <text x="200" y="358" text-anchor="middle" class="t-hd">Workroom</text><text x="200" y="379" text-anchor="middle" class="t-sm">Code Interpreter / Browser</text>
+        <rect x="40" y="398" width="320" height="56" rx="6" class="node-c2"/>
+        <text x="200" y="422" text-anchor="middle" class="t-hd">Desk &amp; rules</text><text x="200" y="443" text-anchor="middle" class="t-sm">Gateway, Policy</text>
+        <line x1="200" y1="454" x2="200" y2="478" class="ln" marker-end="url(#arw)"/>
+        <rect x="40" y="480" width="320" height="50" rx="6" class="node-soft"/>
+        <text x="200" y="502" text-anchor="middle" class="t-hd">Reports &amp; reviews</text><text x="200" y="522" text-anchor="middle" class="t-sm">Observability / Evaluations</text>
       </svg>
-      </div>
-      <figcaption>The user goes through a building pass (Identity, Chapter 7) to enter a private room (Runtime, Chapter 4). Inside the room are a new employee (Strands plus a model, Chapters 2-3) and memory (Memory, Chapter 5). Through the front desk (Gateway, Chapter 6) and the rules (Policy, Chapter 8), the room borrows a workroom (Code Interpreter/Browser, Chapter 6). Reports and reviews (Observability/Evaluations, Chapter 9) record the daily work from outside the room, and Chapter 10's designer's eye surrounds everything.</figcaption>
+      <figcaption>The user goes through a building pass (Identity) to enter a private room (Runtime). Inside the room are a new employee (Strands plus a model) and memory. Through the front desk (Gateway) and the rules (Policy), the room borrows a workroom (Code Interpreter/Browser). Reports and reviews (Observability/Evaluations) record the daily work from outside the room, and the designer's eye surrounds everything.</figcaption>
     </figure>
   </section>
 
-  <div class="aside metaphor">
+  <div class="aside analogy">
     <p class="label">Analogy: a promotion exam</p>
-    <p>AIP-C01 is not a hiring exam that a new employee takes before joining a company. It is closer to an internal promotion exam, taken some time after you start the job. It checks whether you have real hands-on experience, so memorizing alone is not enough to pass. If you have read this reader from Chapter 1, think of this certification as a final step, to check whether you can explain, in words, the work you have actually done.</p>
+    <p>AIP-C01 is not a hiring exam that a new employee takes before joining a company. It is closer to an internal promotion exam, taken some time after you start the job. It checks whether you have real hands-on experience, so memorizing alone is not enough to pass. If you have read this whole reader, think of this certification as a final step, to check whether you can explain, in words, the work you have actually done.</p>
   </div>
 
-  <div class="aside enterprise">
+  <div class="aside caution">
     <p class="label">Where companies get stuck</p>
     <p>Having this certification can help you in a job interview. But it is not what a company checks on a real project. What matters there is whether you can explain a whole design, from authentication to evaluation to operations, and why you designed it that way. A certification is only one entry point. It is not the goal.</p>
   </div>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">5-1</span>AIP-C01 exam guide (Japanese PDF). Check the exam domains and their share here</li>
-      <li><span class="rid">5-2</span>Udemy course "Ultimate AWS Certified Generative AI Developer Professional". Fill in the areas you have not covered yet</li>
-      <li><span class="rid">5-3</span>Skill Builder course "Exam Prep Plan: AWS Certified Generative AI Developer – Professional". The Domain Review part is free</li>
-      <li><span class="rid">5-4</span>Udemy course "[Practice Exams] AWS Certified Generative AI Developer Pro". A final practice exam</li>
-      <li><span class="rid">5-5</span>Take the exam. You can take it in Japanese. It stays valid for 3 years</li>
+      <li><span class="tag">5-1</span>AIP-C01 exam guide (Japanese PDF). Check the exam domains and their share here</li>
+      <li><span class="tag">5-2</span>Udemy course "Ultimate AWS Certified Generative AI Developer Professional". Fill in the areas you have not covered yet</li>
+      <li><span class="tag">5-3</span>Skill Builder course "Exam Prep Plan: AWS Certified Generative AI Developer – Professional". The Domain Review part is free</li>
+      <li><span class="tag">5-4</span>Udemy course "[Practice Exams] AWS Certified Generative AI Developer Pro". A final practice exam</li>
+      <li><span class="tag">5-5</span>Take the exam. You can take it in Japanese. It stays valid for 3 years</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>AIP-C01 is an advanced certification. An update in March 2026 added AgentCore to its scope. SageMaker is also tested widely</li>
       <li>This reader covers only part of the agent side. SageMaker, RAG details, inference modes, and model evaluation are outside this map</li>
@@ -240,8 +346,12 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
     </ol>
   </section>
 
-  <p class="next"><span>This is the end of the reader</span><span>Start from roadmap item 1-1</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch10.html"><span>Previous</span><b>Chapter 10</b></a>
+    <a class="next" href="ch00.html"><span>End of the reader</span><b>Back to contents</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>
-
 </div>
+</body>
+</html>

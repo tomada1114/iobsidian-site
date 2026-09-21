@@ -1,14 +1,14 @@
 <!-- title: AgentCore Reader 04 Runtime | accent: think -->
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 4 / 11 chapters</span></p>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 4 / 11 chapters</span></p>
   <h1>Runtime: A Private Room for Each Agent</h1>
-  <p class="lead">In earlier chapters, you saw that the agent loop itself can be written in a few dozen lines of code. But letting many users use it is a different problem. You need to set up servers, keep each user's conversation separate, and keep long tasks running. In this chapter, you will see how Runtime, the core part of AgentCore, takes over this job of "keeping things running".</p>
+  <p class="lead">The agent loop itself can be written in a few dozen lines of code. But letting many users use it is a different problem. You need to set up servers, keep each user's conversation separate, and keep long tasks running. In this chapter, you will see how Runtime, the core part of AgentCore, takes over this job of "keeping things running".</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>What Runtime takes over: running servers, scaling, and separating sessions</li>
       <li>How each session gets its own microVM</li>
@@ -19,114 +19,109 @@
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">What Runtime takes over</h2>
-    <p>You can write the agent loop yourself, as you saw in earlier chapters. <strong>The hard part is keeping it running so it can always accept requests</strong>. It must answer quickly when someone sends a request. It must keep each user's conversation separate, even when many people use it at once. It must also add or remove servers as needed. Whether you want to build all of this yourself is the real reason to use Runtime.</p>
+    <h2 id="s1"><span class="no">01</span>What Runtime takes over</h2>
+    <p>You can write the agent loop yourself. <strong>The hard part is keeping it running so it can always accept requests</strong>. It must answer quickly when someone sends a request. It must keep each user's conversation separate, even when many people use it at once. It must also add or remove servers as needed. Whether you want to build all of this yourself is the real reason to use Runtime.</p>
     <p>The first option many people think of is AWS Lambda. But Lambda is built for short tasks that finish quickly, and each call has a time limit. An agent calls a tool, waits for the result, then calls the next tool, again and again. If the conversation runs long, it can go past this time limit.</p>
     <p>Another option is a container platform, such as Amazon ECS. This removes the time limit, but now you must design and build your own systems for isolation and scaling, such as keeping each user's conversation separate, and reducing the number of servers when they are not needed.</p>
     <p><strong>Runtime is a service that takes over these three jobs: keeping things running, keeping sessions isolated, and scaling up or down.</strong> As a developer, you only need to write the agent's own code. Runtime handles the rest. The table below compares Runtime with the simpler options.</p>
     <div class="tbl"><table>
       <thead><tr><th>Aspect</th><th>Lambda</th><th>Building your own ECS</th><th>AgentCore Runtime</th></tr></thead>
       <tbody>
-        <tr><td>Run time</td><td>Each call has a time limit, so it does not fit long conversations</td><td>No time limit, but you need to build the system that keeps it running</td><td>Built to support long-running tasks</td></tr>
-        <tr><td>Session isolation</td><td>You design it yourself</td><td>You build container and network separation yourself</td><td>A dedicated environment is set up for each session automatically</td></tr>
-        <tr><td>Scaling</td><td>Automatic</td><td>You set up auto scaling yourself</td><td>Automatic</td></tr>
+        <tr><td class="key">Run time</td><td>Each call has a time limit, so it does not fit long conversations</td><td>No time limit, but you need to build the system that keeps it running</td><td>Built to support long-running tasks</td></tr>
+        <tr><td class="key">Session isolation</td><td>You design it yourself</td><td>You build container and network separation yourself</td><td>A dedicated environment is set up for each session automatically</td></tr>
+        <tr><td class="key">Scaling</td><td>Automatic</td><td>You set up auto scaling yourself</td><td>Automatic</td></tr>
       </tbody>
     </table></div>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">A private room for each session</h2>
+    <h2 id="s2"><span class="no">02</span>A private room for each session</h2>
     <p>When Runtime receives a request, it sets up a <strong>microVM (a small virtual machine)</strong> just for that session, and runs the agent inside it. As Figure 1 shows, each user's session gets its own microVM, so conversations never mix.</p>
-    <p>When the session ends, its microVM is thrown away, like cleaning up a room. If the same user wants to continue the conversation later, they send a request with the same session ID, and Runtime shows them to the same room. Remembering the conversation over time is the job of Memory, covered in the next chapter. It helps to think of Runtime's job as only this: setting up an isolated place to run the agent.</p>
+    <p>When the session ends, its microVM is thrown away, like cleaning up a room. If the same user wants to continue the conversation later, they send a request with the same session ID, and Runtime shows them to the same room. Remembering the conversation over time is the job of Memory. It helps to think of Runtime's job as only this: setting up an isolated place to run the agent.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 250" role="img" aria-label="Several users send requests to Runtime. Each session runs its agent in a separate microVM, and sessions never mix">
-        <defs><marker id="a41" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="175" y="15" width="130" height="36" rx="6" class="b"/><text x="240" y="38" text-anchor="middle">User A</text>
-        <rect x="345" y="15" width="130" height="36" rx="6" class="b"/><text x="410" y="38" text-anchor="middle">User B</text>
-        <rect x="515" y="15" width="130" height="36" rx="6" class="b"/><text x="580" y="38" text-anchor="middle">User C</text>
-        <line x1="240" y1="51" x2="240" y2="93" class="ln" marker-end="url(#a41)"/>
-        <line x1="410" y1="51" x2="410" y2="93" class="ln" marker-end="url(#a41)"/>
-        <line x1="580" y1="51" x2="580" y2="93" class="ln" marker-end="url(#a41)"/>
-        <rect x="160" y="75" width="500" height="160" rx="10" class="frame"/>
-        <text x="178" y="92" class="ts">Runtime</text>
-        <rect x="175" y="95" width="130" height="130" rx="8" class="b-think"/>
-        <rect x="345" y="95" width="130" height="130" rx="8" class="b-reach"/>
-        <rect x="515" y="95" width="130" height="130" rx="8" class="b-run"/>
-        <text x="240" y="112" text-anchor="middle" class="ts">microVM</text>
-        <text x="410" y="112" text-anchor="middle" class="ts">microVM</text>
-        <text x="580" y="112" text-anchor="middle" class="ts">microVM</text>
-        <rect x="195" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="240" y="154" text-anchor="middle">Agent</text>
-        <rect x="365" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="410" y="154" text-anchor="middle">Agent</text>
-        <rect x="535" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="580" y="154" text-anchor="middle">Agent</text>
-        <text x="240" y="200" text-anchor="middle" class="ts">Session A</text>
-        <text x="410" y="200" text-anchor="middle" class="ts">Session B</text>
-        <text x="580" y="200" text-anchor="middle" class="ts">Session C</text>
+      <svg viewBox="0 0 400 248" role="img" aria-label="Three users each send a request to Runtime. Runtime gives every session its own isolated microVM inside one boundary, so conversations from different users never mix">
+        <rect x="4" y="64" width="392" height="176" rx="10" class="zone"/>
+        <text x="20" y="231" class="t-sm t-acc">Runtime: one boundary, a separate room per session</text>
+        <rect x="12" y="8" width="116" height="32" rx="6" class="node"/><text x="68" y="29" text-anchor="middle">User A</text>
+        <line x1="68" y1="40" x2="68" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="12" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="68" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="23" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="68" y="143" text-anchor="middle">Agent</text>
+        <text x="68" y="190" text-anchor="middle" class="t-sm">Session A</text>
+        <rect x="142" y="8" width="116" height="32" rx="6" class="node"/><text x="200" y="29" text-anchor="middle">User B</text>
+        <line x1="200" y1="40" x2="200" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="142" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="200" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="155" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="200" y="143" text-anchor="middle">Agent</text>
+        <text x="200" y="190" text-anchor="middle" class="t-sm">Session B</text>
+        <rect x="272" y="8" width="116" height="32" rx="6" class="node"/><text x="332" y="29" text-anchor="middle">User C</text>
+        <line x1="332" y1="40" x2="332" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="272" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="332" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="287" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="332" y="143" text-anchor="middle">Agent</text>
+        <text x="332" y="190" text-anchor="middle" class="t-sm">Session C</text>
       </svg>
-      </div>
       <figcaption>Each user gets a dedicated microVM, which is thrown away when the session ends. Returning with the same session ID leads back to the same room, and conversations never mix between users.</figcaption>
     </figure>
-    <div class="aside metaphor">
+    <div class="aside analogy">
       <p class="label">Analogy: a private room and cleanup</p>
       <p>Think of it like hiring a new employee. Each new employee gets their own private room, so another employee's papers never mix in with theirs. When a piece of work is finished, the room is cleaned up and made ready for the next task. To continue the same discussion, you just give the same reception number, the session ID, and you are shown back to the same room.</p>
     </div>
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Long runs and streaming</h2>
+    <h2 id="s3"><span class="no">03</span>Long runs and streaming</h2>
     <p>Some agent tasks take a long time, calling many tools again and again. Runtime supports runs of <strong>up to 8 hours</strong>. This means you can hand off long tasks, such as research or data analysis, and let them keep running.</p>
     <p>Still, it is not a good experience to make a user wait in silence for a long task. Runtime supports both asynchronous processing and <strong>streaming</strong> (sending small pieces of the answer as soon as they are ready). You can run long tasks in the background and check the result later. For short answers, you can stream the text to the screen piece by piece as it is written.</p>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">Rules that do not depend on the framework</h2>
+    <h2 id="s4"><span class="no">04</span>Rules that do not depend on the framework</h2>
     <p>Runtime does not care which framework you used to write the agent, or which LLM it calls. <strong>The only rule is this: your agent must offer two HTTP endpoints, <code>/invocations</code> (for calls) and <code>/ping</code> (to check that it is alive)</strong>. If you follow this one simple rule, you can host an agent built with Strands Agents, LangGraph, or CrewAI in the same way.</p>
     <p>The endpoint does not have to be HTTP only. On the same Runtime, you can also host your agent as an MCP server that offers tools, or as an A2A server that talks to other agents. Support for two-way streaming, such as for voice conversations, is also growing. This area changes fast, so check the course materials and the developer guide for the latest details.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">Deployment, versions, and operation</h2>
+    <h2 id="s5"><span class="no">05</span>Deployment, versions, and operation</h2>
     <p>There are two main ways to put your agent on Runtime: building a container image and placing it in ECR, or passing your code directly. There are many small settings, but the <strong>AgentCore CLI</strong> handles everything from building to deploying, so you do not need to redo the steps each time.</p>
     <p>Every time you update your code and deploy, Runtime adds a new version. The actual requests are received by an <strong>endpoint</strong>, and the endpoint decides which version gets the traffic. As Figure 2 shows, you can fix the production endpoint to a version you have already tested, while trying the newest version on a staging endpoint. If something goes wrong, you can roll back by pointing the endpoint to an older version, using the same system.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 210" role="img" aria-label="Each deployment adds a new version. The production endpoint and the staging endpoint point to different versions">
-        <defs><marker id="a42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <text x="250" y="18" text-anchor="middle" class="ts">Versions: a new one added with each update</text>
-        <rect x="40" y="30" width="100" height="44" rx="6" class="b"/><text x="90" y="56" text-anchor="middle">v1</text>
-        <rect x="200" y="30" width="100" height="44" rx="6" class="b-accent"/><text x="250" y="56" text-anchor="middle">v2</text>
-        <rect x="360" y="30" width="100" height="44" rx="6" class="b"/><text x="410" y="56" text-anchor="middle">v3 (latest)</text>
-        <rect x="520" y="30" width="140" height="44" rx="6" class="bg"/><text x="590" y="56" text-anchor="middle" class="ts">Update and deploy</text>
-        <path d="M518 52 L462 52" class="ln" marker-end="url(#a42)"/>
-        <rect x="40" y="150" width="160" height="44" rx="6" class="b-think"/><text x="120" y="176" text-anchor="middle" class="ts">Production endpoint</text>
-        <rect x="480" y="150" width="160" height="44" rx="6" class="b-reach"/><text x="560" y="176" text-anchor="middle" class="ts">Staging endpoint</text>
-        <path d="M140 150 L235 78" class="ln-accent" marker-end="url(#a42)"/>
-        <text x="215" y="130" text-anchor="middle" class="ts">Fixed</text>
-        <path d="M540 150 L420 78" class="ln" marker-end="url(#a42)"/>
-        <text x="500" y="130" text-anchor="middle" class="ts">Try the latest</text>
+      <svg viewBox="0 0 400 280" role="img" aria-label="Production and Staging endpoints point to different versions of the deployed agent. Production stays fixed on a tested version and serves real users, while Staging always tries the newest. Rolling back means repointing an endpoint to an older version">
+        <text x="200" y="20" text-anchor="middle" class="t-sm">Each deploy adds a new version</text>
+        <text x="104" y="52" text-anchor="middle" class="t-hd">Production</text>
+        <text x="296" y="52" text-anchor="middle" class="t-hd">Staging</text>
+        <text x="16" y="72" class="t-sm">Version</text>
+        <rect x="16" y="80" width="176" height="40" rx="6" class="node"/><text x="104" y="105" text-anchor="middle">v2 (tested)</text>
+        <rect x="208" y="80" width="176" height="40" rx="6" class="node"/><text x="296" y="105" text-anchor="middle">v3 (latest)</text>
+        <text x="16" y="140" class="t-sm">Purpose</text>
+        <rect x="16" y="148" width="176" height="40" rx="6" class="node"/><text x="104" y="173" text-anchor="middle">Serves real users</text>
+        <rect x="208" y="148" width="176" height="40" rx="6" class="node"/><text x="296" y="173" text-anchor="middle">Tests changes</text>
+        <text x="16" y="208" class="t-sm">If something breaks</text>
+        <rect x="16" y="216" width="176" height="48" rx="6" class="node-acc"/>
+        <text x="104" y="236" text-anchor="middle">Repoint to</text><text x="104" y="256" text-anchor="middle" class="t-sm">an older version</text>
+        <rect x="208" y="216" width="176" height="48" rx="6" class="node"/><text x="296" y="246" text-anchor="middle" class="t-sm">Stays on the newest</text>
       </svg>
-      </div>
-      <figcaption>Each deployment adds a new version. You can fix the production endpoint to a version you have already checked, and try the newest version on the staging endpoint. You can also roll back just by changing which version an endpoint points to.</figcaption>
+      <figcaption>Production and Staging point to different versions: Production stays fixed on what you have tested, Staging always tries the newest. To roll back, just repoint the endpoint to an older version.</figcaption>
     </figure>
     <p>You pay only for what you use. The design idea is that the cost goes down when the agent is not really doing work, such as while it waits for the LLM to respond. The exact prices change often, so here we focus only on the idea behind the pricing.</p>
-    <p>To authenticate calls to Runtime, you can use AWS IAM (with SigV4 signing) or JWT (with OAuth). Which one to choose depends on who is calling, and Chapter 7 covers this in detail. Runtime can also connect to a database or an internal system inside a VPC (a private network), so it can reach resources deep inside your company's network.</p>
-    <div class="aside enterprise">
+    <p>To authenticate calls to Runtime, you can use AWS IAM (with SigV4 signing) or JWT (with OAuth). Which one to choose depends on who is calling. Runtime can also connect to a database or an internal system inside a VPC (a private network), so it can reach resources deep inside your company's network.</p>
+    <div class="aside caution">
       <p class="label">Where companies get stuck</p>
       <p>In a personal prototype, people often overlook three problems: mixed-up conversations, long tasks stopping partway through, and closed networks. If a shared server handles sessions carelessly, one user's conversation can leak into another's. A long task can also get stuck when it hits a timeout. In production, teams often need the agent to reach a system that is only available inside the company network. Runtime's session isolation, long runs, and VPC connections answer exactly these needs.</p>
     </div>
   </section>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Official Workshop Phase 1: a lab where you deploy to Runtime yourself. You can try out what this chapter covers</li>
-      <li><span class="rid">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Runtime chapter again in Japanese</li>
-      <li><span class="rid">3-3</span>Deep Dive Track 1: Host your agent</li>
+      <li><span class="tag">2-2</span>Official Workshop Phase 1: a lab where you deploy to Runtime yourself. You can try out what this chapter covers</li>
+      <li><span class="tag">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Runtime chapter again in Japanese</li>
+      <li><span class="tag">3-3</span>Deep Dive Track 1: Host your agent</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Runtime is a part that takes over server operation, session isolation, and scaling.</li>
       <li>Each session gets its own microVM, which is thrown away when it ends. The only rule is to offer <code>/invocations</code> and <code>/ping</code>.</li>
@@ -134,6 +129,9 @@
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 5, Memory</b></span><span>The LLM remembers nothing</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch03.html"><span>Previous</span><b>Chapter 3</b></a>
+    <a class="next" href="ch05.html"><span>Next</span><b>Chapter 5, Memory</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>

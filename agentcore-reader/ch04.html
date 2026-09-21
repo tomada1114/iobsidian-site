@@ -1,132 +1,232 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
 <title>AgentCore Reader 04 Runtime</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
 :root{
-  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
-  --think:#2F5E8C; --think-bg:#E6EEF6;
-  --reach:#2E7560; --reach-bg:#E3F1EB;
-  --guard:#9A4B2F; --guard-bg:#F6E9E2;
-  --run:#6A5A1E;   --run-bg:#F1ECD9;
-  --accent:var(--think); --accent-bg:var(--think-bg);
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
   --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
 }
+/* ---------- tokens: dark ---------- */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
 }
-.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
-.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
-.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
-.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
-*{box-sizing:border-box}
-body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
-.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
-h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
-h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
-h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
-h3{font-size:17.5px;font-weight:700;margin-top:8px}
-p,ul,ol,dl,figure,table{margin:0}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
 ul,ol{padding-left:1.4em}
-li+li{margin-top:4px}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
 strong{font-weight:700}
-code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
-.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
-.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
-.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
-.flow{display:grid;gap:22px;margin-top:40px}
-section{display:grid;gap:16px}
-section+section{margin-top:28px}
-.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
-.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
-.map ul{margin:0}
-/* asides */
-.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
-.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
-.metaphor{background:var(--accent-bg)}
-.metaphor .label{color:var(--accent)}
-.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
-.enterprise .label{color:var(--guard)}
-.route{background:var(--paper);border:1px dashed var(--ink-soft)}
-.route .label{color:var(--ink-soft)}
-.route ul{font-size:14.5px}
-.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
-/* figures */
-.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
-.fig .scroll{overflow-x:auto}
-.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
-.fig svg.wide{min-width:560px}
-.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
-.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
-.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
-.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
-.fig svg .ta{fill:var(--accent)}
-.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
-.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
-.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
-.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
-.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
-.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
-.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
-.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
-.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
-.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
-.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
-.fig svg .ah{fill:var(--ink-soft)}
-.fig svg .ah-accent{fill:var(--accent)}
-.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
-/* tables */
-.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:14.5px}
-th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
-th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
-tr:last-child td{border-bottom:0}
-td:first-child{font-weight:700;white-space:nowrap}
-/* terms */
-dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
-dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
-dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
-/* end */
-.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
-.summary h2{font-size:17px;padding:0}
-.summary ol{margin:0}
-.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
-.next b{color:var(--ink);font-family:var(--font-display)}
-.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
-@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
-<div class="wrap acc-think">
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 4 / 11 chapters</span></p>
+</head>
+<body>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 4 / 11 chapters</span></p>
   <h1>Runtime: A Private Room for Each Agent</h1>
-  <p class="lead">In earlier chapters, you saw that the agent loop itself can be written in a few dozen lines of code. But letting many users use it is a different problem. You need to set up servers, keep each user's conversation separate, and keep long tasks running. In this chapter, you will see how Runtime, the core part of AgentCore, takes over this job of "keeping things running".</p>
+  <p class="lead">The agent loop itself can be written in a few dozen lines of code. But letting many users use it is a different problem. You need to set up servers, keep each user's conversation separate, and keep long tasks running. In this chapter, you will see how Runtime, the core part of AgentCore, takes over this job of "keeping things running".</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>What Runtime takes over: running servers, scaling, and separating sessions</li>
       <li>How each session gets its own microVM</li>
@@ -137,114 +237,109 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">What Runtime takes over</h2>
-    <p>You can write the agent loop yourself, as you saw in earlier chapters. <strong>The hard part is keeping it running so it can always accept requests</strong>. It must answer quickly when someone sends a request. It must keep each user's conversation separate, even when many people use it at once. It must also add or remove servers as needed. Whether you want to build all of this yourself is the real reason to use Runtime.</p>
+    <h2 id="s1"><span class="no">01</span>What Runtime takes over</h2>
+    <p>You can write the agent loop yourself. <strong>The hard part is keeping it running so it can always accept requests</strong>. It must answer quickly when someone sends a request. It must keep each user's conversation separate, even when many people use it at once. It must also add or remove servers as needed. Whether you want to build all of this yourself is the real reason to use Runtime.</p>
     <p>The first option many people think of is AWS Lambda. But Lambda is built for short tasks that finish quickly, and each call has a time limit. An agent calls a tool, waits for the result, then calls the next tool, again and again. If the conversation runs long, it can go past this time limit.</p>
     <p>Another option is a container platform, such as Amazon ECS. This removes the time limit, but now you must design and build your own systems for isolation and scaling, such as keeping each user's conversation separate, and reducing the number of servers when they are not needed.</p>
     <p><strong>Runtime is a service that takes over these three jobs: keeping things running, keeping sessions isolated, and scaling up or down.</strong> As a developer, you only need to write the agent's own code. Runtime handles the rest. The table below compares Runtime with the simpler options.</p>
     <div class="tbl"><table>
       <thead><tr><th>Aspect</th><th>Lambda</th><th>Building your own ECS</th><th>AgentCore Runtime</th></tr></thead>
       <tbody>
-        <tr><td>Run time</td><td>Each call has a time limit, so it does not fit long conversations</td><td>No time limit, but you need to build the system that keeps it running</td><td>Built to support long-running tasks</td></tr>
-        <tr><td>Session isolation</td><td>You design it yourself</td><td>You build container and network separation yourself</td><td>A dedicated environment is set up for each session automatically</td></tr>
-        <tr><td>Scaling</td><td>Automatic</td><td>You set up auto scaling yourself</td><td>Automatic</td></tr>
+        <tr><td class="key">Run time</td><td>Each call has a time limit, so it does not fit long conversations</td><td>No time limit, but you need to build the system that keeps it running</td><td>Built to support long-running tasks</td></tr>
+        <tr><td class="key">Session isolation</td><td>You design it yourself</td><td>You build container and network separation yourself</td><td>A dedicated environment is set up for each session automatically</td></tr>
+        <tr><td class="key">Scaling</td><td>Automatic</td><td>You set up auto scaling yourself</td><td>Automatic</td></tr>
       </tbody>
     </table></div>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">A private room for each session</h2>
+    <h2 id="s2"><span class="no">02</span>A private room for each session</h2>
     <p>When Runtime receives a request, it sets up a <strong>microVM (a small virtual machine)</strong> just for that session, and runs the agent inside it. As Figure 1 shows, each user's session gets its own microVM, so conversations never mix.</p>
-    <p>When the session ends, its microVM is thrown away, like cleaning up a room. If the same user wants to continue the conversation later, they send a request with the same session ID, and Runtime shows them to the same room. Remembering the conversation over time is the job of Memory, covered in the next chapter. It helps to think of Runtime's job as only this: setting up an isolated place to run the agent.</p>
+    <p>When the session ends, its microVM is thrown away, like cleaning up a room. If the same user wants to continue the conversation later, they send a request with the same session ID, and Runtime shows them to the same room. Remembering the conversation over time is the job of Memory. It helps to think of Runtime's job as only this: setting up an isolated place to run the agent.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 250" role="img" aria-label="Several users send requests to Runtime. Each session runs its agent in a separate microVM, and sessions never mix">
-        <defs><marker id="a41" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="175" y="15" width="130" height="36" rx="6" class="b"/><text x="240" y="38" text-anchor="middle">User A</text>
-        <rect x="345" y="15" width="130" height="36" rx="6" class="b"/><text x="410" y="38" text-anchor="middle">User B</text>
-        <rect x="515" y="15" width="130" height="36" rx="6" class="b"/><text x="580" y="38" text-anchor="middle">User C</text>
-        <line x1="240" y1="51" x2="240" y2="93" class="ln" marker-end="url(#a41)"/>
-        <line x1="410" y1="51" x2="410" y2="93" class="ln" marker-end="url(#a41)"/>
-        <line x1="580" y1="51" x2="580" y2="93" class="ln" marker-end="url(#a41)"/>
-        <rect x="160" y="75" width="500" height="160" rx="10" class="frame"/>
-        <text x="178" y="92" class="ts">Runtime</text>
-        <rect x="175" y="95" width="130" height="130" rx="8" class="b-think"/>
-        <rect x="345" y="95" width="130" height="130" rx="8" class="b-reach"/>
-        <rect x="515" y="95" width="130" height="130" rx="8" class="b-run"/>
-        <text x="240" y="112" text-anchor="middle" class="ts">microVM</text>
-        <text x="410" y="112" text-anchor="middle" class="ts">microVM</text>
-        <text x="580" y="112" text-anchor="middle" class="ts">microVM</text>
-        <rect x="195" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="240" y="154" text-anchor="middle">Agent</text>
-        <rect x="365" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="410" y="154" text-anchor="middle">Agent</text>
-        <rect x="535" y="130" width="90" height="40" rx="6" class="b-accent"/><text x="580" y="154" text-anchor="middle">Agent</text>
-        <text x="240" y="200" text-anchor="middle" class="ts">Session A</text>
-        <text x="410" y="200" text-anchor="middle" class="ts">Session B</text>
-        <text x="580" y="200" text-anchor="middle" class="ts">Session C</text>
+      <svg viewBox="0 0 400 248" role="img" aria-label="Three users each send a request to Runtime. Runtime gives every session its own isolated microVM inside one boundary, so conversations from different users never mix">
+        <rect x="4" y="64" width="392" height="176" rx="10" class="zone"/>
+        <text x="20" y="231" class="t-sm t-acc">Runtime: one boundary, a separate room per session</text>
+        <rect x="12" y="8" width="116" height="32" rx="6" class="node"/><text x="68" y="29" text-anchor="middle">User A</text>
+        <line x1="68" y1="40" x2="68" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="12" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="68" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="23" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="68" y="143" text-anchor="middle">Agent</text>
+        <text x="68" y="190" text-anchor="middle" class="t-sm">Session A</text>
+        <rect x="142" y="8" width="116" height="32" rx="6" class="node"/><text x="200" y="29" text-anchor="middle">User B</text>
+        <line x1="200" y1="40" x2="200" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="142" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="200" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="155" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="200" y="143" text-anchor="middle">Agent</text>
+        <text x="200" y="190" text-anchor="middle" class="t-sm">Session B</text>
+        <rect x="272" y="8" width="116" height="32" rx="6" class="node"/><text x="332" y="29" text-anchor="middle">User C</text>
+        <line x1="332" y1="40" x2="332" y2="82" class="ln" marker-end="url(#arw)"/>
+        <rect x="272" y="84" width="116" height="124" rx="8" class="node"/>
+        <text x="332" y="104" text-anchor="middle" class="t-sm">microVM</text>
+        <rect x="287" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="332" y="143" text-anchor="middle">Agent</text>
+        <text x="332" y="190" text-anchor="middle" class="t-sm">Session C</text>
       </svg>
-      </div>
       <figcaption>Each user gets a dedicated microVM, which is thrown away when the session ends. Returning with the same session ID leads back to the same room, and conversations never mix between users.</figcaption>
     </figure>
-    <div class="aside metaphor">
+    <div class="aside analogy">
       <p class="label">Analogy: a private room and cleanup</p>
       <p>Think of it like hiring a new employee. Each new employee gets their own private room, so another employee's papers never mix in with theirs. When a piece of work is finished, the room is cleaned up and made ready for the next task. To continue the same discussion, you just give the same reception number, the session ID, and you are shown back to the same room.</p>
     </div>
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Long runs and streaming</h2>
+    <h2 id="s3"><span class="no">03</span>Long runs and streaming</h2>
     <p>Some agent tasks take a long time, calling many tools again and again. Runtime supports runs of <strong>up to 8 hours</strong>. This means you can hand off long tasks, such as research or data analysis, and let them keep running.</p>
     <p>Still, it is not a good experience to make a user wait in silence for a long task. Runtime supports both asynchronous processing and <strong>streaming</strong> (sending small pieces of the answer as soon as they are ready). You can run long tasks in the background and check the result later. For short answers, you can stream the text to the screen piece by piece as it is written.</p>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">Rules that do not depend on the framework</h2>
+    <h2 id="s4"><span class="no">04</span>Rules that do not depend on the framework</h2>
     <p>Runtime does not care which framework you used to write the agent, or which LLM it calls. <strong>The only rule is this: your agent must offer two HTTP endpoints, <code>/invocations</code> (for calls) and <code>/ping</code> (to check that it is alive)</strong>. If you follow this one simple rule, you can host an agent built with Strands Agents, LangGraph, or CrewAI in the same way.</p>
     <p>The endpoint does not have to be HTTP only. On the same Runtime, you can also host your agent as an MCP server that offers tools, or as an A2A server that talks to other agents. Support for two-way streaming, such as for voice conversations, is also growing. This area changes fast, so check the course materials and the developer guide for the latest details.</p>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">Deployment, versions, and operation</h2>
+    <h2 id="s5"><span class="no">05</span>Deployment, versions, and operation</h2>
     <p>There are two main ways to put your agent on Runtime: building a container image and placing it in ECR, or passing your code directly. There are many small settings, but the <strong>AgentCore CLI</strong> handles everything from building to deploying, so you do not need to redo the steps each time.</p>
     <p>Every time you update your code and deploy, Runtime adds a new version. The actual requests are received by an <strong>endpoint</strong>, and the endpoint decides which version gets the traffic. As Figure 2 shows, you can fix the production endpoint to a version you have already tested, while trying the newest version on a staging endpoint. If something goes wrong, you can roll back by pointing the endpoint to an older version, using the same system.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 210" role="img" aria-label="Each deployment adds a new version. The production endpoint and the staging endpoint point to different versions">
-        <defs><marker id="a42" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <text x="250" y="18" text-anchor="middle" class="ts">Versions: a new one added with each update</text>
-        <rect x="40" y="30" width="100" height="44" rx="6" class="b"/><text x="90" y="56" text-anchor="middle">v1</text>
-        <rect x="200" y="30" width="100" height="44" rx="6" class="b-accent"/><text x="250" y="56" text-anchor="middle">v2</text>
-        <rect x="360" y="30" width="100" height="44" rx="6" class="b"/><text x="410" y="56" text-anchor="middle">v3 (latest)</text>
-        <rect x="520" y="30" width="140" height="44" rx="6" class="bg"/><text x="590" y="56" text-anchor="middle" class="ts">Update and deploy</text>
-        <path d="M518 52 L462 52" class="ln" marker-end="url(#a42)"/>
-        <rect x="40" y="150" width="160" height="44" rx="6" class="b-think"/><text x="120" y="176" text-anchor="middle" class="ts">Production endpoint</text>
-        <rect x="480" y="150" width="160" height="44" rx="6" class="b-reach"/><text x="560" y="176" text-anchor="middle" class="ts">Staging endpoint</text>
-        <path d="M140 150 L235 78" class="ln-accent" marker-end="url(#a42)"/>
-        <text x="215" y="130" text-anchor="middle" class="ts">Fixed</text>
-        <path d="M540 150 L420 78" class="ln" marker-end="url(#a42)"/>
-        <text x="500" y="130" text-anchor="middle" class="ts">Try the latest</text>
+      <svg viewBox="0 0 400 280" role="img" aria-label="Production and Staging endpoints point to different versions of the deployed agent. Production stays fixed on a tested version and serves real users, while Staging always tries the newest. Rolling back means repointing an endpoint to an older version">
+        <text x="200" y="20" text-anchor="middle" class="t-sm">Each deploy adds a new version</text>
+        <text x="104" y="52" text-anchor="middle" class="t-hd">Production</text>
+        <text x="296" y="52" text-anchor="middle" class="t-hd">Staging</text>
+        <text x="16" y="72" class="t-sm">Version</text>
+        <rect x="16" y="80" width="176" height="40" rx="6" class="node"/><text x="104" y="105" text-anchor="middle">v2 (tested)</text>
+        <rect x="208" y="80" width="176" height="40" rx="6" class="node"/><text x="296" y="105" text-anchor="middle">v3 (latest)</text>
+        <text x="16" y="140" class="t-sm">Purpose</text>
+        <rect x="16" y="148" width="176" height="40" rx="6" class="node"/><text x="104" y="173" text-anchor="middle">Serves real users</text>
+        <rect x="208" y="148" width="176" height="40" rx="6" class="node"/><text x="296" y="173" text-anchor="middle">Tests changes</text>
+        <text x="16" y="208" class="t-sm">If something breaks</text>
+        <rect x="16" y="216" width="176" height="48" rx="6" class="node-acc"/>
+        <text x="104" y="236" text-anchor="middle">Repoint to</text><text x="104" y="256" text-anchor="middle" class="t-sm">an older version</text>
+        <rect x="208" y="216" width="176" height="48" rx="6" class="node"/><text x="296" y="246" text-anchor="middle" class="t-sm">Stays on the newest</text>
       </svg>
-      </div>
-      <figcaption>Each deployment adds a new version. You can fix the production endpoint to a version you have already checked, and try the newest version on the staging endpoint. You can also roll back just by changing which version an endpoint points to.</figcaption>
+      <figcaption>Production and Staging point to different versions: Production stays fixed on what you have tested, Staging always tries the newest. To roll back, just repoint the endpoint to an older version.</figcaption>
     </figure>
     <p>You pay only for what you use. The design idea is that the cost goes down when the agent is not really doing work, such as while it waits for the LLM to respond. The exact prices change often, so here we focus only on the idea behind the pricing.</p>
-    <p>To authenticate calls to Runtime, you can use AWS IAM (with SigV4 signing) or JWT (with OAuth). Which one to choose depends on who is calling, and Chapter 7 covers this in detail. Runtime can also connect to a database or an internal system inside a VPC (a private network), so it can reach resources deep inside your company's network.</p>
-    <div class="aside enterprise">
+    <p>To authenticate calls to Runtime, you can use AWS IAM (with SigV4 signing) or JWT (with OAuth). Which one to choose depends on who is calling. Runtime can also connect to a database or an internal system inside a VPC (a private network), so it can reach resources deep inside your company's network.</p>
+    <div class="aside caution">
       <p class="label">Where companies get stuck</p>
       <p>In a personal prototype, people often overlook three problems: mixed-up conversations, long tasks stopping partway through, and closed networks. If a shared server handles sessions carelessly, one user's conversation can leak into another's. A long task can also get stuck when it hits a timeout. In production, teams often need the agent to reach a system that is only available inside the company network. Runtime's session isolation, long runs, and VPC connections answer exactly these needs.</p>
     </div>
   </section>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Official Workshop Phase 1: a lab where you deploy to Runtime yourself. You can try out what this chapter covers</li>
-      <li><span class="rid">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Runtime chapter again in Japanese</li>
-      <li><span class="rid">3-3</span>Deep Dive Track 1: Host your agent</li>
+      <li><span class="tag">2-2</span>Official Workshop Phase 1: a lab where you deploy to Runtime yourself. You can try out what this chapter covers</li>
+      <li><span class="tag">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Runtime chapter again in Japanese</li>
+      <li><span class="tag">3-3</span>Deep Dive Track 1: Host your agent</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Runtime is a part that takes over server operation, session isolation, and scaling.</li>
       <li>Each session gets its own microVM, which is thrown away when it ends. The only rule is to offer <code>/invocations</code> and <code>/ping</code>.</li>
@@ -252,8 +347,12 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 5, Memory</b></span><span>The LLM remembers nothing</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch03.html"><span>Previous</span><b>Chapter 3</b></a>
+    <a class="next" href="ch05.html"><span>Next</span><b>Chapter 5, Memory</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>
-
 </div>
+</body>
+</html>

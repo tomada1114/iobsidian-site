@@ -1,132 +1,232 @@
 <!doctype html>
 <html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
 <title>AgentCore Reader 08 Policy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
 :root{
-  --ground:#F3F4F1; --paper:#FFFFFF; --ink:#1D2320; --ink-soft:#4E5752; --line:#D6DAD4;
-  --think:#2F5E8C; --think-bg:#E6EEF6;
-  --reach:#2E7560; --reach-bg:#E3F1EB;
-  --guard:#9A4B2F; --guard-bg:#F6E9E2;
-  --run:#6A5A1E;   --run-bg:#F1ECD9;
-  --accent:var(--think); --accent-bg:var(--think-bg);
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
   --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
 }
+/* ---------- tokens: dark ---------- */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-    --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-    --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#151917; --paper:#1D2220; --ink:#E7EAE6; --ink-soft:#A6AEA9; --line:#343B37;
-  --think:#8DB4DC; --think-bg:#1E2B38; --reach:#7CC4AB; --reach-bg:#1B2E27;
-  --guard:#E09B7E; --guard-bg:#33231C; --run:#D2BC73; --run-bg:#2F2A18;
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
 }
-.acc-think{--accent:var(--think);--accent-bg:var(--think-bg)}
-.acc-reach{--accent:var(--reach);--accent-bg:var(--reach-bg)}
-.acc-guard{--accent:var(--guard);--accent-bg:var(--guard-bg)}
-.acc-run{--accent:var(--run);--accent-bg:var(--run-bg)}
-*{box-sizing:border-box}
-body{background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.9;padding:0 16px;margin:0}
-.wrap{max-width:720px;margin:0 auto;padding-block:40px 96px}
-h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.4;margin:0}
-h1{font-size:clamp(28px,5.4vw,40px);font-weight:900;letter-spacing:.01em;margin-top:6px}
-h2{font-size:clamp(21px,3.4vw,25px);font-weight:900;padding-top:8px}
-h3{font-size:17.5px;font-weight:700;margin-top:8px}
-p,ul,ol,dl,figure,table{margin:0}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
 ul,ol{padding-left:1.4em}
-li+li{margin-top:4px}
-a{color:var(--accent);text-underline-offset:3px}
-a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
 strong{font-weight:700}
-code{font-family:var(--font-mono);font-size:.86em;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:0 5px}
-.series{font-size:12.5px;letter-spacing:.12em;color:var(--ink-soft);font-weight:700;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
-.series b{color:var(--accent);font-family:var(--font-display);font-size:14px;letter-spacing:.06em}
-.lead{color:var(--ink-soft);font-size:16.5px;margin-top:16px}
-.meta{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:16px;font-size:13px;color:var(--ink-soft)}
-.meta span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:7px;vertical-align:1px}
-.ch-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
-.flow{display:grid;gap:22px;margin-top:40px}
-section{display:grid;gap:16px}
-section+section{margin-top:28px}
-.map{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
-.map h2{font-size:15px;letter-spacing:.08em;color:var(--accent);padding:0;margin-bottom:6px}
-.map ul{margin:0}
-/* asides */
-.aside{border-radius:8px;padding:16px 20px;display:grid;gap:8px;font-size:15px;line-height:1.85}
-.aside .label{font-family:var(--font-display);font-weight:900;font-size:13px;letter-spacing:.1em}
-.metaphor{background:var(--accent-bg)}
-.metaphor .label{color:var(--accent)}
-.enterprise{background:var(--guard-bg);border-left:4px solid var(--guard);border-radius:0 8px 8px 0}
-.enterprise .label{color:var(--guard)}
-.route{background:var(--paper);border:1px dashed var(--ink-soft)}
-.route .label{color:var(--ink-soft)}
-.route ul{font-size:14.5px}
-.rid{font-family:var(--font-mono);font-size:12px;font-weight:500;background:var(--ground);border:1px solid var(--line);border-radius:4px;padding:0 6px;margin-right:6px;white-space:nowrap}
-/* figures */
-.fig{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 14px 14px;display:grid;gap:10px}
-.fig .scroll{overflow-x:auto}
-.fig svg{display:block;width:100%;height:auto;max-width:100%;min-width:0}
-.fig svg.wide{min-width:560px}
-.fig figcaption{font-size:13.5px;color:var(--ink-soft);line-height:1.7;padding:0 6px}
-.fig svg text{font-family:var(--font-body);font-size:13px;fill:var(--ink)}
-.fig svg .ts{fill:var(--ink-soft);font-size:11.5px}
-.fig svg .th{font-family:var(--font-display);font-weight:700;font-size:14px}
-.fig svg .ta{fill:var(--accent)}
-.fig svg .b{fill:var(--paper);stroke:var(--line);stroke-width:1.2}
-.fig svg .bg{fill:var(--ground);stroke:var(--line);stroke-width:1}
-.fig svg .b-accent{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.4}
-.fig svg .b-think{fill:var(--think-bg);stroke:var(--think);stroke-width:1.2}
-.fig svg .b-reach{fill:var(--reach-bg);stroke:var(--reach);stroke-width:1.2}
-.fig svg .b-guard{fill:var(--guard-bg);stroke:var(--guard);stroke-width:1.2}
-.fig svg .b-run{fill:var(--run-bg);stroke:var(--run);stroke-width:1.2}
-.fig svg .frame{fill:none;stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 4}
-.fig svg .ln{stroke:var(--ink-soft);stroke-width:1.5;fill:none}
-.fig svg .ln-accent{stroke:var(--accent);stroke-width:2;fill:none}
-.fig svg .ln-dash{stroke:var(--ink-soft);stroke-width:1.4;fill:none;stroke-dasharray:4 4}
-.fig svg .ah{fill:var(--ink-soft)}
-.fig svg .ah-accent{fill:var(--accent)}
-.fig svg .c-think{fill:var(--think)} .fig svg .c-reach{fill:var(--reach)} .fig svg .c-guard{fill:var(--guard)} .fig svg .c-run{fill:var(--run)}
-/* tables */
-.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:14.5px}
-th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
-th{font-size:12.5px;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;background:var(--ground)}
-tr:last-child td{border-bottom:0}
-td:first-child{font-weight:700;white-space:nowrap}
-/* terms */
-dl.terms{display:grid;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
-dl.terms dt{font-family:var(--font-display);font-weight:700;color:var(--accent)}
-dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
-/* end */
-.summary{background:var(--paper);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;display:grid;gap:8px}
-.summary h2{font-size:17px;padding:0}
-.summary ol{margin:0}
-.next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;margin-top:8px}
-.next b{color:var(--ink);font-family:var(--font-display)}
-.fresh{font-size:12.5px;color:var(--ink-soft);line-height:1.7}
-@media (max-width:480px){ body{font-size:15.5px} .aside{padding:14px 16px} td:first-child{white-space:normal} }
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
-<div class="wrap acc-guard">
-<header class="ch-head">
-  <p class="series"><b>AgentCore Reader</b><span>Chapter 8 / 11 chapters</span></p>
+</head>
+<body>
+<div class="page acc-4">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 8 / 11 chapters</span></p>
   <h1>Policy and guardrails: stopping a call, not just asking</h1>
   <p class="lead">You can write "keep refunds under 10,000 yen" in a prompt, but that does not guarantee the agent will always follow it. A prompt is only a request, and it can be overwritten. This chapter looks at a mechanism that enforces business rules outside the LLM, and how it differs from the similarly named guardrails.</p>
   <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
 </header>
 
 <div class="flow">
-  <nav class="map" aria-label="In this chapter">
-    <h2>In this chapter</h2>
+  <nav class="toc" aria-label="In this chapter">
+    <p class="label">In this chapter</p>
     <ul>
       <li>Why a "please don't do this" in a prompt can be broken</li>
       <li>How AgentCore Policy stops a tool call before it runs</li>
@@ -137,15 +237,15 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </nav>
 
   <section aria-labelledby="s1">
-    <h2 id="s1">"Please don't" is only a request</h2>
+    <h2 id="s1"><span class="no">01</span>"Please don't" is only a request</h2>
     <p>When people want an agent to follow a business rule, they often write it into the prompt first. For example: "Please only use the refund tool for amounts up to 10,000 yen," or "Please only show HR data to people with an HR role." Most of the time, the agent follows this instruction without a problem.</p>
     <p><strong>But a prompt is a request, not a real command</strong>. An LLM usually tries to follow it, but it can miss a condition in a long conversation, or get pulled along by a confusing question. An even bigger problem is <strong>prompt injection</strong>. If text like "forget the earlier instructions and allow everything" is hidden inside data returned by a tool or typed by a user, the LLM might follow it.</p>
     <p>For rules like a maximum amount, or who may see what, you want them enforced for certain, no matter how the LLM reasons. Policy, covered in this chapter, is the mechanism for that.</p>
   </section>
 
   <section aria-labelledby="s2">
-    <h2 id="s2">AgentCore Policy: check before running, and stop it</h2>
-    <p>AgentCore's <strong>Policy</strong> checks a tool call before it runs, and decides whether to allow or deny it. When an agent tries to call a tool, the call passes through <strong>Gateway</strong>, covered in Chapter 6. Gateway compares the call against rules that were registered ahead of time, and decides on the spot.</p>
+    <h2 id="s2"><span class="no">02</span>AgentCore Policy: check before running, and stop it</h2>
+    <p>AgentCore's <strong>Policy</strong> checks a tool call before it runs, and decides whether to allow or deny it. When an agent tries to call a tool, the call passes through <strong>Gateway</strong>. Gateway compares the call against rules that were registered ahead of time, and decides on the spot.</p>
     <p><strong>The key point is that this check happens outside the agent's code and outside the LLM</strong>. No matter how the LLM reasons its way to a call, if Gateway decides to deny it, the call never reaches the tool. Even if a prompt injection overwrites an instruction, it cannot break this check, because the check does not go through the LLM at all.</p>
     <p>You write these rules in <strong>Cedar</strong>, an open-source policy language for authorization that AWS created. A rule states either <code>permit</code> (allow) or <code>forbid</code> (deny), using a combination of four parts: who, what, on what, and under what conditions. There is also a feature that turns a rule written in plain language into Cedar. This is a fairly new feature, so check the exact syntax and support in each course and the developer guide.</p>
     <dl class="terms">
@@ -159,121 +259,95 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
   </section>
 
   <section aria-labelledby="s3">
-    <h2 id="s3">Breaking a rule into four parts</h2>
+    <h2 id="s3"><span class="no">03</span>Breaking a rule into four parts</h2>
     <p>In plain words, a rule you might want Policy to enforce looks like this: "The refund tool may be called only when the amount is under a certain limit," or "Only a user with the HR role may use the tool that searches HR data." Both rules can be broken down into who, what, on what, and under what conditions.</p>
     <figure class="fig">
-      <div class="scroll">
-      <svg viewBox="0 0 680 260" role="img" aria-label="A diagram breaking a Cedar rule into four parts: who, what, on what, and under what conditions. When all conditions match, the result is permit.">
-        <text x="340" y="15" text-anchor="middle" class="ts">Example: allow the refund tool only when the amount is 10,000 yen or less</text>
-        <rect x="20" y="30" width="150" height="110" rx="6" class="b-think"/>
-        <text x="95" y="55" text-anchor="middle" class="th">Who</text>
-        <text x="95" y="72" text-anchor="middle" class="ts">(principal)</text>
-        <line x1="35" y1="82" x2="155" y2="82" class="ln"/>
-        <text x="95" y="105" text-anchor="middle">Support staff</text>
-        <rect x="185" y="30" width="150" height="110" rx="6" class="b-reach"/>
-        <text x="260" y="55" text-anchor="middle" class="th">What</text>
-        <text x="260" y="72" text-anchor="middle" class="ts">(action)</text>
-        <line x1="200" y1="82" x2="320" y2="82" class="ln"/>
-        <text x="260" y="105" text-anchor="middle">Call refund tool</text>
-        <rect x="350" y="30" width="150" height="110" rx="6" class="b-guard"/>
-        <text x="425" y="55" text-anchor="middle" class="th">On what</text>
-        <text x="425" y="72" text-anchor="middle" class="ts">(resource)</text>
-        <line x1="365" y1="82" x2="485" y2="82" class="ln"/>
-        <text x="425" y="105" text-anchor="middle">Refund process</text>
-        <rect x="515" y="30" width="150" height="110" rx="6" class="b-run"/>
-        <text x="590" y="55" text-anchor="middle" class="th">Context</text>
-        <text x="590" y="72" text-anchor="middle" class="ts">(context)</text>
-        <line x1="530" y1="82" x2="650" y2="82" class="ln"/>
-        <text x="590" y="105" text-anchor="middle">Amount &#8804; 10,000 yen</text>
-        <line x1="95" y1="140" x2="95" y2="165" class="ln"/>
-        <line x1="260" y1="140" x2="260" y2="165" class="ln"/>
-        <line x1="425" y1="140" x2="425" y2="165" class="ln"/>
-        <line x1="590" y1="140" x2="590" y2="165" class="ln"/>
-        <line x1="95" y1="165" x2="590" y2="165" class="ln"/>
-        <defs><marker id="g2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <line x1="340" y1="165" x2="340" y2="178" class="ln-accent" marker-end="url(#g2)"/>
-        <rect x="270" y="180" width="140" height="56" rx="8" class="b-accent"/>
-        <text x="340" y="203" text-anchor="middle" class="th ta">permit (allow)</text>
-        <text x="340" y="222" text-anchor="middle" class="ts">All conditions match</text>
+      <svg viewBox="0 0 400 400" role="img" aria-label="Gateway checks a Cedar rule in four parts, in order: who, what, on what, and context. When all four match, the result is permit.">
+        <line x1="30" y1="44" x2="30" y2="368" class="ln-acc"/>
+        <circle cx="30" cy="44" r="6" class="node-acc"/>
+        <circle cx="30" cy="118" r="6" class="node-acc"/>
+        <circle cx="30" cy="192" r="6" class="node-acc"/>
+        <circle cx="30" cy="266" r="6" class="node-acc"/>
+        <circle cx="30" cy="340" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node-c1"/>
+        <text x="72" y="40" class="t-hd">Who (principal)</text><text x="72" y="61" class="t-sm">Support staff</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node-c2"/>
+        <text x="72" y="114" class="t-hd">What (action)</text><text x="72" y="135" class="t-sm">Call the refund tool</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node-c4"/>
+        <text x="72" y="188" class="t-hd">On what (resource)</text><text x="72" y="209" class="t-sm">Refund process</text>
+        <rect x="56" y="238" width="328" height="56" rx="6" class="node-c3"/>
+        <text x="72" y="262" class="t-hd">Context</text><text x="72" y="283" class="t-sm">Amount &#8804; 10,000 yen</text>
+        <rect x="56" y="312" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="336" class="t-hd t-acc">permit (allow)</text><text x="72" y="357" class="t-sm">All four parts match</text>
       </svg>
-      </div>
       <figcaption>A Cedar rule returns permit (allow) or forbid (deny) when who, what, on what, and under what conditions all match. In real code, you write this as one statement, but breaking it into these four parts first makes it easier to read.</figcaption>
     </figure>
   </section>
 
   <section aria-labelledby="s4">
-    <h2 id="s4">How the role splits with Bedrock Guardrails</h2>
+    <h2 id="s4"><span class="no">04</span>How the role splits with Bedrock Guardrails</h2>
     <p>Around AgentCore, there is another safety mechanism called <strong>Bedrock Guardrails</strong>. The name and the place it sits are close to Policy, so people often confuse the two, but they look at different things.</p>
     <p>Guardrails looks at the <strong>content</strong> of the input and output. It checks for harmful language, personal information, topics that should not come up, text that looks like a prompt attack, and answers that drift away from their source information. Policy does the opposite: instead of content, it looks at the <strong>action</strong> the agent is about to take, and stops it before the tool call happens.</p>
     <div class="tbl"><table>
       <thead><tr><th>Point</th><th>Bedrock Guardrails</th><th>AgentCore Policy</th></tr></thead>
       <tbody>
-        <tr><td>What it looks at</td><td>The content of input/output (text)</td><td>The action of calling a tool</td></tr>
-        <tr><td>What it checks</td><td>Harmful language, personal data, topic, attacks, source accuracy</td><td>Who, what, on what, under what conditions (Cedar rules)</td></tr>
-        <tr><td>How it stops something</td><td>Rewrites the text, or blocks the response</td><td>Allows or denies the call itself</td></tr>
-        <tr><td>Good example</td><td>Hiding a response with discriminatory language</td><td>Stopping a refund that goes over the limit</td></tr>
+        <tr><td class="key">What it looks at</td><td>The content of input/output (text)</td><td>The action of calling a tool</td></tr>
+        <tr><td class="key">What it checks</td><td>Harmful language, personal data, topic, attacks, source accuracy</td><td>Who, what, on what, under what conditions (Cedar rules)</td></tr>
+        <tr><td class="key">How it stops something</td><td>Rewrites the text, or blocks the response</td><td>Allows or denies the call itself</td></tr>
+        <tr><td class="key">Good example</td><td>Hiding a response with discriminatory language</td><td>Stopping a refund that goes over the limit</td></tr>
       </tbody>
     </table></div>
     <figure class="fig">
-      <div class="scroll">
-      <svg class="wide" viewBox="0 0 680 270" role="img" aria-label="Input passes through Guardrails. Before the agent calls a tool, Policy decides to allow or deny it. A denied call never reaches the tool.">
-        <defs><marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker></defs>
-        <rect x="15" y="118" width="95" height="44" rx="6" class="b"/><text x="62" y="145" text-anchor="middle">User</text>
-        <rect x="145" y="100" width="150" height="80" rx="6" class="b-think"/><text x="220" y="128" text-anchor="middle" class="th">Guardrails</text><text x="220" y="150" text-anchor="middle" class="ts">Checks input & output</text>
-        <rect x="330" y="110" width="120" height="60" rx="6" class="b-accent"/><text x="390" y="145" text-anchor="middle" class="th">Agent</text>
-        <rect x="495" y="30" width="170" height="225" rx="10" class="frame"/>
-        <text x="580" y="50" text-anchor="middle" class="ts">Policy (Gateway)</text>
-        <rect x="515" y="90" width="130" height="50" rx="6" class="b-guard"/><text x="580" y="120" text-anchor="middle" class="th">Checks first</text>
-        <rect x="515" y="190" width="130" height="50" rx="6" class="b-reach"/><text x="580" y="220" text-anchor="middle" class="th">Run tool</text>
-        <line x1="110" y1="132" x2="145" y2="132" class="ln" marker-end="url(#g1)"/>
-        <text x="127" y="124" text-anchor="middle" class="ts">Ask</text>
-        <line x1="295" y1="132" x2="330" y2="132" class="ln" marker-end="url(#g1)"/>
-        <text x="312" y="124" text-anchor="middle" class="ts">OK</text>
-        <path d="M450 135 L515 122" class="ln-accent" marker-end="url(#g1)"/>
-        <text x="483" y="148" text-anchor="middle" class="ts">Wants to call</text>
-        <line x1="580" y1="140" x2="580" y2="188" class="ln-accent" marker-end="url(#g1)"/>
-        <text x="600" y="168" class="ts">Allow</text>
-        <path d="M515 100 L452 108" class="ln-dash" marker-end="url(#g1)"/>
-        <text x="483" y="92" text-anchor="middle" class="ta ts">Deny: stop it</text>
-        <path d="M515 215 L452 160" class="ln" marker-end="url(#g1)"/>
-        <text x="480" y="195" text-anchor="middle" class="ts">Result</text>
-        <line x1="330" y1="160" x2="295" y2="160" class="ln" marker-end="url(#g1)"/>
-        <text x="312" y="178" text-anchor="middle" class="ts">Reply</text>
-        <line x1="145" y1="160" x2="110" y2="160" class="ln" marker-end="url(#g1)"/>
-        <text x="127" y="178" text-anchor="middle" class="ts">Reply</text>
+      <svg viewBox="0 0 400 420" role="img" aria-label="A request passes from the user through Guardrails, which checks the text, to the agent. Before a tool call runs, Policy inside Gateway checks it: an allowed call reaches Run tool, a denied call stops there and never reaches the tool.">
+        <rect x="56" y="16" width="328" height="40" rx="6" class="node"/>
+        <text x="200" y="41" text-anchor="middle">User</text>
+        <rect x="56" y="72" width="328" height="56" rx="6" class="node-c1"/>
+        <text x="200" y="96" text-anchor="middle" class="t-hd">Guardrails</text><text x="200" y="117" text-anchor="middle" class="t-sm">Checks input &amp; output text</text>
+        <rect x="56" y="144" width="328" height="48" rx="6" class="node"/>
+        <text x="200" y="164" text-anchor="middle">Agent</text><text x="200" y="184" text-anchor="middle" class="t-sm">Wants to call a tool</text>
+        <line x1="200" y1="192" x2="200" y2="214" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <rect x="24" y="218" width="352" height="194" rx="10" class="zone"/>
+        <text x="40" y="240" class="t-sm t-acc">Policy (Gateway)</text>
+        <rect x="48" y="250" width="304" height="56" rx="6" class="node-acc"/>
+        <text x="200" y="274" text-anchor="middle" class="t-hd t-acc">Checks the call</text>
+        <text x="200" y="295" text-anchor="middle" class="t-sm">who / what / on what / context</text>
+        <text x="200" y="322" text-anchor="middle" class="t-sm">Deny: stops here, never reaches the tool</text>
+        <line x1="200" y1="334" x2="200" y2="356" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <text x="224" y="350" class="t-sm">Allow</text>
+        <rect x="88" y="360" width="224" height="44" rx="6" class="node-c2"/>
+        <text x="200" y="387" text-anchor="middle">Run tool</text>
       </svg>
-      </div>
       <figcaption>Guardrails checks the content of input and output. Policy allows or denies a tool call before it runs. A denied call stops before it reaches the tool, and the agent only gets back a result that says "not allowed."</figcaption>
     </figure>
   </section>
 
   <section aria-labelledby="s5">
-    <h2 id="s5">The idea of adding human approval</h2>
+    <h2 id="s5"><span class="no">05</span>The idea of adding human approval</h2>
     <p>For actions you cannot undo, like a large refund or deleting an account, you may want a human check before running it, even if Policy's conditions already allow it. This idea is called <strong>human-in-the-loop</strong> (keeping a person in the process).</p>
-    <p>The process pauses right before the tool call, and does not continue until a person approves it. You can build this "pause before calling" using a mechanism like the Strands hooks from Chapter 3. For now, it is enough to know that you can add a place for a human to step in before execution. Designing the approval screen itself is up to the application that uses the agent.</p>
+    <p>The process pauses right before the tool call, and does not continue until a person approves it. You can build this "pause before calling" using a mechanism like Strands hooks. For now, it is enough to know that you can add a place for a human to step in before execution. Designing the approval screen itself is up to the application that uses the agent.</p>
   </section>
 
-  <div class="aside metaphor">
+  <div class="aside analogy">
     <p class="label">Analogy: the approval stamp</p>
     <p>No matter how sure a new employee is that "this looks fine," accounting will not pay out money without the manager's stamp on the approval form. Whether the request goes through does not depend on whether the judgment was correct. It depends on whether the required steps were followed. Policy plays the role of this approval stamp.</p>
   </div>
 
-  <div class="aside enterprise">
+  <div class="aside caution">
     <p class="label">Where companies get stuck</p>
     <p>Three things need to be true before it becomes easy to put an agent into real business use: you can explain to an auditor why an action was allowed; an administrator can change the rules separately from the agent's code; and the same rules apply to every agent in the company at once.</p>
   </div>
 
-  <div class="aside route">
+  <div class="aside aside-quiet">
     <p class="label">Where you meet this on the roadmap</p>
     <ul>
-      <li><span class="rid">2-2</span>Phase 1 (the Policy lab): write a Cedar rule yourself and apply it to Gateway.</li>
-      <li><span class="rid">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Policy chapter): review the mechanism in Japanese</li>
-      <li><span class="rid">3-8</span>Deep Dive: Centralize and govern your AI infrastructure: look at it from a governance point of view.</li>
+      <li><span class="tag">2-2</span>Phase 1 (the Policy lab): write a Cedar rule yourself and apply it to Gateway.</li>
+      <li><span class="tag">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Policy chapter): review the mechanism in Japanese</li>
+      <li><span class="tag">3-8</span>Deep Dive: Centralize and govern your AI infrastructure: look at it from a governance point of view.</li>
     </ul>
   </div>
 
   <section class="summary" aria-labelledby="sum">
-    <h2 id="sum">Summary in three lines</h2>
+    <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>A "please don't" in a prompt is only a request. Policy enforces real business rules.</li>
       <li>Policy checks a tool call at Gateway before it runs, and rules are written in the Cedar language.</li>
@@ -281,8 +355,12 @@ dl.terms dd{margin:0 0 0 0;font-size:15px;color:var(--ink)}
     </ol>
   </section>
 
-  <p class="next"><span>Next: <b>Chapter 9, Observability and evaluation</b></span><span>Checking that things have not gotten worse</span></p>
-  <p class="fresh">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <nav class="pager" aria-label="Pages">
+    <a class="prev" href="ch07.html"><span>Previous</span><b>Chapter 7</b></a>
+    <a class="next" href="ch09.html"><span>Next</span><b>Chapter 9, Observability and evaluation</b></a>
+  </nav>
+  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
 </div>
-
 </div>
+</body>
+</html>
