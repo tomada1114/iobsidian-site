@@ -9,3 +9,4 @@
 | 読み物 | 目次 |
 |---|---|
 | AgentCore Reader（英語・B1） | `agentcore-reader/ch00.html` |
+| Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |
