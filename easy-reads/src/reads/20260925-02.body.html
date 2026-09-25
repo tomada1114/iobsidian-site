@@ -1,0 +1,44 @@
+<!-- title: What Happens in a System Design Interview | topic: work | blurb: In a system design interview, there is no single right answer. The interviewer wants to hear how you think. -->
+<section aria-labelledby="s1">
+  <h2 id="s1">What is this interview?</h2>
+  <p><em>Q: What is a system design interview?</em></p>
+  <p>A: It is a common interview for software engineers, often for mid-level and senior jobs. The interviewer gives you a big, open task. For example, "Design a short link service" or "Design a chat app." You have about an hour.</p>
+  <p>You talk and draw boxes on a whiteboard or a shared screen. The boxes are parts of the system, like servers, a database and a cache. You write very little code, or no code at all.</p>
+</section>
+
+<section aria-labelledby="s2">
+  <h2 id="s2">Is there a right answer?</h2>
+  <p><em>Q: So what is the correct design?</em></p>
+  <p>A: Here is the surprise. <strong>There is no single right answer.</strong> Two good engineers can draw two different systems. Both can be fine. The interviewer is not checking your drawing against a key.</p>
+  <p>Instead, the interviewer wants to hear how you think. Can you make a big, unclear problem smaller? Can you choose between options and explain your choice? That is what they write down.</p>
+</section>
+
+<section aria-labelledby="s3">
+  <h2 id="s3">Start with questions</h2>
+  <p><em>Q: What should I do first?</em></p>
+  <p>A: Ask questions. The task is open on purpose. How many users are there? Do they read more or write more? Does the data need to be correct at every moment? These questions show that you care about real needs.</p>
+  <p>Many people start drawing right away. That is a common mistake. A design for one hundred users looks very different from a design for millions.</p>
+</section>
+
+<section aria-labelledby="s4">
+  <h2 id="s4">Talk about trade-offs</h2>
+  <p><em>Q: How do I choose between options?</em></p>
+  <p>A: Talk about <strong>trade-offs</strong>. A trade-off means you get one good thing, but you lose another. A cache makes reads fast. But the data in the cache can be old for a short time.</p>
+  <p>So say both sides out loud. "I will use a cache here, because reads are most of the traffic. The cost is some old data, and that is fine for this app." The word "because" is very important. Always explain why.</p>
+</section>
+
+<section class="words" aria-labelledby="w">
+  <h2 id="w">Words to notice</h2>
+  <dl class="terms">
+    <dt>interviewer</dt><dd>the person who asks questions in an interview</dd>
+    <dt>cache</dt><dd>a fast place that keeps copies of data</dd>
+    <dt>trade-offs</dt><dd>choices where you get one good thing and lose another</dd>
+    <dt>on purpose</dt><dd>because someone wanted it, not by accident</dd>
+    <dt>out loud</dt><dd>in a voice other people can hear</dd>
+  </dl>
+</section>
+
+<div class="aside aside-quiet">
+  <p class="label">Think about it</p>
+  <p>Think of a choice you made at work. What did you get, and what did you lose?</p>
+</div>

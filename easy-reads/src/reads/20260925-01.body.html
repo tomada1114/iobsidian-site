@@ -1,0 +1,43 @@
+<!-- title: How a Search Tree Finds a Number Fast | topic: tech | blurb: A tree with a million numbers can find one in about twenty steps. The trick is to throw away half the tree at each step. -->
+<section aria-labelledby="s1">
+  <h2 id="s1">Smaller left, bigger right</h2>
+  <p>A <strong>binary search tree</strong> is a way to keep numbers in order. Each number sits in a box called a node. A node can have two children, one on the left and one on the right.</p>
+  <p>The rule is simple. Smaller numbers go to the left. Bigger numbers go to the right. This rule is true at every node in the tree, not only at the top.</p>
+  <p>The node at the top is called the root. Every search starts there.</p>
+</section>
+
+<section aria-labelledby="s2">
+  <h2 id="s2">One step at a time</h2>
+  <p>Say you want to find the number 42. You look at the root first. Maybe it holds 50. Your number is smaller, so you go left.</p>
+  <p>Now you are at a node with 30. Your number is bigger, so you go right. At each node you ask the same question. Is my number smaller, bigger or the same?</p>
+  <p>If it is the same, you are done. If you reach an empty place, the number is not in the tree. You never need to go back up.</p>
+</section>
+
+<section aria-labelledby="s3">
+  <h2 id="s3">Half is gone each time</h2>
+  <p>Here is the key idea. When you go left, you also decide <em>not</em> to go right. You never look at anything on the right side again. In a well-shaped tree, that side holds about half of the numbers.</p>
+  <p>So each step throws away about half of what is left. Start with a thousand numbers. After one step, about five hundred are left. After two steps, about two hundred fifty. The numbers get small very fast.</p>
+  <p>With a thousand numbers, you need about ten steps. With a million numbers, you need only about twenty. Each time the tree gets twice as big, you add just one more step.</p>
+</section>
+
+<section aria-labelledby="s4">
+  <h2 id="s4">When the tree is not balanced</h2>
+  <p>There is one catch. The tree must stay <em>balanced</em>, which means the left and right sides are close in size. Say you add the numbers 1, 2, 3, 4 and 5 in that order. Each new number goes to the right, and the tree becomes one long line.</p>
+  <p>Then a search must walk the whole line, one node at a time. For this reason, many real tools use trees that fix their own shape. Two well-known kinds are the red-black tree and the <code>AVL</code> tree.</p>
+</section>
+
+<section class="words" aria-labelledby="w">
+  <h2 id="w">Words to notice</h2>
+  <dl class="terms">
+    <dt>binary search tree</dt><dd>a tree where smaller numbers go left, bigger go right</dd>
+    <dt>node</dt><dd>one box in a tree that holds a value</dd>
+    <dt>root</dt><dd>the node at the very top of a tree</dd>
+    <dt>balanced</dt><dd>with left and right sides close in size</dd>
+    <dt>throws away</dt><dd>stops using something because you do not need it</dd>
+  </dl>
+</section>
+
+<div class="aside aside-quiet">
+  <p class="label">Think about it</p>
+  <p>Think of a paper dictionary. How do you find a word in it? Is it like a search tree?</p>
+</div>
