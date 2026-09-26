@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>How a Simple Metal Box Changed World Trade | Easy Reads</title>
+<title>Code Review Is Not Only About Bugs | Easy Reads</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -209,62 +209,62 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
-<body data-id="20260925-06">
-<div class="page acc-3">
+<body data-id="20260926-02">
+<div class="page acc-1">
 <header class="page-head">
-  <p class="kicker"><a href="../index.html"><b>Easy Reads</b></a><span>Fri, Sep 25, 2026</span></p>
-  <h1>How a Simple Metal Box Changed World Trade</h1>
-  <p class="lead">Ships once took days to load, one bag and one box at a time. Then one man had an idea about a simple steel box.</p>
-  <p class="meta"><span>History</span><span>357 words</span><span>About 3 min</span></p>
+  <p class="kicker"><a href="../index.html"><b>Easy Reads</b></a><span>Sat, Sep 26, 2026</span></p>
+  <h1>Code Review Is Not Only About Bugs</h1>
+  <p class="lead">On a software team, code is read by a second person before it goes in. This helps find bugs, but it also does something more.</p>
+  <p class="meta"><span>Work</span><span>352 words</span><span>About 3 min</span></p>
 </header>
 
 <div class="flow">
 <section aria-labelledby="s1">
-  <h2 id="s1">Loading ships by hand</h2>
-  <p>Think about a port in the early 1950s. A ship is waiting to take goods across the sea. The goods come in bags, boxes and barrels of every size.</p>
-  <p>Workers carry each item onto the ship by hand. They pack it in a small space with care. Then, at the next port, other workers take it all out again, one piece at a time.</p>
-  <p>This work was slow and hard. Loading one ship could take days. Ships often spent more time in port than at sea. Some goods also broke or went missing on the way.</p>
+  <h2 id="s1">One person asks</h2>
+  <p>On many software teams, no one adds code alone. First, a developer makes a change on their own branch. Then they ask a teammate to read it. This is called a <strong>code review</strong>.</p>
+  <p>On GitHub, this request is a <em>pull request</em>. On GitLab, it is a <em>merge request</em>. The names are different, but the idea is the same. The developer writes a short note. The note says what the change does and why.</p>
 </section>
 
 <section aria-labelledby="s2">
-  <h2 id="s2">A trucker with an idea</h2>
-  <p>Malcolm McLean ran a trucking company in the United States. His trucks often waited at ports while workers loaded ships. He thought this was a waste of time and money.</p>
-  <p>His idea was simple. Why lift every item? Why not lift the whole back of the truck and put it on the ship? The goods could stay inside the box from start to end.</p>
-  <p>In 1956, a ship he used carried the first of these boxes. The box is called a <strong>shipping container</strong>, a large steel box that can move by truck, train or ship.</p>
+  <h2 id="s2">Another person reads</h2>
+  <p>The reviewer, the person who reads the change, looks at each line. The tool shows old lines and new lines side by side. The reviewer can leave a comment on any line.</p>
+  <p>The two people talk in these comments. The developer answers questions and fixes some things. Then they push the new version. This can go back and forth a few times.</p>
+  <p>When the reviewer is happy, they approve the change. Then the change is merged into the main branch. Many teams do not allow a merge without at least one approval.</p>
 </section>
 
 <section aria-labelledby="s3">
-  <h2 id="s3">One size for everyone</h2>
-  <p>At first, different companies made boxes in different sizes. This was a problem. A box from one company did not fit the ships or trains of another.</p>
-  <p>Over time, people agreed on a <strong>standard</strong>, one set of sizes that everyone uses. The corners of every box were made the same way. Now any crane, a big machine that lifts heavy things, could pick up any box.</p>
-  <p>Software people know this idea well. It is like a common interface. When everyone uses the same shape, all the parts work together.</p>
+  <h2 id="s3">More than finding bugs</h2>
+  <p>Most people think reviews are for catching bugs. They do catch some bugs. But they also do a quiet second job. They <strong>spread knowledge</strong> across the team.</p>
+  <p>The reviewer learns a part of the code they did not write. The writer learns a new way to solve a problem. Later, if the writer is sick or on vacation, someone else already knows the code. A new team member can also learn fast by reading reviews.</p>
 </section>
 
 <section aria-labelledby="s4">
-  <h2 id="s4">Faster and cheaper</h2>
-  <p>With containers, a crane lifts one box after another. A ship can load in hours, not days. Fewer goods break, and fewer go missing, because the box stays closed.</p>
-  <p>Moving goods became much cheaper. Companies could make things in one country and sell them far away. Today, many of the things in your home came across the sea in a steel box.</p>
+  <h2 id="s4">Kind and clear comments</h2>
+  <p>A good comment is kind and specific. It talks about the code, not the person. "This loop runs twice" is better than "You made a mistake."</p>
+  <p>Many reviewers put a small label at the start of a comment. The label shows how important the comment is. A <em>nit</em> is a very small point, like a name or a space. The writer can skip it. A <em>question</em> asks for help to understand. A <em>suggestion</em> gives an idea, but the writer can say no.</p>
+  <p>These labels save time. The writer knows what must change and what is only an idea.</p>
 </section>
 
 <section class="words" aria-labelledby="w">
   <h2 id="w">Words to notice</h2>
   <dl class="terms">
-    <dt>port</dt><dd>a place where ships stop to load and unload</dd>
-    <dt>goods</dt><dd>things that people buy and sell</dd>
-    <dt>shipping container</dt><dd>a large steel box for moving goods</dd>
-    <dt>standard</dt><dd>one set of sizes or rules that everyone uses</dd>
-    <dt>crane</dt><dd>a big machine that lifts heavy things</dd>
+    <dt>code review</dt><dd>when a teammate reads your code change before it goes in</dd>
+    <dt>reviewer</dt><dd>the person who reads and checks the change</dd>
+    <dt>approve</dt><dd>to say yes, this is ready</dd>
+    <dt>merged</dt><dd>added into the main code</dd>
+    <dt>nit</dt><dd>a very small point that is not important</dd>
+    <dt>specific</dt><dd>clear and about one exact thing</dd>
   </dl>
 </section>
 
 <div class="aside aside-quiet">
   <p class="label">Think about it</p>
-  <p>What is one thing in your home that probably came from far away? How do you think it traveled to you?</p>
+  <p>Think of a comment you once got on your work. Was it kind and specific? How did it help you?</p>
 </div>
 
 <nav class="pager" aria-label="More reads">
-  <a class="prev" href="20260925-05.html"><span>Previous</span><b>The Wrong Name on the Cup</b></a>
-  <a class="next" href="20260926-01.html"><span>Next</span><b>What Makes an AI Agent Different from a Chatbot</b></a>
+  <a class="prev" href="20260926-01.html"><span>Previous</span><b>What Makes an AI Agent Different from a Chatbot</b></a>
+  <a class="next" href="20260926-03.html"><span>Next</span><b>Why Football Fans Eat Lunch in a Parking Lot</b></a>
 </nav>
   <p class="fine"><a href="../index.html">All reads</a></p>
 </div>
