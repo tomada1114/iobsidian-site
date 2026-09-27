@@ -1,0 +1,40 @@
+<!-- title: What Happens When You Type brew install | topic: tech | blurb: One short command puts a new tool on your Mac. Here is what Homebrew does in those few seconds. -->
+<section aria-labelledby="s1">
+  <h2 id="s1">One short command</h2>
+  <p>Many people who write code on a Mac use <code>Homebrew</code>. It is a <strong>package manager</strong>, a tool that installs other tools for you. You type <code>brew install</code> and a name, like <code>brew install wget</code>. A few seconds later, the new tool is ready.</p>
+  <p>But what happens in those few seconds? The steps are simple. Homebrew reads a recipe, gets a package, and puts it in one place.</p>
+</section>
+
+<section aria-labelledby="s2">
+  <h2 id="s2">First, a recipe</h2>
+  <p>For each tool, Homebrew has a small text file. Homebrew calls this file a <strong>formula</strong>, like a recipe in a kitchen. The formula says where the tool comes from. It also lists the other tools it needs to work.</p>
+  <p>These other tools are called dependencies. If your Mac does not have them yet, Homebrew installs them first. You do not need to find them yourself.</p>
+</section>
+
+<section aria-labelledby="s3">
+  <h2 id="s3">Then, a ready-made package</h2>
+  <p>Many tools start as source code. Someone has to build that code before a computer can run it. Building can take a long time. So Homebrew builds most tools ahead of time for common Macs.</p>
+  <p>A package that is already built is called a <strong>bottle</strong>. When a bottle fits your Mac, Homebrew just downloads it and opens it. This is why most installs are fast. If there is no bottle for your Mac, Homebrew builds the tool from the source code on your machine. That is slower, but it still works.</p>
+</section>
+
+<section aria-labelledby="s4">
+  <h2 id="s4">One folder for everything</h2>
+  <p>Homebrew keeps every tool inside one folder that it manages. On newer Macs, this folder is <code>/opt/homebrew</code>. Each tool gets its own place in there. Then Homebrew adds a short link, so you can run the tool by its name.</p>
+  <p>Because everything is in one place, Homebrew knows what it installed. You can type <code>brew upgrade</code> to update your tools. You can type <code>brew uninstall</code> and a name to remove a tool. Homebrew takes out its files and does not touch the rest of your Mac.</p>
+</section>
+
+<section class="words" aria-labelledby="w">
+  <h2 id="w">Words to notice</h2>
+  <dl class="terms">
+    <dt>package manager</dt><dd>a tool that installs, updates and removes other tools</dd>
+    <dt>formula</dt><dd>Homebrew's small recipe file for one tool</dd>
+    <dt>dependencies</dt><dd>other tools that a tool needs to work</dd>
+    <dt>source code</dt><dd>the code people write before it is built</dd>
+    <dt>bottle</dt><dd>a Homebrew package that is already built</dd>
+  </dl>
+</section>
+
+<div class="aside aside-quiet">
+  <p class="label">Think about it</p>
+  <p>What was the last tool you installed on your computer? How did you install it, and how would you remove it?</p>
+</div>
