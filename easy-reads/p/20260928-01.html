@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>How a Theft Made the Mona Lisa Famous | Easy Reads</title>
+<title>How the Paint Bucket Tool Fills a Shape | Easy Reads</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -209,61 +209,62 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
-<body data-id="20260927-06">
-<div class="page acc-4">
+<body data-id="20260928-01">
+<div class="page acc-1">
 <header class="page-head">
-  <p class="kicker"><a href="../index.html"><b>Easy Reads</b></a><span>Sun, Sep 27, 2026</span></p>
-  <h1>How a Theft Made the Mona Lisa Famous</h1>
-  <p class="lead">In 1911, someone took the Mona Lisa from the wall of a museum in Paris. The empty wall made it the most famous painting in the world.</p>
-  <p class="meta"><span>Art</span><span>341 words</span><span>About 3 min</span></p>
+  <p class="kicker"><a href="../index.html"><b>Easy Reads</b></a><span>Mon, Sep 28, 2026</span></p>
+  <h1>How the Paint Bucket Tool Fills a Shape</h1>
+  <p class="lead">Click inside a shape, and the paint bucket fills it with color. The tool cannot see the shape at all. Here is what it does instead.</p>
+  <p class="meta"><span>Technology</span><span>379 words</span><span>About 4 min</span></p>
 </header>
 
 <div class="flow">
 <section aria-labelledby="s1">
-  <h2 id="s1">A painting in Paris</h2>
-  <p>The <em>Mona Lisa</em> is a small painting of a woman with a quiet smile. Leonardo da Vinci painted it about five hundred years ago. For a long time, it has hung in the Louvre, a large art <strong>museum</strong> in Paris.</p>
-  <p>Before 1911, many art lovers knew the painting. But it was one good painting among many. Most people in the world did not know its name.</p>
+  <h2 id="s1">One click, one color</h2>
+  <p>Most drawing apps have a paint bucket tool. You pick a color and click inside a shape. The whole shape turns that color at once.</p>
+  <p>It looks like the app knows where the shape is. But it does not. A picture on a screen is only a grid of small dots. Each dot is called a <em>pixel</em>, and each pixel has one color.</p>
+  <p>So the tool does something simple. It starts at one pixel and <strong>spreads to its neighbors</strong>, one step at a time.</p>
 </section>
 
 <section aria-labelledby="s2">
-  <h2 id="s2">An empty wall</h2>
-  <p>One day in August 1911, the painting was gone. Someone took it off the wall and walked out with it. At first, the museum workers did not worry. They thought someone was taking a photo of it.</p>
-  <p>Then they understood. The Mona Lisa was stolen. The museum closed for a week. The police looked everywhere, but they could not find it.</p>
-  <p>Many people came to the museum just to look at the empty wall. They wanted to see the place where the painting once was.</p>
+  <h2 id="s2">From one pixel to the next</h2>
+  <p>First, the tool looks at the pixel you clicked. Say it is white. Now the tool has one rule: paint white pixels, and stop at any other color.</p>
+  <p>It paints the first pixel. Then it looks at the four pixels next to it: up, down, left and right. Each white neighbor gets painted too. A black line is not white, so the tool stops there.</p>
+  <p>Then the tool looks at the neighbors of those new pixels. And then at their neighbors. The color grows out like water on a flat table. When no white pixels are left to reach, the job is done.</p>
 </section>
 
 <section aria-labelledby="s3">
-  <h2 id="s3">Two years of news</h2>
-  <p>Newspapers wrote about the <strong>theft</strong>, the act of stealing, again and again. They printed the woman's face on the front page. People in many countries saw it for the first time. They read the story and talked about it.</p>
-  <p>Months passed, and there was no news of the painting. Some people thought it was lost forever. But the story did not go away. Each new story made the face more famous.</p>
+  <h2 id="s3">A line of pixels to visit</h2>
+  <p>How does the tool remember where to go next? It keeps a list, often called a <em>queue</em>. A queue works like a line at a store. The first one in is the first one out.</p>
+  <p>The tool takes a pixel from the front of the line. It paints it and adds its white neighbors to the back. It does this again and again until the line is empty. Programmers call this a <code>BFS</code>, or breadth-first search.</p>
+  <p>This is also why a small gap matters. If the black line has a hole of just one pixel, the color walks right through it. Then it fills the whole page.</p>
 </section>
 
 <section aria-labelledby="s4">
-  <h2 id="s4">Found in Italy</h2>
-  <p>In 1913, the painting came back. The <strong>thief</strong> was an Italian man who had worked at the Louvre. He kept the painting in his room in Paris for two years. Then he took it to Florence, a city in Italy, and tried to sell it.</p>
-  <p>The man who met him checked the painting and called the police. The thief was caught. The painting went back to Paris, and big crowds came to see it.</p>
-  <p>So the Mona Lisa was already a fine painting before 1911. But the theft and the news gave it a new kind of fame. Today, it may be the best known painting in the world.</p>
+  <h2 id="s4">The same idea in other places</h2>
+  <p>This way of spreading shows up in many programs. A game can use it to find all the land a player can walk to. A map app can use a similar idea to find a short way from one place to another.</p>
+  <p>The next time you click the paint bucket, think of the small line of pixels. Each one waits for its turn.</p>
 </section>
 
 <section class="words" aria-labelledby="w">
   <h2 id="w">Words to notice</h2>
   <dl class="terms">
-    <dt>museum</dt><dd>a building where people go to see art or old things</dd>
-    <dt>stolen</dt><dd>taken by someone without asking</dd>
-    <dt>theft</dt><dd>the act of stealing something</dd>
-    <dt>thief</dt><dd>a person who steals things</dd>
-    <dt>crowds</dt><dd>large groups of people in one place</dd>
+    <dt>pixel</dt><dd>one very small dot of color on a screen</dd>
+    <dt>neighbors</dt><dd>the things right next to something</dd>
+    <dt>queue</dt><dd>a line where the first one in goes out first</dd>
+    <dt>spreads</dt><dd>moves out to cover more space</dd>
+    <dt>gap</dt><dd>a small open space in something</dd>
   </dl>
 </section>
 
 <div class="aside aside-quiet">
   <p class="label">Think about it</p>
-  <p>Think of something that became famous because of news stories. Why do you think people cared about it?</p>
+  <p>What tool on your computer or phone do you use every day? What do you think it does inside?</p>
 </div>
 
 <nav class="pager" aria-label="More reads">
-  <a class="prev" href="20260927-05.html"><span>Previous</span><b>A New Library Card</b></a>
-  <a class="next" href="20260928-01.html"><span>Next</span><b>How the Paint Bucket Tool Fills a Shape</b></a>
+  <a class="prev" href="20260927-06.html"><span>Previous</span><b>How a Theft Made the Mona Lisa Famous</b></a>
+  <a class="next" href="20260928-02.html"><span>Next</span><b>Whose Meeting Is the One-on-One?</b></a>
 </nav>
   <p class="fine"><a href="../index.html">All reads</a></p>
 </div>
