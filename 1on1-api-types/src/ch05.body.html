@@ -1,0 +1,189 @@
+<!-- title: API and TypeScript 05 · Trust nothing at the boundary | accent: reach -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 5 of 11</span></p>
+  <h1>Trust nothing at the boundary: parse it once</h1>
+  <p class="lead">After this page you can list where outside data enters a program. You can also explain why we parse it once into a precise type instead of validating it again and again.</p>
+  <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why check data our own app just wrote?</li>
+      <li>What's the difference between validating and parsing?</li>
+      <li>Where exactly does the parsing happen?</li>
+      <li>What does parsing cost?</li>
+    </ul>
+  </nav>
+  <p class="stage">The small meeting room. Leo's laptop shows the web app's answer queue.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Where outside data comes in</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Something looks odd in the answer queue. The web app writes answers to session storage. A second later it reads them back, and it checks every one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What seems odd about that?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It's our own data. We wrote it. Why would anyone validate their own data?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who else can write to session storage?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Nobody. Well, the user could, in the browser's dev tools.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a browser extension. And an older version of our app, still open in another tab, with a different answer shape.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. So it's the browser's storage, not ours.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The storage lives outside our program's memory. Once data leaves memory, we can't be sure what comes back.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where else does that happen?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's list them. A request body. Browser storage. Environment variables. A file. Another service's reply.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a model's reply. That's outside too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Everything that comes from outside the process's own memory is <code>unknown</code> on the way in. That's the TypeScript type that allows nothing until you check it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the queue is right to check. What does it do with a bad answer?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small type guard checks each one, and anything that doesn't fit is dropped. The rest of the app only ever sees real answers.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Parse, don't validate</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have called that validation. A function that returns true or false.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the half that's missing something. Alexis King has a phrase for this: parse, don't validate.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the difference? Both check the data.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A validator answers yes or no, and then the answer is gone. The value is still <code>unknown</code>. What does the next function do?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It doesn't know the value was checked… so it checks again.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. A parser returns something new: a more precise type, or a failure. The type carries the proof forward, so nobody checks again.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "validated" becomes part of the type.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. Let me put them side by side.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A validator returns a boolean and leaves the value unknown, so the next function checks again; a parser returns a typed value or a failure, so the value is checked once.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Validate</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Parse</text>
+      <text x="16" y="56" class="t-sm">Returns</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">true or false</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a value or failure</text>
+      <text x="16" y="136" class="t-sm">The value's type after</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">still unknown</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">a precise type</text>
+      <text x="16" y="216" class="t-sm">The next function</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">checks again</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">trusts the type</text>
+    </svg>
+    <figcaption>The bottom row is the point. A parser's result is proof that travels, so the check happens once.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we parse a request body in practice?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With a schema library, zod. One schema gives two things: a runtime check and a static type.</p><pre><code>const StartRound = z.object({
+  kind: z.enum(["first", "retry"]),
+  roundId: z.string().uuid(),
+});
+type StartRound = z.infer&lt;typeof StartRound&gt;;
+
+const parsed = StartRound.safeParse(body); // body: unknown
+if (!parsed.success) return badRequest();
+parsed.data.kind; // "first" | "retry"</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>safeParse</code> doesn't throw. It returns success or failure, like a Result.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And <code>z.infer</code> makes the type from the schema, so they can't disagree.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've also seen <code>satisfies</code> in our code. Is that a parser too?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, it's for values we write ourselves. The keyword <code>as</code> tells the compiler, "trust me". <code>satisfies</code> checks the value against a type, but keeps the value's own narrower type.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>satisfies</code> is a check, and <code>as</code> is only a claim.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And for a tiny shape where we don't want a library, a hand-written type guard is a parser too. It's a function that returns <code>value is Answer</code>.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's what the answer queue uses.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Once, at the edge</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now, where does the parsing happen? Let me draw a request's path into the API.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Request bytes are read under a size cap, parsed as JSON into an unknown value, then parsed by a schema into a typed command or refused with a code.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Bytes, read under a size cap</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">JSON parse</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">An unknown value</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Schema parse, or a refusal code</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">A typed command</text>
+    </svg>
+    <figcaption>The value is <code>unknown</code> until the schema step. The command at the end never sees unchecked data.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a failed schema parse gives a bad-request code?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With one fixed sentence. The message never quotes what the client sent.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not? Quoting the bad field would help.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the input might hold a password, or a script tag that ends up in a log viewer. An error never carries the input back.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the environment the same? It's just a few settings.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the best example. Our API reads <code>process.env</code> in exactly one module. Nothing else touches it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And checks it when?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Once, at startup. Small hand-written parse functions check every variable. If any are bad, it reports all their names in one error, and refuses to start.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Names, but not values?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never values. A value might be a secret. And the sign-in client secret isn't allowed as a plain variable at all in the hosted app. It comes from a parameter store.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why refuse to start? It could run until a request needs the value.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the crash comes at 2 a.m., on the first request that needs it. Failing at start shows up during the deploy, while someone is watching.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So every door has one place that parses.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here are our doors.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The edge sits in the center; request bodies and session storage above it, environment variables and model output below it, each parsed once at the edge.">
+      <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
+      <line x1="296" y1="76" x2="240" y2="118" class="ln"/>
+      <line x1="104" y1="182" x2="160" y2="166" class="ln"/>
+      <line x1="296" y1="182" x2="240" y2="166" class="ln"/>
+      <rect x="16" y="28" width="176" height="48" rx="6" class="node"/><text x="104" y="58" text-anchor="middle">Request body</text>
+      <rect x="208" y="28" width="176" height="48" rx="6" class="node"/><text x="296" y="58" text-anchor="middle">Session storage</text>
+      <rect x="120" y="118" width="160" height="48" rx="8" class="node-acc"/>
+      <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">The edge</text>
+      <rect x="16" y="182" width="176" height="48" rx="6" class="node"/><text x="104" y="212" text-anchor="middle">Env variables</text>
+      <rect x="208" y="182" width="176" height="48" rx="6" class="node"/><text x="296" y="212" text-anchor="middle">Model output</text>
+      <text x="200" y="272" text-anchor="middle" class="t-sm">each is parsed once, here</text>
+    </svg>
+    <figcaption>Four different sources, one rule. Each one becomes a precise type at the edge, and the inside of the program never checks again.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>What parsing costs</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not parse everywhere, to be safe?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Parsing costs code and CPU time. If every function parses again, you pay many times for the same proof. Once at the edge is enough.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about fields we don't expect? A newer app might send an extra field.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You have to decide that on purpose. Strip it, refuse it, or keep it. A strict object refuses it, and then a newer client breaks against an older server.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed refusing unknown fields was the careful choice.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside one version, it is. But phones update on their own schedule, so refusing new fields can break real users.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So strict isn't always safer.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not across versions. There's another cost too: a schema library adds weight to the browser bundle.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that why the answer queue uses a type guard, not zod?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's one reason. And our environment module uses small hand-written functions, so that package doesn't need a schema library at all.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where else does this matter?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anywhere a model returns structured output. Our grader for typed answers asks the model for a shape, and a schema parses the reply the same way.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the parse fails?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a retry, or a fallback grade. Never an <code>as</code> to make the compiler quiet. Teams that cast model output find out in production.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A teammate removes the check in the answer queue, saying "it's our own data". What do you tell them?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything from outside our process is <code>unknown</code>: a request, browser storage, environment variables, a model's reply. Session storage is the browser's, not ours.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We parse it once at the edge into a real type, or refuse it. Then everything inside trusts the type.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A validator only says yes or no, so the next function checks again. A parser returns proof in the type.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And <code>satisfies</code>?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>satisfies</code> checks a value against a type. <code>as</code> only asserts. Config gets the same rule: one module, checked at startup, every bad name reported, and no start if anything's wrong.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Don't forget the refusals: a refusal never quotes the input back. The bad value might be a secret, or something dangerous in a log.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Every value from outside the process, even browser storage, is <code>unknown</code> on the way in.</li>
+      <li>Parse it once at the edge into a precise type or a refusal, so the inside never checks again.</li>
+      <li>Read configuration in one module at startup, and refuse to start with every bad name listed.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch04.html"><span>Previous</span><b>Should a function throw, or return its failure?</b></a>
+    <a class="next" href="ch06.html"><span>Next</span><b>REST, GraphQL or RPC: how do you choose?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
