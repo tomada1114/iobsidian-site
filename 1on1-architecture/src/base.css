@@ -1,17 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
-<meta name="robots" content="noindex">
-<title>tomada's Bookshelf</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
-<style>
 /* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
 
 /* ---------- tokens: light ---------- */
@@ -147,6 +133,7 @@ h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);fo
 /* svg vocabulary: shapes */
 .fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
 .fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
 .fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
 .fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
 .fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
@@ -186,9 +173,24 @@ ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
 ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
 ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
   color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
-pre{background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
-pre code{background:none;padding:0;font-size:inherit}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
 blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
 /* ---------- ending ---------- */
 .summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
@@ -205,40 +207,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
   .aside{padding:14px 15px}
   td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-</style>
-</head>
-<body>
-<div class="page acc-1">
-<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <defs>
-    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
-    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
-  </defs>
-</svg>
-<header class="page-head">
-  <h1>Bookshelf</h1>
-  <p class="lead">Readers I made for my own study.</p>
-</header>
-
-<div class="flow">
-  <section aria-labelledby="easy-reads">
-    <h2 id="easy-reads"><a href="easy-reads/index.html">Easy Reads</a></h2>
-    <p>Short and easy English reads on many topics. Six new ones every morning.</p>
-    <p class="meta"><span>New every day</span><span>3 to 4 min each</span><span>English, A2+ to B1</span></p>
-  </section>
-  <section aria-labelledby="1on1-architecture">
-    <h2 id="1on1-architecture"><a href="1on1-architecture/ch00.html">One-on-Ones: Architecture</a></h2>
-    <p>Maya and Leo talk through what architecture is for: dependency rules, ports and adapters, DDD, and how to choose.</p>
-    <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="agentcore-reader">
-    <h2 id="agentcore-reader"><a href="agentcore-reader/ch00.html">AgentCore Reader</a></h2>
-    <p>A quick tour of building AI agents for companies on AWS, before the hands-on study.</p>
-    <p class="meta"><span>11 chapters</span><span>About 2.5 hours</span><span>English, B1</span></p>
-  </section>
-</div>
-</div>
-</body>
-</html>

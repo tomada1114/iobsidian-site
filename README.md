@@ -8,5 +8,6 @@
 
 | 読み物 | 目次 |
 |---|---|
+| One-on-Ones: Architecture（英語・B2・対話） | `1on1-architecture/ch00.html` |
 | AgentCore Reader（英語・B1） | `agentcore-reader/ch00.html` |
 | Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |

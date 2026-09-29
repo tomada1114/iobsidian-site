@@ -1,0 +1,67 @@
+<!-- title: One-on-Ones: Architecture · Contents | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Contents · 11 pages</span></p>
+  <h1>One-on-Ones: Architecture</h1>
+  <p class="lead">Eleven short conversations about what software architecture is for. After them you can explain dependency rules, ports and adapters, DDD and aggregates, and how to choose between styles and defend the choice in a review.</p>
+  <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
+</header>
+
+<div class="flow">
+  <section aria-labelledby="who">
+    <h2 id="who">Who's talking</h2>
+    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level; he builds features every day with Claude Code and wants to be able to explain why the system is built the way it is. Each page is one of their one-on-ones.</p>
+    <p>Quickturn is a small company that makes a language-learning app: a card shows a sentence in your own language, and you say it in the language you are learning before a timer runs out. Maya, Leo and Quickturn are fictional.</p>
+  </section>
+
+  <section aria-labelledby="map">
+    <h2 id="map">How the pages fit together</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 400 386" role="img" aria-label="The pages build in five steps: the two questions architecture answers, the styles that answer them, boundaries and consistency, where logic and history live, and finally enforcing and defending a design, which is where the series lands.">
+        <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="266" r="6" class="dot"/>
+        <circle cx="30" cy="342" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">Pages 1–2 · Two questions</text><text x="72" y="61" class="t-sm">what changes, which way arrows point</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">Pages 3–4 · Styles</text><text x="72" y="135" class="t-sm">ports and adapters, clean</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">Pages 5–7 · Boundaries</text><text x="72" y="209" class="t-sm">DDD, modular monolith, aggregates</text>
+        <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="262">Pages 8–9 · Logic and history</text><text x="72" y="283" class="t-sm">decide functions, projections</text>
+        <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="338" class="t-hd">Pages 10–11 · Hold and defend</text><text x="72" y="359" class="t-sm">checks, decision records</text>
+      </svg>
+      <figcaption>Each page stands on its own, but in order they move from the two questions every style answers to the skill the series ends on: keeping a design honest and explaining it.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="pages">
+    <h2 id="pages">The pages</h2>
+    <ol>
+      <li><a href="ch01.html">Isn't architecture just folders?</a> — Architecture decides what changes together and which way dependencies point.</li>
+      <li><a href="ch02.html">If the rules can't touch the database, who saves?</a> — Dependency inversion lets the rules own the interface the database code implements.</li>
+      <li><a href="ch03.html">Should every dependency get a port?</a> — Add a port only at a seam with two real implementations.</li>
+      <li><a href="ch04.html">Clean vs Hexagonal — what's actually different?</a> — One shared rule; clean adds a prescribed inside.</li>
+      <li><a href="ch05.html">Isn't DDD just another architecture style?</a> — DDD draws boundaries and words; clean points the arrows.</li>
+      <li><a href="ch06.html">Why not split it into microservices?</a> — Bounded contexts can live as modules in one deployable.</li>
+      <li><a href="ch07.html">What is an aggregate, really?</a> — A consistency boundary that decides what one commit protects.</li>
+      <li><a href="ch08.html">Where does the logic go, if not in the handler?</a> — Load, decide in a pure function, commit.</li>
+      <li><a href="ch09.html">Do we need event sourcing to keep the history?</a> — An append-only log with projections, and when to derive instead.</li>
+      <li><a href="ch10.html">Who stops a bad import when nobody is watching?</a> — Workspace packages and checks that turn boundaries into failed builds.</li>
+      <li><a href="ch11.html">How do I defend a design decision in a review?</a> — Decision records, rejected options, and effort that matches reversibility.</li>
+    </ol>
+  </section>
+
+  <div class="aside note">
+    <p class="label">How to read this</p>
+    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+  </div>
+
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>Next</span><b>Isn't architecture just folders</b></a>
+  </nav>
+</div>
