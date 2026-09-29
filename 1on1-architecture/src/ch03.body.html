@@ -1,0 +1,183 @@
+<!-- title: Architecture 03 · Should every dependency get a port | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 3 of 11</span></p>
+  <h1>Should every dependency get a port?</h1>
+  <p class="lead">After this page you can explain ports and adapters, tell driving ports from driven ones, and decide where a port belongs and where a plain function is enough.</p>
+  <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What is hexagonal architecture actually saying?</li>
+      <li>What's the difference between driving and driven ports?</li>
+      <li>Where do we draw a port, and when is a port the wrong tool?</li>
+    </ul>
+  </nav>
+  <p class="stage">The whiteboard room. Leo has an interface draft on his laptop.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Inside and outside</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I wrote an interface for the deck composer, the function that picks a round's cards. So we can swap it later, like the store.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Show me. Okay, an interface with one method, and one class that implements it.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Right. I was thinking we could do this for every class. Ports everywhere, like hexagonal architecture.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before we decide, tell me what you think "hexagonal" means.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Put an interface in front of everything? More ports, cleaner code?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common reading, and it's where teams get into trouble. Let's go back to the idea itself.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Alistair Cockburn named it hexagonal architecture, and later ports and adapters. The application sits inside. Everything outside talks to it through a port.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And an adapter is the thing in between?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. An adapter translates one technology to a port. HTTP to a command. A command's writes to DynamoDB calls.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why a hexagon, though? Is six important?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not at all. The shape only leaves room to draw many ports. The important part is a symmetry: the app shouldn't care whether a person, an HTTP request or a test is driving it.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a test is just another thing outside, like the web app.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Let me draw Quickturn this way.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 356" role="img" aria-label="The application sits in the center; driving adapters above it are the HTTP API and tests; driven adapters below it are the DynamoDB store, the in-memory store, the Cognito authenticator and the catalog snapshot. The application doesn't know which adapter is plugged in.">
+        <text x="16" y="16" class="t-sm">Driving: they call us</text>
+        <line x1="96" y1="68" x2="160" y2="140" class="ln"/>
+        <line x1="304" y1="68" x2="240" y2="140" class="ln"/>
+        <rect x="8" y="228" width="384" height="112" rx="10" class="zone-soft"/>
+        <line x1="200" y1="196" x2="200" y2="228" class="ln"/>
+        <rect x="16" y="24" width="160" height="44" rx="6" class="node"/><text x="96" y="52" text-anchor="middle">HTTP API</text>
+        <rect x="224" y="24" width="160" height="44" rx="6" class="node"/><text x="304" y="52" text-anchor="middle">Tests</text>
+        <rect x="110" y="140" width="180" height="56" rx="8" class="node-acc"/>
+        <text x="200" y="174" text-anchor="middle" class="t-hd">Application</text>
+        <rect x="16" y="236" width="160" height="44" rx="6" class="node"/><text x="96" y="264" text-anchor="middle">DynamoDB store</text>
+        <rect x="224" y="236" width="160" height="44" rx="6" class="node"/><text x="304" y="264" text-anchor="middle">In-memory store</text>
+        <rect x="16" y="288" width="160" height="44" rx="6" class="node"/><text x="96" y="316" text-anchor="middle">Cognito sign-in</text>
+        <rect x="224" y="288" width="160" height="44" rx="6" class="node"/><text x="304" y="316" text-anchor="middle">Catalog snapshot</text>
+        <text x="16" y="350" class="t-sm">Driven: we call them (plus clock and ids)</text>
+      </svg>
+      <figcaption>The application in the middle only sees ports. Above are the things that call it; below are the things it calls. It doesn't know which adapter is plugged in.</figcaption>
+    </figure>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Driving and driven</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There are two groups in your drawing. Top and bottom.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Driving ports and driven ports. Some books say primary and secondary; it's the same split.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Driving means they call us?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Our driving side is the commands and queries: start a round, record answers, finish a round, read the home screen. The HTTP adapter calls them, and so do tests, in exactly the same way.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And driven is what we call out to. The store, the catalog.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The learner store, the learner directory, the catalog. Plus the authenticator at the edge, and the clock and id generators we pass in at startup.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, the clock is a port?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A tiny one. In production it's the real time. In a test it's a fixed moment, so the test is repeatable.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the in-memory store? I always worry a fake hides bugs that the real database would show.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good worry. Both stores run the same contract suite. Same tests, same expected results.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Including the weird cases?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Including one I like. The test writes as one learner, then reads as another. It must get nothing back.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the fake leaked data between learners, the suite would catch it, just like with DynamoDB.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why we trust the fake in fast tests. A fake that passes the real contract is a second real implementation.</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Where we draw a port</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why not a port for my deck composer? It's the same idea.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Look at what varies. For the store, the technology varies: DynamoDB in production, memory in tests. What varies for the deck composer?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The way we pick cards. The algorithm.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And does it do any I/O?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. It takes the learner's cards and returns a deck.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then what you'd swap is a function, not a technology. If we want a different algorithm, we call a different function.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my interface just adds a file and a name, and there will never be a second implementation.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Probably never. Let me put the two cases side by side.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="The store seam has two real implementations doing I/O, so it gets a port; the deck composer is one algorithm with no I/O, so it stays a plain function.">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">Store</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd">Deck composer</text>
+        <text x="16" y="56" class="t-sm">Does I/O?</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">Yes</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">No</text>
+        <text x="16" y="136" class="t-sm">What varies</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">DynamoDB, memory</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the algorithm</text>
+        <text x="16" y="216" class="t-sm">Decision</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">port</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">plain function</text>
+      </svg>
+      <figcaption>The same question gives two answers. Where technology varies, draw a port; where only the logic varies, keep a plain function.</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our ports sit only at seams with two real implementations. The store: DynamoDB and memory. The authenticator: Cognito, and a local stand-in where tests sign tokens with their own key pair.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The catalog?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A snapshot built with the app, and whatever cards a test hands in. Clock and ids too. The scheduler and the deck composer are plain functions.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you're saying no to my interface.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>To the interface, yes. The function is fine as it is.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One more thing I don't get. My old team used mocks for everything. Is the in-memory store a mock?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, and the words matter here: Gerard Meszaros sorted these "test doubles" into kinds. A mock checks which calls were made. A fake is a small working implementation.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a mock test says "commit was called once with these arguments".</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And when we refactor, that test breaks even if the behavior is the same. A fake test just checks the result: start a round, then read it back.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the fake is only possible because there's a port with a clear shape.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A good port gives you good fakes. That's one more reason to put ports only where they're real.</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>When ports go wrong</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the real harm, though? One extra interface isn't much.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One isn't. A port per class is noise: two files for every idea, and interfaces nobody will ever implement twice. Readers jump around for nothing.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fair. Is that the worst failure?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The subtler one is a port shaped like its first technology.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does that look like?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our early store interface was synchronous, and it let callers hold a transaction open. That was natural for a local database on one machine.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And DynamoDB is across a network. You can't hold a transaction open while your code thinks.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The seam existed, but its shape was wrong. We had to redesign it: async reads, and one commit that carries every change at once.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the lesson is to shape the port for what the app needs, not for the database you have today.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Here's the rule of thumb on two axes.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether code does I/O against how many real implementations it has; I/O with two or more implementations gets a port, and pure code with one implementation is just a function.">
+        <text x="44" y="18" class="t-sm">↑ Real implementations: 2+</text>
+        <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
+        <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
+        <text x="390" y="356" text-anchor="end" class="t-sm">Does I/O →</text>
+        <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
+        <text x="134" y="100" text-anchor="middle">Pick a function</text><text x="134" y="124" text-anchor="middle" class="t-sm">e.g. schedulers</text>
+        <rect x="222" y="36" width="160" height="140" rx="6" class="node-acc"/>
+        <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">Port</text><text x="302" y="124" text-anchor="middle" class="t-sm">store, sign-in</text>
+        <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
+        <text x="134" y="248" text-anchor="middle">Just a function</text><text x="134" y="272" text-anchor="middle" class="t-sm">deck composer</text>
+        <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
+        <text x="302" y="248" text-anchor="middle">Wait for a</text><text x="302" y="272" text-anchor="middle">second one</text>
+      </svg>
+      <figcaption>A port pays for itself in the top-right corner: code that does I/O and has two real implementations. Pure code stays a function, however many versions it has.</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply to the AI parts? Grading typed answers with a model?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does. We have one port per task: grade an answer, explain a mistake. Not one generic "call the model" port.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not generic? It would be less code.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because each task has its own output schema and its own evaluation. A generic port pushes those details into every caller.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the port names what the app needs, "grade this", not what the model offers, "send a prompt".</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the same lesson as the store, one more time.</p></div></div>
+    </div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone proposes a port for every class. What do you tell them?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Ports and adapters keep technology outside and the app inside. The app shouldn't care if HTTP or a test is calling it.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Driving ports are how the world calls us, our commands and queries. Driven ports are how we call the world, like the store.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We add a port only where there are two real implementations, like DynamoDB and memory. Pure logic stays a function.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the shape?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Shape the port for what we need, not for the first database we had.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. One thing: mention the contract suite. It's what makes the in-memory fake trustworthy.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Right. Same tests for both, including the isolation test.</p></div></div>
+    </div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Ports and adapters keep the application inside and every technology outside, behind ports that adapters translate to.</li>
+      <li>Add a port only at a seam with two real implementations; pure logic stays a plain function.</li>
+      <li>Shape each port for what the application needs, not for the first technology behind it.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch02.html"><span>Previous</span><b>If the rules can't touch the database</b></a>
+    <a class="next" href="ch04.html"><span>Next</span><b>Clean vs Hexagonal</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
