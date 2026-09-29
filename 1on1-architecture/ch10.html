@@ -239,7 +239,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 10 of 11</span></p>
   <h1>Who stops a bad import when nobody is watching?</h1>
-  <p class="lead">After this page you can explain how a monorepo with workspace packages turns architecture boundaries into checks a machine runs, and why that matters more when AI coding agents write much of the code.</p>
+  <p class="lead">After this page you can explain how a monorepo with workspace packages turns architecture boundaries into checks a machine runs. You can also say why that matters more when AI coding agents write much of the code.</p>
   <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
 </header>
 <div class="flow">
@@ -248,7 +248,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ul>
       <li>Why one repository instead of several?</li>
       <li>How do workspace packages make a surface explicit?</li>
-      <li>How are the edges enforced, and is all this config worth it?</li>
+      <li>How are the edges enforced?</li>
+      <li>Is all this config worth it?</li>
     </ul>
   </nav>
   <p class="stage">The whiteboard room. A red CI run is on Leo's laptop.</p>
@@ -256,13 +257,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s1"><span class="no">01</span>One repository or several</h2>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My coding agent wrote a change this morning that worked. It imported the DynamoDB adapter straight into a command. CI rejected it before anyone even looked.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. That's the system doing its job.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the system doing its job. The adapter is the code that talks to DynamoDB, and a command isn't allowed to import it.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I know. But I'm curious why the repo is set up like this. And whether it's worth all that config.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start one level up. Why do you think everything lives in one repository?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start with a bigger question. Why do you think everything lives in one repository?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Honestly, I thought a monorepo was just one big folder. Less setup.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's part of it, but not the reason. Think about a contract change. Say a new field in the answer response.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's part of it, but not the reason. Think about a contract change, a change to the shape of data the API and its clients agree on. Say a new field in the answer response.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The contracts package changes. The API changes. The web app changes to show it.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one repository, that's one commit, one review, and one set of gates. Now imagine three repositories.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one repository, that's one commit, one review, and one set of gates, the checks that must pass before a merge. Now imagine three repositories.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Three pull requests. The contract gets a new version, then the API updates, then the web app. Somebody has to coordinate the order.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me draw it.</p></div></div>
     </div>
@@ -280,7 +281,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">one set</text>
         <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one per repo</text>
       </svg>
-      <figcaption>The first row decides it for us: when one team changes a contract and its clients together, a single commit beats three coordinated pull requests.</figcaption>
+      <figcaption>The first row decides it for us. When one team changes a contract and its clients together, a single commit beats three coordinated pull requests.</figcaption>
     </figure>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But the other column has upsides too. Independent releases, separate permissions.</p></div></div>
@@ -293,15 +294,19 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>Packages with explicit surfaces</h2>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, one repo. What makes it more than a folder?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>pnpm workspaces. Each package declares which other packages it depends on. And pnpm's strict layout means an undeclared package can't even be resolved.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>pnpm workspaces. pnpm is our package manager, and workspaces let one repository hold many packages. Each package declares which other packages it depends on.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Declares it where?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In its manifest, the package.json file. And pnpm's strict layout means an undeclared package can't even be resolved, that is, found.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the domain doesn't declare the adapters, the import can't even resolve.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly, type checking fails on it. That's the first fence. The second is the exports field in each package's manifest.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. The domain holds our pure business rules and declares no adapters, so type checking fails on that import. That's the first barrier. The second is the exports field in each package's manifest.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does exports do?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It points at one entry file. Only what that file re-exports is public. Everything else in the package is private.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So each package has a front door, and the rest is locked.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And one more thing: "source, not builds". The entry points at the TypeScript source itself.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No build step per package?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>None. Whoever uses the package compiles it: Vite for the web app, the test runner, Node's type stripping for the API. So there's no stale build to get out of sync.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>None. Whoever uses the package compiles it: Vite for the web app, the test runner, and Node's type stripping for the API.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Type stripping?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Node removes the TypeScript types and runs what's left. So there's no stale build to get out of sync.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which package imports which, though?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw the layers.</p></div></div>
     </div>
@@ -331,9 +336,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s3"><span class="no">03</span>Edges enforced twice</h2>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what caught my agent's import? The manifest?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Lint. The lint config holds the allowed edges as a table: domain to nothing, application to domain, adapters to application and domain, contracts to zod only.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Lint, the tool that checks code without running it. Its config holds a table of allowed edges, where an edge is one package importing another.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's in the table?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Domain to nothing, application to domain, adapters to application and domain, contracts to zod only. The application package is where commands live, and zod is the schema library the contracts use.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the import rules are generated from that table.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Then a separate test states the same edges again, on its own, and scans the real import graph and each package's manifest.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Then a separate test states the same edges again, on its own. It scans the real import graph, meaning which file imports which, and each package's manifest.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why both, if they check the same thing?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So that deleting one check still fails the other. A boundary that only one layer holds is a boundary one edit removes.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an agent that "fixes" the build by deleting the lint rule still fails the test.</p></div></div>
@@ -341,11 +348,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </div>
     <figure class="fig">
       <svg viewBox="0 0 400 386" role="img" aria-label="The agent writes a bad import, the lint rule fails, the boundary test fails, CI blocks the merge, and the agent fixes it by going through the port: fixed before review.">
-        <line x1="30" y1="44" x2="30" y2="342" class="ln-acc"/>
-        <circle cx="30" cy="44" r="6" class="node-acc"/>
-        <circle cx="30" cy="118" r="6" class="node-acc"/>
-        <circle cx="30" cy="192" r="6" class="node-acc"/>
-        <circle cx="30" cy="266" r="6" class="node-acc"/>
+        <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="266" r="6" class="dot"/>
         <circle cx="30" cy="342" r="8" class="f-acc"/>
         <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
         <text x="72" y="40">Agent writes the import</text><text x="72" y="61" class="t-sm">adapter inside a command</text>
@@ -362,15 +369,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </figure>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait. Would the manifest alone have caught it? The application package doesn't declare the adapters.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here, yes; lint just flagged it first. But a manifest is all or nothing: the API app declares several packages, so any file in it may import any of them.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here, yes; lint just flagged it first. But a manifest is all or nothing. The API app declares several packages, so any file in it may import any of them.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And lint and the test can say exactly which edges are allowed, file by file.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The manifest fences packages; the table fences the direction between them.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The manifest controls which packages you can reach; the table controls the direction between them.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the agent read the error and fixed it itself.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The error message says which edge is allowed. That's worth writing carefully.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, it went through the port: the interface the application defines for storage. The error message says which edge is allowed. That's worth writing carefully.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about tools like Nx or Turborepo? Would they help?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They solve neighboring problems. Nx has a module-boundary lint rule driven by project tags. Turborepo is mainly about running and caching tasks across packages.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They solve related problems. Nx has a module-boundary lint rule driven by project tags. Turborepo is mainly about running and caching tasks across packages.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we don't need caching?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No package has its own build step, and bundling the deployables is quick. So build caching buys us little, and our own checks do the boundary job.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No package has its own build step, and bundling the apps we deploy is quick. So build caching gives us little, and our own checks do the boundary job.</p></div></div>
     </div>
   </section>
   <section aria-labelledby="s4">
@@ -387,9 +394,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because agents don't read the wiki?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half right. They often do read the instructions. But an agent follows what's checked more reliably than what's written. A wrong import becomes a red build, not a review comment a tired person might miss.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the checks are the real documentation for agents.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For boundaries, yes. Neal Ford and his coauthors call a test like ours an architectural fitness function: a test for a design property, not a feature.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For boundaries, yes. Neal Ford and his coauthors call a test like ours an architectural fitness function. That's a test for a design property, not a feature.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for a small team with no agents, would you still do it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The lint table, probably yes; it's cheap. The full double check pays off when many hands, human or not, touch the code every day.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The lint table, probably yes; it's cheap. The full double check is worth it when many people or agents touch the code every day.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is us now. My agent opens more pull requests than I do.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the config is the cheapest reviewer we have.</p></div></div>
     </div>
@@ -403,8 +410,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The allowed edges are written twice on purpose. Lint checks one copy, and a separate test checks the real import graph against its own.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why twice?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So deleting one check still fails the other. A wrong import is a failed build, whether a person or an agent wrote it.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. Add the cost: every new package needs a row first.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Right. That's the moment to decide its edges on purpose.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One piece is missing: the cost. Every new package needs a row in the table before it passes, and that's the moment to decide its edges on purpose.</p></div></div>
     </div>
   </section>
   <section class="summary" aria-labelledby="sum">
@@ -412,12 +418,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ol>
       <li>One repository lets a contract and its clients change in one commit, when one team changes them together.</li>
       <li>Workspace dependencies and a single exported entry file make each package's public surface explicit.</li>
-      <li>Checking the allowed edges twice, by lint and by a graph test, turns a wrong import into a failed build for people and agents alike.</li>
+      <li>Lint and a graph test both check the allowed edges, so a wrong import fails the build, whoever wrote it.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch09.html"><span>Previous</span><b>Do we need event sourcing</b></a>
-    <a class="next" href="ch11.html"><span>Next</span><b>How do I defend a design decision</b></a>
+    <a class="prev" href="ch09.html"><span>Previous</span><b>Do we need event sourcing to keep the history?</b></a>
+    <a class="next" href="ch11.html"><span>Next</span><b>How do I defend a design decision in a review?</b></a>
   </nav>
   <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
 </div>

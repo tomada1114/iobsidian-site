@@ -239,7 +239,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 1 of 11</span></p>
   <h1>Isn't architecture just folders?</h1>
-  <p class="lead">After this page you can explain architecture as two decisions: what changes together, and which way dependencies point. You can also say where structure pays for itself and where it doesn't.</p>
+  <p class="lead">After this page you can explain architecture as two decisions: what changes together, and which way dependencies point. You can also say where structure is worth its cost and where it isn't.</p>
   <p class="meta"><span>About 8 min read</span><span>Whiteboard room, after a review</span></p>
 </header>
 <div class="flow">
@@ -247,7 +247,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label">In this page</p>
     <ul>
       <li>Why did a small rule change touch eleven files?</li>
-      <li>Which way should the arrows point, and why are there named styles?</li>
+      <li>Which way should the arrows point?</li>
+      <li>Why are there named styles at all?</li>
       <li>When is structure worth its cost?</li>
     </ul>
   </nav>
@@ -270,7 +271,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my rule had low cohesion. It was spread out. And the three parts were coupled, because each had to agree with the others.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Here's a sharper test: a module should have one reason to change. Code that changes for the same reason lives together. Code that changes for different reasons lives apart.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The UI changes when design changes. The database code changes when storage changes. And the missed-card rule changes when the product rules change.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Three reasons, so three homes. But the rule itself should have one home. Let me draw both versions.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Three reasons, so three homes. But the rule itself should have one home: the domain, the code that holds only the product's rules. Let me draw both versions.</p></div></div>
     </div>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="Changing the missed-card rule in a tangled codebase touches the UI, the API handler and the database code; in a codebase split by reason to change, it touches only one domain module.">
@@ -299,7 +300,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <div class="dialog">
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now the second decision. If A imports B, draw an arrow from A to B. Which way should the arrows point?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Toward the things that are used a lot? Like shared code?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close. They should point toward the things that change least. Stable things shouldn't depend on volatile things.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close. They should point toward the things that change least. Stable things shouldn't depend on volatile things, the ones that change often.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as stable here?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The rules of the drill. How we deal cards, how streaks work, how levels move. Those change only for product reasons, never because a library or a database changed.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And volatile would be the web framework, the database client, AWS itself.</p></div></div>
@@ -325,7 +326,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <div class="dialog">
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The domain package imports no other package. No npm library, not even Node's built-in modules.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even for dates? That sounds strict.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Time comes in as an argument. And two separate checks guard the edge: a lint rule refuses the import, and a test reads the import graph and fails the build.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Time comes in as an argument. And two separate checks guard the edge. A lint rule refuses the import, and a test reads the import graph and fails the build.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why two? One seems enough.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because someone can switch off a lint rule in one line. Deleting the lint rule still leaves the test failing.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the native apps? They're a different codebase.</p></div></div>
@@ -338,7 +339,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but then what are all the styles for? Layered, hexagonal, onion, clean. I thought I had to pick one.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the thing: they aren't four different ideas. They're named recipes that answer the same two questions.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What changes together, and which way the arrows point.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. They draw different pictures and ask for different amounts of ceremony. But each one keeps the core away from the database and the framework.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. They draw different pictures and ask for different amounts of extra code. But each one keeps the core away from the database and the framework.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why bother with the names at all?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because names are short. In a review, someone says "ports and adapters", and everyone knows the rules without a lecture. A name is shared vocabulary.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when I read about one of them, I should ask how it answers the two questions.</p></div></div>
@@ -377,7 +378,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the missed-card rule is top right. Product rules change all the time, and today a change costs eleven files.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And a script that exports a report once a quarter?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bottom left. Nobody touches it, so a clean structure buys nothing.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bottom left. Nobody touches it, so a clean structure gives us nothing.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's YAGNI: "you aren't gonna need it". It comes from Extreme Programming. Don't build for a change you can't name.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But how do I know a change is coming? I can't see the future.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You look at history: which files changed together in the last few months? What did we replace last year? Guess from evidence, not from fear.</p></div></div>
@@ -386,9 +387,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply outside apps like ours?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Very much. Think of a company building an AI agent. The model provider and the tool APIs change every few months. The prompts and business steps change more slowly.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the provider goes at the edge, behind one adapter.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Then switching providers touches one adapter. Teams that call the provider from everywhere rewrite half the product when prices or models change.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. An adapter is one small module that talks to the provider for us, so switching providers touches only it. Teams that call the provider from everywhere rewrite half the product when prices or models change.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the parts that never change stay plain.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the balance. Pay for structure where change lives, and nowhere else.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the balance. Pay for structure where change happens, and nowhere else.</p></div></div>
     </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
@@ -400,8 +401,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the arrows?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The arrows should point toward stable things, like our rules, and away from frameworks and databases. At our company, a lint rule and a test check that.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The named styles are recipes for those two decisions. And structure costs indirection, so we only pay for it where change is frequent.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. One thing to add: say how you'd know where change is frequent. Point to the history, not to a guess.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fair. I'll check which files changed together before I say "we'll need this".</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "frequent": say how you'd know. Check which files changed together before you say "we'll need this". Point to the history, not to a guess.</p></div></div>
     </div>
   </section>
   <section class="summary" aria-labelledby="sum">
@@ -414,7 +414,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
-    <a class="next" href="ch02.html"><span>Next</span><b>If the rules can't touch the database</b></a>
+    <a class="next" href="ch02.html"><span>Next</span><b>If the rules can't touch the database, who saves?</b></a>
   </nav>
   <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
 </div>

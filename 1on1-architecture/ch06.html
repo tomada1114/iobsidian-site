@@ -239,7 +239,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 6 of 11</span></p>
   <h1>Why not split it into microservices?</h1>
-  <p class="lead">After this page you can explain why a bounded context is not the same as a service, what a modular monolith gives a small team, and how to keep extracting a service later cheap.</p>
+  <p class="lead">After this page you can explain why a bounded context is not the same as a service. You can also say what a modular monolith gives a small team, and how to keep extracting a service later cheap.</p>
   <p class="meta"><span>About 8 min read</span><span>A video call</span></p>
 </header>
 <div class="flow">
@@ -248,7 +248,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ul>
       <li>What is a bounded context, and what are ours?</li>
       <li>How do contexts live together in one deployable?</li>
-      <li>Why not microservices now, and what does the monolith cost?</li>
+      <li>Why not microservices now?</li>
+      <li>What does the monolith cost?</li>
     </ul>
   </nav>
   <p class="stage">A video call. Leo is working from home today.</p>
@@ -257,8 +258,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I read a post last night about a startup that moved to microservices. It made me wonder. Should we split identity, the catalog and practice into separate services before the team grows?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would you expect to gain?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Clean boundaries. Every serious system seems to use microservices. And a monolith turns into a big ball of mud, right?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two ideas are glued together there. Let's pull them apart. What's a bounded context?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Clean boundaries. Every serious system seems to use microservices. And a monolith turns into code where everything depends on everything, right?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You're mixing two ideas there. Let's separate them. What's a bounded context?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A boundary around part of the system. So... a service?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common mix-up. A bounded context is the boundary inside which a model and its words stay consistent. It says nothing about how you deploy it.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a context could be a folder, a package or a service.</p></div></div>
@@ -266,9 +267,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Identity, the catalog, practice. What else?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Identity is who the learner is: their time zone and languages. The catalog is the reviewed cards, grammar tags and levels, and it's read-only. Practice owns rounds, portions, placement, levels and deck composition.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the review log?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the learning record: the append-only log of answers and each item's memory state. Then the learner model, which ranks weak grammar points.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the learning record: the append-only log of answers and each item's memory state. We only add to the log, and the memory state says when a card is due again. Then the learner model, which ranks weak grammar points.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm counting five so far.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four more. Engagement keeps streaks and a daily goal across activities, and vocabulary practice is its own activity. Assessment is the LLM grading. Entitlements keeps a usage ledger.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four more. Engagement keeps streaks and a daily goal across activities, and vocabulary practice is its own activity. Assessment is the LLM grading. Entitlements keeps a usage ledger, a record of how much each learner uses.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's nine contexts in one codebase. How do they share data?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They don't share structures. They reference each other's items only by id, like "card 42" or "round abc". Never by passing one context's object into another.</p></div></div>
     </div>
@@ -297,13 +298,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </figure>
     <div class="dialog">
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And identity sits above all of them?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Upstream of everyone, yes. The learner model also reads the catalog, and the catalog is read-only for all.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Upstream of everyone, yes, meaning the others depend on it. The learner model also reads the catalog, and the catalog is read-only for all.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do they run, though?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one codebase, deployed as an API function plus a worker function for background jobs. Both are built from the same packages.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So calls between contexts are function calls.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Function calls, one deploy, one set of logs. That's a modular monolith: one deployable, with modules that keep their boundaries.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Function calls, one deploy, one set of logs. That's a modular monolith: one deployable, meaning one thing we build and ship, with modules that keep their boundaries.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What stops practice from reaching into the learner model's private files?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Honest answer: the machine-checked fences are between layers, the domain, application, adapter and contracts packages. Inside those, each context is a module with a public surface.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Honest answer: the fences a machine checks are between layers, the domain, application, adapter and contracts packages. Lint and a test reject an import that crosses a layer the wrong way. Inside those layers, each context is a module with a public surface.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A public surface meaning the functions other contexts are allowed to call?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Other contexts go through it. And each stored key names its kind of item, like a round or a card's memory.</p></div></div>
     </div>
@@ -339,13 +340,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Modular monolith</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd">Microservices</text>
         <text x="16" y="54" class="t-sm">The call</text>
-        <rect x="16" y="62" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="90" text-anchor="middle">function call</text>
+        <rect x="16" y="62" width="176" height="44" rx="6" class="node"/><text x="104" y="90" text-anchor="middle">function call</text>
         <rect x="208" y="62" width="176" height="44" rx="6" class="node"/><text x="296" y="90" text-anchor="middle">network call</text>
         <text x="16" y="132" class="t-sm">When it fails</text>
-        <rect x="16" y="140" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="168" text-anchor="middle">an error value</text>
+        <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">an error value</text>
         <rect x="208" y="140" width="176" height="44" rx="6" class="node"/><text x="296" y="168" text-anchor="middle">retries, versions</text>
         <text x="16" y="210" class="t-sm">To run it</text>
-        <rect x="16" y="218" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="246" text-anchor="middle">one deploy</text>
+        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">one deploy</text>
         <rect x="208" y="218" width="176" height="44" rx="6" class="node"/><text x="296" y="246" text-anchor="middle">alarms each</text>
         <text x="200" y="290" text-anchor="middle" class="t-sm">Every row differs; each costs people time</text>
       </svg>
@@ -355,24 +356,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And deployment, monitoring and permissions multiply per service.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The usual reasons to pay that are independent scaling, and separate teams owning separate services. Do we have either?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We have a handful of engineers. And the traffic is small enough for one function.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So network boundaries would buy us nothing. We wrote that down as an explicit non-goal.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So network boundaries would give us nothing. We wrote that down as an explicit non-goal, a thing we chose not to do.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But what if we grow? Wouldn't splitting later be a huge rewrite?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the real question, and we plan for it. Commands are plain data, validated at the edge. Handlers keep a standard request-to-response signature.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the real question, and we plan for it. A command is a request to change something, like "start a round". Ours are plain data, validated at the edge, where a request enters the system.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And handlers keep a standard request-to-response signature.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And contexts only talk through public surfaces.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. So promoting one context to its own service later is mostly packaging, not a rewrite.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Martin Fowler's "monolith first", right?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. Start with one deployable, learn where the real seams are, then split where it pays.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. Start with one deployable, learn where the real seams are, then split where it pays. A seam is a place where the code can be cut apart cleanly.</p></div></div>
     </div>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What the monolith costs</h2>
     <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, devil's advocate. What's bad about our setup?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, let me push back. What's bad about our setup?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two things. It needs discipline, because nothing physical stops a shortcut import between contexts. And one bad deploy takes everything down.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we keep the discipline, then? Code review?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Partly. My guess is you'd say "more rules in lint".</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That was exactly my next sentence.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half of it works. Lint guards the layers well. Inside a layer, what helps most is making the right path the easy one: every context has one obvious entry file, and names that say who owns what.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half of it works. Lint guards the layers well.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside a layer, what helps most is making the right path the easy one. Every context has one obvious entry file, and names that say who owns what.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a shortcut import looks strange in a diff, because it skips the entry file.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Reviewers and agents both notice what looks strange. A second protection is the data: each stored key names its kind of item, like a round.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So even the database shows what's being touched.</p></div></div>
@@ -384,7 +387,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once vocabulary arrived?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then engagement became its own context. It had a second user, so we could see what it really needed.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you fence a context when a second user shows up.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's our rule of thumb. Before that, you're drawing a boundary from imagination.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a simple rule we use. Before that, you're drawing a boundary from imagination.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens to teams that split into services first?</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often they rebuild a distributed monolith: services that must all deploy together because they share assumptions. All the network costs, none of the independence.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the worst of both.</p></div></div>
@@ -397,11 +400,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone in the next review says "we should be on microservices". What do you say?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A bounded context is a boundary for a model and its words. It isn't necessarily a service.</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We keep our contexts as modules in one deployable, plus a worker. Calls between them are function calls, with one deploy and one set of logs.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Network boundaries would buy us nothing at our size. We keep extraction cheap with plain-data commands and public surfaces.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Network boundaries would give us nothing at our size. We keep extraction cheap with plain-data commands and public surfaces.</p></div></div>
       <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And when do you add a fence?</p></div></div>
       <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When a context gets a second user, like engagement did with vocabulary. Not before.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. Name the cost too: it takes discipline, and a bad deploy hits everything.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Right. I'd rather pay that than pay for retries on every call.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the cost: it takes discipline, and one bad deploy hits everything. At our size, that's still cheaper than retries on every call.</p></div></div>
     </div>
   </section>
   <section class="summary" aria-labelledby="sum">
@@ -413,8 +415,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>Isn't DDD just another style</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>What is an aggregate, really</b></a>
+    <a class="prev" href="ch05.html"><span>Previous</span><b>Isn't DDD just another architecture style?</b></a>
+    <a class="next" href="ch07.html"><span>Next</span><b>What is an aggregate, really?</b></a>
   </nav>
   <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
 </div>
