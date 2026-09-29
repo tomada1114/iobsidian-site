@@ -1,0 +1,185 @@
+<!-- title: API and TypeScript 08 · Change an API without breaking | accent: reach -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 8 of 11</span></p>
+  <h1>How do you change an API without breaking old apps?</h1>
+  <p class="lead">After this page you can tell a safe API change from a breaking one. You can also explain error codes, additive changes and deprecation as promises to apps you can't update.</p>
+  <p class="meta"><span>About 8 min read</span><span>Video call</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What should a client branch on when a call fails?</li>
+      <li>Which changes are safe inside one version?</li>
+      <li>How do you remove something for real?</li>
+      <li>What does this discipline cost?</li>
+    </ul>
+  </nav>
+  <p class="stage">A video call. Maya is at home; Leo has a small cleanup pull request open.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Codes, not messages</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Quick one. The settings response has the learner's level twice: a top-level <code>toeic</code> field and one inside <code>difficulty</code>. I want to delete the duplicate. Only our web app reads it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only our web app reads it today. Who reads it next year?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Next year? The web app, still.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the iOS app installed on a phone that hasn't updated in eight months?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. I was thinking of the web app, which we deploy whenever we want.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the key difference. A web app updates as soon as the browser reloads it. An installed app updates when the store approves it and the learner taps "update". Some never do.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the API has to keep working for apps we can't change.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A public API is a promise. Let's start with the part clients rely on most: failures. How does the web app decide what went wrong?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've seen code that checks the error message.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the habit to break. Every failure we send has the same shape.</p><pre><code>{ "error": {
+    "code": "ERR_ROUND_CLOSED",
+    "message": "This round is already finished." } }
+
+switch (error.code) {
+  case "ERR_UNAUTHENTICATED": return signInAgain();
+  case "ERR_ROUND_CLOSED":    return showResults();
+  default:                    return showGenericError();
+}</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The code is for the program, the message is for a person.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The code is a stable string. The message is one fixed sentence, and it never quotes the request back.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why is there a <code>default</code> branch? I thought exhaustive switches were the good kind.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside our own code, they are. But new codes may appear inside a version. So the document types <code>code</code> as a plain string, not a closed list, and every client keeps a default.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the HTTP statuses?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They're grouped by what a client can do: sign in again, fix the request, reload, or retry. Our web client treats every refusal as final, except the one code the contract names as worth sending again.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Additive only inside /v1</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what can I change inside <code>/v1</code>?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Guess first. Is adding a new field to a response safe?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I think so. An old app doesn't know about it, so it ignores it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That idea has a name, the tolerant reader, from Martin Fowler. A client reads what it needs and ignores the rest.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And renaming a field?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does the old app do when <code>toeic</code> becomes <code>toeicScore</code>?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It reads <code>toeic</code>, finds nothing, and shows an empty level. Or crashes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw the two cases.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="An additive change adds a new response field, the old app ignores it and keeps working; a breaking change renames a field, the old app reads nothing and fails.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Additive</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Breaking</text>
+      <text x="16" y="56" class="t-sm">The change</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">a new field</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a renamed field</text>
+      <text x="16" y="136" class="t-sm">The old app reads</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">what it knows</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">nothing</text>
+      <text x="16" y="216" class="t-sm">Result</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">keeps working</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">fails</text>
+    </svg>
+    <figcaption>Both changes look small in the server code. Only the one on the left leaves installed apps working.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here are the common cases in one list.</p></div></div>
+</div>
+  <div class="tbl"><table>
+    <thead><tr><th>Change</th><th>Safe in /v1?</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td class="key">New endpoint</td><td>Yes</td><td>Old apps never call it</td></tr>
+      <tr><td class="key">New optional request field</td><td>Yes</td><td>Old apps just don't send it</td></tr>
+      <tr><td class="key">New response field</td><td>Yes</td><td>Old apps ignore it</td></tr>
+      <tr><td class="key">Remove or rename a field</td><td>No</td><td>Old apps read nothing</td></tr>
+      <tr><td class="key">Change what a field means</td><td>No</td><td>Old apps read it wrongly</td></tr>
+      <tr><td class="key">Make an optional field required</td><td>No</td><td>Old requests are refused</td></tr>
+      <tr><td class="key">New value in a closed list</td><td>No</td><td>Exhaustive clients break</td></tr>
+    </tbody>
+  </table></div>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The "required" row surprises me. Our web app always sends the time zone, so making it required felt harmless.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does last spring's Android app send?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I don't know. Maybe nothing, if the field didn't exist yet.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then every answer batch from that app is refused as a bad request. The learner sees an error on every round.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I'd check what old clients send, not what our newest one sends.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The last row is sneaky. Adding a value sounds additive.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is, for clients with a default branch. For a client that switches over every value it knows, it's a break. That's why codes are open strings.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do generated clients handle new fields? Some generators reject unknown properties.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We leave response objects open in the document. So a generated client accepts a field that's added later, instead of refusing the whole response.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Deprecate, then version</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can never remove the duplicate <code>toeic</code> field?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not inside <code>/v1</code>. When something really must break, it ships as <code>/v2</code>. And <code>/v1</code> keeps working for a deprecation window.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long is the window?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Long enough for installed apps. Store review takes time, and some people never update. We decide it per change.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And before <code>/v2</code> exists?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We mark the field deprecated in the document now. Generated clients show a warning, and the note names the replacement: the value inside <code>difficulty</code>.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the field is still served, unchanged. It just carries a warning.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's where your cleanup belongs today. Here's the whole path to removal.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="The field is marked deprecated in v1, v2 ships without it, v1 traffic is watched as it falls, the deprecation window ends, and only then is v1 retired and the field removed.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Mark the field deprecated in /v1</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Ship /v2 without it</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Watch /v1 traffic fall</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">The window ends</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">Removed only after the window</text>
+    </svg>
+    <figcaption>Removal is the last step, not the first. Each step before it gives installed apps time to move.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does an app even know a version is going away?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>HTTP has standard response headers for it. A <code>Deprecation</code> header says "this is deprecated", and a <code>Sunset</code> header gives the date it stops.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we watch the traffic so we know when it's safe.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Usage tells you who still depends on it. Dates alone don't.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>What the discipline costs</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This all sounds slow.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is slower. Additive-only means a naming mistake stays until the next major version. The duplicate field is exactly that kind of mistake.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the review has to happen before release, not after.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. We review contract changes before they ship, because after that they're promises. And running two versions costs code, tests and attention.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are there other ways to version? I've seen a version in a header.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Some teams put it in a header or a media type. Stripe uses dated versions, where each account is pinned to a date. A version in the path is simply the easiest to see.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the error format? Is ours standard?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's a standard alternative called Problem Details. We kept a smaller envelope, but the idea is the same: a stable machine field, and prose for people.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why do so many web teams skip all this?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A web-only product can move faster. Every user gets the new code on reload. So the discipline feels useless.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Until the day a native app ships.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the day they pay for it. Every response shape from before becomes a promise they didn't know they made.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what do you write on your pull request, instead of the delete?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Once apps are installed, we can't make them update. So the API has to stay compatible.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Clients branch on the error code, never the message, and they always keep a default branch.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Inside <code>/v1</code> we only add things: new endpoints, new optional fields, new response fields. Clients ignore what they don't know.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the duplicate field?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It stays, marked deprecated with its replacement named. If something must break, it goes to <code>/v2</code>, and <code>/v1</code> stays up for a deprecation window.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One thing to add: watch the traffic. We remove <code>/v1</code> when usage says nobody needs it, not just when a date passes.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Failures carry a stable code for programs and a fixed message for people; clients always keep a default branch.</li>
+      <li>Inside one version, only add things; renaming, removing or tightening anything breaks installed apps.</li>
+      <li>Mark a field deprecated first, ship breaking changes as a new version, and retire the old one after a window.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch07.html"><span>Previous</span><b>Where does the API contract actually live?</b></a>
+    <a class="next" href="ch09.html"><span>Next</span><b>What if the same request arrives twice?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
