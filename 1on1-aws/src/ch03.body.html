@@ -1,0 +1,182 @@
+<!-- title: AWS Foundation 03 · What we give up on Lambda | accent: run -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 3 of 14</span></p>
+  <h1>What do we give up by running the API on Lambda?</h1>
+  <p class="lead">After this page you can explain how Lambda runs requests and what a cold start is. You can also say when serverless fits, and when containers or a queue are the better choice.</p>
+  <p class="meta"><span>About 8 min read</span><span>Video call</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why is the first request of the morning slower?</li>
+      <li>What sits in front of the function, and why?</li>
+      <li>What does serverless give up, and when is it wrong?</li>
+      <li>How do long AI jobs fit?</li>
+    </ul>
+  </nav>
+  <p class="stage">A video call. Leo has the API's response times open in another window.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>How Lambda runs a request</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I noticed something. The first request of the morning takes clearly longer than the rest. Is Lambda just slow? Should we move the API to containers?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before we move anything, let's see what that first request does. What do you think happens when a request reaches Lambda?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Lambda runs my handler function. That's it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the part you see. Underneath, your code runs in an execution environment, a small, isolated sandbox with the runtime and your code loaded.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the environment is always there?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It's created on demand. One environment handles one request at a time. If two requests arrive together, Lambda creates a second environment.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the number of environments running at once is…</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Concurrency. After a request, the environment stays warm for a while and is reused. When it's idle long enough, it's removed.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. So in the morning, nothing is warm.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The first request pays for creating one. That's a cold start: load the code, start the runtime, and run the setup code outside the handler. Let me draw it.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="A request arrives and finds no free environment, so Lambda creates one, loads the code and runs the setup, which happens on a cold start only, and then handles the request; a warm request goes straight to handling.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">A request arrives</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node-soft"/>
+      <text x="64" y="118">No free environment</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node-soft"/>
+      <text x="64" y="190">Create it, load the code</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node-soft"/>
+      <text x="64" y="262">Run setup: config, clients</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">Handle the request</text>
+    </svg>
+    <figcaption>The three soft steps happen on a cold start only. A warm request skips them and goes straight to the last step.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's in our setup code?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our API is one function that runs the whole HTTP app. At start, it reads its configuration once and builds its clients, like the DynamoDB client. Every warm request reuses them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it's slow once, then fast. Not "Lambda is slow".</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. And we measured the cold start rather than assuming it. It matters less than you'd think for our app.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The drill timer runs on the phone, not on the server. A slow first call doesn't eat into a learner's thirty seconds.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>The front door</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do requests even reach the function? Through API Gateway?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and there are several front doors to choose from. API Gateway has two kinds. The HTTP API is simpler and cheaper per request, and it can check a JWT, a signed sign-in token.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the other kind?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The REST API. It has more features: API keys, usage plans, request validation and caching. We don't need those.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else could sit in front?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A load balancer in front of containers, which bills per hour. Or a Lambda function URL, where the function gets its own address, with no gateway at all.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A function URL sounds simplest. Why didn't we use that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We looked hard at it. You can protect a function URL so that only CloudFront can call it. But then clients must send a SHA-256 hash of every POST or PUT body.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every client? The phone apps too?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every client. An infrastructure detail would leak into our public contract. So we chose an HTTP API, with one catch-all route to our app.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the gateway's cost ever became a problem?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The fallback is a function URL that only accepts a secret header, which CloudFront adds. We'd switch only if the per-request cost really mattered.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>What serverless gives up</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So is Lambda free of limits? "Serverless" sounds like nothing to think about.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea I want to clear up. Let's list what you give up. First, cold-start latency, which we just saw.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Second?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A hard limit: fifteen minutes at most per invocation. Third, no memory kept between requests. You can't hold a session in a variable.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the next request might go to another environment.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Fourth, a concurrency quota shared by the whole account. And fifth, cost that grows with every single request.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we know if we hit the concurrency limit?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We have alarms on 5xx errors, function errors and throttles. We tested them by setting the function's reserved concurrency to zero. Every request was throttled, and the alarms fired.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You broke it on purpose to see the alarm?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In dev, yes. An alarm you've never seen fire is a guess. Now compare Lambda with containers.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 436" role="img" aria-label="Lambda with an HTTP API costs close to nothing when idle, scales per request, allows up to fifteen minutes per request, pays a cold start on some first requests and needs little operations work; containers behind a load balancer bill by the hour when idle, scale by adding tasks, allow long requests, have no cold start per request and need more operations work.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Lambda + HTTP API</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Containers + LB</text>
+      <text x="16" y="56" class="t-sm">Cost when idle</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">close to zero</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="92" text-anchor="middle">billed per hour</text>
+      <text x="16" y="136" class="t-sm">Scaling</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">per request</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">add tasks</text>
+      <text x="16" y="216" class="t-sm">Longest request</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">15 minutes</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">no hard limit</text>
+      <text x="16" y="296" class="t-sm">First-request wait</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">cold starts</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">always warm</text>
+      <text x="16" y="376" class="t-sm">Operations work</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">little</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">more</text>
+    </svg>
+    <figcaption>Containers win several rows. The first row decided it for Quickturn: an app that sleeps at night shouldn't pay by the hour.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So containers aren't worse. They just cost money while idle.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both a load balancer and container tasks bill by the hour. That's why we ruled them out, not because of speed.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When would you switch?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Steady, high traffic, where per-request cost adds up. Long-running jobs. Long-lived connections, like websockets held for hours. Or heavy startup, where every cold start is painful.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question is the shape of the work, not which tool is newer.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Here are the two questions together.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of traffic shape against job length: spiky or low traffic with short jobs suits serverless functions, steady high traffic with short jobs suits containers, spiky traffic with long jobs suits a queue or workflow, and steady traffic with long jobs suits containers or an agent runtime.">
+      <text x="44" y="18" class="t-sm">↑ Job length: minutes to hours</text>
+      <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
+      <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
+      <text x="390" y="356" text-anchor="end" class="t-sm">Traffic: steady, high →</text>
+      <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="134" y="100" text-anchor="middle">Queue or</text><text x="134" y="124" text-anchor="middle">workflow</text>
+      <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="302" y="100" text-anchor="middle">Containers,</text><text x="302" y="124" text-anchor="middle">agent runtime</text>
+      <rect x="54" y="184" width="160" height="138" rx="6" class="node-acc"/>
+      <text x="134" y="248" text-anchor="middle" class="t-hd t-acc">Functions</text><text x="134" y="272" text-anchor="middle" class="t-sm">our API</text>
+      <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
+      <text x="302" y="248" text-anchor="middle">Containers</text><text x="302" y="272" text-anchor="middle" class="t-sm">always busy</text>
+    </svg>
+    <figcaption>Short jobs with spiky or low traffic are where functions shine. Move right and hourly capacity pays off; move up and you need something that runs longer.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>Long AI jobs</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The top row is where AI work lands, isn't it? An agent can run for a long time.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. One agent session can run for many minutes, with dozens of tool calls. That doesn't fit a fifteen-minute request, and a user won't hold a connection that long anyway.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do teams do?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three common answers. A queue and a worker that picks jobs up. A workflow service that runs steps and waits between them. Or a managed agent runtime, where one session can last for hours.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which do we use?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both kinds. Grading typed answers is a background job: the API puts it on an SQS queue, and a worker Lambda picks it up.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A grade takes seconds, so a worker Lambda still fits.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, and the learner doesn't wait on the request. Our tutor agent is different. It runs on Amazon Bedrock AgentCore, a managed agent runtime, because its sessions are long conversations.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the API stays a short-request function, and the long work moves elsewhere.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's the pattern. Keep each piece in the quadrant it fits.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the PM asks whether we should move the API to containers because the first call is slow. What's your answer?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Lambda runs each request in an environment created on demand. The first request after idle pays a cold start; warm requests don't.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each invocation also has a hard time limit, keeps no memory between requests, and shares a concurrency quota.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In return, we run no servers and pay close to nothing when nobody practices.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the front door?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An HTTP API, because it's simple and keeps signing details out of our public contract.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say when you'd change your mind: steady, heavy traffic or long jobs. Then containers or a queue would win, and we'd move.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Lambda creates environments on demand, so the first request after idle pays a cold start and later ones don't.</li>
+      <li>Serverless gives up long requests, in-memory state and flat costs, in exchange for no servers and no idle bill.</li>
+      <li>Pick by the shape of the work: short and spiky suits functions, steady or long suits containers, queues or agent runtimes.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch02.html"><span>Previous</span><b>Why does our deploy have no AWS keys?</b></a>
+    <a class="next" href="ch04.html"><span>Next</span><b>Why doesn't Quickturn have a VPC?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
