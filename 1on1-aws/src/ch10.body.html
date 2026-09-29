@@ -1,0 +1,193 @@
+<!-- title: AWS Foundation 10 · Split what breaks from what lasts | accent: run -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 10 of 14</span></p>
+  <h1>Split what breaks often from what must never be lost</h1>
+  <p class="lead">After this page you can explain why data lives in its own stack with retain policies. You can also explain how stacks find each other without locking, and where configuration and secrets belong.</p>
+  <p class="meta"><span>About 8 min read</span><span>The morning after a failed deploy</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why keep the data in a separate stack?</li>
+      <li>How do two stacks find each other?</li>
+      <li>How do dev and prod differ, and where do secrets go?</li>
+      <li>What does the split cost?</li>
+    </ul>
+  </nav>
+  <p class="stage">Morning. The app stack's deploy failed overnight and rolled back.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Stateful versus rebuilt often</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The overnight deploy of the app stack failed and rolled back. Everything's fine now. But could a bad deploy ever delete the learner table?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not from the app stack. The table isn't in it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where is it, then? I assumed one stack held everything. That seems simpler.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's simpler until the day it isn't. We split by one question: does this resource keep data we can't rebuild?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The learner table, obviously. What else?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The user pool. Every learner's account lives there. Those two sit in the foundation stack, which almost never changes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the rest?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The distribution, the bucket with the web app, the API, the function, the alarms. All of that is in the app stack, deployed on every merge.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a failed deploy only touches things we can rebuild from code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me compare the two stacks.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 356" role="img" aria-label="The foundation stack holds the table and the user pool, changes rarely, keeps its resources when the stack is deleted, and is untouched by a failed app deploy; the app stack holds the API, the web app and alarms, changes on every merge, is rebuilt from code when deleted, and rolls back on a failed deploy.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Foundation</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">App</text>
+      <text x="16" y="56" class="t-sm">Holds</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">table, user pool</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">API, web, alarms</text>
+      <text x="16" y="136" class="t-sm">Changes</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">rarely</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">every merge</text>
+      <text x="16" y="216" class="t-sm">On stack delete</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd t-acc">retained</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">rebuilt from code</text>
+      <text x="16" y="296" class="t-sm">On a failed deploy</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">not involved</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">rolled back</text>
+    </svg>
+    <figcaption>The third row is the point. Even deleting the foundation stack leaves the table and the user pool in place.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How can a resource survive its stack being deleted?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A retain policy. CloudFormation's DeletionPolicy says: when the stack goes, keep this resource. We set it on both, in every stage.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why was I nervous? Nobody deletes stacks.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Deletion isn't the quiet danger. Replacement is. Some property changes make CloudFormation build a new resource and remove the old one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Change a table's key, and you get a new, empty table. Change certain sign-in settings on a user pool, and you get a new pool.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new pool just means new accounts. Learners sign in again, right?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Worse. A new pool issues new user ids. Every learner's data is keyed by the old id, so it's stranded.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. Their history is still there, but nobody can reach it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So we also set UpdateReplacePolicy to retain. Then a replacement keeps the old resource instead of deleting it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything else in prod?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Deletion protection on the user pool, in every stage. On the table in prod, deletion protection and point-in-time recovery.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Loose coupling</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the app stack doesn't hold the table, how does the function know its name?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would you guess?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CloudFormation exports. One stack exports a value, the other imports it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the obvious way, and it locks both stacks. Once another stack imports an export, the exported value can't change.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the exporting stack?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can't be deleted while anything imports from it. You end up untangling imports before every change.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do we do instead?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The foundation writes its identifiers to Parameter Store, under a path for the stage. The app stack reads them by name when it deploys.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The foundation stack deploys, writes its identifiers under a stage path in Parameter Store, the app stack deploys and reads those names, and after that either stack can update without the other.">
+      <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Foundation deploys</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Writes names under a stage path</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">App deploys, reads the names</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="262" class="t-hd">Either stack updates alone</text>
+    </svg>
+    <figcaption>The dependency points one way. The foundation never learns that the app stack exists.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the foundation publishes, and the app looks up. Nothing is locked.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The stack outputs carry no export names at all.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The name is a string contract, and nothing enforces it. Rename a parameter on one side, and the other side breaks at deploy time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tests check both sides.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. One test checks what the foundation writes, another checks what the app reads, from the same list of names.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Stages, config and secrets</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is prod a separate CDK app?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. One app builds dev or prod from a stage setting. The setting is checked before any template is written.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the stage change?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A short, listed set of things. Point-in-time recovery, table deletion protection, self sign-up, and the approval before deploy.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why keep the list short?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So prod is the same design, not a second one. Every difference is a place where dev can't warn you about prod.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, dev has no point-in-time recovery?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By choice. Dev holds only the team's own test data. We accept losing it in exchange for a simpler, cheaper stage.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And configuration inside the function?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Read once at startup, from one place, and validated. A missing value fails the start, not a request an hour later.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My last team put secrets in environment variables. Is that wrong?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They show up in the console and in the template. Anyone who can read the function's settings can read them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where do secrets go?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It depends on two questions. Here are the two stores we use for secrets.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A SecureString parameter has no extra charge for standard parameters and no built-in rotation, and is the default for secrets; Secrets Manager has a small monthly charge per secret and built-in rotation, and is used for secrets that must rotate, such as payment keys.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">SecureString</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Secrets Manager</text>
+      <text x="16" y="56" class="t-sm">Price</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no extra charge</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">per secret</text>
+      <text x="16" y="136" class="t-sm">Rotation</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">none built in</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">built in</text>
+      <text x="16" y="216" class="t-sm">Use it for</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">most secrets</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">payment keys</text>
+    </svg>
+    <figcaption>Plain settings go in ordinary String parameters. For a secret, the only question left is whether it must rotate.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have picked Secrets Manager for everything. It sounds like the proper place.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a fine place, but you pay for every secret, every month. Most of ours never rotate, so that buys nothing.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So SecureString by default, and Secrets Manager only when we need rotation.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Standard parameters carry no extra charge. Secrets Manager costs a small monthly amount per secret.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does a secret get into a SecureString? Surely not typed into the template.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>CloudFormation can't create a SecureString. So a small custom resource copies the web client's secret into one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the secret never appears in a template or a log.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The function reads it through the Parameters and Secrets extension, which caches it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For how long?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Five minutes at most. So a changed value reaches every function within five minutes.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>What the split costs</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This all sounds safer. What does it cost?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two stacks mean deploy order: foundation first, then app. And the parameter names are a contract to keep.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And retained resources?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They outlive their stack. If you really want one gone, you remove it by hand.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a dev table from an old experiment could sit there forever.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It could, and it would still bill for its storage. Somebody has to clean up on purpose.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When would you use one stack?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a throwaway prototype with no data worth keeping. Nothing to lose, so nothing to protect.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And last night's rollback?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Read why it failed, fix it in code, and merge. The data was never at risk.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The PM heard about the failed deploy. Explain why the data was safe.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The table and the user pool live in a foundation stack that rarely changes. Retain policies keep them even if that stack is deleted.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Everything else is in an app stack we rebuild on every merge. The app stack finds the table by parameter name, not by export.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod is the same app with a different stage setting. Secrets go in SecureString parameters unless they need rotation.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anything the PM should worry about?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not for last night. The app stack can't touch the table.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The risk worth naming is replacement. A retain policy on updates is what stops a changed setting from quietly swapping in a new, empty table.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Keep stateful resources in a rarely changed stack, retained on deletion and on replacement.</li>
+      <li>Connect stacks through named parameters, not exports, so neither locks the other.</li>
+      <li>Build every stage from one app, and keep secrets in SecureString unless they must rotate.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch09.html"><span>Previous</span><b>Why write infrastructure as code at all?</b></a>
+    <a class="next" href="ch11.html"><span>Next</span><b>What actually happens when a learner signs in?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
