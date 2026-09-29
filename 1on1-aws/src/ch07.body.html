@@ -1,0 +1,182 @@
+<!-- title: AWS Foundation 07 · List the questions first | accent: run -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 7 of 14</span></p>
+  <h1>List the questions first, then design the table</h1>
+  <p class="lead">After this page you can design a DynamoDB table from its access patterns. You can also explain single-table design with prefixed sort keys, and when separate tables are better.</p>
+  <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why start from questions instead of entities?</li>
+      <li>How does one table hold every kind of item?</li>
+      <li>What does one partition per learner give us?</li>
+      <li>When is single-table design the wrong choice?</li>
+    </ul>
+  </nav>
+  <p class="stage">The whiteboard room. Leo is drawing boxes for a new practice calendar.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Access patterns first</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I need to show the last thirty days of practice on a calendar. I've started the data model: learners, rounds, answers, days. One table each.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's an entity diagram. It's how you'd start in SQL. What happens next, in SQL?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I normalize, so nothing is stored twice. Then I write queries with joins.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And DynamoDB has no joins. So where do you think we start instead?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With… the questions the app asks?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. We call them access patterns. Write each read as a plain sentence. Try the calendar.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Get the day tallies for one learner, for a date window."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep going. What else does the app ask?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Get a learner's settings." "Get a round and all its answers." "Get every card's memory state", for scheduling.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One more that people forget.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hmm. "Everything for one learner", to delete or export an account?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That one. Now the rule: each question must map to one GetItem or one Query. If it doesn't, the keys are wrong. Let me draw the method.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Write the question, name the items it returns, choose the partition key for whose data it is, choose the sort-key shape such as a prefix or a date, and arrive at one operation, a GetItem or a Query.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Write the question</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Name the items it returns</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Partition key: whose data</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Sort key: a prefix or a date</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">One GetItem or one Query</text>
+    </svg>
+    <figcaption>Every question ends in exactly one operation. If a question needs two, go back to the keys.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>One table, overloaded keys</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do all those items fit, if not in four tables?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one table. Every item a learner owns shares one partition key: <code>LEARNER#</code> and the learner's id. The sort key says what the item is, with a prefix.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like <code>SETTINGS</code>?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. There are singletons: <code>PROFILE</code>, <code>SETTINGS</code>, <code>STATS</code>. Then <code>ROUND#</code> and the round id for each round, and <code>ROUND#</code> id <code>#ANSWER#</code> id for each answer.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the answers sit right after their round, in sort order.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. "Get a round and all its answers" is one Query with <code>begins_with ROUND#</code> and the round id. This is called overloading the sort key: one key attribute, many kinds of item.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the calendar?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Day tallies use <code>DAY#</code> and the date, like <code>DAY#2026-09-29</code>. ISO dates sort correctly as text.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So thirty days is one Query with <code>BETWEEN</code> two dates.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. And the memory state of each card is <code>ITEM#</code>, a kind and an id. There are also items for portions, levels, titles and the learner's usage ledger.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if an id contains a <code>#</code>? It would look like a separator.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every id inside a key is escaped with <code>encodeURIComponent</code>. A <code>#</code> becomes <code>%23</code>, so an id can never fake a separator.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything to watch out for with prefixes?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One thing. <code>ROUND#</code> matches rounds and answers alike. So the reader checks each item's type before using it. Let me draw one learner's partition.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="One learner's partition holds the singletons PROFILE, SETTINGS and STATS, a round with its answer items, day items in date order and item states; the identity mapping item sits outside in its own partition; deleting or exporting a learner is one key.">
+      <rect x="8" y="8" width="384" height="284" rx="10" class="node-acc"/>
+      <text x="24" y="36" class="t-hd t-acc">One learner's partition</text>
+      <rect x="24" y="52" width="352" height="36" rx="6" class="node"/><text x="40" y="76" class="t-sm">PROFILE · SETTINGS · STATS</text>
+      <rect x="24" y="96" width="352" height="84" rx="8" class="zone"/>
+      <text x="40" y="118" class="t-sm">ROUND#r1</text>
+      <rect x="40" y="128" width="152" height="40" rx="6" class="node"/><text x="116" y="153" text-anchor="middle" class="t-sm">#ANSWER#a1</text>
+      <rect x="208" y="128" width="152" height="40" rx="6" class="node"/><text x="284" y="153" text-anchor="middle" class="t-sm">#ANSWER#a2</text>
+      <rect x="24" y="188" width="352" height="36" rx="6" class="node"/><text x="40" y="212" class="t-sm">DAY#2026-09-28 · DAY#2026-09-29</text>
+      <rect x="24" y="232" width="352" height="36" rx="6" class="node"/><text x="40" y="256" class="t-sm">ITEM#card#c203 · ITEM#…</text>
+      <rect x="24" y="312" width="352" height="44" rx="6" class="node-soft"/>
+      <text x="40" y="340" class="t-sm">IDENTITY#sub → learner id (outside)</text>
+    </svg>
+    <figcaption>Everything the learner owns is under one partition key. Only the sign-in mapping lives outside, in its own partition.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>One partition per learner</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the identity item outside the partition?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When someone signs in, we get their sign-in id, the <code>sub</code> from Cognito. The item <code>IDENTITY#</code> sub maps it to our own internal learner id.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not use the sign-in id as the learner id directly?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keeping our own id means the sign-in provider can change without renaming every item.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. And how does one learner stay out of another's data?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The store adds the learner's partition to every key. Code above the store never writes a partition key by hand.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a bug in a command can't ask for someone else's partition.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And look what deletion becomes. To delete or export an account, we Query one partition, plus the identity item.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No hunting across four tables.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>None. Let me compare the two designs on the questions we listed.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 356" role="img" aria-label="With one table per entity, a round with its answers needs two reads, the last thirty days needs a filter, deleting a learner means searching every table, and the schema is easy to read; with a single table and one partition per learner, each of the first three is one Query and deleting a learner is one key, but the schema is harder to read.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Table per entity</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Single table</text>
+      <text x="16" y="56" class="t-sm">A round with its answers</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">two reads</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">one Query</text>
+      <text x="16" y="136" class="t-sm">Last 30 days</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">an index needed</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">one BETWEEN</text>
+      <text x="16" y="216" class="t-sm">Delete a learner</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">search every table</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">one key</text>
+      <text x="16" y="296" class="t-sm">Reading the schema</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">easy</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">needs the list</text>
+    </svg>
+    <figcaption>The row to notice is deletion. With one partition per learner, removing everything a learner owns is a single key, not a search.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Won't the calendar need an index on due dates, for scheduling?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. One learner holds a few thousand items at most. Reading all their item states is one small Query, so no index is needed.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>When single-table is wrong</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The bottom row worries me. "Needs the list."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It should. Single-table design is hard to read without the list of access patterns. The list is part of the schema.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a new question?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new question means a new key shape, a secondary index, or a backfill.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Backfill?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rewriting existing items so they have the new key shape. It's a migration you run over old data.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Say the PM wants a weekly leaderboard: the learners who practiced most. I'd add a secondary index on day items, keyed by date.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What kind of question is that, compared with our list?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It crosses learners. Every question on our list stays inside one learner.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, and that's the warning sign. An index would copy every learner's day items into one date key, and that key gets busy every evening.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what would you do?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Build the leaderboard from the export, once a night, and store the result as its own small item. The live table keeps answering per-learner questions only.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the list tells me when a question doesn't belong in the table at all.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Reading the list is how you notice that early, before an index exists.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when would you use separate tables?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When access patterns, lifecycles, backups or owners diverge. If one kind of data is deleted on a different schedule, or another team owns it, a separate table is cleaner.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is anything at Quickturn close to that line?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The usage ledger. It's one item in each learner's partition. But money-like state with its own lifecycle is exactly the kind of data that can justify a table of its own.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Doesn't one learner's partition become a hot spot? Everything they do hits one key.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a huge single key, like "all learners", yes. A per-learner partition doesn't, because each learner's traffic is small.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the partition choice also spreads the load.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Thousands of learners means thousands of small partitions, not one busy one.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose you explain the calendar design at the Tuesday review. What do you say?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I wrote the questions down first. Then I gave each one a key so it's a single get or query.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Everything a learner owns shares one partition key. The sort key says what the item is.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prefixes for rounds and answers, and dates for day tallies, so thirty days is one range query.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And ids?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Escaped, so an id can't break the separators. And deleting a learner is one partition, plus the identity item.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the cost: a new kind of question means a new key design, an index or a backfill. That's why the list of questions lives next to the schema.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>List every access pattern first, and shape the keys so each is one GetItem or one Query.</li>
+      <li>One partition per learner with prefixed sort keys makes isolation, deletion and export each one key.</li>
+      <li>The access-pattern list is part of the schema; use separate tables when lifecycles or owners diverge.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch06.html"><span>Previous</span><b>Why DynamoDB and not PostgreSQL?</b></a>
+    <a class="next" href="ch08.html"><span>Next</span><b>What if the app crashes halfway through a write?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
