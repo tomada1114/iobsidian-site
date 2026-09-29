@@ -1,0 +1,193 @@
+<!-- title: API and TypeScript 01 · If types vanish at runtime | accent: reach -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 1 of 11</span></p>
+  <h1>If types vanish at runtime, what are they for?</h1>
+  <p class="lead">After this page you can explain what TypeScript checks and what it never checks. You can also say where a runtime check must go, and why a cast is not one.</p>
+  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why does a type match by shape, not by name?</li>
+      <li>How does the compiler follow my checks?</li>
+      <li>What can types never do for me?</li>
+      <li>Is a model's reply any different from a request body?</li>
+    </ul>
+  </nav>
+  <p class="stage">Leo's desk. A request handler is open in the editor, with a review comment next to one line.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Shapes, not names</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Maya, can you look at this? I wrote <code>const body = (await request.json()) as StartRoundRequest</code>. A reviewer wrote "this cast proves nothing".</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think they meant?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm not sure. It compiled. If it proves nothing, why did the compiler accept it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the right thing to be confused about. Before we answer it, tell me what you think a type is while the program runs.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like in Java or Swift, I guess. The object carries its class. If it says <code>StartRoundRequest</code>, it is one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half of that is right for Java. In Java a class name is part of the object, and the runtime can check it. TypeScript works another way, in two places.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two places?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>First, it compares shapes, not names. That's called structural typing. Two types fit together when their fields match, whatever they are called.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the name <code>StartRoundRequest</code> doesn't matter?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not to the compiler. Look at this.</p><pre><code>interface HasLearner { learnerId: string }
+
+function greet(x: HasLearner) { return x.learnerId }
+
+// this object never mentions HasLearner
+const req = { learnerId: "L1", deckSize: 10 };
+greet(req); // compiles: the shape fits</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The object never says it's a <code>HasLearner</code>, but it has a <code>learnerId</code>, so it passes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Java would call that nominal typing: you must say <code>implements HasLearner</code>. TypeScript only asks, "does it have the fields I need?"</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And I didn't write a type on <code>req</code>. The compiler worked it out?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's inference. Inside a function body, the compiler fills in most types for you. So we write types where code meets other code: parameters and exported return types.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>At the edges of a function, not on every line.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Those are the promises other code depends on. The inside can take care of itself.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Unions and narrowing</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, shapes. What's the second place it's different?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Hold that for a minute. First, the part TypeScript is really good at.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Unions. A value can be one of several types, and we write that with a bar: <code>string | null</code>.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A union. We have those for the round kind, right? <code>'first' | 'retry'</code>.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Those are literal types. The type is not "any string", it's exactly one of these two strings. Now watch what the compiler does with a union when you check it.</p><pre><code>function label(name: string | undefined) {
+  // name: string | undefined
+  if (name === undefined) {
+    return "Guest"; // name: undefined
+  }
+  // name: string
+  return name.toUpperCase();
+}</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>After the early return, it knows <code>name</code> is a string. I never told it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It followed your check. That's called narrowing. The compiler reads <code>typeof</code>, <code>===</code> and <code>in</code> checks, and gives each branch a narrower type.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the check I write for my own logic also teaches the compiler.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Let me draw what narrowing looks like with our round kinds.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The type string contains the union of first and retry, which contains the single literal first; each check moves the value one step inward, ending at first.">
+      <rect x="8" y="8" width="384" height="284" rx="10" class="zone-soft"/>
+      <text x="24" y="40" class="t-hd">string</text>
+      <text x="24" y="62" class="t-sm">any text at all</text>
+      <rect x="40" y="84" width="320" height="192" rx="10" class="zone"/>
+      <text x="56" y="114" class="t-hd">'first' | 'retry'</text>
+      <text x="56" y="136" class="t-sm">after checking it's a round kind</text>
+      <rect x="80" y="164" width="240" height="88" rx="6" class="node-acc"/>
+      <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">'first'</text>
+      <text x="200" y="228" text-anchor="middle" class="t-sm">after kind === 'first'</text>
+    </svg>
+    <figcaption>Narrowing moves a value inward. Each check the code makes leaves a smaller set of possible values, until the branch knows exactly which one it has.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each box is a set of possible values. Every check moves you one box in.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And inside the <code>'first'</code> branch, I can't accidentally handle a retry.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Add a third kind later, and the compiler shows you every <code>switch</code> that forgot it. That's the real payoff of unions.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>What types cannot do</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, now the second place. Why does my cast prove nothing?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because of what happens when you build. TypeScript compiles to JavaScript, and every type is removed. The term for that is "erased".</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Removed completely? Not kept somewhere for checking?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Completely. Let me draw the path from your file to a real request.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A TypeScript file is type-checked, then emitted as JavaScript with every type removed; at runtime JSON bytes arrive with no type attached, so no types exist there.">
+      <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">.ts source, with types</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Type check: our code only</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">.js output, types removed</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="262" class="t-hd">Runtime: no types here</text>
+    </svg>
+    <figcaption>The type check happens before the program runs. By the time a request body arrives, the types are gone, so nothing compares the bytes with the type.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when a request arrives, the JSON is just bytes. Nobody compares it with <code>StartRoundRequest</code>.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nobody. <code>as</code> is a promise you make to the compiler: "trust me, it's this shape". The compiler believes you and checks nothing.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why did it let me make the promise at all?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because <code>request.json()</code> returns <code>any</code>. <code>JSON.parse</code> does too. <code>any</code> means "switch checking off". The compiler will accept any promise about it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And from that line on, everything I do with <code>body</code> is trusted?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Everything downstream. If a client sends <code>deckSize: "ten"</code>, your code gets a string where it expects a number. The crash happens far from the cause.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what should the type be instead?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span><code>unknown</code>. It's the honest type for outside data. It allows nothing until you check it. You can't even read a field.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds annoying.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's meant to be. It forces one check, once, at the edge. Here's the difference side by side.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Casting the body compiles but runs nothing, so a bad body flows on; reading it as unknown and checking it with a schema gives a typed value or refuses a bad body.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">as Request</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">unknown + schema</text>
+      <text x="16" y="56" class="t-sm">Input</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">any</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">unknown</text>
+      <text x="16" y="136" class="t-sm">What runs</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">nothing</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">a schema check</text>
+      <text x="16" y="216" class="t-sm">A bad body</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">flows on</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">is refused</text>
+    </svg>
+    <figcaption>Both versions compile. Only the right one runs a check, so only the right one stops a bad body at the door.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So at Quickturn, the API never casts a body?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never. It reads every body as <code>unknown</code>, with a size limit, and parses the JSON. Then a schema checks it before any command sees it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it fails?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The client gets a bad-request error with a fixed code. The command never runs.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. Is there anything else the compiler can't see, even inside our code?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One blind spot comes from structural typing. A learner id and a card id are both <code>string</code>. Same shape, so the compiler lets you swap them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. <code>recordAnswer(cardId, learnerId)</code> with the arguments reversed would compile.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It would. There's a fix called a brand, a tag that makes two strings different types. That's a topic of its own.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does all this checking cost?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside the program, compile-time checks are free. They cost nothing when the code runs. Runtime checks cost code and a little time, so you place them on purpose: at the edges, once.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>Beyond Quickturn</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>This matters more now that teams call language models. What's a model's reply, from the program's point of view?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Text that comes back from an API. So it's outside data too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Say you ask a model for JSON with a <code>score</code> and a <code>reason</code>. Does the reply have that shape?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Usually. But nothing forces it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Teams write <code>as GradeResult</code> on the parsed reply. It works for weeks. Then the model returns <code>score: "high"</code>, and something far away crashes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the stack trace points at the place that used the score, not the place that trusted it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the painful part. At Quickturn, the grader for typed answers asks for structured output. The reply is still <code>unknown</code> until a schema has checked it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same rule as a request body. A request, a model reply, a file someone uploads: all <code>unknown</code> at first.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same rule. The source doesn't matter. What matters is whether our own code produced the value.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the reviewer asks you why you changed the line. What do you tell them?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Types are a proof about our own code, checked before it runs. They compare shapes, not names, and the compiler infers most of them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Unions say a value can be one of several things. The compiler follows our checks and narrows each branch.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But types are erased. At runtime nothing checks them, so <code>as</code> is only a promise, and <code>request.json()</code> gives <code>any</code>, which turns checking off.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what's the type of the body?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>unknown</code>. Then a schema checks it once, at the edge, and a bad body is refused before any command runs.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add where else it applies: a model's reply is outside data too. Asking for a shape does not give you that shape, so it gets the same schema check as a request body.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>TypeScript checks shapes, infers most types and narrows unions as your code checks them.</li>
+      <li>Every type is erased at build time, so <code>as</code> and <code>any</code> check nothing while the program runs.</li>
+      <li>Treat anything from outside, including a model's reply, as <code>unknown</code> and check it once at the edge.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
+    <a class="next" href="ch02.html"><span>Next</span><b>Which compiler flags change how I write code?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
