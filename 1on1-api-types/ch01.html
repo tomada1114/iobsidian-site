@@ -318,7 +318,7 @@ greet(req); // compiles: the shape fits</code></pre></div></div>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each box is a set of possible values. Every check moves you one box in.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And inside the <code>'first'</code> branch, I can't accidentally handle a retry.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Add a third kind later, and the compiler shows you every <code>switch</code> that forgot it. That's the real payoff of unions.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Add a third kind later, and an exhaustive check shows you every <code>switch</code> that forgot it. That's what unions give you.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">
@@ -351,7 +351,7 @@ greet(req); // compiles: the shape fits</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when a request arrives, the JSON is just bytes. Nobody compares it with <code>StartRoundRequest</code>.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nobody. <code>as</code> is a promise you make to the compiler: "trust me, it's this shape". The compiler believes you and checks nothing.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why did it let me make the promise at all?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because <code>request.json()</code> returns <code>any</code>. <code>JSON.parse</code> does too. <code>any</code> means "switch checking off". The compiler will accept any promise about it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Casts are allowed on purpose, as an escape hatch. And <code>request.json()</code> returns <code>any</code>, like <code>JSON.parse</code>. <code>any</code> means "switch checking off", so every promise about it is accepted.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And from that line on, everything I do with <code>body</code> is trusted?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Everything downstream. If a client sends <code>deckSize: "ten"</code>, your code gets a string where it expects a number. The crash happens far from the cause.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what should the type be instead?</p></div></div>
@@ -399,7 +399,7 @@ greet(req); // compiles: the shape fits</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the stack trace points at the place that used the score, not the place that trusted it.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the painful part. At Quickturn, the grader for typed answers asks for structured output. The reply is still <code>unknown</code> until a schema has checked it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same rule as a request body. A request, a model reply, a file someone uploads: all <code>unknown</code> at first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same rule. The source doesn't matter. What matters is whether our own code produced the value.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same rule. The source doesn't matter. What matters is whether the value comes from outside our program's own memory.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">

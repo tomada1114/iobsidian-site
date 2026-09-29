@@ -87,7 +87,9 @@ const b: Settings = { sound: undefined }; // error</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But it's really a lookup that can miss.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the flag makes you write <code>counts["verbs"]</code>. The brackets tell the next reader, "this key may not be there".</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the last one? Imports?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When you import only a type, the import should vanish from the JavaScript. If it isn't marked <code>type</code>, <code>verbatimModuleSyntax</code> keeps it. Then that module loads and runs its top-level code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When you import only a type, the import should vanish from the JavaScript. An unmarked import may stay, and then that module loads and runs its top-level code.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the flag?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With <code>verbatimModuleSyntax</code>, the compiler makes you mark type-only imports. Nothing is removed or kept by guessing.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I write <code>import type { Card }</code> when I only need the type.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The rule is simple: what you write is what comes out.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I see why each one exists. But my screen is full of red now.</p></div></div>
@@ -111,27 +113,27 @@ const b: Settings = { sound: undefined }; // error</code></pre></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That was one option on the table. Let's put both side by side.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Loosening the flag for generated code compiles but lets a contract change pass silently; generating only types and hand-writing the calls makes a contract change a compile error, at the cost of one small module.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Loosening the flag for generated code compiles but makes the gate weaker in one folder; generating only types and hand-writing the calls keeps the gate the same everywhere, at the cost of one small module.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Loosen the flag</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Types only</text>
       <text x="16" y="56" class="t-sm">What compiles</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">everything</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">everything</text>
-      <text x="16" y="136" class="t-sm">A contract change</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">passes silently</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">compile error</text>
+      <text x="16" y="136" class="t-sm">The gate</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">weaker in a folder</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">same everywhere</text>
       <text x="16" y="216" class="t-sm">What it costs</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">a weaker gate</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one small module</text>
     </svg>
-    <figcaption>Both options compile. Only generating types and writing the calls by hand keeps a contract change loud.</figcaption>
+    <figcaption>Both options compile, and in both a contract change still breaks the build. Only the right one keeps the gate the same for every file.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you generate only the types, and write the calls yourselves?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one small module. Each call is plain <code>fetch</code>, and its request is checked with <code>satisfies</code> against the generated request type.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does <code>satisfies</code> do, exactly?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It checks that a value fits a type, without changing the value's own type. So if the contract changes, our request object stops fitting, and the build fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the row you colored. With the loose folder, a changed contract would just slip through.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the row you colored. With the loose folder, the flag would stop protecting part of our code.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The hand-written module costs us some upkeep. We'll look again when a generator release compiles under the flag.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Still, one exception for generated code doesn't sound dangerous.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The first one never does. But a gate you loosen for one caller stops being a gate. The next person points at your exception.</p></div></div>

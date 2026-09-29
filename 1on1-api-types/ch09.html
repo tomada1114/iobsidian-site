@@ -333,8 +333,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens to the request that loses?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each commit is one transaction of conditional writes. A lost race is retried a few times, and then it gets a conflict code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The one code the web client resends.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. On the resend it sees the answers already held, and gets the same success.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the web client resend on a conflict?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. It's the one refusal the web client sends again; every other refusal is final.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And on the resend the server sees the answers already held, so the client gets the same success.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we just lock the round while one request writes? Then nobody races.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Locks across a network have their own problems. A Lambda that holds a lock can time out, and the lock stays until it expires.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And every other request waits behind it.</p></div></div>
@@ -345,9 +346,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s3"><span class="no">03</span>Idempotency keys and first answers</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Answers have natural ids. What about a create that doesn't? Something with no obvious identity?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the client sends an <code>Idempotency-Key</code> header, a random value for that one intended action. Stripe made the pattern well known. There's an IETF draft that standardizes the header.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A draft, not a finished standard?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An Internet-Draft, still in progress. The idea is stable, though. Here's what the server does with the key.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the client sends an <code>Idempotency-Key</code> header, a random value for that one intended action. Stripe made the pattern well known.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the header a web standard?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The IETF, the group that writes internet standards, had a draft for it, and the draft expired. The pattern is widely used anyway. Here's what the server does with the key.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A request with a key arrives, the server looks the key up, does the work and stores the response under the key when it is new, and when a repeat arrives it returns the stored response.">
@@ -405,7 +406,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The database write is conditional on that id. So a duplicate is skipped, even if two arrive at the same moment.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what does the repeat get back?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The same answer as the first time. For creates with no natural id, an Idempotency-Key does the same job, with the first response stored.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the agent case: the key belongs to the intended action, made by the code that runs the agent. Never let the model make it up.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With agents, one more rule: the key belongs to the intended action, made by the code that runs the agent. Never let the model make it up.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

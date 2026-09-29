@@ -148,11 +148,11 @@
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why do we use string unions instead of <code>enum</code>? My old team used enums for this.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our lint blocks <code>enum</code>, and its message says why. An enum is the one TypeScript feature that creates a real object in the JavaScript output. It can't just be erased.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our lint blocks <code>enum</code>, and its message says why. An enum is one of the few TypeScript features that create a real object in the JavaScript output. It can't just be erased.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does that matter?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tools that strip types without compiling, like Node's built-in type stripping, don't support enums at all. And numeric enums accept any number, even one you never listed.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a string union is already the value we send in JSON.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. <code>"system"</code> in the code is <code>"system"</code> on the wire. No mapping in between.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. <code>"system"</code> in the code is <code>"system"</code> on the wire, meaning in the JSON we send over the network. No mapping in between.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">

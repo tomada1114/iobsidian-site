@@ -92,7 +92,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>GraphQL solves exactly that.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We solve it more simply: one view endpoint per screen. The home view returns everything the home screen shows, in one call.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A GraphQL query, but fixed on the server.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a good way to put it. The other cost is more endpoints to keep compatible across versions.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, a fixed query per screen. The other cost is more endpoints to keep compatible across versions.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So was my side project wrong to use tRPC?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. If one team owns both ends, and every client is TypeScript, tRPC is great. An internal admin tool used only by our web app would be a good fit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the style follows the clients, not the other way round.</p></div></div>
@@ -142,7 +142,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>GraphQL earns its cost when many clients want many read shapes. The tRPC library fits when everything is TypeScript. One team must own both ends, too.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And REST's weak spot?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Over-fetching. We answer it with one view endpoint per screen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the agent: because commands are plain data, its tools call the same ones as the apps. And the learner always comes from the session, never from a tool argument.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent belongs in the answer too: because commands are plain data, its tools call the same ones as the apps. And the learner always comes from the session, never from a tool argument.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

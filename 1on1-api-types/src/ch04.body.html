@@ -26,8 +26,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>type LearnerId = string</code>. I thought that made it safe.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does a type alias like that create?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new type?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only a new name. <code>LearnerId</code> and <code>string</code> are the same thing to the compiler. And a card id is also a string, so the shapes match.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Structural typing again. Same shape, so it fits.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only a new name. <code>LearnerId</code> and <code>string</code> are the same thing to the compiler. And a card id is also a string.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the compiler compares shapes, not names?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, that's called structural typing. Same shape, so it fits.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The fix is called a brand. You add a marker that exists only at compile time.</p><pre><code>type LearnerId = string &amp; {
   readonly __brand: "LearnerId";
 };
@@ -63,20 +64,20 @@ result.value; // the finished round</code></pre></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and small <code>ok()</code> and <code>err()</code> helpers build the two members. Now the failure is in the return type. Let me compare the two.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Throwing is not visible in the signature and the caller can forget it; returning a Result is visible, the caller can't forget it, and the caller branches on a code instead of a message.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Throwing is not visible in the signature and the caller can easily forget it; returning a Result is visible and hard to miss, and the caller branches on a code instead of a message.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">throw</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">return Result</text>
       <text x="16" y="56" class="t-sm">In the signature?</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">yes</text>
-      <text x="16" y="136" class="t-sm">Can the caller forget it?</text>
+      <text x="16" y="136" class="t-sm">Easy to forget?</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">yes</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">no</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">hard to miss</text>
       <text x="16" y="216" class="t-sm">Caller branches on</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">the message</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">a stable code</text>
     </svg>
-    <figcaption>The row to notice is the middle one. A returned failure can't be ignored by accident, because the value isn't reachable until you check <code>ok</code>.</figcaption>
+    <figcaption>The row to notice is the middle one. A returned failure is hard to ignore, because the value isn't reachable until you check <code>ok</code>.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the "stable code"?</p></div></div>
@@ -169,12 +170,12 @@ result.value; // the finished round</code></pre></div></div>
     <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose you reply to the reviewer. What do you write?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a failure is expected and the caller can act on it, I return it as a Result. Then it's in the signature, and nobody can forget it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a failure is expected and the caller can act on it, I return it as a Result. Then it's in the signature, and it's hard to forget.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The error has a stable code, and callers branch on the code. The message is for people and can change.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bugs, like a broken invariant, still throw. No caller can fix them.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first comment?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A type alias is just a name. A brand makes the compiler refuse a card id where a learner id belongs, and one constructor checks and builds it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add where you'd stop: in thin UI code, or where a library expects throws, a plain throw is the cheaper choice. Keep Result and brands for the core.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say where you'd stop, too: in thin UI code, or where a library expects throws, a plain throw is the cheaper choice. Keep Result and brands for the core.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
