@@ -1,0 +1,185 @@
+<!-- title: Architecture 09 · Do we need event sourcing | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 9 of 11</span></p>
+  <h1>Do we need event sourcing to keep the history?</h1>
+  <p class="lead">After this page you can place CQRS and event sourcing on a spectrum, explain an append-only log with projections, and decide whether a view should be stored or derived when it's read.</p>
+  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What is CQRS, and how deep can it go?</li>
+      <li>How is a log with projections different from event sourcing?</li>
+      <li>When should a view be stored, and when derived?</li>
+    </ul>
+  </nav>
+  <p class="stage">The kitchen. Leo is talking fast about something he read.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>The CQRS spectrum</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I want to build a "weakness trend over time" screen. And I've been reading about event sourcing. We already keep every answer, so shouldn't we just switch to full event sourcing?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think event sourcing is?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Keeping a log of events. Which we do. And CQRS means two databases, one for writes and one for reads.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two ideas, both half right. Let's start with CQRS, because it's a spectrum, not a switch.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A spectrum?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It starts with command-query separation, from Bertrand Meyer. A method either changes state or answers a question. Never both.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>startRound</code> changes things, and <code>readHome</code> only answers.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Greg Young lifted that idea to the model: CQRS. Commands go through one path, reads through another. And it has depths.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How many depths?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw four steps.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="The CQRS spectrum in four steps: separate functions, projections in the same store, a separate read database, full event sourcing; Quickturn sits at projections in the same store.">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="8" class="f-acc"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="6" class="dot"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">Separate functions</text><text x="72" y="61" class="t-sm">commands and queries apart</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="114" class="t-hd">Projections, same store</text><text x="72" y="135" class="t-sm">Quickturn is here</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">Separate read database</text><text x="72" y="209" class="t-sm">synced from the write side</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="264">Full event sourcing</text><text x="72" y="285" class="t-sm">state rebuilt from events</text>
+      </svg>
+      <figcaption>Each step down adds power and cost. Quickturn stops at the second step: read models kept in the same store as the writes.</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We sit at the second step. Commands are data, handled as load, decide, commit. And every screen's query reads projections only.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a projection, exactly?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A read model: data shaped for a screen, kept up to date on every write. Like each card's memory state, or the learner's totals.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "two databases" is just one depth of CQRS, not the definition.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Most teams never need step three.</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>A log is not event sourcing</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And event sourcing is step four. We keep a log, so aren't we already there?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the difference. Full event sourcing stores only events. To know a round's state, you replay every event for that round.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we don't replay?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not on a read. We keep an append-only review log: every answer, with the card's memory state before and after.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the projections?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each card's memory state, the learner's totals, each day's tally. They're written in the same commit as the log entry.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same commit, so they can't disagree.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not within one commit. So a read is a key lookup, and it never lags behind. Let me put the two side by side.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="Full event sourcing stores only events and reads state by replaying them; log plus projections appends events and updates projections in one commit, and reads state by lookup.">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">Event sourcing</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Log + projections</text>
+        <text x="16" y="56" class="t-sm">What is stored</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">events only</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">events + read models</text>
+        <text x="16" y="136" class="t-sm">A write</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">append event</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">append + update</text>
+        <text x="16" y="216" class="t-sm">How state is read</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">replay events</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">key lookup</text>
+      </svg>
+      <figcaption>Both keep every event. The difference is the last row: we read state by looking it up, not by replaying history on each request.</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why keep the log at all, if nobody replays it on reads?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For concrete reasons. First, when the scheduler changes. We started with simple Leitner boxes.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Leitner is the classic flashcard boxes, right? Get it right, move it up a box.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. When we moved to FSRS, an open-source spaced-repetition scheduler, we replayed the log to rebuild every card's memory state.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And second?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tuning the scheduler's parameters from real answers. And third, reproducing evaluations: rerunning old answers through a new version to compare.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the log is for rebuilding and learning, not for everyday reads.</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Store it or derive it?</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now your screen. Where do the weak grammar points come from today?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I assumed there's a table of them.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There isn't. A pure function computes them when they're read. It uses the card projections the home screen already loads, plus the catalog's grammar tags.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not store them? It feels wasteful to compute every time.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Guess what storing would cost.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A write on every answer commit, to update the weakness numbers.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And a backfill every time we change the ranking rule. Without saving a single read, because we load those cards anyway.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the rule, roughly?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A smoothed miss rate per grammar point. A point counts as weak once three cards have been seen and the rate reaches 0.4, and we keep the top two. Those are starting values; we tune them.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does storing win?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When a rule needs history the card projection doesn't keep. Here's the question as a picture.</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether a rule needs history the projections don't keep against whether it's read on a hot path; rules without history needs are derived at read time, rules that need history store a projection, and Leo's trend screen falls in the store quadrant.">
+        <text x="44" y="18" class="t-sm">↑ Needs history we don't keep</text>
+        <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
+        <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
+        <text x="390" y="356" text-anchor="end" class="t-sm">Read on a hot path →</text>
+        <rect x="54" y="36" width="160" height="140" rx="6" class="node-acc"/>
+        <text x="134" y="100" text-anchor="middle" class="t-hd t-acc">Store a</text><text x="134" y="124" text-anchor="middle" class="t-hd t-acc">projection</text>
+        <text x="134" y="152" text-anchor="middle" class="t-sm">trend screen</text>
+        <rect x="222" y="36" width="160" height="140" rx="6" class="node"/>
+        <text x="302" y="100" text-anchor="middle">Store a</text><text x="302" y="124" text-anchor="middle">projection</text>
+        <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
+        <text x="134" y="248" text-anchor="middle">Derive at</text><text x="134" y="272" text-anchor="middle">read time</text>
+        <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
+        <text x="302" y="248" text-anchor="middle">Derive at</text><text x="302" y="272" text-anchor="middle">read time</text>
+      </svg>
+      <figcaption>The vertical axis decides it. If a view can be computed from what we already load, derive it; if it needs history we don't keep, store a projection. The trend screen is the second kind.</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A trend needs last month's numbers. The card projection only knows now.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. So your feature is a reason to add one projection: weakness per grammar point per week, updated on commit.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not a reason to adopt event sourcing.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Evidence from a second activity, like vocabulary, would be another reason to store one.</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>What projections cost</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are projections free, then?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. They duplicate data, so they can drift. If a commit path forgets to update one, it quietly goes wrong.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we catch that?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Contract tests on the store, and rebuild tooling. The store can read the whole log in order, and a "rebuild projections" system job replays it.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if one drifts, we rebuild it from the log.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's the log earning its place again.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could we update projections later instead, from a queue? Then a commit stays small.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many systems do that. Guess what the learner would see.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They answer a card, go back to the home screen, and the count hasn't moved yet.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For a second or two, the screen lies. Then you need a way to hide that, and a way to catch a stuck queue.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So updating in the same commit trades a slightly bigger write for screens that never lag.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. For one learner's small data, that's an easy trade. For a feed read by millions, you'd choose the queue.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And full event sourcing? What would it add?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More cost. Event versioning forever, because old events never change. Snapshots for long streams, so replays stay fast. And harder ad hoc queries.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would anyone pay that?</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Audit-heavy domains. Payments, ledgers. Systems that must answer "what was the state on day X" routinely.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A bank has to show a balance on any past date. We don't.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So we took the log and the projections, and left out rebuilding state from events on every request, a separate read database and a command bus. Projections in the same commit already make reads a lookup.</p></div></div>
+    </div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the PM asks why the trend screen needs "a projection". What do you tell them?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CQRS is a spectrum. We separate commands from reads, and reads come from projections in the same table.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We keep an append-only log so we can rebuild projections and replay history when the scheduler changes. But we don't rebuild state from events on every request.</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a view can be computed from what we already load, like weak grammar points, we derive it. The trend needs history we don't keep, so it gets a projection.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the risk?</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Projections can drift. We have contract tests and a rebuild job for that.</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Good. One more: say why not full event sourcing. Nobody here needs "the state on day X".</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Right. That's for banks, not for flashcards.</p></div></div>
+    </div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>CQRS is a spectrum; most teams need separate reads from projections, not a second database.</li>
+      <li>An append-only log with projections updated in the same commit keeps history without replaying it on every read.</li>
+      <li>Derive a view when it can be computed from what you already load; store a projection when it needs history you don't keep.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch08.html"><span>Previous</span><b>Where does the logic go</b></a>
+    <a class="next" href="ch10.html"><span>Next</span><b>Who stops a bad import</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
