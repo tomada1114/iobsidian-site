@@ -1,0 +1,179 @@
+<!-- title: AWS Foundation 14 · Cost when nobody uses it | accent: run -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 14 of 14</span></p>
+  <h1>How much will this cost if nobody uses it?</h1>
+  <p class="lead">After this page you can tell parts billed by the hour from parts billed per use. You can also explain how free tiers, budgets and a budget action keep spending in check from the first day.</p>
+  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Which parts cost money even when idle?</li>
+      <li>What does Quickturn avoid, and what do free tiers cover?</li>
+      <li>What guards spending from the first day?</li>
+      <li>When does saving money cost too much?</li>
+    </ul>
+  </nav>
+  <p class="stage">The office kitchen. A budget email arrived this morning.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Fixed versus per use</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I got a budget forecast email this morning. Only the team uses the app. What could even cost money?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's find out. What do you think drives the bill?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Traffic. And we're serverless, so no traffic means no bill.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half right. Serverless parts bill per use. But some parts bill for every hour they exist, used or not.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Such as?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A NAT gateway, a load balancer, an interface endpoint. An always-on instance or container. A flat monthly plan.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the per-use side?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Lambda, API Gateway, DynamoDB on-demand, S3. Logs are billed by volume. They charge per request, per gigabyte or per second of work.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "serverless is cheap" is only true for the per-use side.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And only at low traffic. So I ask two questions of every design.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which are?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does it cost at zero traffic? And at ten times today's?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Draw me the two sides?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two questions make four corners.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether a part is billed while idle against whether its cost grows with traffic: a NAT gateway and a load balancer are billed while idle and grow; a flat-rate plan is billed while idle and does not grow; Lambda, API Gateway and DynamoDB on-demand are not billed while idle and grow; free-tier items are not billed while idle and grow only past the tier.">
+      <text x="44" y="18" class="t-sm">↑ Billed while idle</text>
+      <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
+      <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
+      <text x="390" y="356" text-anchor="end" class="t-sm">Grows with traffic →</text>
+      <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="134" y="112" text-anchor="middle">Flat-rate plan</text>
+      <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="302" y="100" text-anchor="middle">NAT gateway,</text><text x="302" y="124" text-anchor="middle">load balancer</text>
+      <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
+      <text x="134" y="248" text-anchor="middle">Free-tier items</text><text x="134" y="272" text-anchor="middle" class="t-sm">until past the tier</text>
+      <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
+      <text x="302" y="236" text-anchor="middle" class="t-hd t-acc">Lambda,</text><text x="302" y="260" text-anchor="middle" class="t-hd t-acc">API Gateway,</text><text x="302" y="284" text-anchor="middle" class="t-sm">DynamoDB</text>
+    </svg>
+    <figcaption>The bottom row costs nothing with no one using it. Quickturn's main parts sit in the bottom right.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The top right looks like the worst corner.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is for a small app. A NAT gateway alone bills about four and a half cents an hour in one example region, as of September 2026.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's over thirty dollars a month, before any traffic.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For an app only the team uses, that could be the whole bill.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>What we avoid, what's free</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what did we leave out on purpose?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No NAT gateway, no load balancer, no interface endpoints. That's also why we have no VPC.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the monitoring? Alarms cost money too, don't they?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We sized them to CloudWatch's free tier: five alarms and one dashboard. Function logs are kept for one month.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I thought logs were basically free. They're just text.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Logs are billed by the gigabyte, both when written and while stored. A debug line on every request, kept forever, grows every month.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one month of retention caps the stored part.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And we log one line per request, not the whole body.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And sign-in?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cognito's free monthly users cover us. CloudFront is on its flat-rate Free plan.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, a flat-rate plan sits in the top left. Isn't that a fixed cost?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is, but the Free plan's rate is zero dollars. Fixed, and still nothing.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about API Gateway?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It charges per request, and we accept that. If traffic ever makes it matter, a function URL behind CloudFront is the cheaper fallback.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the design is deliberately boring on cost.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Boring is the goal. With nobody using it, the bill should be close to zero.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why did I get a forecast email?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Probably an early projection, from a few days of testing. Let's look at how the guards work.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Guards from the first day</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When were the budgets set up?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before any other resource. We created two by hand, before the first stack.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are they?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A monthly budget of 30 dollars. It alerts at 85% and 100% of actual spend, and at 100% of forecast.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the email I got. And the second?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A zero-spend budget. It catches the first unexpected charge, however small.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we know which feature is spending?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cost allocation tags. Our model calls go through tagged inference profiles, so AI spend shows up on its own line.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And an email is enough?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For most parts. Not for AI model calls. One bad loop can spend a month's budget overnight.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what stops that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A budget action. When the budget is crossed, it attaches a deny policy on its own. That's our kill switch for model calls.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Spend rises, budget data updates, possibly with a lag, an alert email is sent, a budget action attaches a deny policy, and model calls are refused.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Spend rises</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Budget data updates, maybe late</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Alert email</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Action attaches a deny policy</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">Model calls refused</text>
+    </svg>
+    <figcaption>Budget data may lag behind real spend. That's why the kill switch protects the account, and a per-learner ledger protects against one learner.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why may it lag?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Billing data takes time to arrive. By the time the action fires, more has been spent.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one learner could still run up a big bill before the switch trips.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the job of the per-learner usage ledger. It limits each learner, one call at a time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it know the cost before the call?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It reserves the most a call could cost, and refunds the rest afterwards. If the learner's balance can't cover the worst case, the call doesn't happen.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And telemetry?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each model call records its cost. So we see spend per call, per feature and per learner, not just a monthly total.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>When saving costs too much</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So per use is always the right choice?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. At steady high load, per-request pricing overtakes per-hour capacity. What's cheapest idle can be expensive at scale.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Give me a case.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Imagine the API handling many requests every second, all day. A small always-on container might then cost less than paying per request.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then we'd switch when we get there.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, when the numbers say so. And engineering time is a cost too. Don't spend a week to save a few dollars a month.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the kill switch? It sounds like pure upside.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It trades availability for money. A false trigger turns a feature off for every learner.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could a false trigger really happen?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A busy week of honest use could cross the budget. So could one runaway job. The switch can't tell which.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one bad job can switch off the tutor for every learner in that account.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So someone has to watch for that, too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The alert arrives before the action, so a person usually sees it first.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is this just a Quickturn habit?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. AI features make each user's cost variable, and potentially unbounded. That's why teams add per-call cost telemetry, per-user limits and a hard stop for the account.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So cost is part of the design, not a report at the end of the month.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the whole idea.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say how you'd think about cost on your next design.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I ask what it costs with nobody using it, and with ten times the traffic.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We avoid parts that bill by the hour, like NAT gateways and load balancers. So our idle cost is close to zero, and we stay inside free tiers where we can.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Budgets alert us on actual and forecast spend from day one. For AI calls, a budget action is the account's kill switch, and a per-learner ledger limits each user.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anything you'd watch?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The price of the kill switch: a false trigger turns the feature off for everyone.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep engineering time in the sum as well. A week spent saving a few dollars a month is a loss.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Separate hourly parts from per-use parts, and ask what each costs at zero and at ten times the traffic.</li>
+      <li>Keep idle cost near zero, and know what free tiers cover.</li>
+      <li>Set budgets from day one, with a budget action and per-user limits where usage can run away.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch13.html"><span>Previous</span><b>How do we prove one learner can't see another's data?</b></a>
+    <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
