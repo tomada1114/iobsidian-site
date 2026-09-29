@@ -1,0 +1,185 @@
+<!-- title: AWS Foundation 09 · Why infrastructure as code | accent: run -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 9 of 14</span></p>
+  <h1>Why write infrastructure as code at all?</h1>
+  <p class="lead">After this page you can explain what infrastructure as code gives you and how CDK becomes a CloudFormation stack. You can also compare the main tools, and say how to test what they produce.</p>
+  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What's wrong with changing things in the console?</li>
+      <li>How does CDK code become real resources?</li>
+      <li>How do the tools differ?</li>
+      <li>What does infrastructure as code cost, and how do we test it?</li>
+    </ul>
+  </nav>
+  <p class="stage">Leo's desk. He has just changed a setting in the AWS console.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Why not the console</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I raised the API function's memory in the console, to test a slow request. It helped a lot.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Useful test. When's the next merge to main?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This afternoon, probably. Why?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the next deploy will quietly put the memory back. The code still says the old value.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. So my change disappears, and nobody notices.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or the opposite. Someone's console change stays, and the code no longer describes what's running. That gap has a name: drift.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I always thought the console was the real state, and code was a way to automate clicking.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the misconception. For us, the code is the source of truth. Infrastructure as code means the environment is defined in files, like any other code.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does that give us, besides no drift?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same environment twice: dev and prod from one source. Review in pull requests, before anything changes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And after it changes?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>History in git, so you can see who changed what and why. And a new environment from one command.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a reviewer would have seen my memory change and asked why.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the reason would live in the commit, not in your memory.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the console useless, then?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It's fine for exploring in a sandbox account. The rule is: whatever you learn there, you write back into code.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>How CDK works</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does our CDK code actually become resources?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw it. It's a pipeline, and each step has a job.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="TypeScript constructs are synthesized by cdk synth into a CloudFormation template plus assets, CloudFormation computes a change set, and the stack is updated or rolled back if a step fails.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">TypeScript constructs</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">cdk synth</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Template plus assets</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">CloudFormation change set</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">Stack updated, or rolled back</text>
+    </svg>
+    <figcaption>CDK's job ends at the template. From the change set on, CloudFormation does the work and decides whether the update stands.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a construct?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A building block in code, like "a DynamoDB table". A bigger one might be "a Lambda function with its role".</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And <code>cdk synth</code>?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It runs our program and writes a CloudFormation template. Assets come with it, like the bundled Lambda code.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And <code>cdk deploy</code>?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It uploads the assets to the bootstrap bucket. Then CloudFormation computes a change set, the list of what will be created, changed or deleted.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a step fails halfway?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>CloudFormation rolls the stack back to where it was. That's a big reason to use it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does it remember what exists? My friend's team keeps a state file.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With CloudFormation, the state lives in AWS, in the stack itself. There's no file for us to keep or lose.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the bootstrap bucket?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bootstrapping, done once per account, creates what CDK deploys through. That means an S3 bucket, a KMS key, IAM roles, a container repository and a parameter. After that, every deploy uses them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How many stacks do we have?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three in each account: foundation, deploy-access, and app. An agents stack holds the tutor agent.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And how do deploys run?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>GitHub Actions deploys foundation, then app, to dev on every merge to main, with no manual step. Prod waits for a manual approval. The deploy-access stack is deployed by hand, once per account.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>The tools</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why CDK? My old agency used Terraform.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's compare on two questions. How do you write it: as configuration, or in a programming language? And who keeps the state: AWS, or you?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CloudFormation is configuration, YAML or JSON, and AWS keeps the state.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. SAM too; it's an extension of CloudFormation for functions and APIs. CDK is a real programming language, and it still compiles to CloudFormation, so AWS keeps the state.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Terraform is its own configuration language, with a state file you keep.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You run its state store and its locking, so two people can't apply at once. In return, it has providers for many clouds and services. Let me draw the four corners.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of how infrastructure is written, configuration or a programming language, against who keeps the state, AWS or you: CloudFormation and SAM are configuration with AWS state, CDK is a language with AWS state, Terraform is configuration with your state, and CDK for Terraform or Pulumi is a language with your state.">
+      <text x="44" y="18" class="t-sm">↑ State kept by you</text>
+      <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
+      <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
+      <text x="390" y="356" text-anchor="end" class="t-sm">Written in a language →</text>
+      <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="134" y="112" text-anchor="middle">Terraform</text>
+      <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
+      <text x="302" y="100" text-anchor="middle">Pulumi, CDK</text><text x="302" y="124" text-anchor="middle">for Terraform</text>
+      <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
+      <text x="134" y="248" text-anchor="middle">CloudFormation</text><text x="134" y="272" text-anchor="middle" class="t-sm">and SAM</text>
+      <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
+      <text x="302" y="248" text-anchor="middle" class="t-hd t-acc">CDK</text><text x="302" y="272" text-anchor="middle" class="t-sm">Quickturn</text>
+    </svg>
+    <figcaption>Moving right gives you a real language; moving up gives you a state store to run. CDK takes the language and leaves the state to AWS.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why did we land bottom right?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three reasons. Our server is TypeScript, so the infrastructure shares the same language, checks and tests. Terraform would need its own state store. And SAM leaves CloudFront, WAF, Cognito and our stack split to raw CloudFormation.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My guess was that CDK wins because it's newer and faster to deploy.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Newer, yes. Faster, no. A CDK deploy is a CloudFormation deploy, so it's just as slow.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So speed was never the reason. The reasons are the language and not running a state store.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the size of what we run.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So SAM is great for a function and an API, but we have much more than that.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For a small team that only runs functions, SAM would be a fine choice.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>What it costs, and how we test it</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does infrastructure as code have downsides?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Several. A learning curve. Slow deploys. CloudFormation's own limits. And abstractions that create resources and IAM policies you never wrote.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The last one sounds dangerous.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. A construct can add a role with more permissions than you'd choose. So we test what the code makes. Here's the ladder of checks, fastest first.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 332" role="img" aria-label="Checks from fastest to slowest: the type check, assertions on the synthesized template, a bundling test, the deploy, and finally reading the live resource back, which is the only check of the real account.">
+      <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
+      <text x="32" y="48">Type check</text>
+      <rect x="16" y="76" width="368" height="52" rx="6" class="node"/>
+      <text x="32" y="108">Assertions on the template</text>
+      <rect x="16" y="136" width="368" height="52" rx="6" class="node"/>
+      <text x="32" y="168">Bundling test</text>
+      <rect x="16" y="196" width="368" height="52" rx="6" class="node"/>
+      <text x="32" y="228">Deploy</text>
+      <rect x="16" y="264" width="368" height="52" rx="6" class="node-acc"/>
+      <text x="32" y="296" class="t-hd t-acc">Read the live resource back</text>
+    </svg>
+    <figcaption>Each step is slower than the one above it. Only the last step checks the account that learners actually use.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do the template tests work?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Synthesis needs no AWS credentials. So tests synthesize every stage and assert what matters: the table's key schema, billing mode, retain policies, trust conditions, the exact permissions.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about a whole-template snapshot? That's one line.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We avoid snapshots. A large snapshot diff gets approved without anyone reading it. We also keep an allowlist of resource types in the app stack's test.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if a construct quietly adds a new kind of resource…</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The test fails, and adding that type becomes a conscious change. One more test bundles the function exactly as a deploy does.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And after all that is green?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A green synth proves nothing about the live account. After a deploy, read the real resource back: the table's settings, the function's memory.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is exactly where my console change would have shown up.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Now put your memory change in the code, and let review decide.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate asks why they can't just click in the console. What do you say?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Infrastructure as code means the environment is defined in reviewed code. Dev and prod come from the same source.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A console tweak can't quietly drift, because the next deploy puts the code's version back.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CDK is TypeScript that turns into a CloudFormation template. CloudFormation does the create, update and rollback, and keeps the state.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And testing?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We test the synthesized template for the properties we care about, and a list of allowed resource types. No snapshots.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One step is missing: after a deploy, check the real resource. A green template test only proves what we asked for, not what's running.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Infrastructure as code makes environments reproducible and reviewable, and stops console changes from drifting.</li>
+      <li>CDK synthesizes CloudFormation templates; CloudFormation applies them as stacks and keeps the state.</li>
+      <li>Test the synthesized template for what matters, then read the live resource back after a deploy.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch08.html"><span>Previous</span><b>What if the app crashes halfway through a write?</b></a>
+    <a class="next" href="ch10.html"><span>Next</span><b>Split what breaks often from what must never be lost</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
