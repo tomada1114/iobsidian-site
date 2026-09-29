@@ -1,0 +1,59 @@
+<!-- title: One-on-Ones: API and TypeScript · Contents | accent: reach -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Contents · 11 pages</span></p>
+  <h1>One-on-Ones: API and TypeScript</h1>
+  <p class="lead">Eleven short conversations about types and APIs that last. After them you can explain what TypeScript checks and where runtime checks belong. You can also design an API that old apps, retries and offline phones can rely on.</p>
+  <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
+</header>
+<div class="flow">
+  <section aria-labelledby="who">
+    <h2 id="who">Who's talking</h2>
+    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He writes TypeScript every day with Claude Code. He wants to explain why the code and the API are shaped the way they are. Each page is one of their one-on-ones.</p>
+    <p>Quickturn is a small company that makes a language-learning app, with a web app and iOS and Android apps on one API. Maya, Leo and Quickturn are fictional.</p>
+  </section>
+  <section aria-labelledby="map">
+    <h2 id="map">How the pages fit together</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="The pages build in four steps: types inside the program, the boundary where outside data is parsed, the contract between server and clients, and finally an API that survives old apps, retries and offline use, which is where the series lands.">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">Pages 1–4 · Types inside</text><text x="72" y="61" class="t-sm">flags, unions, brands, Result</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">Page 5 · The boundary</text><text x="72" y="135" class="t-sm">parse outside data once</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">Pages 6–7 · The contract</text><text x="72" y="209" class="t-sm">API style, one source of truth</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">Pages 8–11 · APIs that last</text><text x="72" y="285" class="t-sm">versions, retries, offline, the SPA</text>
+      </svg>
+      <figcaption>You can read any page alone. In order, the pages move from types inside one program to an API that keeps working for clients you can't update.</figcaption>
+    </figure>
+  </section>
+  <section aria-labelledby="pages">
+    <h2 id="pages">The pages</h2>
+    <ol>
+      <li><a href="ch01.html">If types vanish at runtime, what are they for?</a> — Types check our code; outside data stays <code>unknown</code> until checked.</li>
+      <li><a href="ch02.html">Which compiler flags change how I write code?</a> — <code>strict</code> is a floor, and a loosened gate stops being one.</li>
+      <li><a href="ch03.html">Why not just add another boolean flag?</a> — A discriminated union makes nonsense combinations impossible to write.</li>
+      <li><a href="ch04.html">Should a function throw, or return its failure?</a> — Return expected failures with a code; throw only for bugs.</li>
+      <li><a href="ch05.html">Trust nothing at the boundary: parse it once</a> — Parse outside data once at the edge into a precise type.</li>
+      <li><a href="ch06.html">REST, GraphQL or RPC: how do you choose?</a> — The API style follows the clients and how they read data.</li>
+      <li><a href="ch07.html">Where does the API contract actually live?</a> — One set of schemas generates everything, and tests catch drift.</li>
+      <li><a href="ch08.html">How do you change an API without breaking old apps?</a> — Stable codes, additive changes, and deprecation before removal.</li>
+      <li><a href="ch09.html">What if the same request arrives twice?</a> — Client-made ids and conditional writes make repeats harmless.</li>
+      <li><a href="ch10.html">Can an app work offline if the server owns the rules?</a> — The client records facts; the server applies the rules on arrival.</li>
+      <li><a href="ch11.html">Why a static SPA instead of server rendering?</a> — Behind a sign-in, on a shared API, static files are the simplest client.</li>
+    </ol>
+  </section>
+  <div class="aside note">
+    <p class="label">How to read this</p>
+    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+  </div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>Next</span><b>If types vanish at runtime, what are they for?</b></a>
+  </nav>
+</div>
