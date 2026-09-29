@@ -276,19 +276,19 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And inside a partition, items are kept in sort-key order. Let me draw our table.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="The learner table holds one partition per learner; inside one learner's partition, items are kept in sort-key order: PROFILE, ROUND entries, SETTINGS and STATS.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="The learner table holds one partition key per learner; under one learner's key, items are kept in sort-key order: PROFILE, round and answer entries, SETTINGS and STATS.">
       <rect x="8" y="8" width="384" height="316" rx="10" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">Learner table</text>
       <rect x="24" y="52" width="352" height="200" rx="8" class="node-acc"/>
-      <text x="40" y="78" class="t-hd t-acc">One learner's partition</text>
+      <text x="40" y="78" class="t-hd t-acc">One learner's items</text>
       <rect x="40" y="92" width="320" height="30" rx="6" class="node"/><text x="56" y="113" class="t-sm">PROFILE</text>
-      <rect x="40" y="128" width="320" height="30" rx="6" class="node"/><text x="56" y="149" class="t-sm">ROUND#2026-09-28…</text>
-      <rect x="40" y="164" width="320" height="30" rx="6" class="node"/><text x="56" y="185" class="t-sm">ROUND#2026-09-29…</text>
+      <rect x="40" y="128" width="320" height="30" rx="6" class="node"/><text x="56" y="149" class="t-sm">ROUND#r1</text>
+      <rect x="40" y="164" width="320" height="30" rx="6" class="node"/><text x="56" y="185" class="t-sm">ROUND#r1#ANSWER#a1 …</text>
       <rect x="40" y="200" width="320" height="30" rx="6" class="node"/><text x="56" y="221" class="t-sm">SETTINGS, STATS …</text>
       <rect x="24" y="268" width="170" height="40" rx="6" class="node"/><text x="109" y="293" text-anchor="middle" class="t-sm">another learner</text>
       <rect x="206" y="268" width="170" height="40" rx="6" class="node"/><text x="291" y="293" text-anchor="middle" class="t-sm">another learner</text>
     </svg>
-    <figcaption>Each learner gets a partition. Inside it, items sit in sort-key order, so "all of this learner's rounds" is one neat range.</figcaption>
+    <figcaption>Each learner has their own partition key, so their items are stored together. Inside, items sit in sort-key order, so "all of this learner's rounds" is one neat range.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the sort keys are strings like <code>SETTINGS</code> and <code>ROUND#</code> plus an id.</p></div></div>
@@ -308,8 +308,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It reads every learner's data to return one learner's rounds. What would a Query do instead?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A Query names one partition key. So it goes straight to that learner's partition.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And you can add a condition on the sort key: equals, <code>begins_with</code>, or <code>between</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>begins_with "ROUND#"</code> gets exactly the rounds, in order.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the whole fix. Let me put the two side by side.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>begins_with "ROUND#"</code> gets the rounds in one Query, plus their answers, since those sort under each round.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The reader keeps only the round items. That's the whole fix: one partition, one range. Let me put the two side by side.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="A Query reads one partition's range while a Scan reads the whole table; with a Query you pay for what you get, with a Scan you pay for everything read; a Query stays fast as the table grows while a Scan slows down; Queries suit request paths and Scans suit rare offline jobs.">
@@ -353,9 +353,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds bad for a drill. I answer a card and then see old data?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So we read everything strongly consistent. A strongly consistent read costs twice as much, and it isn't available on global secondary indexes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Another reason not to have one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It fits our design.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not always read eventually consistent and save the money?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a feed of news, I would. For a learner who just finished a round and opens the results, a stale read looks like lost answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It fits our design. Third: size. One item holds at most 400 KB. And writes across several items can be made atomic with transactions, all or nothing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Third: size. One item holds at most 400 KB. And writes across several items can be made atomic with transactions, all or nothing.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>400 KB is a lot for a round.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. But it's a hard limit, so we never let one item grow without end, like a list of every answer ever given.</p></div></div>
 </div>
@@ -372,7 +373,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the live table only answers the app's questions.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. And that tells you when not to use it. If you can't list your questions yet, stay relational for now.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about backups? If everything is in one table, one bad write is scary.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prod has point-in-time recovery. We can restore the table to any second in the recent past.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prod has point-in-time recovery. We can restore a copy of the table as it was at any second in the last few weeks.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. I'll rewrite mine as a Query on the learner's partition, with <code>begins_with</code>.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And add a test with more than one learner in it. Your twenty items were all one learner, weren't they?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They were. So a Scan looked correct by accident.</p></div></div>

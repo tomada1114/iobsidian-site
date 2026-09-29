@@ -305,9 +305,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And DSQL?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>DSQL was the real competitor. It's serverless, it speaks PostgreSQL, and an idle cluster costs nothing. It bills per unit of work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds almost perfect. What was wrong with it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its transactions have limits. There's one isolation level, a cap on how many rows one transaction may change, and no savepoints.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its transactions have limits. There's only one isolation level, the rule for how much one transaction sees of another's changes. There's also a cap on how many rows one transaction may change, and no savepoints.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a savepoint?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A marker inside a transaction you can roll back to, without undoing the whole thing. And DSQL uses optimistic concurrency, so a commit can fail and must be retried from the start.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A marker inside a transaction you can roll back to, without undoing the whole thing. And DSQL retries a whole SQL transaction when another one wins. Ordinary PostgreSQL code written with locks doesn't carry over as it is.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And local development?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We'd run plain PostgreSQL on our laptops, a different engine from production. Tests could pass locally and fail in the cloud. Let me compare the two finalists.</p></div></div>
 </div>
@@ -325,8 +325,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">one partition key</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">a filter per query</text>
       <text x="16" y="296" class="t-sm">Transactions</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">conditional writes</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">limits, retries</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">conditions</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">SQL, own limits</text>
       <text x="16" y="376" class="t-sm">Local development</text>
       <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">same model</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">another engine</text>
@@ -386,7 +386,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do I say all this in a review, without sounding defensive?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three moves. Name the drivers. Show each option against them. And write down what would make you revisit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's our revisit condition?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If exports make it convenient, we move the answer log to its own table. It's written in the decision record, so nobody has to remember it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If exporting the answer log for reports gets easier with its own table, we move it there. It's written in the decision record, so nobody has to remember it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the revisit condition never comes true?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the record says why we're still here. A new teammate reads it and doesn't have to reopen the whole debate.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the teammate's comment isn't an attack. It's a chance to check the drivers again.</p></div></div>

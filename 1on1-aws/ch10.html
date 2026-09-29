@@ -259,7 +259,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The overnight deploy of the app stack failed and rolled back. Everything's fine now. But could a bad deploy ever delete the learner table?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not from the app stack. The table isn't in it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where is it, then? I assumed one stack held everything. That seems simpler.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's simpler until the day it isn't. We split by one question: does this resource keep data we can't rebuild?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's simpler at first. We split by one question: does this resource keep data we can't rebuild?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The learner table, obviously. What else?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The user pool. Every learner's account lives there. Those two sit in the foundation stack, which almost never changes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the rest?</p></div></div>
@@ -356,7 +356,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My last team put secrets in environment variables. Is that wrong?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They show up in the console and in the template. Anyone who can read the function's settings can read them.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where do secrets go?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It depends on two questions. Here are the two stores we use for secrets.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two questions: is it secret, and must it rotate? Here are the two stores we use for secrets.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="A SecureString parameter has no extra charge for standard parameters and no built-in rotation, and is the default for secrets; Secrets Manager has a small monthly charge per secret and built-in rotation, and is used for secrets that must rotate, such as payment keys.">
@@ -380,9 +380,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So SecureString by default, and Secrets Manager only when we need rotation.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Standard parameters carry no extra charge. Secrets Manager costs a small monthly amount per secret.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does a secret get into a SecureString? Surely not typed into the template.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>CloudFormation can't create a SecureString. So a small custom resource copies the web client's secret into one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>CloudFormation can't create a SecureString. So a small custom resource copies the secret Cognito gave our web backend into one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A custom resource?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A function CloudFormation runs during the deploy.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the secret never appears in a template or a log.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The function reads it through the Parameters and Secrets extension, which caches it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The function reads it through the Parameters and Secrets extension. That's a small helper running next to the function, and it caches values.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For how long?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Five minutes at most. So a changed value reaches every function within five minutes.</p></div></div>
 </div>
@@ -411,7 +413,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod is the same app with a different stage setting. Secrets go in SecureString parameters unless they need rotation.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anything the PM should worry about?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not for last night. The app stack can't touch the table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The risk worth naming is replacement. A retain policy on updates is what stops a changed setting from quietly swapping in a new, empty table.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The risk worth naming is replacement. A changed key still swaps in a new, empty table, and the retain policy only keeps the old one. Our key-schema test catches that change before it ships.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

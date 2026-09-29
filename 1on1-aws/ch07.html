@@ -360,7 +360,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <figcaption>The row to notice is deletion. With one partition per learner, removing everything a learner owns is a single key, not a search.</figcaption>
   </figure>
 <div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Won't the calendar need an index on due dates, for scheduling?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Won't scheduling need an index on due dates, to find the cards that are due?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. One learner holds a few thousand items at most. Reading all their item states is one small Query, so no index is needed.</p></div></div>
 </div>
   </section>
@@ -388,7 +388,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Doesn't one learner's partition become a hot spot? Everything they do hits one key.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a huge single key, like "all learners", yes. A per-learner partition doesn't, because each learner's traffic is small.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the partition choice also spreads the load.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Thousands of learners means thousands of small partitions, not one busy one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Thousands of learners means thousands of small partition keys, spread across partitions, not one busy key.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">

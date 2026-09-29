@@ -57,7 +57,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And "all or nothing" solves the crash. What solves the resend?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Conditions. A new answer is a Put with the condition <code>attribute_not_exists</code>: only write it if no item has this key yet.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a resent answer fails its condition, and nothing is counted twice.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Our store treats that as "already held", not as an error. Now the points. Two devices might add points at the same time.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Our code reads again, sees the answer is already saved, and skips it. The client gets success, not an error.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the points?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two devices might add points at the same time.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Last one wins, and one update is lost.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So each summary carries a version number. We read it with its version, and the Put says: only write if the version is still the one I read.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone else wrote first?</p></div></div>
@@ -159,7 +161,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If someone else wrote first, we reload and decide again, instead of holding a lock.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the limits?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>100 actions, and one action per item. They decide how we cut commands, like committing answers as they arrive.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mention the safety net too: a transaction only covers what you put in it. The rebuild job and the contract tests catch a projection someone forgot.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your fix still leans on a safety net: a transaction only covers what you put in it. The rebuild job and the contract tests catch a projection someone forgot.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

@@ -39,15 +39,15 @@
     <h2 id="pages">The pages</h2>
     <ol>
       <li><a href="ch01.html">What am I actually responsible for on AWS?</a> — Regions, accounts, and the line between AWS's security and ours.</li>
-      <li><a href="ch02.html">Why does our deploy have no AWS keys?</a> — Roles hand out short-lived credentials, so no key can leak.</li>
+      <li><a href="ch02.html">Why does our deploy have no AWS keys?</a> — Roles hand out short-lived credentials, so there is no long-lived key to leak.</li>
       <li><a href="ch03.html">What do we give up by running the API on Lambda?</a> — No servers to run, in exchange for cold starts and limits.</li>
       <li><a href="ch04.html">Why doesn't Quickturn have a VPC?</a> — Nothing private to reach means no network to build and pay for.</li>
       <li><a href="ch05.html">How does DynamoDB find my data so fast?</a> — Keys decide where items live, so a Query beats a Scan.</li>
-      <li><a href="ch06.html">Why DynamoDB and not PostgreSQL?</a> — Known questions and an idle bill near zero decided it.</li>
+      <li><a href="ch06.html">Why DynamoDB and not PostgreSQL?</a> — A learner boundary built into the keys decided it.</li>
       <li><a href="ch07.html">List the questions first, then design the table</a> — Every access pattern becomes a key before any data exists.</li>
       <li><a href="ch08.html">What if the app crashes halfway through a write?</a> — One transaction with conditions keeps the log and its summaries in step.</li>
       <li><a href="ch09.html">Why write infrastructure as code at all?</a> — Reviewed code stops drift, and tests check what CDK produces.</li>
-      <li><a href="ch10.html">Split what breaks often from what must never be lost</a> — Data lives in a retained stack that deploys can't touch.</li>
+      <li><a href="ch10.html">Split what breaks often from what must never be lost</a> — Data lives in a retained stack that app deploys can't touch.</li>
       <li><a href="ch11.html">What actually happens when a learner signs in?</a> — A one-time code becomes tokens, and the API verifies before it trusts.</li>
       <li><a href="ch12.html">Where should a web app keep its tokens?</a> — HttpOnly cookies keep tokens away from page scripts.</li>
       <li><a href="ch13.html">How do we prove one learner can't see another's data?</a> — Stores bound to one learner, and a test that proves it.</li>

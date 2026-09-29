@@ -285,7 +285,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="278" y="190" text-anchor="middle" class="t-sm">resources</text>
       <rect x="20" y="268" width="360" height="80" rx="8" class="node"/>
       <text x="36" y="298" class="t-hd">Prod account</text>
-      <text x="36" y="324" class="t-sm">its own region, resources and bill</text>
+      <text x="36" y="324" class="t-sm">Tokyo too: own resources and bill</text>
     </svg>
     <figcaption>The account edge is the line that matters. A mistake, a leaked key or a runaway bill inside dev stays inside dev.</figcaption>
   </figure>
@@ -324,7 +324,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So on a virtual machine I'd also patch the operating system.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. On Lambda and DynamoDB, AWS does the patching. But IAM and data are always yours. No service takes those away from you.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a relief and a worry at the same time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the right reaction. Less to patch, but the part that's left is the part attackers aim for.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Less to patch, yes. But the part that's left is the part attackers aim for.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">
@@ -347,7 +347,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you paid for it on day one.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We did, on purpose. Prod holds learners' data, and nothing done in dev can reach it. For a weekend project I'd skip it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't one account do the same job with careful IAM roles? A dev role that can't touch prod tables?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can, on a good day. But every new resource needs the right tags and the right policy, and one missed line opens the door.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can, if everything goes right. But every new resource needs the right tags and the right policy, and one missed line lets dev reach prod.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the separation depends on everyone getting every policy right.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. With two accounts, the separation is the default. A dev role simply has no way into prod, even if its policy is too wide.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the bill is split for free, too. I can see what dev costs.</p></div></div>
@@ -386,7 +386,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is per-request always cheaper, then?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. At steady, high traffic, per-hour capacity can become cheaper and easier to predict. Per request, you pay a little on every call, forever.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the choice depends on the traffic shape, not on which is "modern".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And it's a design choice, made early. Moving from one to the other later means changing architecture, not a setting.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And it's a design choice, made early. For compute, moving from one to the other later usually means changing the architecture, not just a setting.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
@@ -398,7 +398,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AWS secures its side of the line. Our data, IAM and configuration are always ours.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the two accounts?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dev and prod are separate accounts in one organization, so nothing done in dev can reach learners' data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One piece is missing: pricing. We prefer per-request parts so an idle app costs almost nothing, and we'd look again if traffic became high and steady.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we prefer per-request pricing, so an idle app costs almost nothing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That choice has a limit. If traffic became high and steady, we'd look at per-hour capacity again.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

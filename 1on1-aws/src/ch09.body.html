@@ -20,13 +20,13 @@
     <h2 id="s1"><span class="no">01</span>Why not the console</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I raised the API function's memory in the console, to test a slow request. It helped a lot.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Useful test. When's the next merge to main?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When's the next merge to main?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This afternoon, probably. Why?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the next deploy will quietly put the memory back. The code still says the old value.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the next deploy may put the memory back, or may leave it. That depends on what changes in the template.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. So my change disappears, and nobody notices.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or the opposite. Someone's console change stays, and the code no longer describes what's running. That gap has a name: drift.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I always thought the console was the real state, and code was a way to automate clicking.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the misconception. For us, the code is the source of truth. Infrastructure as code means the environment is defined in files, like any other code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the other way round here. For us, the code is the source of truth. Infrastructure as code means the environment is defined in files, like any other code.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does that give us, besides no drift?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same environment twice: dev and prod from one source. Review in pull requests, before anything changes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And after it changes?</p></div></div>
@@ -78,7 +78,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the bootstrap bucket?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bootstrapping, done once per account, creates what CDK deploys through. That means an S3 bucket, a KMS key, IAM roles, a container repository and a parameter. After that, every deploy uses them.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How many stacks do we have?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three in each account: foundation, deploy-access, and app. An agents stack holds the tutor agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four. Foundation, deploy-access and app in each account, plus an agents stack for the tutor agent.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And how do deploys run?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>GitHub Actions deploys foundation, then app, to dev on every merge to main, with no manual step. Prod waits for a manual approval. The deploy-access stack is deployed by hand, once per account.</p></div></div>
 </div>
@@ -116,7 +116,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My guess was that CDK wins because it's newer and faster to deploy.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Newer, yes. Faster, no. A CDK deploy is a CloudFormation deploy, so it's just as slow.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So speed was never the reason. The reasons are the language and not running a state store.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the size of what we run.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And how much we run besides functions: CloudFront, WAF, Cognito.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So SAM is great for a function and an API, but we have much more than that.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For a small team that only runs functions, SAM would be a fine choice.</p></div></div>
 </div>
@@ -148,7 +148,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do the template tests work?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Synthesis needs no AWS credentials. So tests synthesize every stage and assert what matters: the table's key schema, billing mode, retain policies, trust conditions, the exact permissions.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about a whole-template snapshot? That's one line.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We avoid snapshots. A large snapshot diff gets approved without anyone reading it. We also keep an allowlist of resource types in the app stack's test.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A snapshot test saves the whole template and fails on any change. We avoid those. A large snapshot diff gets approved without anyone reading it. We also keep an allowlist of resource types in the app stack's test.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if a construct quietly adds a new kind of resource…</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The test fails, and adding that type becomes a conscious change. One more test bundles the function exactly as a deploy does.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And after all that is green?</p></div></div>
@@ -162,11 +162,11 @@
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate asks why they can't just click in the console. What do you say?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Infrastructure as code means the environment is defined in reviewed code. Dev and prod come from the same source.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A console tweak can't quietly drift, because the next deploy puts the code's version back.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A console tweak is drift. The code stops describing what's running, and a later deploy may undo it without anyone noticing.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CDK is TypeScript that turns into a CloudFormation template. CloudFormation does the create, update and rollback, and keeps the state.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And testing?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We test the synthesized template for the properties we care about, and a list of allowed resource types. No snapshots.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One step is missing: after a deploy, check the real resource. A green template test only proves what we asked for, not what's running.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You skipped the last check: after a deploy, read the real resource back. A green template test only proves what we asked for, not what's running.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

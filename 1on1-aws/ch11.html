@@ -318,7 +318,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a stolen code only works with the verifier from that one sign-in.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. That's what PKCE adds. And the state stops a forged callback: if it doesn't match what we made, we refuse it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the phone apps? They can't keep a secret.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They use the same flow as public clients, with no secret, through the system browser. PKCE carries the weight there.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They use the same flow as public clients, with no secret, through the system browser. PKCE alone protects the code there.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">

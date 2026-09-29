@@ -22,7 +22,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the review, someone asked what stops learner B from reading learner A's round. I said each handler checks the learner id.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did they say?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Every handler, forever?" I didn't have a better answer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It was a fair push. What happens the day someone writes a new handler and forgets the check?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What happens the day someone writes a new handler and forgets the check?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A learner can read someone else's data. And no test fails, because nobody wrote one for the new handler.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And signing in doesn't help there. It proves who is calling, not what they may touch.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the better answer?</p></div></div>
@@ -101,6 +101,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why write the same keys as B? Reading already failed.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Reading proves B can't see A. A write with the same round id could still land on A's item if the partition were missing from the key.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the write half catches a store that forgets the partition.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which stores does it run against?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every one. The in-memory store and DynamoDB running locally run the same suite.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And above the store?</p></div></div>
@@ -115,7 +116,7 @@
     <h2 id="s3"><span class="no">03</span>Silo, pool and bridge</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why do we need all this? Couldn't each learner just have their own table?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a real model, called silo. Each tenant gets its own resources: an account, a stack, or a table.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a real model, called silo. Each tenant, one customer whose data must stay apart, gets its own resources: an account, a stack, or a table.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And ours?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Pool. Everything is shared, and the tenant key is in every item. Let me compare them.</p></div></div>
 </div>
@@ -136,7 +137,7 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">the layout</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">a contract test</text>
     </svg>
-    <figcaption>Pool is cheap, but nothing in the layout separates tenants. The proof has to come from structure and tests.</figcaption>
+    <figcaption>Pool is cheap, but no separate resources keep tenants apart. The proof has to come from structure and tests.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Silo sounds safer. Why didn't we pick it?</p></div></div>
@@ -146,7 +147,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't IAM enforce the partition? I've seen a condition on DynamoDB's leading keys.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can, but only when each user calls AWS with their own credentials. Our API calls DynamoDB with one role for everyone.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So IAM can't tell learners apart there.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And even that setup uses a different id from our <code>sub</code>. So the boundary lives in our code, and the test proves it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And in that setup the key would be an identity-pool id, not the Cognito <code>sub</code> we map from. So the boundary lives in our code, and the test proves it.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -161,7 +162,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutor can only ever reach the learner who is talking to it.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Even if the model is tricked, the worst it can do is read that same learner's own history.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the system jobs? Account deletion, export, the rebuild?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They go through a separately named port. So their wider reach is visible in the code, not hidden in a flag.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They go through a separate, clearly named interface in our code. So their wider reach is visible in the code, not hidden in a flag.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. Next review, my answer is the structure and the test, not the handlers.</p></div></div>
 </div>
   </section>
@@ -174,7 +175,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a cross-learner read can't even be written. A contract test on every store proves B sees nothing of A's.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why does that test matter so much for us?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We share one table, the pool model. So that test is our isolation.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The 404 is worth saying out loud too. It hides whether another learner's round exists at all.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the 404: it hides whether another learner's round exists at all.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
