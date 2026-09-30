@@ -1,0 +1,64 @@
+<!-- title: One-on-Ones: AI in Production · Contents | accent: guard -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Contents · 13 pages</span></p>
+  <h1>One-on-Ones: AI in Production</h1>
+  <p class="lead">Thirteen short conversations about putting LLM features into a real product. After them you can explain what a model call costs, how to shape and test it, and how to defend it. You can also say when an agent is worth it, and how it acts safely for a user.</p>
+  <p class="meta"><span>13 pages</span><span>About 1.75 hours</span><span>English, B2 · dialogue</span></p>
+</header>
+<div class="flow">
+  <section aria-labelledby="who">
+    <h2 id="who">Who's talking</h2>
+    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He writes TypeScript every day with Claude Code. He wants to explain why the product's AI features are built the way they are. Each page is one of their one-on-ones.</p>
+    <p>Quickturn is a small company that makes a language-learning app, with a web app and iOS and Android apps on one API. Maya, Leo and Quickturn are fictional.</p>
+  </section>
+  <section aria-labelledby="map">
+    <h2 id="map">How the pages fit together</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 400 386" role="img" aria-label="The pages build in five steps: the shape and cost of one model call; the code around it; evaluation; defenses against attacks and runaway cost; and finally agents and machine review, which is where the series lands.">
+        <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="266" r="6" class="dot"/>
+        <circle cx="30" cy="342" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">Pages 1–3 · The call</text><text x="72" y="61" class="t-sm">agent or not, tokens, Bedrock</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">Pages 4–6 · The code</text><text x="72" y="135" class="t-sm">typed output, ports, jobs</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">Pages 7–8 · The evals</text><text x="72" y="209" class="t-sm">gold sets, metrics, gates</text>
+        <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="262">Pages 9–10 · The guards</text><text x="72" y="283" class="t-sm">injection, cost limits</text>
+        <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="338" class="t-hd">Pages 11–13 · Agents</text><text x="72" y="359" class="t-sm">AgentCore, rights, review</text>
+      </svg>
+      <figcaption>You can read any page alone. In order, the pages move from one model call to agents that act for a learner.</figcaption>
+    </figure>
+  </section>
+  <section aria-labelledby="pages">
+    <h2 id="pages">The pages</h2>
+    <ol>
+      <li><a href="ch01.html">Does every AI feature need to be an agent?</a> — Pick the smallest shape that works, and save agents for open-ended tool use.</li>
+      <li><a href="ch02.html">What am I actually paying for in one LLM call?</a> — Tokens in and out, and why the same prompt can answer differently.</li>
+      <li><a href="ch03.html">Why does Bedrock want an inference profile, not a model?</a> — The profile decides where a call runs and which feature pays.</li>
+      <li><a href="ch04.html">Can an LLM return a type instead of a paragraph?</a> — A schema shapes the output, and validation checks its meaning.</li>
+      <li><a href="ch05.html">Why not one complete(prompt) function for every feature?</a> — Each task gets a port that owns its prompt, schema and evaluation.</li>
+      <li><a href="ch06.html">Should the timed drill wait for the grader?</a> — Grade later as a job, and store the first result.</li>
+      <li><a href="ch07.html">How would we know a prompt change made grading worse?</a> — A gold set and a few metrics turn opinions into numbers.</li>
+      <li><a href="ch08.html">Where do evals run: in CI, at night or in production?</a> — Each place catches what the others miss.</li>
+      <li><a href="ch09.html">What if a learner types 'ignore your instructions'?</a> — Limit what a successful attack can do, instead of betting on detection.</li>
+      <li><a href="ch10.html">Who pays for the tokens, and what stops a runaway bill?</a> — A per-learner ledger counts money; a kill switch stops the account.</li>
+      <li><a href="ch11.html">What does AgentCore do that forty lines of code can't?</a> — It rents you the production parts around the agent loop.</li>
+      <li><a href="ch12.html">When an agent acts for a learner, whose rights does it use?</a> — From the token, never from a tool argument.</li>
+      <li><a href="ch13.html">Can a machine review the cards a machine wrote?</a> — Only after it agrees with past human decisions, above all the rejections.</li>
+    </ol>
+  </section>
+  <div class="aside note">
+    <p class="label">How to read this</p>
+    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+  </div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>Next</span><b>Does every AI feature need to be an agent?</b></a>
+  </nav>
+</div>
