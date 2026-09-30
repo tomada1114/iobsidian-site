@@ -1,0 +1,185 @@
+<!-- title: Operations 08 · Testing what isn't code | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 8 of 12</span></p>
+  <h1>How do you test things that aren't plain code?</h1>
+  <p class="lead">After this page you can explain how generated files, infrastructure templates, types and import rules each get their own cheap check. You can also say what only a smoke test sees, and what no automated check sees.</p>
+  <p class="meta"><span>About 9 min read</span><span>Pairing at Leo's desk</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why does a JSON file have a test?</li>
+      <li>How do you test infrastructure?</li>
+      <li>How do you test types and import rules?</li>
+      <li>What does only the smoke test see?</li>
+    </ul>
+  </nav>
+  <p class="stage">Leo's desk. He edited an API schema, and CI failed on a test he had never heard of.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Drift in generated files</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I added a field to a zod schema, and every handler test passed. Then CI failed on a test about <code>openapi.json</code>.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you want to know why it's there.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Yes. Why does a JSON file have a test?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where does that file come from?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It's generated from the zod schemas, I think. Then it's committed.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who reads it?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The web client. Its types are generated from that document.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what happens if the schema changes and the document doesn't?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The server accepts the new field, and the client doesn't know it exists.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Every unit test passes, and the two sides quietly disagree.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the test catches that.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It regenerates the document in memory and compares it with the committed file. In CI, a difference fails instead of rewriting.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not just rewrite it in CI? It knows the right answer.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the change you review isn't the change that ships. One command rewrites it on your machine, and you commit the result.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I run that command, and commit the schema and the document together.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the fix. Here's the whole loop.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 444" role="img" aria-label="Edit a zod schema; a test regenerates the OpenAPI document in memory; it compares with the committed file; CI fails on a difference; run the one rewrite command; commit both files.">
+      <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="6" class="dot"/>
+      <circle cx="28" cy="400" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Edit a zod schema</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Regenerate in memory</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Compare with the file</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">CI fails on a difference</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="334">Run the rewrite command</text>
+      <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="406" class="t-hd">Commit both</text>
+    </svg>
+    <figcaption>The schema and the document move together. The contract that clients read can't silently disagree with the server.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are there other files like this?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web client's generated types have the same kind of test. So do the mirrored skill folders.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same idea each time: regenerate, compare, fail.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It's cheap, and it turns "someone forgot to regenerate" into a red build.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Infrastructure as testable code</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the CDK stacks? You can't unit test AWS.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You don't need AWS. A CDK app synthesizes a CloudFormation template locally, with no credentials.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the test reads the template.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And asserts the properties that matter, per stage. The table is on demand, keyed PK and SK, and kept on delete and on replacement.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Kept even in dev?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Kept in both. Point-in-time recovery and deletion protection are off in dev, and on in prod.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else is asserted?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The deploy role trusts only the main branch, and can only assume the CDK bootstrap roles. The app stack holds only an allowed list of resource types. And there are five alarms.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why an allowed list of resource types?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So a new kind of resource can't slip in unreviewed. Adding one means changing the list, and that shows in the diff.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not a snapshot test? Save the whole template, and fail on any change.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A snapshot diff of a whole template is hundreds of lines. People approve it without reading.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it fails on everything, and checks nothing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the risk. A property assertion fails only when a property you care about changes, and the reviewer reads one line.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like "deletion protection is on in prod."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The test name says what's protected.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone changes a stack for a good reason, say to add a queue?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The resource-type test fails first. They add the type to the list, and the reviewer sees that one line and asks why.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Types and boundaries</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And types? The compiler already checks them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It checks your code uses them correctly. It doesn't check that a type says what you meant.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would that look like?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a generic Result type. Inference might widen it to something loose, and every caller still compiles.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the type got weaker, but nothing failed.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Type tests prove inference keeps what it should. With <code>expectTypeOf</code>, you check that a Result doesn't widen.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the literal lists?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same tool checks that a literal list stays in step with its union. Add a member to one, and the test fails until the other has it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a call that should fail?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A <code>@ts-expect-error</code> line proves a bad call fails to compile. If it ever compiles, the test breaks.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about import rules? We have an ESLint rule for layers.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We also have a boundary test. It walks the module graph and asserts the allowed edges.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Such as?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The domain imports nothing. The infrastructure code imports nothing of the application.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't that a duplicate of the lint rule?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On purpose. If someone deletes the lint rule, the boundary still holds.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two independent checks for one rule.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a rule that matters this much, yes. The layers are what keep the domain pure.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 436" role="img" aria-label="What each check sees, from narrow to wide: types at compile time; unit tests, one function; CDK assertions, one template; the boundary test, the module graph; the smoke test, processes over HTTP; and the deployed dev stack, read back by hand.">
+      <rect x="16" y="16" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="50">Types · compile time</text>
+      <rect x="16" y="84" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="118">Unit · one function</text>
+      <rect x="16" y="152" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="186">CDK · one template</text>
+      <rect x="16" y="220" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="254">Boundary · module graph</text>
+      <rect x="16" y="288" width="368" height="56" rx="6" class="node-acc"/>
+      <text x="32" y="322" class="t-hd t-acc">Smoke · processes, HTTP</text>
+      <rect x="16" y="356" width="368" height="56" rx="6" class="node-soft"/>
+      <text x="32" y="390">Deployed dev · by hand</text>
+    </svg>
+    <figcaption>The accented layer is the only automated check that crosses process seams. The last one is done by a person.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>The smoke test</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So all of these are narrow checks.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Narrow and cheap. But none of them sees the seams between processes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like the web bundle actually talking to the API.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's what the one smoke test is for. It serves the built web bundle in front of the API, on DynamoDB local.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With a browser?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No browser. It asserts over HTTP. The document is served, and a stylesheet with a real utility class is linked.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why check a utility class?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because a build can produce an empty stylesheet and still succeed. The page would load with no styling at all.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A round trip saves, starts, records and reads back. One contract refusal, and a bare 404.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if I forgot to build first?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It refuses to run on a missing or stale build. It never builds for itself.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not? It would be easier.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it would test a build nobody ships. It should test the one you made.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It needs a build and a container, so it lives in the full gate, not the everyday one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So after a deploy, is the live URL tested?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No automated check hits it. After each deploy, the live resources and the URL are read back by hand.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a gap.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A known one, written down. You should know it's there.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this scale to a big company?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Policy-as-code checks do. A rule like "no public bucket" runs against every template before deploy. Same idea, at company scale.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So, why does a JSON file have a test?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything we generate, configure or type can drift, so each gets a cheap check against the truth.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Regenerate and diff for generated files. Synthesize and assert for infrastructure. <code>expectTypeOf</code> for types, and a graph walk for import rules.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only the smoke test sees processes talking over HTTP.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And after a deploy?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The deployed URL is read back by hand.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One habit for your next schema change: run the rewrite command before you push. CI will only tell you what you forgot.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Generated files get drift tests: regenerate, compare, fail in CI, rewrite by one command.</li>
+      <li>Infrastructure, types and import rules each get a narrow check of the properties that matter.</li>
+      <li>Only the smoke test crosses process seams; the deployed URL is still read back by hand.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch07.html"><span>Previous</span><b>How do we know the fake database behaves like the real one?</b></a>
+    <a class="next" href="ch09.html"><span>Next</span><b>What actually stops a bad change from merging?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
