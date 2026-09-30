@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>AgentCore Reader 02 Map of AgentCore</title>
+<title>AgentCore Reader 02 · An agent at a company</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -147,6 +147,7 @@ h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);fo
 /* svg vocabulary: shapes */
 .fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
 .fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
 .fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
 .fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
 .fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
@@ -190,6 +191,21 @@ pre{white-space:pre;background:var(--surface);border-radius:var(--radius);paddin
 pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
 blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
 
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
 /* ---------- ending ---------- */
 .summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
 .summary .label{color:var(--accent)}
@@ -205,6 +221,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
   .aside{padding:14px 15px}
   td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
@@ -218,161 +237,177 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 2 / 11 chapters</span></p>
-  <h1>Map of AgentCore: what does it do for you?</h1>
-  <p class="lead">In this chapter, we look at the full picture of Amazon Bedrock AgentCore, the set of parts that AWS built to run an agent's harness in production. There are about eight parts. You can use each one alone, or combine them. First, let's build a map in our heads.</p>
-  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S1</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 2 of 13</span></p>
+  <h1>What changes when an agent goes to work at a company?</h1>
+  <p class="lead">After this page you can explain what MCP and A2A each connect. You can also say how AgentCore differs from the older Bedrock Agents, and what a company needs that a laptop project doesn't.</p>
+  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
 </header>
-
 <div class="flow">
-  <nav class="toc" aria-label="In this chapter">
-    <p class="label">In this chapter</p>
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
     <ul>
-      <li>AgentCore is not the agent itself. It is a set of parts that handle production support</li>
-      <li>What each part does for you, and which chapter covers it</li>
-      <li>You can use each part alone or combine them</li>
-      <li>The order of adding parts, shown by the official workshop</li>
-      <li>Pricing is pay-per-use, for each part</li>
+      <li>What do MCP and A2A connect?</li>
+      <li>What happened to Bedrock Agents?</li>
+      <li>What does a company add?</li>
+      <li>What does a platform cost?</li>
     </ul>
   </nav>
-
+  <p class="stage">Coffee in the kitchen. Leo spent the weekend building an agent of his own.</p>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Parts that support the agent, not the agent itself</h2>
-    <p>You write the agent itself in code. This includes the harness that runs the loop, and the model it uses. <strong>Amazon Bedrock AgentCore is not a service for building that agent.</strong> It is a service that gives you the support features you need to run the agent in production, such as authentication, memory, and monitoring.</p>
-    <p>Each part is a separate AWS feature. You can call it from an agent built with any framework, such as Strands, LangGraph, or CrewAI, and with any model. AgentCore itself is not tied to one way of writing code.</p>
-    <p>Another important point: you only need to use the parts you need. For example, some teams use Memory without Runtime, or add Gateway first, before anything else. You do not need to use every part together.</p>
+    <h2 id="s1"><span class="no">01</span>MCP and A2A</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I built an agent this weekend. It uses three MCP tools, and it works fine on my laptop. So why do companies need a whole platform?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start with the tools. What does MCP give you?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A way to plug tools in. I found servers for search and for my notes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. MCP, the Model Context Protocol, is a standard for describing tools and calling them in one common way.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tool doesn't care which agent calls it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point of it. Wrap an internal API as an MCP server once.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you can use it the same way from Strands, from Claude Code, or from any other framework.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like every plug fitting the same USB port.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, one shape for every tool. In AgentCore, the Gateway handles this job.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And A2A? I've seen it next to MCP everywhere.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A2A, Agent2Agent, connects something different. It lets one agent ask another agent to do a job.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without knowing how the other one is built?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You don't need its framework or its model. You send "please do this job," and you get back "it's done."</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like employees in different departments asking each other for help.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. MCP connects an agent to tools and data. A2A connects agents to agents.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So they compete? I'd pick one?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, they sit side by side. An agent can use tools through MCP and still hand a whole job to another agent through A2A.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like the finance team. You don't use their spreadsheet yourself; you ask them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A tool does one action you control. Another agent takes a job and decides how to do it.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 332" role="img" aria-label="Our agent in the middle. On one side, through MCP, it reaches tools: an internal API, a database and a SaaS app. On the other side, through A2A, it asks other agents for work: a finance agent and a partner's agent.">
+      <line x1="200" y1="166" x2="104" y2="44" class="ln"/>
+      <line x1="200" y1="166" x2="104" y2="166" class="ln"/>
+      <line x1="200" y1="166" x2="104" y2="288" class="ln"/>
+      <line x1="200" y1="166" x2="296" y2="84" class="ln"/>
+      <line x1="200" y1="166" x2="296" y2="248" class="ln"/>
+      <text x="16" y="14" class="t-sm">MCP: tools</text>
+      <text x="384" y="44" text-anchor="end" class="t-sm">A2A: agents</text>
+      <rect x="16" y="20" width="144" height="48" rx="6" class="node"/><text x="88" y="50" text-anchor="middle">internal API</text>
+      <rect x="16" y="142" width="112" height="48" rx="6" class="node"/><text x="72" y="172" text-anchor="middle">database</text>
+      <rect x="16" y="264" width="144" height="48" rx="6" class="node"/><text x="88" y="294" text-anchor="middle">SaaS app</text>
+      <rect x="240" y="60" width="144" height="48" rx="6" class="node-soft"/><text x="312" y="90" text-anchor="middle">finance agent</text>
+      <rect x="240" y="224" width="144" height="48" rx="6" class="node-soft"/><text x="312" y="254" text-anchor="middle">partner agent</text>
+      <rect x="144" y="138" width="112" height="56" rx="8" class="node-acc"/>
+      <text x="200" y="172" text-anchor="middle" class="t-hd t-acc">our agent</text>
+    </svg>
+    <figcaption>Tools on the left, other agents on the right. The two standards meet only in the agent in the middle.</figcaption>
+  </figure>
   </section>
-
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>All the parts at a glance</h2>
-    <p>Here are the eight parts. For each one, we give a short description and an analogy. Later chapters cover each part in detail, as shown in the table.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Part</th><th>In short</th><th>Analogy</th><th>Chapter</th></tr></thead>
-      <tbody>
-        <tr><td class="key">Runtime</td><td>Runs the agent without servers to manage. Keeps each user's session in its own separate space</td><td>A private room</td><td>Ch. 4</td></tr>
-        <tr><td class="key">Memory</td><td>Holds the short-term conversation and the long-term memory</td><td>A work notebook and a customer file</td><td>Ch. 5</td></tr>
-        <tr><td class="key">Gateway</td><td>Turns your existing APIs and Lambda functions into MCP tools</td><td>A toolbox front desk</td><td>Ch. 6</td></tr>
-        <tr><td class="key">Code Interpreter / Browser</td><td>Runs code in an isolated space, and controls an isolated cloud browser</td><td>An isolated workroom</td><td>Ch. 6</td></tr>
-        <tr><td class="key">Identity</td><td>Holds the agent's ID and the login details for outside services</td><td>An ID badge and a spare key</td><td>Ch. 7</td></tr>
-        <tr><td class="key">Policy</td><td>Decides to allow or block a tool call, before it runs</td><td>Company rules</td><td>Ch. 8</td></tr>
-        <tr><td class="key">Observability</td><td>Records what the agent does as a trace (a record of every step in one request)</td><td>A daily work report</td><td>Ch. 9</td></tr>
-        <tr><td class="key">Evaluations</td><td>Scores the quality of the agent's answers and behavior</td><td>A performance review</td><td>Ch. 9</td></tr>
-      </tbody>
-    </table></div>
-    <div class="aside analogy">
-      <p class="label">Analogy: the new employee</p>
-      <p>When a company places a new employee (the LLM), it does not rely on that person's skill alone. It also gives them a seat, a work notebook, a toolbox front desk, an ID badge, rules to follow, a daily report, and a yearly performance review. The AgentCore parts match this whole set.</p>
-    </div>
-    <p>Two more topics are not in the table above. <strong>Payments</strong> are covered in an official Deep Dive module called "Agents that transact." It looks at cases where an agent makes a payment. We will not go deep here.</p>
-    <p>The <strong>AgentCore CLI</strong> is where development starts. It is a development tool for creating an agent, running it locally, and deploying it, all with commands. It replaces the old Starter Toolkit.</p>
-    <p>Another word you often see in the official courses is <strong>Harness</strong>. Some Labs in the official Workshop, and some Tracks in the official Deep Dive, have a module named "Harness." This is the same idea: the program outside the LLM that runs the loop. Different courses describe this in different ways, so we will not state exactly what AgentCore itself provides for it.</p>
+    <h2 id="s2"><span class="no">02</span>Bedrock Agents and AgentCore</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've also seen tutorials for Bedrock Agents. Is that the same thing as AgentCore?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the older service. You wrote instructions in the console and registered tools as an "Action Group."</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And AWS ran the loop?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A loop AWS built for you, like ready-made furniture. Easy to use, but hard to change on the inside.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hard to change how?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If the built-in loop didn't fit your task, you had few ways to change what happened inside it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could you bring your own framework?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. An agent built with something like LangGraph couldn't come in. And it used Bedrock models only.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So AgentCore replaced it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AWS changed direction. AgentCore isn't a service for building the agent itself. It's a set of parts for running an agent built with any framework in production.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then where does the agent come from?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You write it in code. AWS recommends Strands Agents, an open-source SDK, but Strands, LangGraph and CrewAI all work.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And models outside Bedrock?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those work too. The loop comes from your framework, and you fully control it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should I still learn Bedrock Agents?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No new use is allowed after 1 August 2026. If a course focuses on "Action Group" or "Supervisor Agent," it's teaching the old way.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is why my roadmap only covers AgentCore and Strands.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the reason.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>A diagram of how the parts fit together</h2>
-    <p>Let's arrange these parts in the order a request flows through them. The colors in the diagram show four groups: blue is for thinking (Runtime, Memory), green is for acting (Gateway, Code Interpreter, Browser), purple is for guarding (Identity, Policy), and yellow-brown is for running the whole cycle (Observability, Evaluations).</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 636" role="img" aria-label="A request from the user passes through Identity, into Runtime where the agent works with Memory, through Policy, then Gateway calls internal APIs or SaaS while Code Interpreter and Browser are used directly. Observability and Evaluations record and score the whole process">
-        <rect x="150" y="8" width="100" height="36" rx="6" class="node"/><text x="200" y="31" text-anchor="middle">User</text>
-        <line x1="200" y1="44" x2="200" y2="66" class="ln" marker-end="url(#arw)"/>
-        <text x="210" y="58" class="t-sm">auth</text>
-        <rect x="110" y="68" width="180" height="40" rx="6" class="node-c4"/><text x="200" y="93" text-anchor="middle">Identity</text>
-        <line x1="200" y1="108" x2="200" y2="130" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="132" width="368" height="150" rx="10" class="zone-soft"/>
-        <text x="32" y="154" class="t-hd">Runtime</text>
-        <rect x="28" y="168" width="160" height="68" rx="6" class="node-c1"/>
-        <text x="108" y="196" text-anchor="middle" class="t-hd">Agent</text><text x="108" y="216" text-anchor="middle" class="t-sm">Framework, model</text>
-        <rect x="212" y="168" width="160" height="68" rx="6" class="node-c1"/>
-        <text x="292" y="196" text-anchor="middle" class="t-hd">Memory</text><text x="292" y="216" text-anchor="middle" class="t-sm">Short &amp; long term</text>
-        <line x1="188" y1="202" x2="212" y2="202" class="ln" marker-start="url(#arw)" marker-end="url(#arw)"/>
-        <line x1="200" y1="282" x2="200" y2="304" class="ln" marker-end="url(#arw)"/>
-        <text x="210" y="296" class="t-sm">call</text>
-        <rect x="110" y="306" width="180" height="40" rx="6" class="node-c4"/><text x="200" y="331" text-anchor="middle">Policy</text>
-        <line x1="200" y1="346" x2="200" y2="368" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="370" width="368" height="56" rx="6" class="node-c2"/>
-        <text x="200" y="394" text-anchor="middle" class="t-hd">Gateway</text><text x="200" y="414" text-anchor="middle" class="t-sm">Turns APIs into MCP tools</text>
-        <line x1="200" y1="426" x2="200" y2="448" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="450" width="368" height="40" rx="6" class="node"/>
-        <text x="200" y="475" text-anchor="middle">Internal API / SaaS</text>
-        <text x="200" y="504" text-anchor="middle" class="t-sm">Agent also uses directly:</text>
-        <rect x="16" y="512" width="176" height="44" rx="6" class="node-c2"/><text x="104" y="538" text-anchor="middle" class="t-sm">Code Interpreter</text>
-        <rect x="208" y="512" width="176" height="44" rx="6" class="node-c2"/><text x="296" y="538" text-anchor="middle" class="t-sm">Browser</text>
-        <rect x="16" y="572" width="368" height="56" rx="8" class="node-acc"/>
-        <text x="200" y="596" text-anchor="middle" class="t-hd t-acc">Observability + Evaluations</text>
-        <text x="200" y="616" text-anchor="middle" class="t-sm">Records everything, scores quality</text>
-      </svg>
-      <figcaption>A request from the user goes through Identity, which checks who the user is. Then it reaches the agent inside Runtime. The agent thinks by going back and forth with Memory. When it wants to act outside, it first needs approval from Policy, then it calls internal APIs or SaaS through Gateway. Code Interpreter and Browser work the same way: they are tools that the agent uses directly, inside an isolated space. Observability and Evaluations cover this whole process, recording what happens and scoring the quality.</figcaption>
-    </figure>
-    <p>As the diagram shows, each part has its own job: Runtime is the place, Memory is the memory, and Gateway is the toolbox front desk. The roles do not overlap. <strong>Each part handles one concern</strong>, so you can add only the parts you need.</p>
+    <h2 id="s3"><span class="no">03</span>The wall</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to my weekend agent. The loop is a few dozen lines. What's actually hard?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Making it work for thousands of people at a company. Who uses yours?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Just me.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a company, thousands of people use it, and each is allowed to see different information.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So identity matters.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And it has to run for many people at once, without mixing up their conversations.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Mine keeps one history in memory. Two users would read each other's chat.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the first bug a company would find, usually on the first day.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My agent has one API key for everything.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a company, permissions are checked for every action: who it's for, and what is allowed.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And quality? Mine is fine if it seems to work.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a company, it's measured with scores and checked after every change. And when it fails, you can't just try again.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You'd have to explain what happened.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Trace the cause from records, and explain it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My agent keeps no records at all. When it gave a strange answer, I just ran it again.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a company, "run it again" isn't an answer. Someone will ask which tool it called, with what, and why. Here's the whole wall in one picture.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 356" role="img" aria-label="A personal project compared with a company agent. Identity: just you, versus thousands of people who may each see different data. Rules: one API key, versus a check on every action. Memory: one conversation, versus many at once kept apart. Monitoring: fine if it seems to work, versus scores and traced records.">
+      <rect x="200" y="36" width="192" height="316" rx="10" class="node-acc"/>
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Your laptop</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">A company</text>
+      <text x="16" y="56" class="t-sm">Identity</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">just you</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">thousands</text>
+      <text x="16" y="136" class="t-sm">Rules</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">one API key</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">every action</text>
+      <text x="16" y="216" class="t-sm">Memory</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">one chat</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">many, apart</text>
+      <text x="16" y="296" class="t-sm">Monitoring</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">seems to work</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">scores, traces</text>
+    </svg>
+    <figcaption>Every row differs, and none of them is about how smart the model is. The accented column is what a company has to build.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why do so many proofs of concept never reach production?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's usually not because the LLM isn't smart enough. The missing pieces are authentication, permissions, monitoring, evaluation and cost control.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The things any new hire gets on day one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right: a badge, a desk, rules to follow. AgentCore provides those as ready-made parts.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the weekend agent isn't wasted. It's the brain, without the badge and the desk.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The loop you wrote still runs; it just runs inside those parts.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What the order of adding parts teaches us</h2>
-    <p>The official Phase 1 workshop, "Getting Started with Amazon Bedrock AgentCore," shows a real example of the order to add these parts. It builds one customer support agent, and adds production features to it, one at a time.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 436" role="img" aria-label="The nine labs of the official Phase 1 workshop, in order: build locally, add memory, add Gateway, deploy to Runtime, add evaluation, add a frontend, add policy, adjust the harness, and finally optimize">
-        <line x1="30" y1="34" x2="30" y2="402" class="ln-acc"/>
-        <circle cx="30" cy="34" r="6" class="node-acc"/>
-        <rect x="56" y="16" width="328" height="36" rx="6" class="node"/><text x="72" y="39">1 Build locally</text>
-        <circle cx="30" cy="80" r="6" class="node-acc"/>
-        <rect x="56" y="62" width="328" height="36" rx="6" class="node"/><text x="72" y="85">2 Add memory</text>
-        <circle cx="30" cy="126" r="6" class="node-acc"/>
-        <rect x="56" y="108" width="328" height="36" rx="6" class="node"/><text x="72" y="131">3 Add Gateway</text>
-        <circle cx="30" cy="172" r="6" class="node-acc"/>
-        <rect x="56" y="154" width="328" height="36" rx="6" class="node"/><text x="72" y="177">4 Deploy to Runtime</text>
-        <circle cx="30" cy="218" r="6" class="node-acc"/>
-        <rect x="56" y="200" width="328" height="36" rx="6" class="node"/><text x="72" y="223">5 Add evaluation</text>
-        <circle cx="30" cy="264" r="6" class="node-acc"/>
-        <rect x="56" y="246" width="328" height="36" rx="6" class="node"/><text x="72" y="269">6 Add a frontend</text>
-        <circle cx="30" cy="310" r="6" class="node-acc"/>
-        <rect x="56" y="292" width="328" height="36" rx="6" class="node"/><text x="72" y="315">7 Add policy</text>
-        <circle cx="30" cy="356" r="6" class="node-acc"/>
-        <rect x="56" y="338" width="328" height="36" rx="6" class="node"/><text x="72" y="361">8 Adjust the harness</text>
-        <circle cx="30" cy="402" r="8" class="f-acc"/>
-        <rect x="56" y="384" width="328" height="36" rx="6" class="node-acc"/><text x="72" y="407" class="t-hd t-acc">9 Optimize</text>
-      </svg>
-      <figcaption>Start by building an agent that runs locally. Then add memory. Use Gateway to gather tools. Deploy it to Runtime. Add a way to evaluate it. Add a frontend. Control it with policy. Adjust the harness. Finally, optimize it. The workshop has 9 labs, takes about 3.5 hours, and is also available in Japanese.</figcaption>
-    </figure>
-    <p><strong>This order of adding parts is the same order you need when moving from a PoC to production.</strong> You start with something that runs, then strengthen it step by step with memory, tools, authentication, evaluation, and control.</p>
+    <h2 id="s4"><span class="no">04</span>What a platform costs</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does our tutor use those parts?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the company-side ones. Sign-in, limits on which learner's data it can reach, and limits on cost.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we build those ourselves?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We could. But none of it makes Quickturn different from anyone else. It's work every company repeats.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor itself is what makes us different.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So that's where our time should go: the prompts, the tools and the tests of the tutor.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the platform takes that work away.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, and that's the benefit. The cost is a dependency on AWS, and a price per use.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if AgentCore changes, we change with it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trade. For a small team, it's usually worth it. Just go in knowing you're making it.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>The official courses follow two phases</h2>
-    <p>The official AgentCore courses are split into two main phases. <strong>Phase 1, "Getting Started,"</strong> is the 9 labs we just saw, done in order. It is for people who are new to AgentCore.</p>
-    <p><strong>Phase 2, "Diving Deep,"</strong> has 8 modules that you can study in any order, working together with Claude Code. Since there is no fixed order, you can go deep into the part you need first. This reader's roadmap points you to both phases, depending on the situation.</p>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your weekend agent is going to work here. What does it need first?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>MCP connects it to tools, and A2A lets it ask other agents for work.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The loop is the easy part. A company adds identity, rules for every action, memory kept apart per user, and monitoring.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AgentCore gives those as parts, and Bedrock Agents is the old way.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mind the price of that choice as well: a dependency and a cost per use, in exchange for work we don't repeat.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s6">
-    <h2 id="s6"><span class="no">06</span>Pricing: pay for each part you use</h2>
-    <p>AgentCore uses pay-per-use pricing. You only pay for what you use. Parts like Runtime, Memory, and Gateway are each billed separately, and you pay nothing for a part you do not use. The exact prices change often, so this reader will not give numbers here. Just remember the idea.</p>
-    <div class="aside caution">
-      <p class="label">Where companies get stuck</p>
-      <p>If you built these eight parts yourself, even just separating each session's environment, storing login details safely, and collecting traces of every call would each take weeks of work. Many companies stop after the PoC stage, not because the agent is not smart enough, but because they do not have the resources to build all of this support themselves. The value of AgentCore is that it already has these parts ready for you.</p>
-    </div>
-  </section>
-
-  <div class="aside aside-quiet">
-    <p class="label">Where you meet this on the roadmap</p>
-    <ul>
-      <li><span class="tag">1-2</span>Amazon Bedrock AgentCore Getting Started (Skill Builder): check how much AWS says each part in this chapter handles for you.</li>
-      <li><span class="tag">2-2</span>Official Workshop Phase 1: try the order of adding parts yourself, with hands-on work.</li>
-    </ul>
-  </div>
-
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>AgentCore is not the agent itself. It is a set of parts that handle what you need for production.</li>
-      <li>You can use each part alone or together. Each one has its own chapter and its own price.</li>
-      <li>The order in the official workshop is also the order you follow from PoC to production.</li>
+      <li>MCP connects an agent to tools and data; A2A lets agents ask each other for work.</li>
+      <li>AgentCore runs agents built with any framework; Bedrock Agents is the older, closed way.</li>
+      <li>The hard part is the company side: identity, rules, memory and monitoring.</li>
     </ol>
   </section>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="prev" href="ch01.html"><span>Previous</span><b>Chapter 1</b></a>
-    <a class="next" href="ch03.html"><span>Next</span><b>Chapter 3, Strands Agents</b></a>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">1-1</span> Introduction to Agentic AI on AWS: MCP, A2A and the move to AgentCore</li><li><span class="tag">1-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 1 (in Japanese)</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch01.html"><span>Previous</span><b>When is it really an agent?</b></a>
+    <a class="next" href="ch03.html"><span>Next</span><b>What does AgentCore actually give you?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
 </div>
 </body>
