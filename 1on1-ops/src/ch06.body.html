@@ -1,0 +1,174 @@
+<!-- title: Operations 06 · More unit tests? | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 6 of 12</span></p>
+  <h1>Is a testing strategy just 'write more unit tests'?</h1>
+  <p class="lead">After this page you can explain what each kind of test buys, and at what price. You can also say why fakes usually beat mocks, and how to test a feature whose output isn't fixed.</p>
+  <p class="meta"><span>About 9 min read</span><span>Pairing at Leo's desk</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What does each kind of test buy?</li>
+      <li>Pyramid or trophy?</li>
+      <li>Mocks, fakes or recordings?</li>
+      <li>How do you test output that isn't fixed?</li>
+    </ul>
+  </nav>
+  <p class="stage">Leo's desk. His pull request added thirty unit tests, and the reviewer still asked how he knows it works.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>What each test buys</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I mocked every collaborator of the command handler. Coverage is 100% on that file. And the reviewer asks, "How do you know it works?"</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do your tests check?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That the handler calls the repository's save method once, with the right card.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And if the repository's save is broken?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then… my tests still pass. The mock always says yes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Coverage tells you which lines ran. It doesn't tell you what was checked.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So 100% can mean very little.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can. Let's step back. Each kind of test buys a different kind of confidence, at a different price.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the kinds, for us?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Unit tests check pure rules. Our domain package is plain functions, so they run in milliseconds and give the same answer every time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like scheduling the next review of a card.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then contract tests: does an adapter keep its promise against a real engine?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And component tests render a screen?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Under a fake browser, with a stand-in for the API. Then one smoke test, which asks whether the built system answers over HTTP.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No browser tests that click through the app?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>None, on purpose. That's a decision, not something we forgot.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not? They'd prove the most.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They're slow, and they fail for reasons that have nothing to do with your change. Speed and determinism are part of the price.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a slow test stops being run.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a flaky one stops being believed. Either way, it stops protecting you.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of speed across and confidence about real behavior down. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake proven by contract tests. Slow with low confidence: flaky browser tests. Slow with high confidence: the smoke test.">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">slow</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">fast</text>
+      <text x="8" y="80" class="t-sm">low</text>
+      <text x="8" y="196" class="t-sm">high</text>
+      <rect x="76" y="36" width="150" height="100" rx="6" class="node"/>
+      <text x="151" y="92" text-anchor="middle">flaky browser</text>
+      <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
+      <text x="309" y="92" text-anchor="middle">mock-heavy</text>
+      <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
+      <text x="151" y="208" text-anchor="middle">smoke test</text>
+      <rect x="234" y="152" width="150" height="100" rx="6" class="node-acc"/>
+      <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">proven fake</text>
+    </svg>
+    <figcaption>Down is confidence about real behavior. The accented corner is where most tests should live: fast, and still close to the real thing.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Pyramid or trophy</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I learned the test pyramid. Many unit tests, fewer integration tests, very few end-to-end.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's Mike Cohn's shape. Kent C. Dodds drew another one, the testing trophy.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's different?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Static checks form the base: types and lint. And the most weight sits on integration tests, not unit tests.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which one is right?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Neither is a law. The shape follows the architecture.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 268" role="img" aria-label="The pyramid and the trophy use the same four rows: end-to-end, integration, unit and static. The pyramid puts the most weight on unit tests; the trophy puts it on integration tests.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Pyramid</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Trophy</text>
+      <rect x="56" y="40" width="96" height="44" rx="6" class="node"/><text x="104" y="68" text-anchor="middle" class="t-sm">end-to-end</text>
+      <rect x="40" y="96" width="128" height="44" rx="6" class="node"/><text x="104" y="124" text-anchor="middle">integration</text>
+      <rect x="16" y="152" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="180" text-anchor="middle" class="t-hd t-acc">unit</text>
+      <rect x="64" y="208" width="80" height="44" rx="6" class="node-soft"/><text x="104" y="236" text-anchor="middle" class="t-sm">static</text>
+      <rect x="248" y="40" width="96" height="44" rx="6" class="node"/><text x="296" y="68" text-anchor="middle" class="t-sm">end-to-end</text>
+      <rect x="208" y="96" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="124" text-anchor="middle" class="t-hd t-acc">integration</text>
+      <rect x="232" y="152" width="128" height="44" rx="6" class="node"/><text x="296" y="180" text-anchor="middle">unit</text>
+      <rect x="216" y="208" width="160" height="44" rx="6" class="node"/><text x="296" y="236" text-anchor="middle">static</text>
+    </svg>
+    <figcaption>Same rows, different weight. Which row deserves the weight depends on where your code keeps its logic.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it follow ours?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our domain is pure, so unit tests there are cheap and meaningful. In a codebase where every rule touches the database, they wouldn't be.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And static checks?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Types and lint catch a whole class of bugs before any test runs. A wrong field name never gets that far.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the seams between layers?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's where contract tests and the smoke test go. The seams are where the pieces disagree.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How are the tests organised?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Into five projects, by what they touch. Unit and component tests get five seconds each. They do no I/O, so a hang is a bug.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the others?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Automation tests spawn processes, so they get two minutes. The smoke suite needs a build, and the DynamoDB suite needs a container, so each runs on its own.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a fast run on every save, and slower runs where they're needed.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would a hang look like in a unit test?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a rule waits on a promise that never resolves. With no I/O, nothing should wait, so five seconds already means something is wrong.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Mocks, fakes and recordings</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what should my handler tests look like instead?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's the difference between a mock and a fake, in your words?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't a fake just a mock with more code?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. A mock checks that calls happened. A fake is a real, simpler implementation, like an in-memory store.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So with a fake, the handler really saves, and I can read the card back.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Your code runs the same path it runs in production.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What goes wrong with the mock, apart from what we saw?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It breaks when you refactor, even though behavior is unchanged. Rename the method, and thirty tests fail.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While the app still works.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the reverse: it can pass while the real thing is broken. That's the dangerous half.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a recording?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It replays a real response, captured once. It's useful for external APIs and for model calls.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the rule here?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mock only at boundaries: the network, the filesystem, the clock and randomness. Prefer fakes. Assert behavior, not call counts.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch with fakes?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You must prove the fake behaves like the real thing. Otherwise it's a second system that can lie.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you prove that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Contract tests. The same cases run against the fake and against the real engine, and both must pass.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the fake drifts, a case fails.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The fake earns its trust by passing the same cases.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our API tests drive real Request objects over the in-memory store.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the web screens render under a fake browser with a stand-in fetch. No mock counts anywhere.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the coverage number, then?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We keep floors per area, so a gap gets noticed. But a floor is a smoke alarm, not a proof.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>When the output isn't fixed</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about LLM grading? The same answer might get two different explanations.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So a test can't assert one exact output. What can it check?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That the response has the right shape?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Tests still check the plumbing: the schema, the parsing, and that a retry doesn't grade twice.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Against a fake or a recording, I guess.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both. The same code can run with a fake, a recording or the real model.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the quality of the grades?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's measured statistically, by evaluations. How often do the verdicts agree with gold labels, marked by a person?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And how often does the verdict flip, if you ask twice?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the other number. The evaluation gates CI against a baseline, so a worse prompt can't merge quietly.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So tests for plumbing, evals for quality.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the split Quickturn uses for grading. It works for any feature where the answer isn't fixed.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Write your reply to the reviewer. What do you say?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each kind of test buys a different confidence at a different price, so we pick a mix, not a shape.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our pure domain makes unit tests cheap, and the seams get contract and smoke tests.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'll replace the mocks with the in-memory store, and mock only at boundaries.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the AI side?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For AI features, tests check the plumbing and evals measure quality.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the coverage point. A 100% line tells the reviewer what ran, and nothing about what was checked.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Each kind of test buys different confidence at a different price; choose the mix by where the risk is.</li>
+      <li>Prefer fakes to mocks, mock only at boundaries, and assert behavior rather than calls.</li>
+      <li>When output isn't fixed, tests check the plumbing and evaluations measure quality.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch05.html"><span>Previous</span><b>How do we see what a model call costs?</b></a>
+    <a class="next" href="ch07.html"><span>Next</span><b>How do we know the fake database behaves like the real one?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
