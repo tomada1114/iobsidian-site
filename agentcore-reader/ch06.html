@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>AgentCore Reader 06 Gateway</title>
+<title>AgentCore Reader 06 · How an agent remembers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -147,6 +147,7 @@ h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);fo
 /* svg vocabulary: shapes */
 .fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
 .fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
 .fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
 .fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
 .fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
@@ -190,6 +191,21 @@ pre{white-space:pre;background:var(--surface);border-radius:var(--radius);paddin
 pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
 blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
 
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
 /* ---------- ending ---------- */
 .summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
 .summary .label{color:var(--accent)}
@@ -205,6 +221,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
   .aside{padding:14px 15px}
   td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
@@ -218,146 +237,175 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 6 / 11 chapters</span></p>
-  <h1>Gateway: one entry point for internal tools</h1>
-  <p class="lead">To do real work, an agent needs "tools" that connect to internal APIs and databases. But a company often has dozens of APIs. If each team writes its own connection code for every agent, the same logic gets copied many times, and access rules end up different in every team. Gateway, the topic of this chapter, brings these internal resources together into one entry point, so agents can use them all the same way.</p>
-  <p class="meta"><span>Reading time: about 12 min</span><span>Roadmap stage S2-S3</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 6 of 13</span></p>
+  <h1>How can an agent remember anything?</h1>
+  <p class="lead">After this page you can explain why an LLM remembers nothing, and how short-term and long-term memory fill that gap. You can also say what the context window limits, and why memory must always belong to one owner.</p>
+  <p class="meta"><span>About 8 min read</span><span>A video call</span></p>
 </header>
-
 <div class="flow">
-  <nav class="toc" aria-label="In this chapter">
-    <p class="label">In this chapter</p>
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
     <ul>
-      <li>How internal APIs, Lambda functions, and existing MCP servers become "targets"</li>
-      <li>Two-way authentication: agent to Gateway, and Gateway to target</li>
-      <li>Tool search by meaning, used when there are hundreds of tools</li>
-      <li>Why tool size and description text decide how well a tool gets picked</li>
-      <li>The built-in tools Code Interpreter and Browser</li>
+      <li>Does the model remember last week?</li>
+      <li>What do short-term and long-term memory keep?</li>
+      <li>How does memory come back into a conversation?</li>
+      <li>Whose memory is it?</li>
     </ul>
   </nav>
-
+  <p class="stage">A video call. Leo has been chatting with the tutor on the test site all morning.</p>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Too many separate toolboxes</h2>
-    <p>A company has billing systems, HR systems, inventory systems, and more, each built up over time by a different department. There can be dozens of these APIs, and each one is a possible tool for an agent. If every team writes its own connection code, the same kind of login check (authentication) gets rewritten again and again.</p>
-    <p>Access rules often differ between teams too. One team checks every caller carefully, while another team lets everything through with a single API key. <strong>As the number of agents grows, this duplicate work and uneven access control keep piling up</strong>.</p>
-    <p>Gateway solves the problem of "how to expose these tools" only once. Many agents can then reuse that same setup. The next sections look at how it works.</p>
+    <h2 id="s1"><span class="no">01</span>The model remembers nothing</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The tutor remembered something I told it last week. So the model keeps a memory of each learner, right?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think happens when you write "as I mentioned before"?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It looks back at what I said.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It looks like that. In fact, the whole conversation history is sent again with every message. The LLM itself has no way to remember.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every message? That sounds expensive.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. The container that carries the history is called the context window, and it has a limit.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens as it fills up?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You send more tokens, the small pieces of text the model reads. The answer gets slower and the cost goes up.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But at least it has everything.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Too much hurts too. The LLM can have trouble finding the part it really needs, so the answer can get worse.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then use a model with a bigger window.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That doesn't solve it. Keep sending every unrelated message, and it can still lose track of the instructions that matter.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question isn't how much to pack in.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's what to keep and what to drop. That's where Memory comes in.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Register existing resources as "targets"</h2>
-    <p>Anything you register with Gateway is called a target. The advantage is that you can register a resource that is already running, without rewriting it.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Target type</th><th>What you register</th><th>Good for</th></tr></thead>
-      <tbody>
-        <tr><td class="key">Lambda function</td><td>Code you already wrote</td><td>Turning your own logic into a tool without changes</td></tr>
-        <tr><td class="key">REST API</td><td>An existing API with an OpenAPI definition</td><td>When your system already has a public API</td></tr>
-        <tr><td class="key">Smithy model</td><td>An API defined with Smithy</td><td>When AWS manages your API with Smithy</td></tr>
-        <tr><td class="key">Existing MCP server</td><td>An MCP server that is already running</td><td>When another team has already set up MCP</td></tr>
-      </tbody>
-    </table></div>
-    <p>Once you register targets, Gateway publishes all of them as one single MCP endpoint (a single connection point). The agent does not need to know how each target is different. It just connects as an MCP client to this one endpoint, and it can then use every tool behind it.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 480" role="img" aria-label="Several agents connect through Gateway, which runs an entry check, a semantic tool search, a policy check and an exit check, to reach registered targets such as a Lambda function, a REST API, a Smithy model or an existing MCP server. Gateway is the one entry point for all of them">
-        <rect x="90" y="16" width="220" height="48" rx="6" class="node"/>
-        <text x="200" y="38" text-anchor="middle">Agents</text><text x="200" y="56" text-anchor="middle" class="t-sm">Many, e.g. sales or HR</text>
-        <line x1="200" y1="64" x2="200" y2="90" class="ln" marker-end="url(#arw)"/>
-        <rect x="24" y="94" width="352" height="244" rx="10" class="zone"/>
-        <text x="200" y="118" text-anchor="middle" class="t-hd t-acc">Gateway</text>
-        <text x="200" y="136" text-anchor="middle" class="t-sm">One entry point for internal resources</text>
-        <rect x="48" y="150" width="304" height="40" rx="6" class="node-c4"/><text x="200" y="174" text-anchor="middle">Entry check (who called)</text>
-        <rect x="48" y="196" width="304" height="40" rx="6" class="node-c1"/><text x="200" y="220" text-anchor="middle">Tool search (by meaning)</text>
-        <rect x="48" y="242" width="304" height="40" rx="6" class="node-c4"/><text x="200" y="266" text-anchor="middle">Policy check</text>
-        <rect x="48" y="288" width="304" height="40" rx="6" class="node-c4"/><text x="200" y="312" text-anchor="middle">Exit check (target side)</text>
-        <line x1="200" y1="338" x2="200" y2="360" class="ln" marker-end="url(#arw)"/>
-        <text x="200" y="374" text-anchor="middle" class="t-sm">Targets — become MCP tools</text>
-        <rect x="24" y="382" width="172" height="40" rx="6" class="node-soft"/><text x="110" y="406" text-anchor="middle">Lambda function</text>
-        <rect x="204" y="382" width="172" height="40" rx="6" class="node-soft"/><text x="290" y="406" text-anchor="middle">REST API</text>
-        <rect x="24" y="430" width="172" height="40" rx="6" class="node-soft"/><text x="110" y="454" text-anchor="middle">Smithy model</text>
-        <rect x="204" y="430" width="172" height="40" rx="6" class="node-soft"/><text x="290" y="454" text-anchor="middle">MCP server</text>
-      </svg>
-      <figcaption>An agent only needs to connect to one MCP endpoint, Gateway, to use a Lambda function, a REST API with OpenAPI, a Smithy model, and an existing MCP server as tools. Inside Gateway, each call passes through four checks in order: entry check, tool search, Policy check, and exit check.</figcaption>
-    </figure>
-    <p>When a new internal API appears, you do not need to change the agent's code. Just add it as a new target in Gateway, and existing agents can use it right away.</p>
-    <div class="aside analogy">
-      <p class="label">Analogy: the toolbox front desk</p>
-      <p>The new employee (the agent) does not need to remember where every tool is kept. They just tell the front desk (Gateway), "I want to do this," and the desk finds the right tool. The desk always checks an ID before handing out a tool, and it records who received which tool. Searching through hundreds of tools on the shelf is the desk's job, not the new employee's.</p>
-    </div>
+    <h2 id="s2"><span class="no">02</span>Short-term and long-term</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does Memory keep first?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Short-term memory. It saves every message in a session as an event, without changing it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it tell sessions apart?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each event has an actor ID, who is talking, and a session ID, which conversation it belongs to. So one user's several sessions don't mix.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when the Runtime session ends and its microVM is thrown away?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The record stays in Memory. When the session starts again, the conversation continues by loading it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But keeping every message forever won't fit in the window.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So Memory pulls out the key points from the saved events and stores them separately, as long-term memory.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While the learner waits?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It runs in the background, asynchronously. The reply is never slowed down by it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a slow strategy is fine?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Because the user isn't waiting, you can choose one that takes some time. It only changes when the memory is ready, not how fast the tutor answers.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Pulls out what, exactly?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You choose a strategy. Semantic memory collects facts. A summary sums up the whole conversation.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And others?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>User preference remembers what the user likes. Episodic memory learns from events that went well or badly. And a custom strategy uses your own prompt.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can one agent use several?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, it can combine them. And the extracted memories go into separate namespaces, like separate shelves.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One shelf for this user's preferences, another for a case history.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Separate shelves help avoid mixing up whose memory is whose.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a search on one shelf never reads another?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. You choose the shelf when you store and when you search.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 372" role="img" aria-label="A chat turn is saved as-is in short-term memory; an extraction strategy runs in the background; the key points settle in long-term memory, by namespace; and when the next chat starts, retrieval searches by meaning and adds them into the prompt.">
+      <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">A chat turn</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Short-term: events as-is</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Extraction, in background</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Long-term, by namespace</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="334" class="t-hd">Retrieval into the prompt</text>
+    </svg>
+    <figcaption>Storing memory is only half of it. The accented step is where a memory becomes useful again.</figcaption>
+  </figure>
   </section>
-
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Authentication goes in two directions</h2>
-    <p>The key point about Gateway is that authentication (checking who someone is) happens in two separate directions. The first is when the agent calls Gateway. This uses JWT or OAuth to check "who is making this call." The second is when Gateway calls the target. Here it uses IAM, OAuth, or an API key, depending on the type of target.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Direction</th><th>What is checked</th><th>Method used</th></tr></thead>
-      <tbody>
-        <tr><td class="key">Agent to Gateway</td><td>Who is making this call</td><td>JWT, OAuth</td></tr>
-        <tr><td class="key">Gateway to target</td><td>Which rights to use on the target side</td><td>IAM, OAuth, API key</td></tr>
-      </tbody>
-    </table></div>
-    <p><strong>The agent itself never handles these credentials (login secrets) directly</strong>. Deciding where to store each credential is the job of Identity. Gateway only decides which authentication method to use; the credentials themselves are stored on the Identity side.</p>
+    <h2 id="s3"><span class="no">03</span>Bringing memory back</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how did the tutor know what I said last week?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When a new conversation starts, Memory searches long-term memory for entries close in meaning to the question. It adds them into the prompt.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Close in meaning, not the same words?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It searches by meaning, so it finds a related memory even when the wording differs.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if I said "I keep mixing up past tenses" last week, and today I ask about "yesterday's grammar"…</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The search can still find it. The words differ, but the meaning is close.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do I write that search myself?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Barely at all. Point your calls to Memory, and the conversation starts with likely relevant memories already added.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in the new-employee picture, what is this?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Short-term memory is the employee's note from today's meeting, written down as it happened. Long-term memory is a customer chart, with only the key points copied over.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the charts sit on shelves until that customer comes up again.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then they're taken down and placed on the desk.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But the desk has a size.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The context window, yes. It's shared by the system prompt, the tool descriptions, the chat history and the retrieved memories.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 332" role="img" aria-label="The context window as a container with a limit, holding the system prompt, tool descriptions, retrieved memory and the chat history, which grows as the conversation continues.">
+      <rect x="8" y="8" width="384" height="316" rx="12" class="node-acc"/>
+      <text x="24" y="36" class="t-hd t-acc">Context window · has a limit</text>
+      <rect x="32" y="52" width="336" height="48" rx="6" class="node"/>
+      <text x="48" y="82">System prompt</text>
+      <rect x="32" y="112" width="336" height="48" rx="6" class="node"/>
+      <text x="48" y="142">Tool descriptions</text>
+      <rect x="32" y="172" width="336" height="48" rx="6" class="node"/>
+      <text x="48" y="202">Retrieved memory</text>
+      <rect x="32" y="232" width="336" height="76" rx="6" class="node-soft"/>
+      <text x="48" y="262">Chat history</text>
+      <text x="48" y="286" class="t-sm">grows as the chat continues</text>
+    </svg>
+    <figcaption>Everything shares one container. As the history grows, it leaves less room for the rest.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So who decides what to drop when it's full?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In Strands, the conversation manager. It replaces old messages with a summary, or removes the oldest parts past a certain size.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the default good enough?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It depends on what matters most for the agent. Deciding whether to keep the default or adjust it is a real design choice.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For a tutor, the last few turns matter most. An old greeting could be dropped first.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Maybe. But the learner's goal from the first message may matter more than anything since. Test it before you decide.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When tools grow in number, narrow them down first</h2>
-    <p>As you register more targets, the number of tools available through Gateway can reach hundreds. A problem appears if you send every tool's description to the LLM. Too much description text fills up the context window (the space the LLM uses to hold information for one request), and having many similar tools also makes wrong choices more likely.</p>
-    <p>Gateway can search by meaning (semantic search) to find only the tools that match a request. The agent then only sees a short list of tools that fit the request, so the choice does not get harder as the total number of tools grows. For example, if one department has 100 tools but only a few match the current request, Gateway can pull out just those few, and the LLM can then pick the right one with no confusion.</p>
+    <h2 id="s4"><span class="no">04</span>Whose memory it is</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What worries companies most about long-term memory?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mixing up whose memory it is. A poor namespace design can leak one customer's preferences into another's data.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you design it well?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For example, build namespaces around individual people rather than departments. Then when staff change, memories don't get mixed up.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else comes up in production?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Questions you barely think about alone. Can you delete one user's memory when they ask? How long is memory kept?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is it fine to keep personal data in it as it is?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And is the stored data encrypted? Those aren't only settings. The extraction strategy decides what goes into long-term memory in the first place.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So choosing a strategy is a privacy decision too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why our tutor's Memory holds conversation only. The learner's weak points stay in Quickturn's own database.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the database is where deletion and export already work.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And where the rest of the app reads them. Memory helps the tutor talk; it isn't the learner's record.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Tool size and description text decide accuracy</h2>
-    <p>Publishing a target as-is is not enough. Part of designing Gateway is shaping tools to a size that is easy to use. If one tool matches a single API call, it can be too small, and the agent ends up needing many calls. If one tool tries to do too many things at once, it becomes hard to reuse in other situations.</p>
-    <p><strong>How you write a tool's description also decides how often it gets picked</strong>. Adding a clear note about when to use the tool, not just its name and arguments, improves the accuracy of semantic search and the LLM's choice. This tool design is also what Policy checks when it decides whether to allow a call.</p>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now explain how the tutor "remembered" last week.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model remembers nothing. Short-term memory keeps each session's turns, as they were said.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Long-term memory keeps facts extracted in the background, on separate shelves.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Retrieval brings them back into the next prompt, by meaning, inside a window with a limit.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And whose shelf?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Always one user's.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add where the line is for us: the tutor's Memory keeps conversation, and the learner's record stays in our database.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s6">
-    <h2 id="s6"><span class="no">06</span>An isolated workspace: Code Interpreter and Browser</h2>
-    <p>Besides connecting internal APIs, Gateway also offers built-in tools that AWS provides. One is Code Interpreter. It runs code inside an isolated sandbox (a safe, separate space) to do data analysis and calculations.</p>
-    <p>The other is Browser. An agent can control a browser that runs in an isolated space in the cloud. This lets it work with internal systems that only have a screen and no API. A person can also watch the actions live or keep a record of them. Normal API calls cannot do that.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 320" role="img" aria-label="Code Interpreter and Browser run inside an isolated workspace, separate from production sales and customer data; only results leave the workspace, not real data">
-        <rect x="90" y="16" width="220" height="48" rx="8" class="node-soft"/>
-        <text x="200" y="38" text-anchor="middle" class="t-hd">Production</text><text x="200" y="56" text-anchor="middle" class="t-sm">Sales &amp; customer data</text>
-        <line x1="200" y1="64" x2="200" y2="90" class="ln-dash"/>
-        <rect x="24" y="94" width="352" height="176" rx="10" class="zone"/>
-        <text x="200" y="118" text-anchor="middle" class="t-hd t-acc">Workspace (isolated)</text>
-        <rect x="48" y="134" width="304" height="56" rx="8" class="node-c3"/>
-        <text x="200" y="158" text-anchor="middle" class="t-hd">Code Interpreter</text><text x="200" y="178" text-anchor="middle" class="t-sm">Data analysis, math</text>
-        <rect x="48" y="200" width="304" height="56" rx="8" class="node-c2"/>
-        <text x="200" y="224" text-anchor="middle" class="t-hd">Browser</text><text x="200" y="244" text-anchor="middle" class="t-sm">Clicks &amp; reads a live page</text>
-        <text x="200" y="292" text-anchor="middle" class="t-sm">No real data goes in; only results come out</text>
-      </svg>
-      <figcaption>Code Interpreter and Browser both run in an isolated environment, separate from production. If something fails, it does not affect the real systems or data.</figcaption>
-    </figure>
-    <div class="aside caution">
-      <p class="label">Where companies get stuck</p>
-      <p>IT security reviews always flag the same problem: every time a new tool is added, teams give it slightly more access than needed. Before long, every agent has admin-level rights. Another concern is indirect prompt injection, where a tool follows hidden instructions placed inside an outside web page or file. Tools that touch outside content directly, like Browser, need even stronger isolation from production.</p>
-    </div>
-  </section>
-
-  <div class="aside aside-quiet">
-    <p class="label">Where you meet this on the roadmap</p>
-    <ul>
-      <li><span class="tag">2-2</span>Phase 1 (the Gateway lab): register targets and try tool search yourself.</li>
-      <li><span class="tag">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Gateway chapter)</li>
-      <li><span class="tag">2-4</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, second half (Built-in tools chapter): covers Code Interpreter and Browser</li>
-      <li><span class="tag">3-4</span>Deep Dive: Connect your agent to anything</li>
-    </ul>
-  </div>
-
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Gateway registers internal APIs, Lambda functions, and existing MCP servers as "targets," and combines them into one MCP endpoint.</li>
-      <li>Authentication happens in two directions, agent to Gateway and Gateway to target, and Identity stores the credentials.</li>
-      <li>As tools grow in number, semantic search narrows them down, and good tool size and descriptions decide how well they get chosen.</li>
+      <li>The LLM remembers nothing; the context window carries the history and has a limit.</li>
+      <li>Short-term memory keeps whole conversations; long-term memory stores extracted key points by namespace.</li>
+      <li>Retrieval adds memories back by meaning, and every shelf belongs to one owner.</li>
     </ol>
   </section>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>Chapter 5</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>Chapter 7, Identity</b></a>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Official Workshop Phase 1: the Memory lab</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Memory chapter</li><li><span class="tag">3-5</span> Deep Dive: Manage context of your agent</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch05.html"><span>Previous</span><b>Where does an agent actually run?</b></a>
+    <a class="next" href="ch07.html"><span>Next</span><b>How does an agent get the right tools?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
 </div>
 </body>
