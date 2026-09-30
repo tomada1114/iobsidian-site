@@ -5,6 +5,7 @@
 - 入口: `index.html`（本棚）
 - 各読み物は `<name>/` に HTML と原稿 `src/` を置く。`python3 <name>/src/build.py` で再生成
 - 検索エンジンには載せない（各ページの `noindex` と `robots.txt`）。URL を知っていれば誰でも読める
+- ヘッダー（全ページ）と読み物のサイドバー（全ページ一覧。PC は左固定、スマホは Menu ボタンのドロワー）は `_shared/nav.py` が出す。読み物を足したら `READERS` に1行足し、`python3 _shared/nav.py` で本棚 `index.html` のヘッダーを差し直す
 
 | 読み物 | 目次 |
 |---|---|

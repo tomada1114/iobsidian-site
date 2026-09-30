@@ -1,10 +1,12 @@
 """Build Easy Reads: one page per src/reads/<id>.body.html into ../p/<id>.html, plus ../index.html.
 Each body starts with: <!-- title: ... | topic: <topic> | blurb: ... -->
 The page head matches reading-page-designing/assets/page-template.html; base.css is a copy of that skill's."""
-import re, math, html, datetime, pathlib
+import re, sys, math, html, datetime, pathlib
 here = pathlib.Path(__file__).parent
 root = here.parent
-css = (here/"base.css").read_text()
+sys.path.insert(0, str(root.parent/"_shared"))
+import nav
+css = (here/"base.css").read_text() + nav.CSS
 LANG = "en"
 SERIES = "Easy Reads"
 WPM = 120  # a comfortable pace for a learner reading easy English
@@ -24,7 +26,12 @@ var p=document.querySelector(".pager");if(p&&"IntersectionObserver" in window){n
 SHOW_JS = READ_JS % """document.querySelectorAll("dd[data-id]").forEach(function(d){if(s.indexOf(d.dataset.id)>=0){var t=document.createElement("span");t.className="tag";t.textContent="read";d.prepend(t)}});"""
 
 def page(title, acc, body, data_id=""):
+    """data_id set: a read in p/; empty: the Easy Reads index."""
     attr = f' data-id="{data_id}"' if data_id else ""
+    up, pre = ("../", "") if data_id else ("", "p/")
+    items = [(f"{up}index.html", "", "All reads")] + [(f"{pre}{r['id']}.html", r["id"][4:6].lstrip("0") + "/" + r["id"][6:8].lstrip("0"), r["title"]) for r in reversed(reads)]
+    cur = f"{data_id}.html" if data_id else "index.html"
+    side = nav.sidebar(SERIES, f"{up}index.html", items, cur, "../" + up, "easy-reads")
     return f"""<!doctype html>
 <html lang="{LANG}">
 <head>
@@ -41,10 +48,13 @@ def page(title, acc, body, data_id=""):
 <style>
 {css}</style>
 </head>
-<body{attr}>
+<body class="has-side acc-{acc}"{attr}>
+{nav.header("../" + up, "easy-reads", True)}
+{side}
 <div class="page acc-{acc}">
 {body.rstrip()}
 </div>
+{nav.JS}
 </body>
 </html>
 """

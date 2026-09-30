@@ -1,9 +1,11 @@
 """Assemble chapter bodies into standalone HTML pages.
 Each src/chNN.body.html starts with a line: <!-- title: ... | accent: think -->
 The page head matches reading-page-designing/assets/page-template.html; base.css is a copy of that skill's."""
-import re, pathlib
+import re, sys, pathlib
 here = pathlib.Path(__file__).parent
-css = (here/"base.css").read_text()
+sys.path.insert(0, str(here.parent.parent/"_shared"))
+import nav
+css = (here/"base.css").read_text() + nav.CSS
 LANG = "en"
 ACCENT = {"think": "1", "reach": "2", "run": "3", "guard": "4"}
 head = """<!doctype html>
@@ -22,7 +24,9 @@ head = """<!doctype html>
 <style>
 {css}</style>
 </head>
-<body>
+<body class="has-side acc-{acc}">
+{header}
+{side}
 <div class="page acc-{acc}">
 <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
@@ -31,12 +35,15 @@ head = """<!doctype html>
   </defs>
 </svg>
 """
+items = nav.chapter_items(here)
+series = re.match(r"<!--\s*title:\s*(.+?)\s*·", (here/"ch00.body.html").read_text()).group(1)
+slug = here.parent.name
 for f in sorted(here.glob("*.body.html")):
     src = f.read_text()
     m = re.match(r"<!--\s*title:\s*(.+?)\s*\|\s*accent:\s*(\w+)\s*-->\n", src)
     if not m: raise SystemExit(f"{f.name}: missing header comment")
     title, acc = m.groups()
     body = src[m.end():]
-    out = head.format(lang=LANG, title=title, css=css, acc=ACCENT[acc]) + body.rstrip("\n") + "\n</div>\n</body>\n</html>\n"
+    out = head.format(lang=LANG, title=title, css=css, acc=ACCENT[acc], header=nav.header("../", slug, True), side=nav.sidebar(series, "ch00.html", items, f.name.replace(".body",""), "../", slug)) + body.rstrip("\n") + "\n</div>\n" + nav.JS + "\n</body>\n</html>\n"
     (here.parent/f.name.replace(".body","")).write_text(out)
     print("built", f.name.replace(".body",""), len(out))
