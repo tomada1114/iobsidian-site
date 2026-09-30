@@ -1,66 +1,65 @@
-<!-- title: AgentCore Reader Contents | accent: think -->
+<!-- title: AgentCore Reader · Contents | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Contents / 11 chapters</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Contents · 13 pages</span></p>
   <h1>AgentCore Reader</h1>
-  <p class="lead">This reader gives you a quick look at the whole topic before you start the learning roadmap. The roadmap teaches you how to build AI agents for companies on AWS. This reader has no hands-on steps. Each chapter takes about 12 to 15 minutes to read. The whole reader takes about two and a half hours. Read it in order, and the map grows step by step: first how agents work, then the AgentCore parts, then how to design them for a company.</p>
-  <p class="meta"><span>11 chapters, about 2.5 hours</span><span>Matches roadmap stages S1 to S5</span></p>
+  <p class="lead">Thirteen short conversations about building AI agents for companies on AWS. After them you can explain what makes something an agent, and what each part of Amazon Bedrock AgentCore does. You can also say how to run an agent safely at a company.</p>
+  <p class="meta"><span>13 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
 </header>
-
 <div class="flow">
-  <div class="aside analogy">
-    <p class="label">Analogy for this whole book</p>
-    <p>This reader compares an AI agent to <b>hiring a new employee</b> who thinks fast. The new employee's brain is the LLM, and Strands Agents plans the steps of the work. When you hire someone, you also need other things: a private room, memory, a toolbox, an ID badge, company rules, and a daily report. These are the AgentCore parts.</p>
-  </div>
-
-  <section aria-labelledby="p1">
-    <h2 id="p1">Part 1: What an Agent Really Is, and the Map</h2>
-    <div class="tbl"><table>
-      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
-      <tbody>
-        <tr><td class="key"><a href="ch01.html">1 What an Agent Really Is</a></td><td>The difference between an LLM call, a workflow, and an agent. The loop and the harness. MCP and A2A. How this compares with the old Bedrock Agents.</td><td><span class="tag">1-1</span><span class="tag">1-3</span></td></tr>
-        <tr><td class="key"><a href="ch02.html">2 Map of the Parts</a></td><td>What each AgentCore part does for you, and the order to add them, from a test project to a real product.</td><td><span class="tag">1-2</span><span class="tag">2-2</span></td></tr>
-        <tr><td class="key"><a href="ch03.html">3 Strands Agents</a></td><td>How to write model-driven code, the layers of the harness (tools, hooks, skills, steering, sessions), and multiple agents working together.</td><td><span class="tag">1-4</span><span class="tag">2-1</span></td></tr>
-      </tbody>
-    </table></div>
+  <section aria-labelledby="who">
+    <h2 id="who">Who's talking</h2>
+    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. She helped her former employer put its first internal agents into production. <strong>Leo</strong> has just joined the team that owns Quickturn's tutor agent, and is following a study roadmap with stages S1 to S5. Each page is one of their one-on-ones.</p>
+    <p>Quickturn is a small company that makes a language-learning app, with a conversational tutor agent running on AgentCore. Maya, Leo and Quickturn are fictional.</p>
   </section>
-
-  <section aria-labelledby="p2">
-    <h2 id="p2">Part 2: The AgentCore Parts, One by One</h2>
-    <div class="tbl"><table>
-      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
-      <tbody>
-        <tr><td class="key"><a href="ch04.html">4 Runtime</a></td><td>Keeping each session separate, running for a long time, and how to deploy and manage versions.</td><td><span class="tag">2-3</span><span class="tag">3-3</span></td></tr>
-        <tr><td class="key"><a href="ch05.html">5 Memory</a></td><td>Short-term and long-term memory, strategies for pulling out information, and managing context.</td><td><span class="tag">2-3</span><span class="tag">3-5</span></td></tr>
-        <tr><td class="key"><a href="ch06.html">6 Gateway</a></td><td>Turning existing APIs into MCP tools, searching for tools, Code Interpreter, and Browser.</td><td><span class="tag">2-3</span><span class="tag">3-4</span></td></tr>
-        <tr><td class="key"><a href="ch07.html">7 Identity</a></td><td>Checking identity coming in and going out, acting on behalf of a user, and storing tokens safely.</td><td><span class="tag">2-3</span><span class="tag">3-6</span></td></tr>
-        <tr><td class="key"><a href="ch08.html">8 Policy</a></td><td>Stopping a tool call before it runs, Cedar, and how this is different from Guardrails.</td><td><span class="tag">2-3</span><span class="tag">3-8</span></td></tr>
-        <tr><td class="key"><a href="ch09.html">9 Observability and Evaluations</a></td><td>Traces and spans, evaluators, and the loop for making the agent better.</td><td><span class="tag">2-4</span><span class="tag">3-7</span></td></tr>
-      </tbody>
-    </table></div>
+  <section aria-labelledby="map">
+    <h2 id="map">How the pages fit together</h2>
+    <figure class="fig">
+      <svg viewBox="0 0 400 386" role="img" aria-label="The pages build in five steps: what an agent is; the map of AgentCore and Strands; running and remembering; tools, identity and rules; and finally quality, company scale and the certification, which is where the series lands.">
+        <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="266" r="6" class="dot"/>
+        <circle cx="30" cy="342" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">Pages 1–2 · The agent</text><text x="72" y="61" class="t-sm">the loop, MCP, the company wall</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">Pages 3–4 · The map</text><text x="72" y="135" class="t-sm">AgentCore's parts, Strands</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">Pages 5–6 · Run, remember</text><text x="72" y="209" class="t-sm">Runtime, Memory</text>
+        <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="262">Pages 7–9 · Tools and rules</text><text x="72" y="283" class="t-sm">Gateway, Identity, Policy</text>
+        <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="338" class="t-hd">Pages 10–13 · Quality, scale</text><text x="72" y="359" class="t-sm">evaluation, design, the exam</text>
+      </svg>
+      <figcaption>Read the pages in order. Each one adds a part to the picture of an agent at work in a company.</figcaption>
+    </figure>
   </section>
-
-  <section aria-labelledby="p3">
-    <h2 id="p3">Part 3: Design and Final Details</h2>
-    <div class="tbl"><table>
-      <thead><tr><th>Chapter</th><th>Content</th><th>Roadmap</th></tr></thead>
-      <tbody>
-        <tr><td class="key"><a href="ch10.html">10 A Designer's Eye</a></td><td>Governance, cost, prompt injection, read permissions for RAG, the Generative AI Lens, and GenU.</td><td><span class="tag">4-1</span><span class="tag">4-3</span></td></tr>
-        <tr><td class="key"><a href="ch11.html">11 Map of Certifications</a></td><td>What AIP-C01 covers, and topics this reader does not cover.</td><td><span class="tag">5-1</span><span class="tag">5-5</span></td></tr>
-      </tbody>
-    </table></div>
+  <section aria-labelledby="pages">
+    <h2 id="pages">The pages</h2>
+    <ol>
+      <li><a href="ch01.html">When is it really an agent?</a> — One call, a workflow or a loop; choose the least autonomy that works.</li>
+      <li><a href="ch02.html">What changes when an agent goes to work at a company?</a> — MCP, A2A, and the wall between a laptop and a company.</li>
+      <li><a href="ch03.html">What does AgentCore actually give you?</a> — Separate parts around your code, added in order.</li>
+      <li><a href="ch04.html">Why let the model run the loop?</a> — Strands is model-driven, and its harness layers give you control.</li>
+      <li><a href="ch05.html">Where does an agent actually run?</a> — Runtime gives each session its own private room.</li>
+      <li><a href="ch06.html">How can an agent remember anything?</a> — Short-term turns, long-term facts, and retrieval, always per user.</li>
+      <li><a href="ch07.html">How does an agent get the right tools?</a> — One gateway, a few clear tools, checks both ways.</li>
+      <li><a href="ch08.html">Whose permission is the agent using?</a> — Check who comes in, and choose whose rights go out.</li>
+      <li><a href="ch09.html">Why isn't 'please don't' enough?</a> — Prompts ask; Policy enforces before a tool runs.</li>
+      <li><a href="ch10.html">How do you know an agent is doing a good job?</a> — Trace every run, score quality, and loop.</li>
+      <li><a href="ch11.html">What worries a company when every team builds agents?</a> — Central rules, shared cost, and three risks that must not meet.</li>
+      <li><a href="ch12.html">How do you design an agent you can defend?</a> — Permissions in search, care with money, and "no agent" as an answer.</li>
+      <li><a href="ch13.html">What's left before the certification?</a> — What AIP-C01 adds, and how to work through the last stage.</li>
+    </ol>
   </section>
-
-  <div class="aside aside-quiet">
+  <div class="aside note">
     <p class="label">How to read this</p>
-    <ul>
-      <li>If you are short on time, read only Chapters 1 and 2. You will still understand the whole roadmap.</li>
-      <li>At the end of each chapter, "Where you meet this on the roadmap" shows the row ID (the number in the course catalog) of the course where you use this content.</li>
-      <li>Each chapter's "Where companies get stuck" can also help you when you write Deep Dive notes in S3.</li>
-    </ul>
+    <p>The pages build a map in order, in about 8 minutes each. Maya is on the left, Leo on the right. Each page ends with the roadmap items where you meet its topic.</p>
   </div>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="next" href="ch01.html"><span>Start reading</span><b>Chapter 1, What an Agent Really Is</b></a>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>Next</span><b>When is it really an agent?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
