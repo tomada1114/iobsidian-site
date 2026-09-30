@@ -1,0 +1,180 @@
+<!-- title: AgentCore Reader 12 · An agent you can defend | accent: guard -->
+<header class="page-head">
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 12 of 13</span></p>
+  <h1>How do you design an agent you can defend?</h1>
+  <p class="lead">After this page you can explain how document search can leak what a user shouldn't see. You can say what an agent needs before it touches money. And you can use the Generative AI Lens as a checklist, and defend choosing no agent.</p>
+  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>How can document search leak?</li>
+      <li>What must be true before an agent pays?</li>
+      <li>What does the Generative AI Lens ask?</li>
+      <li>When is "no agent" the right answer?</li>
+    </ul>
+  </nav>
+  <p class="stage">After Tuesday's design review. Next week Leo presents the tutor's design, and he's rehearsing.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>Permissions in search</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've spent a week on the tutor's prompt. If the prompt is good, the design is good, isn't it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The prompt is one part. Someone will ask about search first. What does the tutor read?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Documents and cards, through search. Like Bedrock Knowledge Bases, which lets an agent search internal documents.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Useful. But there's an easy trap. The permission on the original document isn't always carried over to the search result.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does that look like?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say an HR evaluation folder is meant only for a few managers. Inside the search index, that difference may not be kept.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So anyone who asks could get an answer from that folder.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By mistake, yes. And nobody would notice, because the answer would sound perfectly normal.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a good prompt can't help here.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The prompt never sees which documents were filtered. The fix is metadata, extra data about the data, on each document, saying who may read it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the search filters on it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Using the metadata and the permissions of the current user. The agent acts on behalf of the user.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The asker's permissions, not the agent's.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then documents the user can't see never get mixed into the answer.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A user asks a question; the search retrieves candidate documents; a permission filter keeps only documents this user may read, using each document's metadata; then the agent answers from what is left.">
+      <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="7" class="f-acc"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">User asks</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Search finds candidates</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="190" class="t-hd">Keep only what they may read</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Agent answers</text>
+    </svg>
+    <figcaption>The accented step uses the asker's permissions. Skip it, and a well-written prompt can still quote a folder the user should never see.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It reads only the signed-in learner's data. That's the same idea at our size.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>When an agent pays</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Someone asked whether the tutor could buy a course upgrade for a learner. Is that just another tool?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Payments deserve extra care. There's a Deep Dive module on it, "Agents that transact."</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What should I remember?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three points. First, set a limit on the budget. Second, a person approves any payment above a certain amount.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And third?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep a record of what was paid, and how much.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And without all three?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's safer to say it's too early to let an agent pay.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for the upgrade question, the answer is "not yet."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or "not until those three exist." That's an answer a reviewer can accept.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why the record, if a person already approved it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because later someone will ask what the agent paid, and why. An approval without a record can't answer that.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>A checklist and real code</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do I know I haven't missed a whole area?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The AWS Well-Architected Framework has a Generative AI Lens, made for these workloads. It asks questions under six pillars.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which ones?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Operational excellence, security, reliability, performance efficiency, cost optimization and sustainability.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does operational excellence ask about an agent?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How you check a change before deploying it, and how you notice when behavior changes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And security?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Whether permissions are kept to the minimum, and whether you're ready for indirect prompt injection.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Reliability must be about failures.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Is there a fallback, a backup plan, if a model or tool fails? Can a long task resume from where it stopped?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And performance efficiency?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How you keep delay low, with caching, streaming and model choice.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Cost optimization I can guess. Split cost by department, and use different models for different tasks.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And sustainability asks whether you can cut models bigger than needed, and wasted calls.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can walk the tutor through all six before the review.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how to use it: as a checklist, to find your weak part. There's a Skill Builder course on the lens.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A fallback, for example. I don't have one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then that's the question you'll get. Better to find it yourself this week.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would a fallback even be for a tutor?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A smaller model when the main one fails, or a plain "try again" message instead of an error page.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there real code I can compare against?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>GenU, generative-ai-use-cases. It's an open-source generative AI app for companies, published by AWS Japan.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>All of it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Look at four parts: SAML sign-in, the security settings, where AgentCore Runtime is used, and the chat feature that uses MCP.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And compare them with what we've talked about.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You'll see how the parts connect far more clearly than from any diagram.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should I copy its settings?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Read them to understand the choices. Then make your own, for our learners and our risks.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>Choosing no agent</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the question I'm dreading: "Why an agent at all?"</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Governance, cost, security and permissions all get heavier as you give an agent more responsibility.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a smaller scope means fewer things to check.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For work with fixed steps, a workflow is still the cheapest choice.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Card grading, for example.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It stays a workflow. The tutor is an agent because a learner's question can go anywhere.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of how open-ended the task is across and how risky it is down. Fixed steps and low risk: a workflow. Open-ended and low risk: an agent. Fixed steps and high risk: plain code with no LLM. Open-ended and high risk: a narrow agent with approvals.">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">fixed steps</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">open-ended</text>
+      <text x="8" y="80" class="t-sm">low</text>
+      <text x="8" y="98" class="t-sm">risk</text>
+      <text x="8" y="196" class="t-sm">high</text>
+      <text x="8" y="214" class="t-sm">risk</text>
+      <rect x="76" y="36" width="150" height="100" rx="6" class="node-acc"/>
+      <text x="151" y="92" text-anchor="middle" class="t-hd t-acc">workflow</text>
+      <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
+      <text x="309" y="92" text-anchor="middle">agent</text>
+      <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
+      <text x="151" y="208" text-anchor="middle">plain code</text>
+      <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
+      <text x="309" y="208" text-anchor="middle">narrow agent</text>
+    </svg>
+    <figcaption>Most tasks land in the accented corner. An agent earns its place only where the steps can't be written down.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "plain code" is an answer too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For fixed, risky work, often the best one. No LLM means nothing to trick.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the narrow agent, bottom right?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Open-ended but risky. Keep its tools few, its rights narrow, and put a person's approval before anything it can't undo.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So that corner needs every guard at once.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which makes it the most expensive corner to live in. Stay there only when the task truly needs it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do the company-wide reviews usually ask?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who manages which agent? Is there a cost limit?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And injection?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Are you protected against indirect prompt injection? And are document permissions still enforced?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If I can answer those, "why an agent?" is easy.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because you'll have shown you only used one where you had to.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Give me your opening for next week, in a few lines.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Search filters by the asker's permissions, and the tutor reads only the signed-in learner's data.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No agent touches money without a budget limit, human approval and a record.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We checked the design against the six pillars of the Generative AI Lens.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And "why an agent?"</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only the tutor is one, because its questions are open-ended. Grading stays a workflow.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say your weak pillar out loud before anyone asks. A known gap with a plan is easier to defend than a surprise.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Search must filter by the asker's permissions, or documents leak into answers.</li>
+      <li>Before an agent pays, it needs a budget limit, human approval and a record.</li>
+      <li>Use the Generative AI Lens as a checklist, and choose no agent when steps are fixed.</li>
+    </ol>
+  </section>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">3-9</span> Deep Dive: Agents that transact</li><li><span class="tag">4-1</span> Building Your Agentic Applications the Well-Architected Way (Skill Builder)</li><li><span class="tag">4-2</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 4 (in Japanese): applications</li><li><span class="tag">4-3</span> Read GenU: SAML sign-in, security settings, Runtime and the MCP chat feature</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch11.html"><span>Previous</span><b>What worries a company when every team builds agents?</b></a>
+    <a class="next" href="ch13.html"><span>Next</span><b>What's left before the certification?</b></a>
+  </nav>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
+</div>
