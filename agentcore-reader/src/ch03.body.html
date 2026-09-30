@@ -35,7 +35,7 @@
     <h2 id="s2"><span class="no">02</span>The parts</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How many parts are there?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>About eight. Remember the new employee from before? A company doesn't rely on their skill alone.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>About eight. Think of the agent as a new employee. A company doesn't rely on their skill alone.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It gives them a desk, a notebook, a badge.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the set. Runtime runs the agent with no servers to manage, and keeps each user's session in its own space. A private room.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Memory is the notebook.</p></div></div>
@@ -86,7 +86,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Code Interpreter and Browser?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tools the agent uses directly, inside an isolated space. Observability and Evaluations cover the whole process.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does our tutor use?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime, Gateway, Identity and Policy run it. The learner's record stays in Quickturn's own database, not in AgentCore.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime, Memory, Gateway, Identity and Policy run it, and Observability and Evaluations watch it. The learner's record stays in Quickturn's own database.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything else I'll see in the courses?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The AgentCore CLI, where development starts. It creates an agent, runs it locally and deploys it, all with commands. It replaces the old Starter Toolkit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And "Harness"? Some course modules have that name.</p></div></div>
@@ -159,7 +159,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how do we estimate a bill?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From usage. Count how many sessions and tool calls you expect, then check the current price page for each part you use.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So early on, we'd skip the parts we don't need yet.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A test project may need only Runtime and Memory. Policy and Evaluations come as the agent meets real users.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Add a part when the project needs it, in the order the workshop shows.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't a company build these parts itself?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Separating each session's environment, storing login details safely, and collecting traces of every call would each take weeks.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So teams stop at the proof of concept.</p></div></div>
@@ -172,8 +172,9 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You couldn't find the framework classes this morning. Explain why.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AgentCore isn't a framework. Our Strands code is the agent, and AgentCore is separate parts around it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each part does one job, like a private room, a notebook, a toolbox desk, a badge, rules and a daily report.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We add them in order as a project grows, and pay only for the parts we use.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And note which parts our tutor uses today. The learner's record isn't one of them; it stays in our database.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the order?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Something that runs first, then memory, tools, deploy, evaluation and policy. We pay only for the parts we use.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out our own case: the tutor uses those parts, but the learner's record isn't in any of them. It stays in our database.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

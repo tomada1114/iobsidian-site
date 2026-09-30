@@ -260,7 +260,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And here?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Here I can't find the steps at all.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There aren't any. Strands Agents is model-driven. You give the model a system prompt and a list of tools, and the model decides what to do next.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it's the third level. The agent.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the model runs the loop itself. That's what makes it an agent.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. AWS recommends Strands and maintains two versions, Python and TypeScript. Here's the minimal example, in Python:</p><pre><code>from strands import Agent, tool
 
 @tool
@@ -353,7 +353,7 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For when I want to fix the order myself.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And when agents talk across systems or teams, Strands supports A2A. Another team's agent can call one built inside your company.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the three forms plus A2A for crossing team lines.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first form is usually enough. Try an agent as a tool before you reach for a Swarm.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first form is usually enough. Try an agent as a tool before you use a Swarm.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a Swarm is harder to follow?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each hand-off is another decision the model makes. It's harder to predict who ends up answering.</p></div></div>
 </div>
@@ -401,7 +401,7 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A rule that must hold goes in a hook or in Policy, not in the prompt.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And when one agent isn't enough?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Agents combine as tools, as a Swarm or as a Graph, and A2A crosses team lines.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One thing to try this week: write a hook that logs every tool call. You'll see exactly what the model chose, and in what order.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the choice against a graph. LangGraph is easier to predict, and model-driven handles paths you can't write in advance; both run on Runtime.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

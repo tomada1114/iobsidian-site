@@ -2,7 +2,7 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 11 of 13</span></p>
   <h1>What worries a company when every team builds agents?</h1>
-  <p class="lead">After this page you can explain why many teams' agents need one shared entry point and one set of rules. You can also say how to keep cost in check across teams, and which three conditions together make a data leak possible.</p>
+  <p class="lead">After this page you can explain why many teams' agents need one shared entry point and one set of rules. You can also say how to control cost across teams, and which three conditions together make a data leak possible.</p>
   <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
@@ -34,7 +34,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without that log?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You'd ask every team, one by one, while the weakness is still open.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And some team would forget the agent it built last year.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual story. The forgotten agent is the one still using the weak tool.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That happens often. The forgotten agent is the one still using the weak tool.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The sales, HR and finance agents all reach internal APIs and tools through one shared Gateway in the middle, which also keeps the shared policy and the log of who uses what.">
@@ -77,8 +77,8 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you can explain later which department's usage is expensive, and why. And set up AWS Budgets to alert you when spending crosses a limit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What limit?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every organization is different, so I won't give numbers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in the new-employee picture…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One new hire, and the colleague next to them handles most problems. Dozens of new hires, and you need general affairs, accounting and IT support.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a simpler way to see it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of agents as new employees. One new hire, and the colleague next to them handles most problems. Dozens of new hires, and you need general affairs, accounting and IT support.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>General affairs decides who can enter which room.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And accounting adds up each department's expenses. Governance and cost are those two jobs.</p></div></div>
 </div>
@@ -100,6 +100,8 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent can touch internal data. It reads content that comes from outside. And it can send data out.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if one is missing?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's no path for confidential information to leave. Cut any one link, and the leak can't happen.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So security isn't mostly about what the model says.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's about what the agent can reach, read and send.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Three conditions around a center: the agent touches internal data, reads outside content, and can send data out. Data can leak only in the center, where all three hold at once.">
@@ -123,7 +125,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a list of these threats?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The OWASP Top 10 for LLM Applications organizes them, including threats beyond this one.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply to us? We're small.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The tutor combines learner data, learner input and tools. The same three kinds of thing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The tutor touches learner data and reads what learners type. Add a tool that sends data out, and all three hold.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question is which link we keep cut.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the review will ask that, every time a tool is added.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a new tool can quietly add the missing link.</p></div></div>
@@ -134,7 +136,7 @@
     <h2 id="s4"><span class="no">04</span>Central control, and its cost</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Doesn't one shared Gateway slow the teams down?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, a little. A team that wants a new tool has to go through the shared rules instead of just wiring it in.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, a little. A team that wants a new tool has to go through the shared rules instead of just adding it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So central control trades speed for safety.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for a record. The alternative is fast at first and very slow the day a weakness is found.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a good platform team makes the shared path the easy one.</p></div></div>
@@ -153,8 +155,8 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Watch cost across teams. Use the right model for each task, cache repeated instructions, and alert on budgets.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And never let the three risks meet unguarded: internal data, outside content, and a way to send data out.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which link does the tutor cut?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's my question for Thursday.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Take the OWASP list with you. It gives the meeting shared names for the other threats.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The one that sends data out. No tool on its list may do that, and Policy keeps it off.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the price of central control. Teams move a little slower, and the platform team has to make the shared path the easy one.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

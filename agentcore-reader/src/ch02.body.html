@@ -33,12 +33,10 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A2A, Agent2Agent, connects something different. It lets one agent ask another agent to do a job.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without knowing how the other one is built?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You don't need its framework or its model. You send "please do this job," and you get back "it's done."</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like employees in different departments asking each other for help.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. MCP connects an agent to tools and data. A2A connects agents to agents.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the other agent is a closed box to us.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. MCP connects an agent to tools and data. A2A connects agents to agents.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So they compete? I'd pick one?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, they sit side by side. An agent can use tools through MCP and still hand a whole job to another agent through A2A.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like the finance team. You don't use their spreadsheet yourself; you ask them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A tool does one action you control. Another agent takes a job and decides how to do it.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="Our agent in the middle. On one side, through MCP, it reaches tools: an internal API, a database and a SaaS app. On the other side, through A2A, it asks other agents for work: a finance agent and a partner's agent.">
@@ -93,7 +91,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So identity matters.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And it has to run for many people at once, without mixing up their conversations.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Mine keeps one history in memory. Two users would read each other's chat.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the first bug a company would find, usually on the first day.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the first thing a company would have to fix.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My agent has one API key for everything.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a company, permissions are checked for every action: who it's for, and what is allowed.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And quality? Mine is fine if it seems to work.</p></div></div>
@@ -121,7 +119,7 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">seems to work</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">scores, traces</text>
     </svg>
-    <figcaption>Every row differs, and none of them is about how smart the model is. The accented column is what a company has to build.</figcaption>
+    <figcaption>Every row differs, and none of them is about how smart the model is. The accented column is what a company needs, and what AgentCore's parts provide.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why do so many proofs of concept never reach production?</p></div></div>
@@ -136,7 +134,7 @@
     <h2 id="s4"><span class="no">04</span>What a platform costs</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does our tutor use those parts?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the company-side ones. Sign-in, limits on which learner's data it can reach, and limits on cost.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the company-side ones. Sign-in, and limits on which learner's data it can reach. Our cost limits sit beside it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we build those ourselves?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We could. But none of it makes Quickturn different from anyone else. It's work every company repeats.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor itself is what makes us different.</p></div></div>
@@ -144,7 +142,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the platform takes that work away.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, and that's the benefit. The cost is a dependency on AWS, and a price per use.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if AgentCore changes, we change with it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trade. For a small team, it's usually worth it. Just go in knowing you're making it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trade. For a small team, it's usually worth it. Just be clear that you're making that choice.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
@@ -153,7 +151,8 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your weekend agent is going to work here. What does it need first?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>MCP connects it to tools, and A2A lets it ask other agents for work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The loop is the easy part. A company adds identity, rules for every action, memory kept apart per user, and monitoring.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AgentCore gives those as parts, and Bedrock Agents is the old way.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why a platform, rather than our own code?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the company parts are the same work at every company. AgentCore gives them as parts, and Bedrock Agents is the old way.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mind the price of that choice as well: a dependency and a cost per use, in exchange for work we don't repeat.</p></div></div>
 </div>
   </section>

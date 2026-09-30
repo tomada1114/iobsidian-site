@@ -291,8 +291,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <figcaption>Going down, deciding the order moves from human code to the LLM. Lower is not better; it's only more autonomous.</figcaption>
   </figure>
 <div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So grading is the second level. A workflow.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And the tutor is an agent. It decides whether to look up the learner's weak points, explain, or ask a question.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So grading is the first level: one call, inside steps our code fixes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close to it. Our code runs the same steps every time, so it's certainly not an agent. The tutor is an agent. It decides whether to look up the learner's weak points, explain, or ask a question.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then going down the ladder is better, isn't it? More intelligent.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Turn a fixed task into an agent, and it only gets slower, more expensive and less predictable.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the skill is choosing the level.</p></div></div>
@@ -334,7 +334,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the harness only run the loop?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does more. It can stop a dangerous action before a tool runs. It can summarize old messages when a conversation gets too long, and it records what happens.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds like most of the real work.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often it is. Here's the picture I'll use all the way through. The LLM is a new employee who thinks fast, but can't leave the desk or make calls.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often it is. Here's a picture that helps. The LLM is a new employee who thinks fast, but can't leave the desk or make calls.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it writes a note: "I want to see this customer's orders."</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the colleague at the next desk, the harness, uses the system and hands back the result. The employee reads it and writes the next note.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And that exchange is the agent.</p></div></div>
@@ -372,7 +372,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what does it cost?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Predictability, latency and money. Each loop turn is another model call, and you can't know how many turns there will be.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While grading always takes one call.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So grading stays a workflow, and the tutor is an agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So grading stays in fixed steps, and the tutor is an agent.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the tutor's answers start to vary too much?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you look for the part that could be fixed in code, and move it out of the loop. An agent can call a workflow as one of its tools.</p></div></div>
 </div>
@@ -383,7 +383,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose a new teammate calls grading "our agent." How do you correct them?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There are three levels: call it once, arrange it as a workflow, or let it decide as an agent.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An agent is a loop. The LLM picks the next move, and the harness runs the tool and hands back the result.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Choose the least autonomy that works. Grading is a workflow, and only the tutor needs to be an agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who calls the API?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Never the model. It only asks, and the harness calls it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Choose the least autonomy that works. Grading runs in fixed steps, and only the tutor needs to be an agent.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the patterns to that list. Chaining, routing and the rest are what you try before the ladder's last rung.</p></div></div>
 </div>
   </section>

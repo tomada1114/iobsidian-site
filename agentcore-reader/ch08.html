@@ -265,7 +265,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Aren't those the same? If I check the user at the door, the rest follows.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. They're handled by separate mechanisms. Finishing the entry check doesn't decide the exit rights.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a design mixes them up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how you get a confused deputy. We'll get there.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how you get a confused deputy, the risk at the end of this.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A user signs in; the entry check verifies the caller; the agent runs on Runtime; on the exit side it chooses a credential from Identity's token vault; and it reaches the outside service with those rights.">
@@ -286,7 +286,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="334">Outside service</text>
     </svg>
-    <figcaption>Two separate checks. The accented step is the choice most designs get wrong.</figcaption>
+    <figcaption>Two separate checks. The accented step is the choice that is easy to get wrong.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -310,8 +310,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It asks Identity, "I want to use this credential provider." The actual tokens stay outside the code.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So rotating a key doesn't mean a new deploy.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. And a key can't leak through a log line or a copied config file, because the code never held it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in the new-employee picture…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The entry is a building pass, checked by the guard. The exit is a key safe. The employee never gets the master key, only the one spare key they need, each time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a simple picture for this?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of the agent as a new employee. The entry is a building pass, checked by the guard.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the exit?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The exit is a key safe. The employee never gets the master key, only the one spare key they need, each time.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">
@@ -358,7 +360,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Picture a learner asking the tutor, "Show me the top learner's mistakes." With admin rights, nothing in the agent stops it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model might even think it's being helpful.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It usually does. The model isn't the check; the rights are.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It's an old, well-known problem, and agents make it easy to repeat.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's an old, well-known problem, and agents make it easy to repeat.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the fix?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Design the agent so it can only touch what the current user is allowed to see. Always narrow it to that user's rights.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it carries over the user's rights, and never adds its own on top.</p></div></div>
@@ -368,7 +370,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How do you stop the rights of an employee who has left?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With the user's rights, you'd switch off their account in the ID system.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the agent loses those rights at the same moment, because it never had any of its own.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent has no rights of its own. So removing the user's access, and the tokens stored for them, removes the agent's access too.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With my admin key, I couldn't answer any of them.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With the user's rights and the vault, you answer all three on the spot. That often decides whether a proof of concept reaches production.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutor uses the learner's token for everything about that learner.</p></div></div>
@@ -383,7 +385,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>On the exit, choose whose rights go out. The user's rights for their own data, and the agent's only for work not tied to one user.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Keys stay in the token vault, never in the code.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the admin key?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Gone. An agent with admin rights is a confused deputy waiting to happen.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Gone. An agent with admin rights can easily become a confused deputy.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put the three review questions at the top of the plan, with your answers. The reviewer will ask them anyway.</p></div></div>
 </div>
   </section>
