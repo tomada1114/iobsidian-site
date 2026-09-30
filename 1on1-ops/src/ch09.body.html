@@ -1,0 +1,189 @@
+<!-- title: Operations 09 · What stops a bad change | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 9 of 12</span></p>
+  <h1>What actually stops a bad change from merging?</h1>
+  <p class="lead">After this page you can explain the layers of checks a change passes before it merges. You can also say why they all run the same scripts. And you can say why a red gate is fixed in the code, not in the gate.</p>
+  <p class="meta"><span>About 8 min read</span><span>A Friday video call</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Which checks run, and when?</li>
+      <li>How should coverage floors work?</li>
+      <li>How strong should a gate be?</li>
+      <li>Why do gates matter more for AI agents?</li>
+    </ul>
+  </nav>
+  <p class="stage">A video call late on Friday. Leo is working from home, and his pull request is red.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>The layers</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My PR fails because coverage for the apps dropped below the floor. The code is fine. Can I lower the threshold by one point?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does the red check tell you?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That some lines in the apps aren't tested.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which lines?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A branch in the error handler. When the body isn't valid JSON.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And is that branch fine?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I think so. I haven't actually run it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the gate is telling you something true. Before we decide, let's see what it's part of.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There's more than one gate?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Several, at different moments. The first runs when you commit: the pre-commit hook.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the one that reformats my files.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It formats and re-stages them first. Then, in parallel, lint on the staged files, a whole-program type check, and only the tests related to what you staged.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the secret check.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a check that the mirrored skill folders are in sync. All of it takes seconds, so nobody is tempted to skip it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the everyday gate?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Format check, lint, type check and tests. It needs nothing running, no build, no container.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the full gate adds the rest.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web build, the smoke suite, the DynamoDB suite and the coverage floors. That's the one that caught you.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And CI runs the same things again?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same scripts, as separate steps. A branch rule requires those checks by name before merge, with no bypass.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even for the owner?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not even for the owner.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 516" role="img" aria-label="A change moves from save, to commit with the pre-commit hook, to the everyday gate, to the full gate, to push, to the required CI checks, and finally to merge.">
+      <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="6" class="dot"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <circle cx="28" cy="328" r="6" class="dot"/>
+      <circle cx="28" cy="400" r="6" class="dot"/>
+      <circle cx="28" cy="472" r="7" class="f-acc"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Save</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Commit · hook, seconds</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="190">Everyday gate · no services</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">Full gate · build, coverage</text>
+      <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="334">Push</text>
+      <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="406">Required CI checks</text>
+      <rect x="48" y="448" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="478" class="t-hd">Merge</text>
+    </svg>
+    <figcaption>Each step adds something the one before couldn't see. Merge is reached only when all of them agree.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why run the same scripts in so many places?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the rule. No hook or workflow defines a check of its own. They all call the same package scripts.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my machine and CI can't disagree.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And a test fails if the full gate's list and CI's list drift apart.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Coverage floors</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to my floor. Why is there a separate number for the apps? Why not one number for the whole repo?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would one global number hide?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A well-tested area could carry an untested one. The average would still pass.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the floors are per area. Packages, apps and infra are at 80%. Scripts have their own floors, and the secret-detection rules have a higher one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How were they chosen?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From measured coverage, rounded down. They're raised as coverage grows, and never lowered.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if I just excluded the handler file from coverage?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same thing, in disguise. No file is excluded to move a number.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the fix is to cover the branch.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Write the test that sends a body that isn't JSON. What should happen?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A 400 with a stable error code, and one log line.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then that's your test. And you'll find out whether the branch really is fine.</p></div></div>
+</div>
+<dl class="terms">
+  <dt>Does the PR go green?</dt><dd>Lowering the floor: yes. Covering the branch: yes.</dd>
+  <dt>Is protection left for the next change?</dt><dd>Lowering the floor: less, for everyone. Covering the branch: the same, plus one test.</dd>
+  <dt>Does a reviewer have to argue?</dt><dd>Lowering the floor: yes. Covering the branch: no.</dd>
+</dl>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Put like that, the one point isn't free.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It never is. The next person inherits the lower floor.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>Strength and friction</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't the hook just run the full gate? Then I'd have caught this before pushing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How long does the full gate take?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Minutes. With a build and a container.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what do people do when a hook blocks them for minutes on every commit?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They use <code>--no-verify</code>.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which also turns off the secret check. So a strict hook can leave you less safe.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the hook stays narrow on purpose.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And judgment calls, like deleting a workflow or relaxing a config, are left to review.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do I know which check to run while I'm working?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Run the narrowest check that can fail, then the gate. One test file first, then the full run before you push.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does anything slip past all of them?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Some things no gate sees. The deployed environment, for one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So passing every gate doesn't mean it works in dev.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It means the code does what the tests say. Whether dev agrees is still checked by a person, after the deploy.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a gate that's actually wrong?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It happens. Then you say so in the PR, and a person decides. Changing a gate is its own reviewed change, never a side effect of yours.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 356" role="img" aria-label="Nested rings: the hook sees staged files; the everyday gate sees the whole repository without services; the full gate and CI add the build, the container and coverage; outermost, only a human reviewer sees judgment calls such as deleting a workflow or relaxing a rule.">
+      <rect x="8" y="8" width="384" height="340" rx="12" class="node-acc"/>
+      <text x="24" y="36" class="t-hd t-acc">Human review</text>
+      <text x="24" y="56" class="t-sm">judgment calls</text>
+      <rect x="32" y="72" width="336" height="260" rx="10" class="zone-soft"/>
+      <text x="48" y="100" class="t-hd">Full gate and CI</text>
+      <text x="48" y="120" class="t-sm">build, container, coverage</text>
+      <rect x="56" y="136" width="288" height="180" rx="8" class="node"/>
+      <text x="72" y="164" class="t-hd">Everyday gate</text>
+      <text x="72" y="184" class="t-sm">whole repo, no services</text>
+      <rect x="80" y="200" width="240" height="96" rx="8" class="node"/>
+      <text x="200" y="240" text-anchor="middle" class="t-hd">Hook</text>
+      <text x="200" y="262" text-anchor="middle" class="t-sm">staged files</text>
+    </svg>
+    <figcaption>The outer ring is where no tool replaces a person. Each inner ring sees more than the one inside it.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>Gates and AI agents</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this change when an AI agent writes the code?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It matters more. Say you tell an agent, "Make CI green."</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It would write the missing test?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Maybe. Or it lowers the threshold, adds a skip, or turns off a lint rule. Its task is the green run.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And all three make the run green.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. From the agent's point of view, it succeeded. It thinks its job is fixing CI, not writing a test.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how does Quickturn stop that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>"Never weaken a gate" is written into the instructions every agent reads. That's exactly why it's there.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the agent ignores it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mechanical checks catch what they can. Review catches the rest. And agents never merge alone.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the ruleset protects us from the agents too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From anyone in a hurry on a Friday.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen an agent try it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, yes. It wanted to add a skip to a flaky test "for now." The review caught it, and the real fix was a missing await.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the skip would have hidden a real bug.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual story. A check that's red for a strange reason is often telling you the most.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say it as if you were writing the rule for a new teammate.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our gates run the same scripts at different moments. There's a narrow pre-commit hook, the everyday gate, the full gate and required CI checks.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Coverage floors are per area, set from measurements and never lowered.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a gate is red, fix the code. If the gate is wrong, argue it in the PR.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who needs that rule most?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AI agents, because their job looks like "make it green."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same goes for a skip you mean to remove later. Later rarely comes, so write the test now.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Hook, everyday gate, full gate and required CI checks all run the same scripts.</li>
+      <li>Coverage floors are per area, set from measurements, and only ever raised.</li>
+      <li>A red gate is fixed in the code; changing a gate is its own reviewed change, for people and agents.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch08.html"><span>Previous</span><b>How do you test things that aren't plain code?</b></a>
+    <a class="next" href="ch10.html"><span>Next</span><b>Should every merge go straight to production?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
