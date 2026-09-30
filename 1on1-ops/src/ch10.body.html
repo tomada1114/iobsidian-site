@@ -3,7 +3,7 @@
   <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 10 of 12</span></p>
   <h1>Should every merge go straight to production?</h1>
   <p class="lead">After this page you can explain the difference between continuous delivery and continuous deployment. You can also describe a safe deploy pipeline, and say why data changes are the hard part of going back.</p>
-  <p class="meta"><span>About 9 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -55,7 +55,7 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">prod</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">dev</text>
     </svg>
-    <figcaption>Only one row differs. Both columns are continuous delivery in the wider sense.</figcaption>
+    <figcaption>The first row is shared, and that's what makes both CD. The accented row is the real difference.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -107,10 +107,10 @@
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if two merges land a minute apart?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Deploys queue in merge order, and a running one is never cancelled.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A running deploy is never cancelled. The next one waits for it, and if several merges land, only the newest waits, with all their changes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not cancel the older one? The newer code wins anyway.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Stopping a CloudFormation update midway leaves it rolling back on its own. You'd wait longer, not shorter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a queue is faster than cancelling.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cancelling the job doesn't stop CloudFormation. The stack keeps changing, and the next deploy has to wait for it anyway.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So waiting costs nothing extra.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And far easier to reason about.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does it ever ask for approval on dev? CDK asks when a change widens permissions.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not on dev. The workflow says never to wait for approval there, because nobody is watching the run. The review on the PR is where a wider permission gets questioned.</p></div></div>
@@ -186,7 +186,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Continuous delivery means every commit on main could ship. Continuous deployment means it ships by itself.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dev auto-deploys through a short-lived OIDC role, foundation first, then app.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod waits for an approval because it holds learners' data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And going back?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What about a bad deploy?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Code is easy to roll forward. Data is not, which is why the stateful stack is separate.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put the rule for a bad deploy in your notes: revert and merge. Never roll back the stateful stack by hand.</p></div></div>
 </div>

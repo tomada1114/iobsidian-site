@@ -3,7 +3,7 @@
   <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 6 of 12</span></p>
   <h1>Is a testing strategy just 'write more unit tests'?</h1>
   <p class="lead">After this page you can explain what each kind of test buys, and at what price. You can also say why fakes usually beat mocks, and how to test a feature whose output isn't fixed.</p>
-  <p class="meta"><span>About 9 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -41,13 +41,13 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a flaky one stops being believed. Either way, it stops protecting you.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of speed across and confidence about real behavior down. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake proven by contract tests. Slow with low confidence: flaky browser tests. Slow with high confidence: the smoke test.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of speed across and confidence about real behavior down. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake proven by contract tests. Slow with low confidence: flaky tests. Slow with high confidence: the smoke test.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">slow</text>
       <text x="309" y="24" text-anchor="middle" class="t-sm">fast</text>
       <text x="8" y="80" class="t-sm">low</text>
       <text x="8" y="196" class="t-sm">high</text>
       <rect x="76" y="36" width="150" height="100" rx="6" class="node"/>
-      <text x="151" y="92" text-anchor="middle">flaky browser</text>
+      <text x="151" y="92" text-anchor="middle">flaky tests</text>
       <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="92" text-anchor="middle">mock-heavy</text>
       <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
@@ -124,9 +124,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the fake drifts, a case fails.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The fake earns its trust by passing the same cases.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our API tests drive real Request objects over the in-memory store.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the web screens render under a fake browser with a stand-in fetch. No mock counts anywhere.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the web screens render under a fake browser with a stand-in fetch. Nothing checks how many times a method was called.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the coverage number, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We keep floors per area, so a gap gets noticed. But a floor is a smoke alarm, not a proof.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We keep floors per area, so a gap gets noticed. But a floor only warns you about gaps. It doesn't prove anything works.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -153,7 +153,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each kind of test buys a different confidence at a different price, so we pick a mix, not a shape.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our pure domain makes unit tests cheap, and the seams get contract and smoke tests.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'll replace the mocks with the in-memory store, and mock only at boundaries.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the AI side?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The grader is the awkward case.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For AI features, tests check the plumbing and evals measure quality.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the coverage point. A 100% line tells the reviewer what ran, and nothing about what was checked.</p></div></div>
 </div>

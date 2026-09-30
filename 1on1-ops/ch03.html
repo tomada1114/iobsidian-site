@@ -269,7 +269,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like my throttle last night.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Possibly. We'll come back to that one.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not alarm on causes as well? More warning can't hurt.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can. Each cause alarm is another email that may mean nothing. And a symptom alarm already catches every cause that hurts users.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can. Each cause alarm is another email that may mean nothing. And a symptom alarm already catches any cause that turns into errors for users.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a list of symptoms worth watching?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The Google SRE book names four golden signals: latency, traffic, errors and saturation. Saturation means how full something is.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four sounds manageable.</p></div></div>
@@ -366,7 +366,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a quick test for whether something deserves an alarm at all?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two questions. Does a user feel it? And is there a clear first action?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the answer is no?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's a dashboard line, not an alarm. Every alarm needs an owner and a first thing to do.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it shouldn't page anyone. It's a dashboard line, a runbook to write, or it gets deleted. Every alarm needs an owner and a first thing to do.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A two-by-two matrix: whether a user feels it across, whether there is a clear first action down. Only when a user feels it and there is a clear first action should someone be paged; with a first action but no user impact it is a dashboard line; with user impact but no first action, write the runbook first; with neither, delete it.">
@@ -387,7 +387,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does my throttle land?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On dev, it's a useful early sign. In prod, it would be a dashboard line, unless it turned into errors.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On dev, it's a useful early sign. In prod, one throttle is a dashboard line. The alarm there watches a sustained rate, because saturation turns into errors next.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -396,13 +396,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what goes on the dashboard?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>API requests, API errors with 5xx and 4xx, and API latency at p90. Then function errors and throttles, function duration at p90, and table throttles.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why p90 and not the average?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An average hides the slow tail. If one learner in ten waits four seconds, the average can still look fine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And p90 shows that one in ten.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An average hides the slow tail. If one learner in five waits four seconds, the average can still look fine.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And p90 shows that one in five.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Ninety percent of requests were faster than that number.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does all of this cost money?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The whole set is sized to fit CloudWatch's free tier: ten alarm metrics and three dashboards, as of 23 September 2026.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone adds a sixth alarm without thinking?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test counts the alarms and fails if the set grows past the free tier.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test pins the set at five alarms and one dashboard. Adding one means changing the test, so a reviewer asks why.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply outside a web API? Say, an internal AI agent.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The idea does. There, a 5xx is rarely what the user feels.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do they feel, then?</p></div></div>
@@ -419,7 +419,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Force every alarm to fire once, so you know the path to your inbox works.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Threshold-one alarms are fine for one user on dev. At scale they cause fatigue, so switch to rates.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the rest?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If nobody would act on it, it's a dashboard line.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If nobody would act on it, it shouldn't page anyone.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One more piece: check the email subscription after every deploy. A missing address turns every alarm silent.</p></div></div>
 </div>
   </section>

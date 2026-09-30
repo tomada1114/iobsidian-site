@@ -32,15 +32,15 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the one that reformats my files.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It formats and re-stages them first. Then, in parallel, lint on the staged files, a whole-program type check, and only the tests related to what you staged.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the secret check.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a check that the mirrored skill folders are in sync. All of it takes seconds, so nobody is tempted to skip it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a check that two copied folders still match. All of it takes seconds, so nobody is tempted to skip it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the everyday gate?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Format check, lint, type check and tests. It needs nothing running, no build, no container.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the full gate adds the rest.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web build, the smoke suite, the DynamoDB suite and the coverage floors. That's the one that caught you.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web build, the smoke suite, the DynamoDB suite and the coverage floors. CI runs the same coverage step, and that's what caught you.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And CI runs the same things again?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same scripts, as separate steps. A branch rule requires those checks by name before merge, with no bypass.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even for the owner?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not even for the owner.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even for an admin?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not even for an admin.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 516" role="img" aria-label="A change moves from save, to commit with the pre-commit hook, to the everyday gate, to the full gate, to push, to the required CI checks, and finally to merge.">
@@ -137,7 +137,7 @@
       <text x="200" y="240" text-anchor="middle" class="t-hd">Hook</text>
       <text x="200" y="262" text-anchor="middle" class="t-sm">staged files</text>
     </svg>
-    <figcaption>The outer ring is where no tool replaces a person. Each inner ring sees more than the one inside it.</figcaption>
+    <figcaption>The outer ring is where no tool replaces a person. Each ring sees more than the ring inside it.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
@@ -170,7 +170,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a gate is red, fix the code. If the gate is wrong, argue it in the PR.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who needs that rule most?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AI agents, because their job looks like "make it green."</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same goes for a skip you mean to remove later. Later rarely comes, so write the test now.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same goes for a skip you mean to remove later. Those skips usually stay, so write the test now.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

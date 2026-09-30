@@ -3,7 +3,7 @@
   <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 12 of 12</span></p>
   <h1>What has to be true before we open to the public?</h1>
   <p class="lead">After this page you can walk through a production readiness list, and say why each item is on it. You can also explain which things to build early, and how to record what you choose to do without.</p>
-  <p class="meta"><span>About 9 min read</span><span>The whiteboard room</span></p>
+  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -21,7 +21,7 @@
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Honestly, I'd write the same things in both columns. Same code, same tests, same alarms. Isn't prod just dev with a different URL?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who uses dev today?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The team. Mostly the owner, practising.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The team, practising.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who will use prod?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Learners. People we've never met.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what arrives with them?</p></div></div>
@@ -49,7 +49,7 @@
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="208" text-anchor="middle">plan early</text>
     </svg>
-    <figcaption>Down is "needed at launch." The accented corner is the readiness list: needed, but cheap enough to add in one phase.</figcaption>
+    <figcaption>The top row is what's needed at launch. The accented corner is the readiness list: needed, but cheap enough to add in one phase.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do separate accounts go? That sounds hard.</p></div></div>
@@ -69,7 +69,7 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Walk it with me. First, the prod stacks, from the same code, with the prod stage.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Deployed behind an approval, with an audit trail.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Next, abuse. WAF rate-based rules at the edge.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one address can't hammer the API.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one address can't flood the API with requests.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then email. Sign-up and recovery email go through SES, not Cognito's built-in sender.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why change the sender?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The built-in one is meant for testing, with low limits. Real learners need their recovery email to arrive.</p></div></div>
@@ -88,7 +88,7 @@
   <dt>Deploy approval</dt><dd>Dev: none. Prod: a reviewer, with an audit trail.</dd>
   <dt>Abuse limits</dt><dd>Dev: none. Prod: WAF rate-based rules.</dd>
   <dt>Auth email</dt><dd>Dev: the built-in sender. Prod: SES.</dd>
-  <dt>Data guards and rights</dt><dd>Dev: Retain only. Prod: recovery, deletion protection, deletion and export.</dd>
+  <dt>Data guards and rights</dt><dd>Dev: Retain and user pool protection. Prod: those, plus recovery and table deletion protection.</dd>
 </dl>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a lot of differences for "the same thing with a new URL."</p></div></div>
@@ -168,7 +168,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Production isn't dev with a new URL. It's strangers' data and strangers' abuse.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We built the hard-to-retrofit things early. The easy guards came in one phase before launch: separate accounts, approvals, WAF, SES, recovery, deletion and export.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every alarm has a runbook.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the things we skipped?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You haven't said what we left out.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We write down what we do without, like paid threat protection, with the reason.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Date each of those notes too. A reason that was true at a hundred learners may not be true at ten thousand.</p></div></div>
 </div>

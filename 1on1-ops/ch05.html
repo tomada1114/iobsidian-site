@@ -317,7 +317,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we trust our own clock.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For that number, yes. Then there are layers outside our code. Bedrock can log each invocation: the raw request and the response.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that on already?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, it's off by default. When you turn it on, it writes to CloudWatch Logs and S3.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, it's off by default. When you turn it on, it writes to CloudWatch Logs, S3, or both.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost split by feature?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each feature calls the model through its own application inference profile, and each profile is tagged. Cost Explorer can then split spend by that tag.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the bill does learn about features.</p></div></div>
@@ -369,13 +369,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <dt>Which feature?</dt><dd>The bill: only with tags. The call record: always.</dd>
   <dt>Which prompt version?</dt><dd>The bill: never. The call record: always.</dd>
   <dt>Which change caused it?</dt><dd>The bill: no. The call record: yes, by version and time.</dd>
-  <dt>Per learner?</dt><dd>The bill: no. The call record and the usage ledger: yes.</dd>
+  <dt>Per learner?</dt><dd>The bill: no. The usage ledger: yes.</dd>
 </dl>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not one shared helper, like <code>complete(prompt)</code>? Every feature could call it.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then each caller has to remember to pass the feature and the version. One day someone forgets.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And that call shows up untagged.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So each feature has its own adapter, and the record is filled in one place.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So each feature gets its own typed port, and one adapter underneath fills in the record. Nobody has to remember to tag a call.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if costs run away anyway?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A per-learner usage ledger caps each learner. And a Budgets action denies Bedrock for the whole account, as a last switch.</p></div></div>
 </div>
@@ -404,9 +404,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. Treat each model call as the unit, and record the model, the prompt version and the feature.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Record the token counts including cache, the latency, and an estimated cost. The bill only gives totals.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Invocation logs and tagged profiles help, but only our record knows the prompt version.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the logs?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You haven't said what's inside a prompt.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prompts contain what learners typed, so logging them means logging personal data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then keep the token counts as the source of truth. Prices change, and the cost can always be recomputed from them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One piece is missing: the cost field is an estimate. Keep the token counts as the source of truth, and recompute when prices change.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

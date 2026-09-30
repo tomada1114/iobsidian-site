@@ -267,7 +267,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't it?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A dashboard shows averages and percentiles over everyone. It can't tell you about one learner's request.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But one slow request should show up somewhere, shouldn't it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One slow request in a thousand doesn't move p90 at all. Even p99 barely moves. Percentiles are built to ignore the rare case.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One slow request in a thousand doesn't move p90 at all. And even when a percentile moves, it can't tell you which request was slow.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it answers "are things broadly okay?"</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's monitoring: watching failure modes you knew about in advance. Is the error rate up? Is latency climbing?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And observability is something else?</p></div></div>
@@ -402,7 +402,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the id has to travel from the start.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's why our API, the grading worker and the tutor agent are traced now, not after an incident.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And model calls?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each one records its own telemetry: tokens, latency, estimated cost. That's a whole topic of its own.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each one records its own telemetry: tokens, latency, estimated cost. The prompt version is recorded with them.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">

@@ -240,7 +240,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 8 of 12</span></p>
   <h1>How do you test things that aren't plain code?</h1>
   <p class="lead">After this page you can explain how generated files, infrastructure templates, types and import rules each get their own cheap check. You can also say what only a smoke test sees, and what no automated check sees.</p>
-  <p class="meta"><span>About 9 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -299,7 +299,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are there other files like this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web client's generated types have the same kind of test. So do the mirrored skill folders.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The web client's generated types have the same kind of test. So does a folder we keep as an exact copy in two places.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same idea each time: regenerate, compare, fail.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It's cheap, and it turns "someone forgot to regenerate" into a red build.</p></div></div>
 </div>
@@ -310,7 +310,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the CDK stacks? You can't unit test AWS.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You don't need AWS. A CDK app synthesizes a CloudFormation template locally, with no credentials.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the test reads the template.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And asserts the properties that matter, per stage. The table is on demand, keyed PK and SK, and kept on delete and on replacement.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And asserts the properties that matter, per stage. The table is on demand, keyed by a partition key and a sort key, and kept on delete and on replacement.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Kept even in dev?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Kept in both. Point-in-time recovery and deletion protection are off in dev, and on in prod.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else is asserted?</p></div></div>
@@ -401,8 +401,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything we generate, configure or type can drift, so each gets a cheap check against the truth.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Regenerate and diff for generated files. Synthesize and assert for infrastructure. <code>expectTypeOf</code> for types, and a graph walk for import rules.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only the smoke test sees processes talking over HTTP.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And after a deploy?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The deployed URL is read back by hand.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You've stopped at the merge.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>After a deploy, the deployed URL is read back by hand.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One habit for your next schema change: run the rewrite command before you push. CI will only tell you what you forgot.</p></div></div>
 </div>
   </section>

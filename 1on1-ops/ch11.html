@@ -240,7 +240,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 11 of 12</span></p>
   <h1>What happens to a learner's data when things go wrong?</h1>
   <p class="lead">After this page you can name the guards against different kinds of data loss, and say which failure each one covers. You can also explain why deleting and exporting an account are features, not scripts.</p>
-  <p class="meta"><span>About 9 min read</span><span>The whiteboard room</span></p>
+  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -259,7 +259,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A friend's company deleted a production table by accident last week. But AWS backs up DynamoDB automatically, right? So we're safe.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think it backs up, exactly?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Everything, I assumed. Isn't that the point of a managed database?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A plain table has none of the guards turned on. Each one is a decision. And each covers a different failure.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A plain table has no recovery and no deletion protection turned on. Each one is a decision. And each covers a different failure.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What failures are there?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start with a bug that writes wrong data. Every learner's review dates shifted by a day, say.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The table is still there. It's just wrong.</p></div></div>
@@ -300,7 +300,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the user pool?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has deletion protection in every stage, dev included.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why dev too? It's only our data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new pool issues new user ids. Every learner's data is keyed by the old ones, so it would all be stranded.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new pool issues new user ids. Our mapping from those ids to learners would point at nobody, so every learner's data would be stranded.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Even ours.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Even ours. Rebuilding the table from nothing is easy. Matching old data to new ids isn't.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the pool is almost more precious than the table.</p></div></div>
@@ -309,7 +309,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test asserts each setting for both stages. Turning one off fails the build.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="Dev and prod compared. Retain policy: on in both. Deletion protection: off in dev, on in prod. Point-in-time recovery: off in dev, on in prod. User pool protection: on in both. Whose data: the owner's own in dev, learners' in prod.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="Dev and prod compared. Retain policy: on in both. Deletion protection: off in dev, on in prod. Point-in-time recovery: off in dev, on in prod. User pool protection: on in both. Whose data: the team's own in dev, learners' in prod.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Dev</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Prod</text>
       <text x="16" y="56" class="t-sm">Retain policy</text>
@@ -325,7 +325,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">on</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">on</text>
       <text x="16" y="376" class="t-sm">Whose data</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">the owner's</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">the team's</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">learners'</text>
     </svg>
     <figcaption>The last row explains the accented ones. Prod holds other people's data, so it gets the guards that cost money.</figcaption>
@@ -337,7 +337,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in dev, a bad write can't be undone?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. And the table can be deleted from the console.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds like a mistake someone should fix.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a decision someone wrote down. Dev holds only the owner's own practice history.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a decision someone wrote down. Dev holds only the team's own practice history.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And recovery costs money.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's priced by table size. For one person's history, it wasn't worth it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "accepted risk" means somebody chose it, on purpose, in writing.</p></div></div>
@@ -396,11 +396,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your friend asks how Quickturn would survive their mistake. Tell them.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each guard covers a different failure: point-in-time recovery for bad writes, deletion protection for a deleted table, Retain policies for stack changes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We keep Retain everywhere, but skip recovery in dev because it's only the owner's data. That's a risk we wrote down.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We keep Retain everywhere, but skip recovery in dev because it's only the team's data. That's a risk we wrote down.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod gets all of them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a learner who leaves?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone asks to close their account. Then what?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Deleting or exporting an account is one partition, and it's a feature, not a script.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Also mention the drills. Until a restore has actually run, nobody knows how long a recovery takes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the drills. Until a restore has actually run, nobody knows how long a recovery takes.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
