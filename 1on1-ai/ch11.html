@@ -266,10 +266,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A tutor conversation can last a long time, with pauses. A Lambda invocation is stateless and stops after fifteen minutes at most.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the conversation state would live somewhere else, and I'd rebuild it on every message.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And keep one learner's state away from another's. That's the first thing Runtime gives you.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keeping each learner's session separate, and alive through a long conversation. Checking who is calling.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else sits around the loop?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Checking who is calling, for a start.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Mine had one user: me.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then exposing tools safely, remembering across sessions, stopping forbidden calls, and tracing and scoring every session.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then exposing tools safely, remembering across sessions, stopping forbidden calls, and tracing and scoring every session.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And AgentCore does all of that?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It offers those as parts. You can adopt them one at a time, with any framework or model. The agent code stays yours.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our tutor is still our code.</p></div></div>
@@ -359,7 +359,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a monthly fee?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No minimum fee. You pay per use, per part.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Per second of running?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime is billed per second. And CPU isn't charged while the agent waits on I/O, like a model call. Memory is.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime is billed per second. And CPU isn't charged while the agent waits on I/O, like a model call. The memory, RAM, it holds is still charged.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An agent spends most of its time waiting for the model.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So an idle agent costs little, and a chatty one scales with use. Gateway is priced per thousand tool calls, and Memory per thousand events, records and retrievals.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Identity?</p></div></div>
@@ -391,8 +391,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="104" y="24" text-anchor="middle" class="t-hd">Self-hosted</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">AgentCore</text>
       <text x="16" y="56" class="t-sm">Session isolation</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">you build</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">microVM each</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">you build</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">microVM each</text>
       <text x="16" y="136" class="t-sm">Long sessions</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">you build</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">up to 8 hours</text>
@@ -409,7 +409,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="464" width="176" height="44" rx="6" class="node"/><text x="104" y="492" text-anchor="middle">low, plus your time</text>
       <rect x="208" y="464" width="176" height="44" rx="6" class="node"/><text x="296" y="492" text-anchor="middle">no minimum</text>
     </svg>
-    <figcaption>Every row on the left says who builds it: you. That's the real difference, more than the price in the last row.</figcaption>
+    <figcaption>On the left, you build five of the six rows yourself. That's the real difference, more than the price in the last row.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch with AgentCore?</p></div></div>
@@ -427,7 +427,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the model wasn't good enough?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model was fine. The missing parts were sign-in, session isolation and audit traces.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once those were in place?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Production took weeks. The forty lines had been ready all along.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Production took weeks. The forty lines had been ready from the start.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my weekend demo is the easy part.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the part that proves the idea. Everything around it is what lets real learners use it safely, and that's the part to plan for.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then I'll start by listing which of the seven parts our tutor actually uses.</p></div></div>
@@ -443,7 +443,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It's worth it once you truly have an agent, and not before.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And our tutor?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our own TypeScript on Strands Agents, running in Runtime, with our Cognito tokens at the door.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep the adoption order in mind too: you can take one part at a time. Nothing forces you to move everything at once.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start small: you can adopt one part at a time. Nothing forces you to move everything at once.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

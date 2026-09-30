@@ -69,7 +69,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if two workers get the same job at the same moment? Both check, both find nothing.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The result is stored with a condition: only if nothing is under that key yet. One write wins, and the other worker reads the winner's result.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one of them paid for a call that was thrown away.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rarely, yes. But the learner still sees one grade. Here's one job from start to finish.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rarely, yes. We pay for the extra call, but the learner is charged once and sees one grade. Here's one job from start to finish.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 516" role="img" aria-label="The answer is stored, a job is queued, the worker checks the key, cost is reserved, the model is called once, the result is stored under the key, and the grade is shown on the round summary.">
@@ -161,7 +161,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Did we consider grading once per round, instead of per answer?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We weighed both. One call per round is fewer calls, but a longer one, and one failure affects every answer in it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And per answer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More calls, each small, and each can fail or retry alone. We measured both in a short spike before choosing, rather than arguing about it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More calls, each small, and each can fail or retry alone. We measured both in a short experiment, a spike, before choosing, rather than arguing about it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen inline go wrong?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, a support-ticket classifier ran inside ticket creation. Then the model provider slowed down.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And creating a ticket timed out.</p></div></div>
@@ -177,7 +177,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The drill never waits on a model. The answer is saved, and a job grades it later.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The job is keyed by answer id and rubric version. The first result is stored under that key.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a retry or a duplicate just reads it back. We can't count on the model to repeat itself.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a new rubric?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What changes when the rubric does?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new key, so a regrade is on purpose.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The ledger belongs in that story as well: the same key reserves the cost, so a duplicate can't charge the learner twice.</p></div></div>
 </div>

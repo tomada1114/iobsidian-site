@@ -92,7 +92,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a fixed workflow?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our code runs the steps, maybe in parallel, maybe with one model checking another's work. The model fills in parts, but the plan is ours.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me place our features. Grading is one call that returns a typed verdict.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It runs behind a task port, as a fixed workflow.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, the first rung. Our code does everything around that call, behind a task port.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Card generation writes a card, checks it, and has it reviewed. That's a chain.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. An AI writer drafts, an AI reviewer judges, and a person supervises the stamp.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor?</p></div></div>
@@ -115,10 +115,10 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You mean we know what the verdict should be?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For about two thousand reviewed alternative answers, yes. So we can test a prompt change against them. With an agent, two good runs may take different paths, and there's no single right one to check.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So choosing the smaller shape is also what makes testing possible.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly that. Let me put our features on two questions.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then let me put our features on two questions.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the steps are unknown in advance against whether the task needs several turns with tools: known steps in one turn is a fixed workflow, where grading and card generation sit; unknown steps in one turn is a router or one call; known steps over several turns is a scripted chat; unknown steps over several turns is an agent, where the tutor sits.">
+    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the steps are unknown in advance against whether the task needs several turns with tools: known steps in one turn is a single call or a fixed workflow, where grading and card generation sit; unknown steps in one turn is a router; known steps over several turns is a scripted chat; unknown steps over several turns is an agent, where the tutor sits.">
       <text x="44" y="18" class="t-sm">↑ Several turns with tools</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
@@ -128,16 +128,18 @@
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
       <text x="302" y="100" text-anchor="middle">Agent</text><text x="302" y="124" text-anchor="middle" class="t-sm">the tutor</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-acc"/>
-      <text x="134" y="236" text-anchor="middle" class="t-hd t-acc">Workflow</text><text x="134" y="260" text-anchor="middle" class="t-sm">grading,</text><text x="134" y="282" text-anchor="middle" class="t-sm">card generation</text>
+      <text x="134" y="224" text-anchor="middle" class="t-hd t-acc">One call or</text><text x="134" y="248" text-anchor="middle" class="t-hd t-acc">workflow</text><text x="134" y="276" text-anchor="middle" class="t-sm">grading,</text><text x="134" y="298" text-anchor="middle" class="t-sm">card generation</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="248" text-anchor="middle">Router or</text><text x="302" y="272" text-anchor="middle">one call</text>
+      <text x="302" y="260" text-anchor="middle">Router</text>
     </svg>
     <figcaption>Most of Quickturn's AI work sits bottom left. Only open-ended, multi-turn tool use moves to the top right.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But workflows break on inputs nobody planned for. A learner types something strange, and the fixed steps don't fit.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's true. And that's exactly where a router belongs. Or an agent, only for that long tail.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the strange cases get the expensive shape, and the normal ones don't.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's true. And that's exactly where a router belongs. Or an agent, only for those rare, unusual cases.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the strange cases get the expensive shape, and the normal ones don't. And a scripted chat, top left?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A conversation with fixed steps, like a guided sign-up. Several turns, but our code still decides each one.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the strange cases pay, and the rest stay cheap.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's how you keep most traffic cheap and testable.</p></div></div>
 </div>
   </section>
@@ -170,8 +172,8 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every step up costs calls, money and predictability. Different paths on the same input are hard to test.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an agent is for open-ended, multi-turn tool use, like the tutor. Grading is one call with a typed answer.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for strange inputs?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A router in front, and the expensive shape only for the long tail.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep one fact in mind as well: the model never runs a tool itself. Whatever an agent does, our harness does it, so our code still sets the limits.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A router in front, and the expensive shape only for the rare, unusual cases.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model never runs a tool itself. Whatever an agent does, our harness does it, so our code still sets the limits.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

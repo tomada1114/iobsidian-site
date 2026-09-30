@@ -305,8 +305,6 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Standard. Each step runs exactly once, and a run can last up to a year. The other kind, Express, runs at least once and only up to five minutes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A batch can take hours, so Standard fits.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here are the steps.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the plan step decide?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which grammar points need cards, and how many, from the gaps in the catalog. The model doesn't choose what to teach.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="Plan, generate in batch, lint and deduplicate, automated review, then a supervised stamp or a trusted publish, and finally the catalog; the review gate sits just before the catalog.">
@@ -333,6 +331,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <figcaption>The fifth step is the review gate. Nothing reaches the catalog, and so no learner, without passing it.</figcaption>
   </figure>
 <div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the plan step decide?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which grammar points need cards, and how many, from the gaps in the catalog. The model doesn't choose what to teach.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it call the model?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Single calls use Step Functions' built-in Bedrock integration. Bulk generation uses batch inference, at half the on-demand price, with results back in S3.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if one step fails at three in the morning?</p></div></div>
@@ -353,7 +353,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The stamped cards?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>About a thousand stamped cards are accepts. And hundreds of deleted cards, each with a written reason, are rejects.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we run the reviewer on those and compare. If it agrees 95% of the time, we trust it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not so fast. Most of the set is accepts. A reviewer that accepts everything would agree most of the time too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not yet. Most of the set is accepts. A reviewer that accepts everything would agree most of the time too.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the rejects are the smaller group.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So one cell of that comparison matters more than the others.</p></div></div>
 </div>
@@ -399,7 +399,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Learners report cards?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every card has a way to report a problem. Those reports feed the next audit, and sometimes a new reject reason.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Sampled audits even after it's trusted?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. Trust is measured, and a measurement can go stale when a model changes.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. Trust is measured, and a measurement can become out of date when a model changes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a model upgrade means measuring the reviewer again.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Against the same accepts and rejects, before it reviews anything alone.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this pattern exist outside language cards?</p></div></div>
@@ -419,7 +419,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only then may it review alone, and only for pairs nobody on the team can read.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for Japanese-to-English?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A person still supervises the stamp.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep the blind-spot risk in the answer too: a different prompt or model for review, and human audits that never fully stop.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "alone", though. The blind-spot risk stays, so review with a different prompt or model, and never fully stop the human audits.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

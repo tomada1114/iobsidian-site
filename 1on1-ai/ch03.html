@@ -263,14 +263,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Inside the account, meaning what?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>IAM controls who may call which model. The cost lands on your AWS bill. And invocation logging writes prompts and answers to logs in your own account.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that different from calling the vendor with an API key?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Quite different. There's no separate key to leak, and the same roles and audit logs as the rest of AWS apply.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Quite different. You don't need a vendor's API key, and the same IAM roles and audit logs as the rest of AWS apply.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we can see every prompt we sent?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If you turn it on. It's off by default, and it writes to CloudWatch Logs and S3 in the same account and region.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the request itself? Each provider has its own format.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's what the Converse API solves. One request shape across models: messages, a system prompt, inference settings, tools and an output format.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So switching models is mostly configuration.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For us, it's the model's profile id in one setting. The code that builds the request doesn't change.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mostly. The older InvokeModel call takes each provider's own body instead. We use Converse, through one adapter that serves every LLM task.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only mostly?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The other call, InvokeModel, takes each provider's own body instead. We use Converse, through one adapter that serves every LLM task.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could I call any model right away?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The account must be allowed to use a model before the first call. How you enable that has changed over time, so check the console when you need it.</p></div></div>
 </div>
@@ -306,10 +307,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, two profiles?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The <code>jp.</code> one is AWS's. The other is an application inference profile: one you create yourself and tag.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why create one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the bill can be split by feature. We make one per feature, each wrapping the same <code>jp.</code> profile.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the bill can be split by feature. We make one per feature, each wrapping that feature's <code>jp.</code> profile.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 344" role="img" aria-label="One model at the center, with an application inference profile per feature around it: grading, feedback and card generation; each profile's tag lets Cost Explorer split spend by feature.">
+    <svg viewBox="0 0 400 344" role="img" aria-label="The jp. profiles at the center, with an application inference profile per feature around it: grading, explanations and card generation; each profile's tag lets Cost Explorer split spend by feature.">
       <line x1="100" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="300" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="200" y1="264" x2="200" y2="202" class="ln"/>
@@ -317,15 +318,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="100" y="44" text-anchor="middle" class="t-hd t-acc">Grading</text>
       <text x="100" y="66" text-anchor="middle" class="t-sm">tag: grading</text>
       <rect x="206" y="16" width="188" height="64" rx="6" class="node"/>
-      <text x="300" y="44" text-anchor="middle" class="t-hd">Feedback</text>
-      <text x="300" y="66" text-anchor="middle" class="t-sm">tag: feedback</text>
+      <text x="300" y="44" text-anchor="middle" class="t-hd">Explanations</text>
+      <text x="300" y="66" text-anchor="middle" class="t-sm">tag: explain</text>
       <rect x="110" y="142" width="180" height="60" rx="8" class="node-soft"/>
-      <text x="200" y="178" text-anchor="middle">One model</text>
+      <text x="200" y="178" text-anchor="middle">jp. profiles</text>
       <rect x="96" y="264" width="208" height="64" rx="6" class="node"/>
       <text x="200" y="292" text-anchor="middle" class="t-hd">Card generation</text>
       <text x="200" y="314" text-anchor="middle" class="t-sm">tag: cards</text>
     </svg>
-    <figcaption>Every feature calls the same model through its own tagged profile. Cost Explorer then shows what grading costs apart from the rest.</figcaption>
+    <figcaption>Every feature calls its model through its own tagged profile. Cost Explorer then shows what grading costs apart from the rest.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can answer "what does grading cost?" without guessing.</p></div></div>
@@ -360,7 +361,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Generating a hundred cards overnight is batch. Nobody is waiting, so we take the lower price.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if one request in the file fails?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each result in the output file carries its own status. The pipeline sends only the failed ones again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one bad card doesn't sink the whole night.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one bad card doesn't fail the whole night's run.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The other ninety-nine are already done.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does structured output still work in batch?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, and with cross-region profiles too. So the card pipeline gets the same typed results.</p></div></div>
@@ -394,7 +395,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <figcaption>The residency row decides it for Quickturn. The last row is the price: a newer model may exist only on a global profile.</figcaption>
   </figure>
 <div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our learners are mostly in Japan, so residency matters.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our learners are mostly in Japan, so residency, where the data is processed, matters.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Grading runs on Claude Haiku 4.5 through its <code>jp.</code> profile. Card generation uses a Sonnet-class model through a <code>jp.</code> profile, where one exists.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where one exists?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When we checked in September 2026, Sonnet 4.6 had a global profile, and no <code>jp.</code> profile was confirmed. So before moving past Sonnet 4.5, we check first.</p></div></div>

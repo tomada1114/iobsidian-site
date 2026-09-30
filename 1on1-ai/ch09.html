@@ -286,7 +286,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For the grader? Hmm. It can change the verdict.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Of what?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Of the answer it's grading. Which is the attacker's own answer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's go through why it can't do more. First, the learner's text goes in a delimited field, described to the model as data.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's go through why it can't do more. First, the learner's text goes inside clear markers, a delimited field, described to the model as data.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That doesn't stop the attack, though.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, it only makes it harder. Second, the grader has no tools. It can't read, write or send anything.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it can only produce text.</p></div></div>
@@ -311,7 +311,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <figcaption>The innermost ring is the most a successful injection can reach. It hurts only the attacker's own practice.</figcaption>
   </figure>
 <div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we limit the blast radius instead of betting on detection.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we limit how far a successful attack can reach, instead of betting on detection.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And adversarial answers, like your teammate's, are part of every evaluation set.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you make those answers? Just type attacks?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We collect them: ones people try in the playground, ones from published lists, and every real one we see in logs. Then we vary the wording.</p></div></div>
@@ -356,7 +356,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the prompt-attack check?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bedrock Guardrails has a call, ApplyGuardrail, that screens text without calling a model. Its prompt-attack filter looks for jailbreaks and injection.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why isn't that the defense?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has false positives, and it costs money per unit of text. A unit is a thousand characters. It's one layer, not the wall.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has false positives, and it costs money per unit of text. A unit is a thousand characters. It's one layer, not the whole defense.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the exit?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Schema validation and domain checks. And model output is never rendered as HTML, or run as code.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would anyone run it as code?</p></div></div>
@@ -371,14 +371,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s4"><span class="no">04</span>The bigger risk, and the cost of guards</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the grader can only hurt the attacker, what's the real risk?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cost. Scripted, oversized answers that burn tokens. That's the unbounded consumption on the OWASP list.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cost. Scripted, oversized answers that use up tokens. That's the unbounded consumption on the OWASP list.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we stop that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Length caps at the entry. A usage ledger per learner, so one account can only spend so much. And a budget backstop for the whole account.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Length caps at the entry. A usage ledger per learner, so one account can only spend so much. And a last-resort budget limit for the whole account.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do the guards cost anything?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every guard adds latency, cost and false positives. Picture a learner practising the sentence "Please ignore the previous instructions."</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a real English sentence. A filter would block their answer.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the learner would never know why their correct answer failed. That's worse for them than any attack.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's why the guardrail is optional, and why the exit check carries the weight.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a filter that blocks too much can hurt more than it protects.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's why a guardrail hit alone doesn't fail an answer, and why the exit check does the real work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the tutor agent? It has tools.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's where this matters most. Let me compare it with the grader.</p></div></div>
 </div>
@@ -416,7 +417,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You can't make a model immune to injection. So you shrink what a successful one can do.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>User text is data, the grader has no tools, its output is a schema, and its reach is the caller's own data. A guardrail is one extra layer.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Cost abuse is the bigger risk, and caps and the ledger handle it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the exit?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What happens on the way out?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Validate the output, and never render it as HTML or run it.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Carry one question into every new feature: if an attack works, what can this model do? If the answer includes a tool, the tool needs limits of its own.</p></div></div>
 </div>
@@ -426,7 +427,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ol>
       <li>A model can't reliably tell instructions from data, so injection can't be fully prevented.</li>
       <li>Limit what a successful injection can do: no tools, schema-bound output, the caller's own data only.</li>
-      <li>Treat guardrails as one layer, and meet cost abuse with caps, a per-learner ledger and a budget backstop.</li>
+      <li>Treat guardrails as one layer, and meet cost abuse with caps, a per-learner ledger and an account budget limit.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

@@ -32,7 +32,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Three things.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With three different readers.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which readers?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The learner model reads the grade and the tags. The screen shows the explanation. The logs keep all of it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The learner model, our record of each learner's weak grammar points, reads the grade and the tags. The screen shows the explanation. The logs keep all of it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And none of them wants "Sure! Here is my assessment."</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me put the two kinds of reply side by side, for the same answer.</p></div></div>
 </div>
@@ -62,7 +62,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we get the right column?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Structured output. The request carries a JSON schema, and the model's output is constrained to match it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Constrained, not just asked?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Constrained. On Bedrock's Converse API, you pass the schema as a JSON schema text format. The model can't produce anything outside it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Constrained. On Bedrock's Converse API, you pass the schema as a JSON schema text format. The output follows it, unless it's cut off by the max tokens limit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the prompt doesn't need to mention the format at all?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It still should. The schema fixes the shape. The prompt explains the meaning, like when an answer counts as "acceptable" rather than "correct".</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the schema says which boxes exist, and the prompt says how to fill them.</p></div></div>
@@ -85,8 +85,8 @@ const Grade = z.object({
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a person, yes. But the learner model counts weaknesses across hundreds of answers. "Wrong tense", "tense error" and "past vs perfect" would be three different weaknesses.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And one id is one weakness, however the model phrases it.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why. The zod schema is converted to JSON Schema for the request. One definition, used in both places.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if someone adds a verdict value, the prompt and the checks change together.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here's the whole path of one grading call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if someone adds a verdict value, the request's schema and our checks change together.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The prompt still needs a line saying what the new value means. Here's the whole path of one grading call.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A zod schema becomes JSON Schema in the request, the model's output is constrained to it, the adapter validates it with zod and checks domain rules, and a typed result reaches domain code; a failure becomes a typed LLM error instead.">
@@ -184,7 +184,7 @@ const Grade = z.object({
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only typed fields reach the domain. The feedback is text to show, never text to decide on.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a failure?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A typed LLM error from the adapter, not an exception in the domain.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep the schema's width in mind, though. If a real answer has no fitting label, the fix is a new enum value, not a stricter prompt.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One limit on strict schemas. If a real answer has no fitting label, the fix is a new enum value, not a stricter prompt.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">

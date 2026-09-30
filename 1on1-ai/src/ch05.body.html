@@ -65,7 +65,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do we do instead?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application layer declares a port per task. A port is an interface our code depends on, with no vendor in it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like the stores? The application asks for a learner's rounds, not for DynamoDB.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly the same idea: the port names the task, not the vendor. Here's a simplified grading port. <code>GradeInput</code> holds the card, the expected answers and the learner's answer:</p><pre><code>interface GradeTask {
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly the same idea, in the same layout as the rest of our code. The domain imports nothing, and the application declares ports.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the port names the task?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The task, not the vendor. Here's a simplified grading port. <code>GradeInput</code> holds the card, the expected answers and the learner's answer:</p><pre><code>interface GradeTask {
   grade(
     ctx: RequestContext,
     input: GradeInput,
@@ -74,9 +76,9 @@
   &gt;;
 }</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does it take a request context?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The context carries the learner, taken from the verified session. The adapter uses it to charge the right learner's usage and to pick the task's tagged profile.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the cost tag comes with the task, and no caller can forget it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The same layout as the rest of our code: the domain imports nothing, the application declares ports, and adapters implement them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The context carries the learner, taken from the verified session. Cost records and the usage ledger use it to charge the right learner.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost tag comes with the task, so no caller can forget it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the caller never sees a prompt.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It passes typed input and gets a typed result, or an LLM error. Beside it sit an explain port and a generate port.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't <code>complete</code> just take a task name as a parameter? Then it's one function, with owners.</p></div></div>
@@ -122,7 +124,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the real model?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For evaluation, where we measure quality on real calls.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does evaluation go through the same port?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, the same port and the same adapter. So what we measure is exactly what learners get, not a copy of the prompt in a notebook.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, the same port and the same adapter. So what we measure is exactly what learners get, not a copy of the prompt in someone's test script.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed a recording is enough for everything. It's real output.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's real output from one day, with one prompt. It proves our code handles that response. It can't tell you whether today's prompt grades well.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And swapping a model?</p></div></div>
@@ -141,7 +143,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We have three: grade, explain and generate.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And adding a fourth means a port, a prompt, a schema and an evaluation set. That work is the point: it's the list of things someone must own.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything that gets worse?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Recordings go stale when prompts change. We refresh them on purpose, not when a test happens to fail.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Recordings become out of date when prompts change. We refresh them on purpose, not when a test happens to fail.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you refresh one?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Run the task once against the real model, save the new response, and review the diff like any other change. A surprising diff is worth reading.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen the other way go wrong?</p></div></div>

@@ -261,15 +261,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Unit, contract, isolation, infrastructure synthesis and smoke tests. They're all required.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And they use fakes and recordings for the model. No real calls, no cost.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does the real model run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only when a pull request changes a prompt, an output schema or the model configuration. A path filter picks those out.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only when a pull request changes a prompt, an output schema or the model configuration. A path filter, a rule on which files changed, picks those out.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then it runs the whole suite?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small subset, under a spend cap.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Picked at random?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Chosen on purpose: past failures, attacks, and the borderline answers that flip. Random cases would mostly be easy ones.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't I just run the eval on my laptop and paste the numbers into the pull request?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then nobody can repeat it, and nobody knows which prompt you ran. The gate runs the committed code and records the result.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Here's the path, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here it is.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the gate actually do?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw the path.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A pull request changes a prompt, a path filter selects the evaluation gate, a small subset runs against the real model under a spend cap, the results are compared with the recorded baseline, and the check passes or fails.">
@@ -415,17 +415,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your pull request touches a prompt. Tell me what will run, and why.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fakes run on every pull request. Because I changed a prompt, a small, capped real-model eval runs too.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It compares with the baseline in the repository. The full suite runs nightly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Once real users arrive, online scoring watches the live system. Every failure found in production becomes a test case for the gate.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>After release, online scoring watches real sessions. Every failure found in production becomes a test case for the gate.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a judge model?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only after checking it against human labels, and pinned like any dependency.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One gap to keep in view: online scoring stores real conversations. Decide how long we keep them before the first one is stored.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Online scoring stores real conversations, though. Decide how long we keep them before the first one is stored.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Run a small, capped real-model gate only when a prompt, schema or model changes, against a recorded baseline.</li>
-      <li>Run the full suite nightly, and score live sessions online once real users arrive.</li>
+      <li>Run the full suite nightly, and score real sessions online after release.</li>
       <li>Check any judge model against human labels, and turn production failures into gate cases.</li>
     </ol>
   </section>

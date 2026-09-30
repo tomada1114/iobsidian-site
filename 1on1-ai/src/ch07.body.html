@@ -28,7 +28,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So without a number, every prompt tweak is an opinion.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a regression ships silently. An evaluation is the test suite of a model feature. It's also our definition of "done".</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't that a lot of work up front? I thought you need thousands of labelled examples.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You need fewer than you think, and we already have most of them. Hamel Husain and Chip Huyen's book "AI Engineering" both put evaluation at the center.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You need fewer than you think, and we already have most of them. Hamel Husain, and Chip Huyen in her book "AI Engineering", both put evaluation at the center.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do I start?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By reading real outputs, like you did, but with a pen. Write down each way a result fails.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like "missed a wrong tense" or "called a typo incorrect"?</p></div></div>
@@ -47,7 +47,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then it's a negative, and we know which error tag it should get.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, because we made the error. Those are perturbations.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is a broken answer always wrong, though? Dropping "the" can still be fine in some sentences.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not always. "I have lunch" and "I have the lunch" are both English. So a person checks a sample of them, and the ones that turn out acceptable move to the positives.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not always. "She plays the piano" and "She plays piano" are both fine. So a person checks a sample of them, and the ones that turn out acceptable move to the positives.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not just use the alternatives? Two thousand is plenty.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They're all positives. A grader that accepts everything would score perfectly on them.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So without negatives, the set can't catch a grader that's too kind.</p></div></div>
@@ -74,7 +74,7 @@
       <text x="300" y="292" text-anchor="middle" class="t-hd">Self-graded</text>
       <text x="300" y="314" text-anchor="middle" class="t-sm">learners' own marks</text>
     </svg>
-    <figcaption>None of the four sources needs a new labelling project. Each one reuses something Quickturn already stores or can make.</figcaption>
+    <figcaption>Each source reuses something Quickturn already stores or can make. Only a sample needs a person's check.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as an attack?</p></div></div>
@@ -163,7 +163,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could a grader score well and still be bad?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Easily. A grader that calls everything "acceptable" agrees with every positive.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's why the negatives and attacks are in the set.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Any single metric can be gamed. Several together are much harder to fool.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Any single metric can be cheated. Several together are much harder to fool.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Gold labels cost a person's time. And small sets are noisy, so one run can look better by luck.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we compare?</p></div></div>
@@ -187,7 +187,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We track agreement, flip rate, tag precision and recall, cost and latency. So "better" is a number against a baseline.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And where does it all start?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With reading real outputs and naming how they fail.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep the cheat in mind as well. A metric that one lazy answer can max out needs a second metric beside it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the cheat: a grader that calls everything "acceptable" scores perfectly on positives. So every metric needs a second one beside it.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
