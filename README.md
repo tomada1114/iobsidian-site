@@ -12,5 +12,6 @@
 | One-on-Ones: API and TypeScript（英語・B2・対話） | `1on1-api-types/ch00.html` |
 | One-on-Ones: AWS Foundation（英語・B2・対話） | `1on1-aws/ch00.html` |
 | One-on-Ones: AI in Production（英語・B2・対話） | `1on1-ai/ch00.html` |
+| One-on-Ones: Operations and Quality（英語・B2・対話） | `1on1-ops/ch00.html` |
 | AgentCore Reader（英語・B1） | `agentcore-reader/ch00.html` |
 | Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |
