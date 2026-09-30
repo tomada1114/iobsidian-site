@@ -1,137 +1,184 @@
-<!-- title: AgentCore Reader 04 Runtime | accent: think -->
+<!-- title: AgentCore Reader 04 · Letting the model run the loop | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 4 / 11 chapters</span></p>
-  <h1>Runtime: A Private Room for Each Agent</h1>
-  <p class="lead">The agent loop itself can be written in a few dozen lines of code. But letting many users use it is a different problem. You need to set up servers, keep each user's conversation separate, and keep long tasks running. In this chapter, you will see how Runtime, the core part of AgentCore, takes over this job of "keeping things running".</p>
-  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 4 of 13</span></p>
+  <h1>Why let the model run the loop?</h1>
+  <p class="lead">After this page you can explain what model-driven means in Strands Agents, and name the six layers of its harness. You can also say how agents are combined, and how Strands differs from a graph-based framework.</p>
+  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
 </header>
-
 <div class="flow">
-  <nav class="toc" aria-label="In this chapter">
-    <p class="label">In this chapter</p>
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
     <ul>
-      <li>What Runtime takes over: running servers, scaling, and separating sessions</li>
-      <li>How each session gets its own microVM</li>
-      <li>Long runs of up to 8 hours, and streaming responses</li>
-      <li>How to choose between a container and direct code for deployment</li>
-      <li>Using versions and endpoints to manage production and staging</li>
+      <li>What does model-driven mean?</li>
+      <li>What are the six layers of the harness?</li>
+      <li>How are agents combined?</li>
+      <li>How is this different from LangGraph?</li>
     </ul>
   </nav>
-
+  <p class="stage">Leo's desk. A minimal agent is open on his screen, and it looks far too short.</p>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What Runtime takes over</h2>
-    <p>You can write the agent loop yourself. <strong>The hard part is keeping it running so it can always accept requests</strong>. It must answer quickly when someone sends a request. It must keep each user's conversation separate, even when many people use it at once. It must also add or remove servers as needed. Whether you want to build all of this yourself is the real reason to use Runtime.</p>
-    <p>The first option many people think of is AWS Lambda. But Lambda is built for short tasks that finish quickly, and each call has a time limit. An agent calls a tool, waits for the result, then calls the next tool, again and again. If the conversation runs long, it can go past this time limit.</p>
-    <p>Another option is a container platform, such as Amazon ECS. This removes the time limit, but now you must design and build your own systems for isolation and scaling, such as keeping each user's conversation separate, and reducing the number of servers when they are not needed.</p>
-    <p><strong>Runtime is a service that takes over these three jobs: keeping things running, keeping sessions isolated, and scaling up or down.</strong> As a developer, you only need to write the agent's own code. Runtime handles the rest. The table below compares Runtime with the simpler options.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Aspect</th><th>Lambda</th><th>Building your own ECS</th><th>AgentCore Runtime</th></tr></thead>
-      <tbody>
-        <tr><td class="key">Run time</td><td>Each call has a time limit, so it does not fit long conversations</td><td>No time limit, but you need to build the system that keeps it running</td><td>Built to support long-running tasks</td></tr>
-        <tr><td class="key">Session isolation</td><td>You design it yourself</td><td>You build container and network separation yourself</td><td>A dedicated environment is set up for each session automatically</td></tr>
-        <tr><td class="key">Scaling</td><td>Automatic</td><td>You set up auto scaling yourself</td><td>Automatic</td></tr>
-      </tbody>
-    </table></div>
-  </section>
+    <h2 id="s1"><span class="no">01</span>Model-driven</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This is the whole agent? I'm used to writing every step myself: call A, check a condition, then call B.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And here?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Here I can't find the steps at all.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There aren't any. Strands Agents is model-driven. You give the model a system prompt and a list of tools, and the model decides what to do next.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it's the third level. The agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. AWS recommends Strands and maintains two versions, Python and TypeScript. Here's the minimal example, in Python:</p><pre><code>from strands import Agent, tool
 
+@tool
+def get_weather(
+    city: str) -&gt; str:
+  """Return the weather
+  for the given city."""
+  return lookup(city)
+
+agent = Agent(
+  model="...",
+  tools=[get_weather],
+  system_prompt=
+    "You are a weather guide.")
+agent("Weather in Tokyo?")</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's it? A model, some tools and a prompt, passed to one class?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the loop is ready to run. A tool is a normal function with <code>@tool</code> above it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does the model know what the tool does?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The function name, the argument types and the docstring become its instructions. You don't write a separate spec file.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the docstring actually matters.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More than most comments you'll ever write. The model reads it every time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a vague docstring means the model guesses when to call the tool.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or calls the wrong one. "Return the weather for the given city" tells it exactly when this tool helps.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does it only work with Bedrock?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bedrock is the default model provider. You can also choose Anthropic, OpenAI, Ollama or LiteLLM.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the MCP tools from my weekend agent?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Strands can act as an MCP client. Tools from an outside MCP server are passed in just like your own functions.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And our tutor?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's written in TypeScript, with the Strands Agents TypeScript SDK.</p></div></div>
+</div>
+  </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>A private room for each session</h2>
-    <p>When Runtime receives a request, it sets up a <strong>microVM (a small virtual machine)</strong> just for that session, and runs the agent inside it. As Figure 1 shows, each user's session gets its own microVM, so conversations never mix.</p>
-    <p>When the session ends, its microVM is thrown away, like cleaning up a room. If the same user wants to continue the conversation later, they send a request with the same session ID, and Runtime shows them to the same room. Remembering the conversation over time is the job of Memory. It helps to think of Runtime's job as only this: setting up an isolated place to run the agent.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 248" role="img" aria-label="Three users each send a request to Runtime. Runtime gives every session its own isolated microVM inside one boundary, so conversations from different users never mix">
-        <rect x="4" y="64" width="392" height="176" rx="10" class="zone"/>
-        <text x="20" y="231" class="t-sm t-acc">Runtime: one boundary, a separate room per session</text>
-        <rect x="12" y="8" width="116" height="32" rx="6" class="node"/><text x="68" y="29" text-anchor="middle">User A</text>
-        <line x1="68" y1="40" x2="68" y2="82" class="ln" marker-end="url(#arw)"/>
-        <rect x="12" y="84" width="116" height="124" rx="8" class="node"/>
-        <text x="68" y="104" text-anchor="middle" class="t-sm">microVM</text>
-        <rect x="23" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="68" y="143" text-anchor="middle">Agent</text>
-        <text x="68" y="190" text-anchor="middle" class="t-sm">Session A</text>
-        <rect x="142" y="8" width="116" height="32" rx="6" class="node"/><text x="200" y="29" text-anchor="middle">User B</text>
-        <line x1="200" y1="40" x2="200" y2="82" class="ln" marker-end="url(#arw)"/>
-        <rect x="142" y="84" width="116" height="124" rx="8" class="node"/>
-        <text x="200" y="104" text-anchor="middle" class="t-sm">microVM</text>
-        <rect x="155" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="200" y="143" text-anchor="middle">Agent</text>
-        <text x="200" y="190" text-anchor="middle" class="t-sm">Session B</text>
-        <rect x="272" y="8" width="116" height="32" rx="6" class="node"/><text x="332" y="29" text-anchor="middle">User C</text>
-        <line x1="332" y1="40" x2="332" y2="82" class="ln" marker-end="url(#arw)"/>
-        <rect x="272" y="84" width="116" height="124" rx="8" class="node"/>
-        <text x="332" y="104" text-anchor="middle" class="t-sm">microVM</text>
-        <rect x="287" y="118" width="90" height="40" rx="6" class="node-soft"/><text x="332" y="143" text-anchor="middle">Agent</text>
-        <text x="332" y="190" text-anchor="middle" class="t-sm">Session C</text>
-      </svg>
-      <figcaption>Each user gets a dedicated microVM, which is thrown away when the session ends. Returning with the same session ID leads back to the same room, and conversations never mix between users.</figcaption>
-    </figure>
-    <div class="aside analogy">
-      <p class="label">Analogy: a private room and cleanup</p>
-      <p>Think of it like hiring a new employee. Each new employee gets their own private room, so another employee's papers never mix in with theirs. When a piece of work is finished, the room is cleaned up and made ready for the next task. To continue the same discussion, you just give the same reception number, the session ID, and you are shown back to the same room.</p>
-    </div>
+    <h2 id="s2"><span class="no">02</span>Six layers of control</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But if the model decides everything, where's my control? I can't just hope.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the harness. The official Strands Workshop lists six layers inside it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The loop is one, I guess.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The loop is the center: think, use a tool, look at the result. Then the tools: normal functions, or outside tools through MCP.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model picks, and the harness runs them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Next come hooks. They step into events in the loop, such as before and after a tool call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would I use a hook for?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>To block a dangerous action, write a call to a log, or change the arguments.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And skills?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Instructions the agent loads only when needed. Most of the time, the model sees only a skill's name and a short description.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And loads the full text when it uses it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Then steering: it adds new instructions to a running agent, based on the situation, to adjust its direction.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the last one?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The session. It saves the conversation's state so you can start it again later.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if the conversation gets too long?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A conversation manager decides what to drop or summarize.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would skills load only when needed? Why not give the model everything at the start?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every instruction takes space in the model's context and costs tokens on every turn. A short description is enough until the skill is actually used.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 380" role="img" aria-label="Nested layers of the Strands harness, from the outside in: session, which stores conversation state; steering, which adds instructions; skills, loaded only when needed; hooks, before and after a call; and at the center the loop, where the LLM and the tools go back and forth.">
+      <rect x="8" y="8" width="384" height="364" rx="12" class="zone-soft"/>
+      <text x="24" y="34" class="t-hd">Session</text>
+      <rect x="28" y="48" width="344" height="308" rx="10" class="node"/>
+      <text x="44" y="74" class="t-hd">Steering</text>
+      <rect x="48" y="88" width="304" height="252" rx="10" class="node"/>
+      <text x="64" y="114" class="t-hd">Skills</text>
+      <rect x="68" y="128" width="264" height="196" rx="10" class="node"/>
+      <text x="84" y="154" class="t-hd">Hooks</text>
+      <rect x="88" y="168" width="224" height="140" rx="8" class="node-acc"/>
+      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">Loop</text>
+      <text x="200" y="252" text-anchor="middle" class="t-sm">LLM and tools</text>
+    </svg>
+    <figcaption>The loop sits at the core. Each layer further out controls a wider range, from one tool call to the whole conversation.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the inner layers deal with one tool call, and the outer ones with the whole run.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the way to read it. And it helps you choose where a rule belongs.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say "don't handle personal data." Written in the system prompt, it's only a request.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model might misread it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or a clever input pushes it past the rule. For rules you truly need to enforce, use the harness side: a hook, or the Policy part. Those stop the action in code.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So control means choosing the layer, not writing every step.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Long runs and streaming</h2>
-    <p>Some agent tasks take a long time, calling many tools again and again. Runtime supports runs of <strong>up to 8 hours</strong>. This means you can hand off long tasks, such as research or data analysis, and let them keep running.</p>
-    <p>Still, it is not a good experience to make a user wait in silence for a long task. Runtime supports both asynchronous processing and <strong>streaming</strong> (sending small pieces of the answer as soon as they are ready). You can run long tasks in the background and check the result later. For short answers, you can stream the text to the screen piece by piece as it is written.</p>
+    <h2 id="s3"><span class="no">03</span>Combining agents</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now, one agent is rarely the end. Strands gives three ways to combine them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the simplest?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Calling an agent as a tool. From the parent's view, the child looks like a single function call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the others?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A Swarm is a group of equal agents that hand work to each other. When one decides a task is too hard, it passes the conversation on.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No boss in a Swarm, then.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The third is a Graph. Work moves between agents along a path you set in advance.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For when I want to fix the order myself.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And when agents talk across systems or teams, Strands supports A2A. Another team's agent can call one built inside your company.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the three forms plus A2A for crossing team lines.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first form is usually enough. Try an agent as a tool before you reach for a Swarm.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a Swarm is harder to follow?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each hand-off is another decision the model makes. It's harder to predict who ends up answering.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Rules that do not depend on the framework</h2>
-    <p>Runtime does not care which framework you used to write the agent, or which LLM it calls. <strong>The only rule is this: your agent must offer two HTTP endpoints, <code>/invocations</code> (for calls) and <code>/ping</code> (to check that it is alive)</strong>. If you follow this one simple rule, you can host an agent built with Strands Agents, LangGraph, or CrewAI in the same way.</p>
-    <p>The endpoint does not have to be HTTP only. On the same Runtime, you can also host your agent as an MCP server that offers tools, or as an A2A server that talks to other agents. Support for two-way streaming, such as for voice conversations, is also growing. This area changes fast, so check the course materials and the developer guide for the latest details.</p>
+    <h2 id="s4"><span class="no">04</span>Model-driven or graph-driven</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You mentioned graphs earlier. That's LangGraph's design.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've used it. You write state changes as an explicit graph.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you decide in code which node comes after which. That makes behavior easier to predict, even with complex branches.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While Strands lets the model make that decision.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the main difference. Here it is side by side.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Model-driven Strands compared with graph-driven LangGraph. Who picks the next step: the model, versus your code. How you write it: tools and a prompt, versus nodes and edges. Where it runs: both on AgentCore Runtime.">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Model-driven</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Graph-driven</text>
+      <text x="16" y="56" class="t-sm">Who picks the next step</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">the model</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">your code</text>
+      <text x="16" y="136" class="t-sm">How you write it</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">tools, a prompt</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">nodes, edges</text>
+      <text x="16" y="216" class="t-sm">Runs on AgentCore Runtime</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">yes</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">yes</text>
+    </svg>
+    <figcaption>The accented row is the real choice. The last row shows it doesn't limit where the agent can run.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which one should I pick?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a choice between two design styles. AgentCore doesn't require a framework, so either runs the same way on Runtime.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If predictability matters most, a graph. If the path can't be known in advance, model-driven.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And inside Strands, a Graph gives you fixed order where you need it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I don't have to choose one style for the whole system.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. A fixed part can be a Graph, and the open part can stay model-driven.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Deployment, versions, and operation</h2>
-    <p>There are two main ways to put your agent on Runtime: building a container image and placing it in ECR, or passing your code directly. There are many small settings, but the <strong>AgentCore CLI</strong> handles everything from building to deploying, so you do not need to redo the steps each time.</p>
-    <p>Every time you update your code and deploy, Runtime adds a new version. The actual requests are received by an <strong>endpoint</strong>, and the endpoint decides which version gets the traffic. As Figure 2 shows, you can fix the production endpoint to a version you have already tested, while trying the newest version on a staging endpoint. If something goes wrong, you can roll back by pointing the endpoint to an older version, using the same system.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 280" role="img" aria-label="Production and Staging endpoints point to different versions of the deployed agent. Production stays fixed on a tested version and serves real users, while Staging always tries the newest. Rolling back means repointing an endpoint to an older version">
-        <text x="200" y="20" text-anchor="middle" class="t-sm">Each deploy adds a new version</text>
-        <text x="104" y="52" text-anchor="middle" class="t-hd">Production</text>
-        <text x="296" y="52" text-anchor="middle" class="t-hd">Staging</text>
-        <text x="16" y="72" class="t-sm">Version</text>
-        <rect x="16" y="80" width="176" height="40" rx="6" class="node"/><text x="104" y="105" text-anchor="middle">v2 (tested)</text>
-        <rect x="208" y="80" width="176" height="40" rx="6" class="node"/><text x="296" y="105" text-anchor="middle">v3 (latest)</text>
-        <text x="16" y="140" class="t-sm">Purpose</text>
-        <rect x="16" y="148" width="176" height="40" rx="6" class="node"/><text x="104" y="173" text-anchor="middle">Serves real users</text>
-        <rect x="208" y="148" width="176" height="40" rx="6" class="node"/><text x="296" y="173" text-anchor="middle">Tests changes</text>
-        <text x="16" y="208" class="t-sm">If something breaks</text>
-        <rect x="16" y="216" width="176" height="48" rx="6" class="node-acc"/>
-        <text x="104" y="236" text-anchor="middle">Repoint to</text><text x="104" y="256" text-anchor="middle" class="t-sm">an older version</text>
-        <rect x="208" y="216" width="176" height="48" rx="6" class="node"/><text x="296" y="246" text-anchor="middle" class="t-sm">Stays on the newest</text>
-      </svg>
-      <figcaption>Production and Staging point to different versions: Production stays fixed on what you have tested, Staging always tries the newest. To roll back, just repoint the endpoint to an older version.</figcaption>
-    </figure>
-    <p>You pay only for what you use. The design idea is that the cost goes down when the agent is not really doing work, such as while it waits for the LLM to respond. The exact prices change often, so here we focus only on the idea behind the pricing.</p>
-    <p>To authenticate calls to Runtime, you can use AWS IAM (with SigV4 signing) or JWT (with OAuth). Which one to choose depends on who is calling. Runtime can also connect to a database or an internal system inside a VPC (a private network), so it can reach resources deep inside your company's network.</p>
-    <div class="aside caution">
-      <p class="label">Where companies get stuck</p>
-      <p>In a personal prototype, people often overlook three problems: mixed-up conversations, long tasks stopping partway through, and closed networks. If a shared server handles sessions carelessly, one user's conversation can leak into another's. A long task can also get stuck when it hits a timeout. In production, teams often need the agent to reach a system that is only available inside the company network. Runtime's session isolation, long runs, and VPC connections answer exactly these needs.</p>
-    </div>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You started by asking where the steps were. Where are they?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There are none to write. The model plans the steps, from the tools and the system prompt.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My control comes from the harness layers: loop, tools, hooks, skills, steering and session.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A rule that must hold goes in a hook or in Policy, not in the prompt.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And when one agent isn't enough?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Agents combine as tools, as a Swarm or as a Graph, and A2A crosses team lines.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One thing to try this week: write a hook that logs every tool call. You'll see exactly what the model chose, and in what order.</p></div></div>
+</div>
   </section>
-
-  <div class="aside aside-quiet">
-    <p class="label">Where you meet this on the roadmap</p>
-    <ul>
-      <li><span class="tag">2-2</span>Official Workshop Phase 1: a lab where you deploy to Runtime yourself. You can try out what this chapter covers</li>
-      <li><span class="tag">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Runtime chapter again in Japanese</li>
-      <li><span class="tag">3-3</span>Deep Dive Track 1: Host your agent</li>
-    </ul>
-  </div>
-
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Runtime is a part that takes over server operation, session isolation, and scaling.</li>
-      <li>Each session gets its own microVM, which is thrown away when it ends. The only rule is to offer <code>/invocations</code> and <code>/ping</code>.</li>
-      <li>By using versions and endpoints together, you can test new code and roll back, while keeping production stable.</li>
+      <li>Strands Agents is model-driven: the model decides the steps from tools and a system prompt.</li>
+      <li>The harness has six layers: loop, tools, hooks, skills, steering and session.</li>
+      <li>Agents combine as tools, a Swarm or a Graph; Runtime runs any framework the same way.</li>
     </ol>
   </section>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="prev" href="ch03.html"><span>Previous</span><b>Chapter 3</b></a>
-    <a class="next" href="ch05.html"><span>Next</span><b>Chapter 5, Memory</b></a>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">1-4</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 2 (in Japanese): the Strands Agents section</li><li><span class="tag">2-1</span> Strands Agents Hands-On Workshop: modules 1 to 5 are the core; 6 and 7 are optional</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch03.html"><span>Previous</span><b>What does AgentCore actually give you?</b></a>
+    <a class="next" href="ch05.html"><span>Next</span><b>Where does an agent actually run?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
