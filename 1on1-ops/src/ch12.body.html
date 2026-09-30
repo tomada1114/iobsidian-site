@@ -1,0 +1,189 @@
+<!-- title: Operations 12 · Before we open | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 12 of 12</span></p>
+  <h1>What has to be true before we open to the public?</h1>
+  <p class="lead">After this page you can walk through a production readiness list, and say why each item is on it. You can also explain which things to build early, and how to record what you choose to do without.</p>
+  <p class="meta"><span>About 9 min read</span><span>The whiteboard room</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>What changes when strangers arrive?</li>
+      <li>What's on the readiness list?</li>
+      <li>What do we do without, and why?</li>
+      <li>What does an internal AI agent need?</li>
+    </ul>
+  </nav>
+  <p class="stage">The whiteboard room. Maya has written "dev" and "prod" at the top of two columns, and hands Leo the pen.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>When strangers arrive</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Honestly, I'd write the same things in both columns. Same code, same tests, same alarms. Isn't prod just dev with a different URL?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who uses dev today?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The team. Mostly the owner, practising.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who will use prod?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Learners. People we've never met.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what arrives with them?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Their data. And… their expectations, I suppose.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And their abuse. Some strangers will try to break things, or sign up ten thousand fake accounts.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So prod is dev plus people we can't trust.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Plus people we owe something to. That's what the second column is about.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why not build all of that from day one?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Quickturn's rule was to build early what's hard to add later. Learner isolation, auth, the data shape, infrastructure as code, fast deploys.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the rest?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Added in one production-guard phase, before launch.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of whether something is hard to add later across and whether it is needed at launch down. Needed at launch and hard to add later: built early, like isolation and auth. Needed at launch but easy to add: added in the guard phase before launch. Not needed yet and easy to add: done without at this size. Not needed yet but hard to add later: plan it early.">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">easy to add later</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">hard to add later</text>
+      <text x="8" y="80" class="t-sm">needed</text>
+      <text x="8" y="196" class="t-sm">not yet</text>
+      <rect x="76" y="36" width="150" height="100" rx="6" class="node-acc"/>
+      <text x="151" y="92" text-anchor="middle" class="t-hd t-acc">before launch</text>
+      <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
+      <text x="309" y="92" text-anchor="middle">built early</text>
+      <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
+      <text x="151" y="208" text-anchor="middle">do without</text>
+      <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
+      <text x="309" y="208" text-anchor="middle">plan early</text>
+    </svg>
+    <figcaption>Down is "needed at launch." The accented corner is the readiness list: needed, but cheap enough to add in one phase.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do separate accounts go? That sounds hard.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It sounds hard, but it's a known shape. An AWS Organization, with a management account that holds only billing and identity.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then a dev account and a prod account.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. People sign in through IAM Identity Center, not as an IAM user with a password and keys.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I read prod data to debug something?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Nothing reaches prod except the deploy workflow behind its approval. And development never reads prod data.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the root user of each account?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Root has MFA and no access keys. Everyone else uses short-lived credentials, so there's no long-lived key to leak.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>The readiness list</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what goes in the prod column?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Walk it with me. First, the prod stacks, from the same code, with the prod stage.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Deployed behind an approval, with an audit trail.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Next, abuse. WAF rate-based rules at the edge.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one address can't hammer the API.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then email. Sign-up and recovery email go through SES, not Cognito's built-in sender.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why change the sender?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The built-in one is meant for testing, with low limits. Real learners need their recovery email to arrive.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the data guards: recovery and deletion protection. And account deletion and data export.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the privacy policy and the terms. And alarms on API errors and budget thresholds.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Watched by whom?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By a person, closely, through the first weeks. An alarm nobody watches is decoration.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the reliability targets and restore drills?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both run in prod. The targets need real traffic, and the drills need real data to restore.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about payments?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Live payments go on in prod too. That's one more reason nobody touches prod by hand.</p></div></div>
+</div>
+<dl class="terms">
+  <dt>Accounts</dt><dd>Dev: the dev account. Prod: its own account.</dd>
+  <dt>Who can sign up</dt><dd>Dev: the team. Prod: anyone, self sign-up on.</dd>
+  <dt>Deploy approval</dt><dd>Dev: none. Prod: a reviewer, with an audit trail.</dd>
+  <dt>Abuse limits</dt><dd>Dev: none. Prod: WAF rate-based rules.</dd>
+  <dt>Auth email</dt><dd>Dev: the built-in sender. Prod: SES.</dd>
+  <dt>Data guards and rights</dt><dd>Dev: Retain only. Prod: recovery, deletion protection, deletion and export.</dd>
+</dl>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a lot of differences for "the same thing with a new URL."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And one more: what we do when an alarm fires.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A runbook?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A short page per alarm. What it means, what to check first, and how to reduce the harm.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Written before the alarm fires.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At 2 a.m., nobody reasons well. The page does the thinking you did in daylight.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a real incident?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone leads it and keeps a timeline. Then the fix, and then a blameless review, as the Google SRE book describes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Blameless meaning nobody gets punished?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Meaning you look for what let the mistake happen, not who made it. People only tell the truth when it's safe to.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does Quickturn have all that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One runbook per alarm, and a short written incident process.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And learner isolation? That felt like the scariest item.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It was built early and is tested in every store. A leak between learners is the one failure no runbook can undo.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>What we do without</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything we skip?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cognito has paid threat protection. We turn it on when abuse is observed, not in advance.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't that risky?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A little. The WAF rules already limit the obvious attacks. The paid tier waits for evidence it's needed.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's no separate analytics database. Reporting runs on exports to S3.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And running prod beside dev?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It doubles the operating work, and part of the cost. The team accepts that, because prod holds learners' data.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do you decide what to skip?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each choice has a cost and a benefit. Skip something, and you have less evidence the first time you need it. But the effort goes where the risk actually is.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the senior part?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Writing each "not at our size" down, with its reason. Then it's a decision, not something forgotten.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So next year, someone can read why, and change their mind on purpose.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point. A written "no" can be revisited. A forgotten one just surprises you.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The production-guard phase adds accounts, stacks, approvals, guards and data rights; then the prod stacks exist but are closed; then launch, with self sign-up on and policies published; then the first weeks of watched alarms.">
+      <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
+      <circle cx="28" cy="40" r="6" class="dot"/>
+      <circle cx="28" cy="112" r="6" class="dot"/>
+      <circle cx="28" cy="184" r="7" class="f-acc"/>
+      <circle cx="28" cy="256" r="6" class="dot"/>
+      <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="46">Production-guard phase</text>
+      <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="118">Prod exists, but closed</text>
+      <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
+      <text x="64" y="190" class="t-hd">Launch · sign-up on</text>
+      <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
+      <text x="64" y="262">First weeks, watched</text>
+    </svg>
+    <figcaption>Launch is one switch, because everything before it is already in place. The weeks after it are when the alarms matter most.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>An internal AI agent</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Would an internal AI agent need all this? Only employees use it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same review, plus some items of its own. Who does the agent act as, and what may each tool do?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Least privilege, per tool.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then a spend limit, and a kill switch.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Evaluation before rollout?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And monitoring of task success after it. Plus logs that don't keep sensitive prompts forever.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it gets something badly wrong?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A human escalation path. Someone the user can reach, quickly.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the usual mistake?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Treating "internal" as "no review needed." Employees paste customer data into it on the first day.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the logs fill with customer data, from a tool nobody reviewed.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The review isn't about who the users are. It's about what the system can touch.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Hand me back the pen. What's the difference between the columns?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Production isn't dev with a new URL. It's strangers' data and strangers' abuse.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We built the hard-to-retrofit things early. The easy guards came in one phase before launch: separate accounts, approvals, WAF, SES, recovery, deletion and export.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every alarm has a runbook.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the things we skipped?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We write down what we do without, like paid threat protection, with the reason.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Date each of those notes too. A reason that was true at a hundred learners may not be true at ten thousand.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Production means strangers' data, abuse and expectations, not just a new URL.</li>
+      <li>Build hard-to-retrofit things early; add accounts, approvals, WAF, SES and data guards before launch.</li>
+      <li>Give every alarm a runbook, and write down each thing you do without, with its reason.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch11.html"><span>Previous</span><b>What happens to a learner's data when things go wrong?</b></a>
+    <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
