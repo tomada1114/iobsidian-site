@@ -1,123 +1,169 @@
-<!-- title: AgentCore Reader 05 Memory | accent: think -->
+<!-- title: AgentCore Reader 05 · Where an agent runs | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 5 / 11 chapters</span></p>
-  <h1>Memory: The LLM Remembers Nothing</h1>
-  <p class="lead">Runtime gives each session its own private room. But what was said inside that room disappears as soon as the room is cleaned up. In this chapter, you will see how Memory saves conversations and uses them again in later conversations.</p>
-  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 5 of 13</span></p>
+  <h1>Where does an agent actually run?</h1>
+  <p class="lead">After this page you can explain what AgentCore Runtime takes over, and why each session gets its own private room. You can also describe the one rule an agent must follow, and how versions and endpoints keep production stable.</p>
+  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
-
 <div class="flow">
-  <nav class="toc" aria-label="In this chapter">
-    <p class="label">In this chapter</p>
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
     <ul>
-      <li>The starting point: the LLM itself remembers nothing</li>
-      <li>Short-term memory: keeping the conversation from one session, as it is</li>
-      <li>Long-term memory: pulling out the key points from conversations and storing them</li>
-      <li>How the next conversation searches for memories and adds them in</li>
-      <li>The idea of managing what goes into the context window</li>
+      <li>Why not run the agent on Lambda?</li>
+      <li>What is a private room per session?</li>
+      <li>What must an agent offer, and how long can it run?</li>
+      <li>How are versions deployed and rolled back?</li>
     </ul>
   </nav>
-
+  <p class="stage">The whiteboard room. Leo has drawn the API's Lambda functions, and the tutor is in a separate box.</p>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The LLM does not remember the last conversation</h2>
-    <p>Here is an important starting point: <strong>the LLM itself has no built-in way to remember a conversation</strong>. When you say "as I mentioned before" and get a natural reply, it looks like the model remembers. In fact, the whole conversation history is sent again with every message.</p>
-    <p>This container that carries the conversation history is called the <strong>context window</strong>. It has a limit. As the history gets longer, you send more tokens (small pieces of text that the model reads), which makes the answer slower and raises the cost. When you pack in too much history, the LLM can also have trouble finding the part it really needs, so the answer can get worse. A longer conversation does not make the model smarter. If you handle it badly, it just becomes extra weight.</p>
-    <p>The tricky part is that making the window bigger does not solve the problem. Even with a larger window, if you keep sending every unrelated message, the LLM can lose track of the instructions that really matter. <strong>The real question is not how much to pack in, but what to keep and what to drop</strong>. This design question leads directly to the role of Memory, which we look at in this chapter.</p>
+    <h2 id="s1"><span class="no">01</span>Why not Lambda</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The whole API runs on Lambda. Why is the tutor over here, on Runtime? Isn't an agent just another function?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does the tutor do during one conversation?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It calls a tool, waits for the result, calls the next tool. Again and again.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what is Lambda built for?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Short tasks that finish quickly. Each call has a time limit.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So a long conversation can run past that limit. That's the first problem.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why not a container, on ECS? No time limit there.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>True. But now you design your own isolation and scaling. Keeping each user's conversation separate, and removing servers when nobody needs them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Lambda runs out of time, and ECS runs out of help.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the gap. Runtime takes over three jobs: keeping the agent running, keeping sessions isolated, and scaling up or down.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we only write the agent's own code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The tutor runs on Runtime, and the rest of the API stays on Lambda. Each fits its job.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Lambda compared with AgentCore Runtime. Run time: a time limit per call, versus built for long-running tasks. Session isolation: you design it yourself, versus a dedicated environment per session set up automatically. Scaling: automatic in both.">
+      <rect x="200" y="36" width="192" height="236" rx="10" class="node-acc"/>
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Lambda</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Runtime</text>
+      <text x="16" y="56" class="t-sm">Run time</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">time limit</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">long tasks</text>
+      <text x="16" y="136" class="t-sm">Session isolation</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">you design it</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">per session</text>
+      <text x="16" y="216" class="t-sm">Scaling</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">automatic</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">automatic</text>
+    </svg>
+    <figcaption>Scaling is a tie. The accented column wins on the two rows an agent needs most: long runs and separate sessions.</figcaption>
+  </figure>
   </section>
-
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Short-term memory: keeping the session's conversation as it is</h2>
-    <p>The first job of Memory is <strong>short-term memory</strong>. It saves every message in a session as an event, without changing it. Each event is tracked by an actor ID (who is talking) and a session ID (which conversation it belongs to). This lets Memory handle several sessions from the same user without mixing them up.</p>
-    <p>Short-term memory is like a raw record of the conversation. Even after a Runtime session ends and its microVM is thrown away, this record stays in Memory. When the session starts again, the conversation can continue by loading this record.</p>
+    <h2 id="s2"><span class="no">02</span>A private room per session</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does "isolated" mean in practice?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When Runtime receives a request, it sets up a microVM, a small virtual machine, just for that session. The agent runs inside it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One per user?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One per session. Each user's session gets its own microVM, so conversations never mix.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when the session ends?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its microVM is thrown away, like cleaning up a room after the work is done.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how does a learner continue tomorrow?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They send a request with the same session ID, and Runtime shows them back to the same room.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Runtime remembers the conversation.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, that's Memory's job. Runtime's job is only to set up an isolated place to run the agent.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the room is new, but the notebook comes back.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Keep them apart in your head, because they fail in different ways.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the AWS account, containing Runtime, containing one session's microVM, containing the agent code. Each session gets its own microVM.">
+      <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
+      <text x="24" y="36" class="t-hd">AWS account</text>
+      <rect x="32" y="52" width="336" height="224" rx="10" class="node"/>
+      <text x="48" y="80" class="t-hd">Runtime</text>
+      <rect x="64" y="100" width="272" height="160" rx="10" class="node-acc"/>
+      <text x="80" y="128" class="t-hd t-acc">Session microVM</text>
+      <text x="80" y="150" class="t-sm">one per session</text>
+      <rect x="104" y="172" width="192" height="68" rx="8" class="node"/>
+      <text x="200" y="212" text-anchor="middle">agent code</text>
+    </svg>
+    <figcaption>The accented box is the private room. Another session never shares it, and it's cleaned away when the session ends.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens without that, in a prototype?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three problems people overlook. A shared server handles sessions carelessly, and one user's conversation leaks into another's.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the worst one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then long tasks get stuck when they hit a timeout. And in production, the agent often needs a system that only exists inside the company network.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can Runtime reach that?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can connect to a database or an internal system inside a VPC, a private network. Session isolation, long runs and VPC connections answer exactly these three.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Long-term memory: pulling out and storing just the key points</h2>
-    <p>If you just keep storing the whole conversation, it will eventually not fit in the context window. So Memory pulls out the key points from the saved events, in the background and asynchronously (not while the user waits), and stores them separately as <strong>long-term memory</strong>.</p>
-    <p>You can choose a strategy for what to pull out: semantic memory, which collects facts; summary, which sums up the whole conversation; user preference, which remembers what the user likes; episodic memory, which learns from events that went well or badly; and a custom strategy, where you write your own prompt to decide what to extract. One agent can also combine several strategies.</p>
-    <p>The extracted memories are stored in separate <strong>namespaces</strong>, like separate shelves. For example, one shelf for "this user's preferences" and another for "the history of this case". Keeping shelves separate helps avoid mixing up whose memory is whose.</p>
-    <p>The extraction does not happen during the conversation. It runs in the background, asynchronously. <strong>This means the response to the user is never slowed down by the extraction step.</strong> Because it is asynchronous, you can choose a strategy that takes some time, without affecting the conversation the user is having right now.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 400" role="img" aria-label="A conversation moves from a chat message through short-term memory and an async extraction step into namespaced long-term memory; the next chat then searches by meaning and adds matching memories back in">
-        <line x1="30" y1="44" x2="30" y2="348" class="ln-acc"/>
-        <circle cx="30" cy="44" r="6" class="node-acc"/>
-        <circle cx="30" cy="120" r="6" class="node-acc"/>
-        <circle cx="30" cy="196" r="6" class="node-acc"/>
-        <circle cx="30" cy="272" r="6" class="node-acc"/>
-        <circle cx="30" cy="348" r="8" class="f-acc"/>
-        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="40">Chat</text><text x="72" y="61" class="t-sm">A new user message</text>
-        <rect x="56" y="92" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="116">Short-term memory</text><text x="72" y="137" class="t-sm">Every event, saved as-is</text>
-        <rect x="56" y="168" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="192">Extract strategy</text><text x="72" y="213" class="t-sm">Runs async, in the background</text>
-        <rect x="56" y="244" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="268">Long-term memory</text><text x="72" y="289" class="t-sm">Namespaced, e.g. per user</text>
-        <rect x="56" y="320" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="344" class="t-hd">Next chat</text><text x="72" y="365" class="t-sm">Searches by meaning, adds it in</text>
-      </svg>
-      <figcaption>A conversation stays in short-term memory as it is. It also goes through an extraction strategy in the background and settles into long-term memory, sorted by namespace. When the next conversation begins, Memory searches for memories close in meaning and adds them into the prompt.</figcaption>
-    </figure>
+    <h2 id="s3"><span class="no">03</span>Long runs and one rule</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long can a session run?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime supports runs of up to 8 hours. You can hand off long tasks, like research or data analysis, and let them keep going.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But a learner won't wait in silence for eight hours.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So Runtime supports both asynchronous processing and streaming. Streaming sends small pieces of the answer as soon as they're ready.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Long tasks in the background, short answers streamed to the screen.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A chat like the tutor suits streaming, because the learner is watching the text appear.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a research task suits the background.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You start it, go to lunch, and read the result later.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does Runtime care that we use Strands?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not at all, or which LLM we call. There's one rule: the agent must offer two HTTP endpoints.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which two?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span><code>/invocations</code> for calls, and <code>/ping</code> to check that it's alive. Follow that, and Strands, LangGraph or CrewAI agents are hosted the same way.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a small contract.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And it isn't HTTP only. On the same Runtime, an agent can be an MCP server that offers tools.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Or an A2A server?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, one that talks to other agents.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about voice?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Support for two-way streaming, for voice conversations, is growing. That area changes fast, so check the developer guide.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Retrieval: adding memory into the next conversation</h2>
-    <p>Long-term memory is not useful if you just store it and never use it. When the next conversation starts, Memory searches long-term memory for entries close in meaning to the user's question, and adds them into the prompt. <strong>It searches by meaning, not by matching exact keywords</strong>, so it can find a related memory even when the wording is different.</p>
-    <p>From the agent's side, you barely need to think about this search and insertion step. If you point your calls to Memory, the conversation already starts with likely relevant memories added to the prompt.</p>
-    <div class="aside analogy">
-      <p class="label">Analogy: a work note and a patient chart</p>
-      <p>Short-term memory is like a work note where a new employee writes down everything from today's meeting, just as it happened. Long-term memory is like a customer chart, where only the key points are copied from that note. Charts are kept on separate shelves for each case and each customer. They are taken down and placed on the desk only when that customer comes up again.</p>
-    </div>
+    <h2 id="s4"><span class="no">04</span>Versions and cost</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does the code get onto Runtime?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two main ways. Build a container image and place it in ECR, or pass your code directly.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Lots of settings, I suppose.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many small ones. But the AgentCore CLI handles everything from building to deploying, so you don't redo the steps each time.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And every deploy replaces the old one?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every deploy adds a new version. Requests are received by an endpoint, and the endpoint decides which version gets the traffic.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So production can stay on a version we tested.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>While a staging endpoint tries the newest. And if something goes wrong, you point the production endpoint back to an older version.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Rollback without a new build.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point of keeping versions. The old code is still there, tested, and one change away.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a Lambda alias pointing at a version?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same idea, yes. On Runtime it's built into how every deploy works.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Now, who calls Runtime? It accepts AWS IAM with SigV4 signing, or JWT with OAuth. Which one depends on who's calling.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You pay only for what you use. The design idea is that cost goes down when the agent isn't really working, like while it waits for the LLM.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the numbers?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They change often, so I'll leave them out. What matters is the trade.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which trade?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Isolation and long sessions, against paying for session time and running a second deploy path beside Lambda's.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two ways to ship code instead of one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And two sets of limits to learn, and two places to look when something breaks.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the second path has to earn its place.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. For the tutor, it's worth it. For a request that ends in a second, Lambda is still the better home.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>The context window: a container with a limit</h2>
-    <p>Adding more memory is not always better. The context window is shared between the conversation history, the retrieved memories, the system prompt, and the tool descriptions. <strong>Deciding what to keep and what to drop</strong> is the job of the conversation manager, a part of Strands Agents.</p>
-    <p>In practice, it replaces old messages with a summary, or removes the oldest parts once the history passes a certain size. What matters most to keep depends on the agent's purpose. Deciding whether to use the default behavior, or adjust it yourself, is a real design choice.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 290" role="img" aria-label="Inside the context window, the system prompt, tool descriptions, chat history and retrieved memory share a fixed limit; chat history is usually the largest and growing share">
-        <text x="200" y="20" text-anchor="middle" class="t-hd">Inside the context window</text>
-        <rect x="24" y="40" width="328" height="28" class="node"/><text x="40" y="59" class="t-sm">System prompt</text>
-        <rect x="24" y="68" width="328" height="44" class="node"/><text x="40" y="95">Tool descriptions</text>
-        <rect x="24" y="112" width="328" height="92" class="node-acc"/><text x="40" y="157" class="t-hd t-acc">Chat history</text><text x="40" y="179" class="t-sm t-acc">Grows as the conversation continues</text>
-        <rect x="24" y="204" width="328" height="40" class="node"/><text x="40" y="229">Retrieved memory</text>
-        <line x1="360" y1="40" x2="360" y2="244" class="ln-dash"/>
-        <text x="360" y="30" text-anchor="middle" class="t-sm">Limit</text>
-      </svg>
-      <figcaption>Inside the context window, the system prompt, tool descriptions, conversation history, and retrieved memory all share the space. As the conversation gets longer, history takes up a bigger share and leaves less room for the rest. The Deep Dive module "Manage context of your agent" covers this design in more detail.</figcaption>
-    </figure>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put my answer to your first question into your own words. Why isn't the tutor on Lambda?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Runtime gives one isolated microVM per session, and throws it away when the session ends.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It supports long runs, up to 8 hours, with streaming or background work.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Any framework works, as long as the agent offers <code>/invocations</code> and <code>/ping</code>.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How do we ship a change safely?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each deploy is a version, and endpoints choose which version gets traffic.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Remember what Runtime doesn't do, too. It hosts the session; remembering the conversation belongs to Memory.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s6">
-    <h2 id="s6"><span class="no">06</span>Do not mix up whose memory it is</h2>
-    <p>When companies use long-term memory, they especially worry about <strong>mixing up whose memory it is</strong>. A poor namespace design can cause accidents, such as one customer's preferences leaking into another's data. For example, if you build namespaces around individual people rather than departments, it is easier to avoid mixed-up memories when staff change.</p>
-    <div class="aside caution">
-      <p class="label">Where companies get stuck</p>
-      <p>Points that you barely think about in personal use become important in production. Can you delete just one user's memory when they ask for it? How long should memory be kept? Is it fine to keep personal data in long-term memory as it is? Is the stored data encrypted? These questions are not only about Memory's settings. They also affect how you choose an extraction strategy, since that strategy decides what goes into long-term memory in the first place.</p>
-    </div>
-  </section>
-
-  <div class="aside aside-quiet">
-    <p class="label">Where you meet this on the roadmap</p>
-    <ul>
-      <li><span class="tag">2-2</span>Official Workshop Phase 1: the Memory lab. Try short-term and long-term memory yourself</li>
-      <li><span class="tag">2-3</span>the book *Amazon Bedrock AgentCore 実践入門* (Japanese) Part 3 (first half): read the Memory chapter again in Japanese</li>
-      <li><span class="tag">3-5</span>Deep Dive: Manage context of your agent</li>
-    </ul>
-  </div>
-
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>The LLM itself remembers nothing. The context window, which carries the conversation history, has a limit.</li>
-      <li>Short-term memory keeps the whole conversation. Long-term memory uses an extraction strategy to store just the key points, by namespace.</li>
-      <li>The next conversation searches for memories that are close in meaning and adds them in. Managing what to keep and what to drop is essential too.</li>
+      <li>Runtime takes over keeping agents running, isolating sessions, and scaling.</li>
+      <li>Each session gets its own microVM; the only rule is to offer /invocations and /ping.</li>
+      <li>Versions and endpoints let you test new code and roll back while production stays stable.</li>
     </ol>
   </section>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="prev" href="ch04.html"><span>Previous</span><b>Chapter 4</b></a>
-    <a class="next" href="ch06.html"><span>Next</span><b>Chapter 6, Gateway and Tools</b></a>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Official Workshop Phase 1: the lab that deploys to Runtime</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Runtime chapter</li><li><span class="tag">3-3</span> Deep Dive Track 1: Host your agent</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch04.html"><span>Previous</span><b>Why let the model run the loop?</b></a>
+    <a class="next" href="ch06.html"><span>Next</span><b>How can an agent remember anything?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
