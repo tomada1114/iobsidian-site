@@ -1,0 +1,188 @@
+<!-- title: Operations 05 · What a model call costs | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 5 of 12</span></p>
+  <h1>How do we see what a model call costs?</h1>
+  <p class="lead">After this page you can explain why a single model call is the unit to observe, and which fields its record needs. You can also say what the bill, the provider's logs and your own record each can and can't tell you.</p>
+  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
+    <ul>
+      <li>Why isn't the bill enough?</li>
+      <li>Where does each piece of the record come from?</li>
+      <li>What do these records cost, and where do they mislead?</li>
+      <li>What changes when an agent makes many calls?</li>
+    </ul>
+  </nav>
+  <p class="stage">The whiteboard room. Leo has been reading the worker that grades typed answers with a model.</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>What the bill can't say</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The design says "every call is observable." But AWS already tracks Bedrock usage, and there's a bill. Isn't that enough?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the bill doubles next month. What's your first question?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why. Which feature got more expensive?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Can the bill answer that?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It says "Bedrock" and a total. Maybe split by model.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So it can't say which feature, which prompt version, or which change made it double last Tuesday.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. It only tells me that something happened.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the gap. For model features, the unit you observe is one model call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not one request to our API?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One API request might make no model call, or several. The cost and the quality live in the call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does a call record hold?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every grade of a typed answer comes back with a call record next to it. Here's the shape:</p><pre><code>{
+  "modelId": "…haiku…",
+  "promptVersion": "grade-v3",
+  "feature": "grading",
+  "inputTokens": 812,
+  "outputTokens": 96,
+  "cacheReadTokens": 640,
+  "cacheWriteTokens": 0,
+  "latencyMs": 1240,
+  "estimatedCostUsd": 0.0013
+}</code></pre></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The numbers are real?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the field names are. The values are made up for today.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does the prompt version matter so much?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because it's the thing you change most. If grades get worse on Wednesday, you want to see "grade-v4 shipped Tuesday."</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And compare grades from v3 and v4 side by side.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Without the version on each call, the two are mixed in one pile.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the feature field?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Grading may not be the only caller. If a hint feature shares the model, the feature field keeps their costs apart.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 332" role="img" aria-label="One model call in the center, with six parts around it: model id, prompt version, feature, tokens including cache, latency and estimated cost. The call is the unit a regression or a cost spike is traced back to.">
+      <line x1="200" y1="166" x2="104" y2="44" class="ln"/>
+      <line x1="200" y1="166" x2="296" y2="44" class="ln"/>
+      <line x1="200" y1="166" x2="80" y2="166" class="ln"/>
+      <line x1="200" y1="166" x2="320" y2="166" class="ln"/>
+      <line x1="200" y1="166" x2="104" y2="288" class="ln"/>
+      <line x1="200" y1="166" x2="296" y2="288" class="ln"/>
+      <rect x="16" y="20" width="176" height="48" rx="6" class="node"/><text x="104" y="50" text-anchor="middle">model id</text>
+      <rect x="208" y="20" width="176" height="48" rx="6" class="node"/><text x="296" y="50" text-anchor="middle">prompt version</text>
+      <rect x="8" y="142" width="112" height="48" rx="6" class="node"/><text x="64" y="172" text-anchor="middle">feature</text>
+      <rect x="280" y="142" width="112" height="48" rx="6" class="node"/><text x="336" y="172" text-anchor="middle">latency</text>
+      <rect x="16" y="264" width="176" height="48" rx="6" class="node"/><text x="104" y="294" text-anchor="middle">tokens + cache</text>
+      <rect x="208" y="264" width="176" height="48" rx="6" class="node"/><text x="296" y="294" text-anchor="middle">estimated cost</text>
+      <rect x="132" y="138" width="136" height="56" rx="8" class="node-acc"/>
+      <text x="200" y="172" text-anchor="middle" class="t-hd t-acc">one call</text>
+    </svg>
+    <figcaption>The call in the middle is what a cost spike or a worse grade is traced back to. Each part around it answers one question.</figcaption>
+  </figure>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>Where each piece comes from</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do the tokens come from? Do we count them ourselves?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model's response reports its own token usage. The adapter copies it into the record.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the latency? Doesn't the response report that too?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The adapter measures it with its own timer, around the call. We don't rely on a latency value we haven't verified.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we trust our own clock.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For that number, yes. Then there are layers outside our code. Bedrock can log each invocation: the raw request and the response.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that on already?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, it's off by default. When you turn it on, it writes to CloudWatch Logs and S3.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost split by feature?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each feature calls the model through its own application inference profile, and each profile is tagged. Cost Explorer can then split spend by that tag.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the bill does learn about features.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, through the tags. And a per-feature cost dashboard shows it.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Four layers: the application call record, which knows the feature and prompt version; Bedrock invocation logs with the raw request and response; tags on the inference profiles; and Cost Explorer with the cost dashboard.">
+      <rect x="16" y="16" width="368" height="56" rx="6" class="node-acc"/>
+      <text x="32" y="50" class="t-hd t-acc">App record · prompt version</text>
+      <rect x="16" y="88" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="122">Invocation logs · raw text</text>
+      <rect x="16" y="160" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="194">Profile tags · per feature</text>
+      <rect x="16" y="232" width="368" height="56" rx="6" class="node"/>
+      <text x="32" y="266">Cost Explorer · dashboard</text>
+    </svg>
+    <figcaption>Only the top layer knows the prompt version. The others know the model, the text or the money.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four layers for one call. Isn't that too much?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each one answers a different question. Only our own record knows which prompt version ran.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a standard for this? Every team seems to invent field names.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>OpenTelemetry has GenAI semantic conventions: standard names for the model, the token usage and the operation.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So tools can read our traces without custom code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the aim. It's still evolving, so check the current version before you adopt it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for the tutor agent?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AgentCore Observability traces its sessions and its tool calls.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>What the records cost</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should we just turn invocation logging on everywhere? Then we'd have everything.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's in a grading prompt?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The learner's typed answer. Oh.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Invocation logs store prompts and outputs. That's personal data, with its own access rules and its own retention.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So turning it on is a data decision, not only a debugging one.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both at once. And the telemetry costs something too. Every field is more storage, on every call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the estimated cost? It's in the record, so it's exact?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's computed from the token counts and a price table. When prices change, the old numbers drift.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which is the truth?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The token counts. Keep them, and recompute the cost when the table changes.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why are cache tokens separate fields?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prompt caching changes the math. Writing to the cache costs more than normal input, and reading from it costs less.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a single "tokens" number would hide whether caching helped.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here's the whole difference in one table.</p></div></div>
+</div>
+<dl class="terms">
+  <dt>Which feature?</dt><dd>The bill: only with tags. The call record: always.</dd>
+  <dt>Which prompt version?</dt><dd>The bill: never. The call record: always.</dd>
+  <dt>Which change caused it?</dt><dd>The bill: no. The call record: yes, by version and time.</dd>
+  <dt>Per learner?</dt><dd>The bill: no. The call record and the usage ledger: yes.</dd>
+</dl>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not one shared helper, like <code>complete(prompt)</code>? Every feature could call it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then each caller has to remember to pass the feature and the version. One day someone forgets.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And that call shows up untagged.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So each feature has its own adapter, and the record is filled in one place.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if costs run away anyway?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A per-learner usage ledger caps each learner. And a Budgets action denies Bedrock for the whole account, as a last switch.</p></div></div>
+</div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>Many calls, one task</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Grading makes one call per answer. What about an agent that plans and uses tools?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One request can become ten model calls. Each record looks fine on its own.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how do we see the whole task?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every call carries a shared session or trace id. Cost and latency then add up per task.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What goes wrong without it?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A team I know tracked tokens per call perfectly. Then the business asked, "What does one finished task cost?"</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And they couldn't answer.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not without a week of joining logs. That's the number people actually ask for.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the record needs the call and the task it belongs to.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Record per call, and roll up per task.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does that change our grading records?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not today. Each grade is one call, so the call and the task are the same thing. The tutor agent is where it starts to matter.</p></div></div>
+</div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now answer your first question. Is the bill enough?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. Treat each model call as the unit, and record the model, the prompt version and the feature.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Record the token counts including cache, the latency, and an estimated cost. The bill only gives totals.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Invocation logs and tagged profiles help, but only our record knows the prompt version.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the logs?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prompts contain what learners typed, so logging them means logging personal data.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then keep the token counts as the source of truth. Prices change, and the cost can always be recomputed from them.</p></div></div>
+</div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">Summary in three lines</p>
+    <ol>
+      <li>Record every model call with its model, prompt version, feature, tokens, latency and cost.</li>
+      <li>The bill, invocation logs and tags help, but only your record knows the prompt version.</li>
+      <li>Prompts are personal data; for agents, add a shared id so calls roll up per task.</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch04.html"><span>Previous</span><b>How reliable is reliable enough?</b></a>
+    <a class="next" href="ch06.html"><span>Next</span><b>Is a testing strategy just 'write more unit tests'?</b></a>
+  </nav>
+  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+</div>
