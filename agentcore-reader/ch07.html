@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>AgentCore Reader 07 Identity</title>
+<title>AgentCore Reader 07 · The right tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -147,6 +147,7 @@ h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);fo
 /* svg vocabulary: shapes */
 .fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
 .fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
 .fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
 .fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
 .fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
@@ -190,6 +191,21 @@ pre{white-space:pre;background:var(--surface);border-radius:var(--radius);paddin
 pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
 blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
 
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
 /* ---------- ending ---------- */
 .summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
 .summary .label{color:var(--accent)}
@@ -205,12 +221,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
   .aside{padding:14px 15px}
   td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div class="page acc-4">
+<div class="page acc-2">
 <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
     <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
@@ -218,137 +237,180 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>AgentCore Reader</b><span>Chapter 7 / 11 chapters</span></p>
-  <h1>Identity: who an agent acts for, and what it may do</h1>
-  <p class="lead">In enterprise projects, Identity is often the topic that people discuss the longest. It splits into two questions. The first is the entry side (inbound): who is calling the agent? The second is the exit side (outbound): whose rights does the agent use to touch outside services? This chapter looks at how AgentCore handles each question.</p>
-  <p class="meta"><span>Reading time: about 13 min</span><span>Roadmap stage S2-S3</span></p>
+  <p class="kicker"><b>AgentCore Reader</b><span>Page 7 of 13</span></p>
+  <h1>How does an agent get the right tools?</h1>
+  <p class="lead">After this page you can explain how Gateway turns existing APIs into MCP tools behind one endpoint. You can say why it checks identity in two directions. And you can say why fewer, clearer tools make an agent more accurate.</p>
+  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
-
 <div class="flow">
-  <nav class="toc" aria-label="In this chapter">
-    <p class="label">In this chapter</p>
+  <nav class="toc" aria-label="In this page">
+    <p class="label">In this page</p>
     <ul>
-      <li>The difference between the entry (inbound) and exit (outbound) questions</li>
-      <li>The agent's own workload ID (an identity for the agent itself)</li>
-      <li>The role of the token vault and credential providers</li>
-      <li>When to use access on behalf of the user (3LO) versus the agent's own rights (2LO)</li>
-      <li>Designing to avoid the "confused deputy" problem</li>
+      <li>Why does every team rebuild the same connections?</li>
+      <li>What are targets, and who is checked where?</li>
+      <li>Why do more tools make an agent worse?</li>
+      <li>What are Code Interpreter and Browser for?</li>
     </ul>
   </nav>
-
+  <p class="stage">The whiteboard room. Leo has listed every API Quickturn has, and it fills the board.</p>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Two questions: entry and exit</h2>
-    <p>Identity handles two main questions. The first is on the entry side: it checks "who is calling this agent." The second is on the exit side: it decides "whose rights the agent uses when it touches an outside service."</p>
-    <p><strong>These two questions are handled by separate mechanisms</strong>. Finishing the entry-side check does not automatically decide the exit-side rights. If you design a system without this clear separation, you can run into the "confused deputy" problem, explained later in this chapter.</p>
+    <h2 id="s1"><span class="no">01</span>Too many toolboxes</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not give the tutor every one of these? More tools, more it can do.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's look at a bigger company first. Billing, HR, inventory, each built by a different department.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dozens of APIs.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And each one is a possible tool. If every team writes its own connection code, the same login check gets rewritten again and again.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the checks won't match.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They rarely do. One team checks every caller carefully. Another lets everything through with a single API key.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it gets worse with each new agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Gateway solves "how do we expose these tools" once, and many agents reuse it.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it work?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anything you register with Gateway is called a target. And you register resources that are already running, without rewriting them.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What kinds?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A Lambda function you already wrote, or a REST API with an OpenAPI definition.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything else?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An API defined with Smithy. Or an MCP server another team already runs.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the agent has to learn four kinds of connection?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Gateway publishes all of them as one MCP endpoint. The agent connects to that one point and uses every tool behind it.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 332" role="img" aria-label="Agents such as a sales agent and an HR agent connect above to Gateway, one MCP endpoint in the middle. Below it, the targets become MCP tools: a Lambda function, a REST API, a Smithy model and an existing MCP server.">
+      <line x1="104" y1="44" x2="200" y2="148" class="ln"/>
+      <line x1="296" y1="44" x2="200" y2="148" class="ln"/>
+      <line x1="104" y1="232" x2="200" y2="176" class="ln"/>
+      <line x1="296" y1="232" x2="200" y2="176" class="ln"/>
+      <line x1="104" y1="284" x2="200" y2="176" class="ln"/>
+      <line x1="296" y1="284" x2="200" y2="176" class="ln"/>
+      <rect x="16" y="20" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="48" text-anchor="middle">sales agent</text>
+      <rect x="208" y="20" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="48" text-anchor="middle">HR agent</text>
+      <rect x="96" y="132" width="208" height="56" rx="8" class="node-acc"/>
+      <text x="200" y="158" text-anchor="middle" class="t-hd t-acc">Gateway</text>
+      <text x="200" y="178" text-anchor="middle" class="t-sm">one MCP endpoint</text>
+      <rect x="16" y="212" width="176" height="44" rx="6" class="node"/><text x="104" y="240" text-anchor="middle">Lambda</text>
+      <rect x="208" y="212" width="176" height="44" rx="6" class="node"/><text x="296" y="240" text-anchor="middle">REST API</text>
+      <rect x="16" y="264" width="176" height="44" rx="6" class="node"/><text x="104" y="292" text-anchor="middle">Smithy model</text>
+      <rect x="208" y="264" width="176" height="44" rx="6" class="node"/><text x="296" y="292" text-anchor="middle">MCP server</text>
+    </svg>
+    <figcaption>Agents above, targets below. Every call passes through the one endpoint in the middle.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when a new internal API appears?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add it as a target. Existing agents can use it right away, without a code change.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent never has to know where each tool lives.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. In the new-employee picture, Gateway is the toolbox front desk. The employee says "I want to do this," and the desk finds the right tool.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And checks an ID first.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. And it records who received which tool.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Entry side: who is calling the agent</h2>
-    <p>There are two ways to check who is calling an agent. The first uses an IAM SigV4 signature (a way AWS confirms an identity), for when the caller already has AWS credentials. The second accepts a JWT (a signed token that proves an identity) issued by your company's existing ID system, such as Cognito, Microsoft Entra ID, or Okta.</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Method</th><th>When to use it</th><th>Example</th></tr></thead>
-      <tbody>
-        <tr><td class="key">IAM (SigV4)</td><td>The caller already has AWS credentials</td><td>A call from another AWS service</td></tr>
-        <tr><td class="key">JWT</td><td>A user or system already signed in through your company's ID system</td><td>Cognito, Microsoft Entra ID, Okta</td></tr>
-      </tbody>
-    </table></div>
-    <p>In addition, the agent itself gets its own ID, called a workload ID. Registering the agent as its own identity lets you trace "which agent did what" later. For example, if a finance agent that handles expense approvals has its own workload ID, you can quickly find which agent approved a large batch of requests overnight, just by checking the logs.</p>
+    <h2 id="s2"><span class="no">02</span>Checks in two directions</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which ID does it check? The agent's or the user's?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There are two checks, in two directions. First, the agent calls Gateway. JWT or OAuth checks who is making the call.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the second?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Gateway calls the target. That uses IAM, OAuth or an API key, depending on the target. It decides which rights to use on the target side.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent holds all those keys?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never. The agent doesn't handle credentials, the login secrets, at all. Storing them is Identity's job.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the agent's prompt leaked, no password would leak with it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's one reason for the split. What the model never sees, it can't repeat.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then Gateway only picks the method.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The method lives in Gateway, and the secrets live in Identity.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything between the two checks?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside Gateway, each call passes through four steps in order.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which four?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The entry check, a tool search, a Policy check, and then the exit check.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Exit side: where to keep the keys for outside services</h2>
-    <p>To use outside services like Google, Slack, Salesforce, or GitHub, an agent needs credentials for each one. You register these credentials with Identity as a "credential provider," using OAuth2 or an API key. Identity then stores them safely in a token vault (a secure storage place for tokens).</p>
-    <p><strong>This means you can avoid writing API keys directly into code or environment variables</strong>. The agent's code only asks Identity, "I want to use this credential provider." The actual tokens are handled outside the code.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 400" role="img" aria-label="A two-part chain: on the entry side, a user authenticates through an ID system and reaches the agent running on Runtime; on the exit side, that same agent asks Identity's token vault for the user's token and sends it to reach an outside SaaS">
-        <line x1="30" y1="40" x2="30" y2="352" class="ln-acc"/>
-        <circle cx="30" cy="40" r="6" class="node-acc"/>
-        <circle cx="30" cy="114" r="6" class="node-acc"/>
-        <circle cx="30" cy="192" r="6" class="node-acc"/>
-        <circle cx="30" cy="274" r="6" class="node-acc"/>
-        <circle cx="30" cy="352" r="8" class="f-acc"/>
-        <text x="56" y="10" class="t-sm">Entry — who is calling</text>
-        <rect x="56" y="16" width="328" height="48" rx="6" class="node"/><text x="72" y="45">User</text>
-        <rect x="56" y="90" width="328" height="48" rx="6" class="node"/><text x="72" y="119">ID system</text>
-        <rect x="56" y="164" width="328" height="56" rx="6" class="node-c3"/>
-        <text x="72" y="188" class="t-hd">Agent</text><text x="72" y="208" class="t-sm">(Runtime)</text>
-        <text x="56" y="240" class="t-sm">Exit — whose rights are used</text>
-        <rect x="56" y="246" width="328" height="56" rx="6" class="node-c4"/>
-        <text x="72" y="270" class="t-hd">Identity</text><text x="72" y="290" class="t-sm">Token vault</text>
-        <rect x="56" y="328" width="328" height="48" rx="6" class="node-acc"/>
-        <text x="72" y="357" class="t-hd t-acc">Outside SaaS</text>
-      </svg>
-      <figcaption>On the entry side, the ID system checks the user and issues a JWT, which goes to the agent running on Runtime. On the exit side, that agent gets the token for that user from Identity's token vault, and uses it to reach an outside SaaS.</figcaption>
-    </figure>
-    <div class="aside analogy">
-      <p class="label">Analogy: the building pass and the key safe</p>
-      <p>The entry side is like a building pass. The guard (the ID system) checks who has arrived before letting them in. The exit side is like a safe (the token vault) that keeps spare keys collected from employees. The new employee (the agent) never gets the company's master key. Instead, they take only the one spare key they need from the safe, each time they need it.</p>
-    </div>
+    <h2 id="s3"><span class="no">03</span>Fewer, clearer tools</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to my list. If Gateway handles connections, why not register everything?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then there could be hundreds of tools. What happens if every description goes to the LLM?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The context window fills with descriptions.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And many similar tools make wrong choices more likely.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So more tools can make the agent worse.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Gateway can search by meaning, called semantic search, to find only the tools that match a request.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent sees a short list.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the choice doesn't get harder as the total grows. Register a thousand tools, and each request still sees only a handful.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the search keeps the choice small, even when the shelf is big.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It helps. But every registered tool still needs an owner and the right access, so keep the shelf small too.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Say a department has 100 tools, and only a few fit this request. Gateway pulls out those few, and the LLM picks without confusion.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the tool's shape matter too?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A lot. If one tool matches a single API call, it can be too small, and the agent needs many calls.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if one tool does everything?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's hard to reuse in other situations. Part of designing Gateway is shaping tools to a size that's easy to use.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the description?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It decides how often a tool gets picked. A clear note about when to use it improves both the search and the LLM's choice.</p></div></div>
+</div>
+  <figure class="fig">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A few focused tools compared with many vague ones. What the LLM reads: a short list, versus hundreds of descriptions. Room left in the context: plenty, versus little. Wrong picks: rare, versus more likely.">
+      <rect x="8" y="36" width="192" height="236" rx="10" class="node-acc"/>
+      <text x="104" y="24" text-anchor="middle" class="t-hd">Few, focused</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Many, vague</text>
+      <text x="16" y="56" class="t-sm">What the LLM reads</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">a short list</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">hundreds</text>
+      <text x="16" y="136" class="t-sm">Room left in context</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">plenty</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">little</text>
+      <text x="16" y="216" class="t-sm">Wrong picks</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">rare</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">more likely</text>
+    </svg>
+    <figcaption>A qualitative picture, not measured numbers. The accented column is where accuracy comes from.</figcaption>
+  </figure>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the tutor get?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small, curated set of the app's commands and queries. And no tool takes a learner id.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the model shouldn't choose whose data it reads.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The tool design is also what Policy checks when it decides whether to allow a call.</p></div></div>
+</div>
   </section>
-
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Whose rights to use on exit: two patterns</h2>
-    <p>There are two patterns for exit-side rights. <strong>The first is acting on behalf of the user</strong>. The agent uses that user's rights, limited to what the user allowed on a consent screen. This is the three-way OAuth exchange, known as 3LO (3-legged OAuth).</p>
-    <p>The second pattern uses the agent's own rights. Systems exchange client credentials (a fixed system-to-system login) directly, with no user involved. This is 2LO (2-legged OAuth).</p>
-    <div class="tbl"><table>
-      <thead><tr><th>Point</th><th>On behalf of user (3LO)</th><th>Agent's own rights (2LO)</th></tr></thead>
-      <tbody>
-        <tr><td class="key">Whose rights</td><td>The user who gave consent</td><td>The agent itself</td></tr>
-        <tr><td class="key">Consent</td><td>Needs an OAuth consent screen</td><td>Not needed (client credentials)</td></tr>
-        <tr><td class="key">Good for</td><td>Sending or approving something for the user</td><td>Batch jobs and other work not tied to one user</td></tr>
-      </tbody>
-    </table></div>
-    <p>A good rule is to ask: "in whose name should this action happen?" Sending or approving something for a user fits the on-behalf-of-user pattern. Summing up data across users, or running a routine batch job, fits the agent's own rights. For example, if the agent sends a Slack message for a user, use access on behalf of the user, so the message truly looks like it came from that user. On the other hand, pulling together a nightly inventory report from an outside SaaS is not tied to any one user, so the agent's own rights are enough.</p>
+    <h2 id="s4"><span class="no">04</span>Isolated workspaces</h2>
+<div class="dialog">
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the built-in tools I saw in the console?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Code Interpreter runs code inside an isolated sandbox, a safe, separate space. It's for data analysis and calculations.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Browser?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent controls a browser running in an isolated space in the cloud. It can work with internal systems that only have a screen and no API.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds risky.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A person can watch the actions live, or keep a record. A normal API call can't offer that.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it goes wrong?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both run separately from production. No real data goes in; only results come out.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do security reviews usually flag?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every new tool gets slightly more access than it needs. Before long, every agent has admin-level rights.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the other worry?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Indirect prompt injection: a tool follows hidden instructions inside an outside web page or file. Tools like Browser need even stronger isolation from production.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So every tool is a trade.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the cost grows quietly. Nobody notices one extra permission, until a review finds fifty of them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each one adds capability and adds risk. That's why the list stays short.</p></div></div>
+</div>
   </section>
-
-  <section aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Avoiding a "confused deputy"</h2>
-    <p>If you give an agent strong rights, such as admin-level access, then even a user with weaker rights can reach any information through that agent. This is a long-known problem called the "confused deputy." It happens when the deputy, in this case the agent, mixes up its own rights with the rights of the person it is acting for.</p>
-    <p><strong>The fix is to design the agent so it can only touch what the current user is allowed to see</strong>. Instead of giving the agent stronger rights than it needs, always narrow it down to the rights of the user it is acting for at that moment. In practice, the agent should carry over the user's existing rights, and never issue extra rights of its own. When you review access rights later, checking the rights of the represented user is enough; you do not need a separate check for the agent's own rights.</p>
-    <figure class="fig">
-      <svg viewBox="0 0 400 210" role="img" aria-label="Comparing two ways an agent can access company data: acting on behalf of user A limits it to what A may see, but running under a shared admin account lets even a low-rights request see all company data">
-        <text x="101" y="30" text-anchor="middle" class="t-hd">Acting for the user</text>
-        <rect x="16" y="48" width="170" height="140" rx="8" class="zone-soft"/>
-        <text x="101" y="68" text-anchor="middle" class="t-sm">All company data</text>
-        <rect x="32" y="128" width="138" height="48" rx="6" class="node"/>
-        <text x="101" y="156" text-anchor="middle" class="t-sm">What A sees</text>
-
-        <text x="299" y="30" text-anchor="middle" class="t-hd t-acc">Shared admin</text>
-        <rect x="214" y="48" width="170" height="140" rx="8" class="zone-soft"/>
-        <rect x="218" y="58" width="158" height="118" rx="6" class="node-acc"/>
-        <text x="299" y="121" text-anchor="middle" class="t-acc">Sees all data</text>
-      </svg>
-      <figcaption>With the same agent, acting for the user limits it to what that user is allowed to see. Run it under a shared admin account instead, and even a request from a low-rights user can see all the data.</figcaption>
-    </figure>
-    <div class="aside caution">
-      <p class="label">Where companies get stuck</p>
-      <p>IT security reviews almost always ask the same three questions: "Whose rights does this agent run with?" "Where are the tokens stored?" and "How do you stop the rights of an employee who has left?" <strong>Whether your design can answer these on the spot often decides if a proof of concept can move to production</strong>. Building Identity into the design from the start lets you answer all three questions with confidence.</p>
-    </div>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
+<div class="dialog">
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Look at your list on the board again. What would you register?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only a few focused tools, with clear notes on when to use each one. More tools means more wrong picks.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They go behind one gateway, as targets, and agents reach them through one MCP endpoint.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who checks whom?</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Identity is checked both ways: the caller at the entry, and the right credentials at the exit, stored in Identity.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Circle the learner id on your list. Whatever else you register, that argument never becomes something the model writes.</p></div></div>
+</div>
   </section>
-
-  <div class="aside aside-quiet">
-    <p class="label">Where you meet this on the roadmap</p>
-    <ul>
-      <li><span class="tag">2-2</span>Phase 1: set up the entry and exit steps from this chapter yourself.</li>
-      <li><span class="tag">2-3</span>the book <i>Amazon Bedrock AgentCore 実践入門</i> (Japanese), Part 3, first half (Identity chapter)</li>
-      <li><span class="tag">3-6</span>Deep Dive: Authenticate and authorize: it helps to listen with the idea that this is where most enterprise projects get stuck.</li>
-    </ul>
-  </div>
-
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Identity handles entry (who is calling) and exit (whose rights reach the outside) as two separate questions.</li>
-      <li>On the exit side, choose between acting for the user (3LO) and the agent's own rights (2LO), and keep tokens in the vault.</li>
-      <li>Avoid the "confused deputy" problem by never giving the agent strong rights, and letting it touch only what the current user may see.</li>
+      <li>Gateway registers existing APIs, functions and MCP servers as targets behind one MCP endpoint.</li>
+      <li>Authentication runs in two directions, and Identity stores the credentials.</li>
+      <li>Semantic search, tool size and clear descriptions decide how accurately tools are chosen.</li>
     </ol>
   </section>
-
-  <nav class="pager" aria-label="Pages">
-    <a class="prev" href="ch06.html"><span>Previous</span><b>Chapter 6</b></a>
-    <a class="next" href="ch08.html"><span>Next</span><b>Chapter 8, Policy and guardrails</b></a>
+  <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Phase 1, the Gateway lab: register targets and try tool search</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Gateway chapter</li><li><span class="tag">2-4</span> The same book, Part 3, second half: the built-in tools chapter</li><li><span class="tag">3-4</span> Deep Dive: Connect your agent to anything</li></ul></div>
+  <nav class="pager" aria-label="Page navigation">
+    <a class="prev" href="ch06.html"><span>Previous</span><b>How can an agent remember anything?</b></a>
+    <a class="next" href="ch08.html"><span>Next</span><b>Whose permission is the agent using?</b></a>
   </nav>
-  <p class="fine">This reader is based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month, so check the details in each course and in the developer guide.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
 </div>
 </div>
 </body>
