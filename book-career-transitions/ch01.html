@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>キャリアの移り目 01 · 一本道はもたない</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">キャリアの移り目</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" aria-current="page" lang="ja">キャリアの移り目</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="キャリアの移り目 pages">
+  <h2><a href="ch00.html">キャリアの移り目</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html" aria-current="page"><span class="n">01</span><span>一本道はもたない</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>年齢と段階</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>もう一冊の帳簿</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>移る力を育てる</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>空白ではなく移り目</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>組み合わせて働く</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>ひとりで完結しない設計</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html" aria-current="page"><span lang="ja">キャリアの移り目</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>キャリアの移り目</b><span>第1章 / 全7章</span></p>
+  <h1>「学ぶ・働く・引退する」の一本道は、長い人生では最後までもちません</h1>
+  <p class="lead">学校を出て働き、60代で引退して余生を過ごす。この順番は、人生が80年ほどだった時代に合わせて作られました。この章では、人生が90年、100年に延びたときにこの順番のどこが足りなくなるのかを確かめ、自分の人生の見通しを描き直すための三つの問いを扱います。</p>
+  <p class="meta"><span>読了 約8分</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>引退後を「85歳まで」と「95歳まで」で試算すると、何が変わるのか</li>
+      <li>人生が延びると、なぜお金とスキルの両方が足りなくなるのか</li>
+      <li>自分の人生の見通しを、どんな問いで描き直せばよいのか</li>
+      <li>寿命の数字は、どこまで当てにしてよいのか</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>同じ試算でも、終わりの年齢を変えると結果が変わります</h2>
+    <p>電機メーカーで経理課長を務める中村さんは52歳です。ある晩、定年後の暮らしにいくら要るのかを表計算ソフトで試算してみました。仕事柄、数字を並べるのは得意です。</p>
+    <p>最初の表は、多くの人が思い浮かべる形で作りました。65歳で仕事を辞め、85歳まで生きる前提です。年金で足りない生活費を仮に月5万円とすると、20年分で1,200万円になります。退職金と貯金を合わせれば、なんとか届きそうでした。</p>
+    <p>次に、終わりの年齢だけを95歳に書き換えました。ほかの数字はそのままです。引退後の期間は20年から30年に延び、足りない額は1,800万円に増えました。中村さんの手元の蓄えでは、80代の後半で底をつきます。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 214" role="img" aria-label="65歳で引退した場合の、引退後の年数と不足額の比較。95歳までの前提では85歳までの前提より10年長く、不足額も600万円多い">
+        <line x1="120" y1="8" x2="120" y2="206" class="ln-base"/>
+        <text x="108" y="44" text-anchor="end">85歳まで</text>
+        <rect x="121" y="20" width="160" height="40" class="bar"/><text x="201" y="88" text-anchor="middle" class="t-sm num">20年・1,200万円</text>
+        <text x="108" y="134" text-anchor="end">95歳まで</text>
+        <rect x="121" y="110" width="240" height="40" class="bar-acc"/><text x="216" y="182" text-anchor="middle" class="t-sm num">30年・1,800万円</text>
+      </svg>
+      <figcaption>終わりの年齢を10年延ばすだけで、引退後の年数も不足額も1.5倍になる（不足額は月5万円とした仮の試算）。</figcaption>
+    </figure>
+    <p>中村さんが気づいたのは、計算のしかたではなく前提の置き方でした。「85歳まで」という数字を、誰かに確かめたわけではありません。自分の親の世代を見て、なんとなく決めていただけでした。そして、終わりの年齢が10年ずれるだけで、65歳で仕事を辞めるという計画そのものが成り立たなくなります。中村さんは、引退の年齢を先に決めてから貯金を数えるという順番を、見直す必要があると考えました。</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>人生が延びると、お金とスキルの両方が足りなくなります</h2>
+    <p>中村さんが「なんとなく」置いた85歳は、いまの日本ではもう長生きの部類に入りません。厚生労働省の2025年の生命表では、65歳の人がその後に生きる年数の平均は、男性で19.68年、女性で24.52年です。生まれた人のうち90歳まで生きる人の割合は、男性で26.7％、女性で50.8％でした。女性の半分は90歳を迎える計算です。</p>
+    <p>100歳を超える人も増えています。2026年9月の時点で、100歳以上の人は10万7,677人で、初めて10万人を超えました。統計を取り始めた1963年には153人でした。</p>
+    <p>そもそも、「学ぶ・働く・引退する」の順番が当たり前だったのは、引退後の期間が今より短かったからです。20代の前半まで学び、60歳前後まで同じ会社で働き、残りの十数年を退職金と年金で暮らす。この組み立てなら、最初に学んだことで最後まで働け、蓄えも引退後の年数に見合っていました。</p>
+    <p>人生が延びると、まず引退後の期間が延びます。その期間の生活費を蓄えだけでまかなうのは難しくなるので、多くの人は働く期間を延ばして収入を得ようとします。60代の後半や70代まで働く前提で考える人が増えているのは、このためです。</p>
+    <p>ところが、働く期間を延ばすと、別の問題が出てきます。20代で身につけた知識や技術を、70代まで使い続けることはできません。仕事の道具も、業界の決まりも、求められる役割も、数十年のうちに何度も入れ替わります。中村さんが新人のころに覚えた経理の手順は、いまではほとんどが会計ソフトの中で自動で処理されています。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 268" role="img" aria-label="人生が延びると引退後が長くなり、そのため働く期間が延び、その結果、若いころのスキルだけでは最後までもたなくなる">
+        <line x1="30" y1="40" x2="30" y2="226" class="ln"/>
+        <circle cx="30" cy="40" r="6" class="dot"/>
+        <circle cx="30" cy="102" r="6" class="dot"/>
+        <circle cx="30" cy="164" r="6" class="dot"/>
+        <circle cx="30" cy="226" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="48" rx="6" class="node"/><text x="72" y="46">人生が90年、100年に延びる</text>
+        <rect x="56" y="78" width="328" height="48" rx="6" class="node"/><text x="72" y="108">引退後の生活費が足りなくなる</text>
+        <rect x="56" y="140" width="328" height="48" rx="6" class="node"/><text x="72" y="170">働く期間を70代まで延ばす</text>
+        <rect x="56" y="202" width="328" height="48" rx="6" class="node-acc"/><text x="72" y="232" class="t-hd">若いころのスキルではもたない</text>
+      </svg>
+      <figcaption>お金の不足を働く期間で補おうとすると、そのために今度はスキルが足りなくなる。二つの不足はつながっている。</figcaption>
+    </figure>
+    <p>「学ぶ・働く・引退する」の一本道は、最初にまとめて学び、その蓄えで40年ほど働き、残りを貯金で暮らす設計です。人生が延びると、若いころに学んだ知識は働く期間の途中で古くなり、貯金は引退後の途中で尽きます。</p>
+    <p>足りない分を埋めるには、働く途中で学び直す期間や、働き方を切り替える期間が必要になります。この本では、ひとつの働き方や暮らし方から次の働き方へ移るあいだの期間を「移り目」と呼びます。学び直しも、新しい仕事を探す期間も、心身を休める期間も移り目に含みます。長い人生では、移り目が一度ではなく何度も訪れます。</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>自分の人生を、三本の線で描き直します</h2>
+    <p>中村さんの試算から分かるのは、人生の計画が、自分で確かめていない前提をもとに立てられていることです。描き直すときは、次の三つの問いに自分で答えを出し、それぞれを年齢の線として紙に引きます。</p>
+    <ol class="steps">
+      <li><strong>何歳まで生きる前提で考えるか。</strong>平均ではなく、長めの年齢で置きます。90歳と100歳の二通りで考えると、幅が見えます。</li>
+      <li><strong>何歳まで収入を得る前提で考えるか。</strong>会社の定年ではなく、自分が働けそうな年齢と、働きたい年齢を書きます。</li>
+      <li><strong>いま持っているスキルは、あと何年使えるか。</strong>仕事の中心になっている知識や技術が、今の形で通用しそうな年数を見積もります。</li>
+    </ol>
+    <p>中村さんが答えを書くと、一本目の生きる年齢の線は95歳、二本目の収入を得る年齢の線は72歳になりました。ところが三本目のスキルの線は、どう見積もっても60歳前後で切れます。72歳まで働くなら、その途中で少なくとも一度は、学び直すか、働き方を切り替える必要があります。三本の線の長さを比べると、どの年齢で移り目を入れればよいかが分かります。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 300" role="img" aria-label="3段階の人生と多段階の人生の比較。多段階の人生では、働く期間の途中に移り目が入り、働く期間も長くなる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">3段階の人生</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">多段階の人生</text>
+        <rect x="16" y="40" width="176" height="40" rx="6" class="node"/><text x="104" y="66" text-anchor="middle" class="t-sm">学ぶ</text>
+        <rect x="16" y="88" width="176" height="104" rx="6" class="node"/><text x="104" y="146" text-anchor="middle" class="t-sm">働く（40年ほど）</text>
+        <rect x="16" y="200" width="176" height="84" rx="6" class="node-soft"/><text x="104" y="248" text-anchor="middle" class="t-sm">引退（長くなる）</text>
+        <rect x="208" y="40" width="176" height="40" rx="6" class="node"/><text x="296" y="66" text-anchor="middle" class="t-sm">学ぶ</text>
+        <rect x="208" y="88" width="176" height="40" rx="6" class="node"/><text x="296" y="114" text-anchor="middle" class="t-sm">働く</text>
+        <rect x="208" y="136" width="176" height="32" rx="6" class="node-acc"/><text x="296" y="158" text-anchor="middle" class="t-hd">移り目</text>
+        <rect x="208" y="176" width="176" height="40" rx="6" class="node"/><text x="296" y="202" text-anchor="middle" class="t-sm">別の形で働く</text>
+        <rect x="208" y="224" width="176" height="24" rx="6" class="node-plan"/><text x="296" y="241" text-anchor="middle" class="t-sm">次の移り目</text>
+        <rect x="208" y="256" width="176" height="28" rx="6" class="node-soft"/><text x="296" y="275" text-anchor="middle" class="t-sm">引退</text>
+      </svg>
+      <figcaption>多段階の人生では、働く期間の途中に移り目が入る。点線の箱は、まだ先の、何度目かの移り目を表す。</figcaption>
+    </figure>
+    <p>三本の線は、若い人が引いても役に立ちます。スーパーで売り場の主任を務める32歳の石井さんは、生きる線を95歳、収入の線を70歳と置きました。三本目のスキルの線を考えたとき、石井さんは少し迷いました。発注や棚の管理は、ここ数年で端末とソフトが自動で処理する部分が増えています。一方で、パートの人たちの勤務を組み、新人を育てる仕事は、どの店に移っても求められそうです。</p>
+    <p>そこで石井さんは、スキルを二つに分けて線を引きました。発注の知識は10年ほど、人の配置と育成は30年ほどです。前者が切れる40代の前半に、一つ目の移り目を置きました。そのころまでに、人を育てる力を店の外でも説明できる形にしておくのが目標です。</p>
+    <p>線を引くときは、三本の長さをそろえようとしなくてかまいません。そろわないのが普通です。大事なのは、どこで線が足りなくなるかを先に知っておくことです。移り目を前もって置いておけば、会社の都合や体調の変化で急に働き方を変えることになっても、慌てずに済みます。</p>
+    <div class="aside caution">
+      <p class="label">つまずきやすいところ</p>
+      <p>「いま持っているスキルは、あと何年使えるか」という問いに、いまの仕事の肩書きや会社名を答えにする人がいます。肩書きや会社は、スキルではありません。「取引先の数字を読んで、どこに問題があるかを見つけられる」のように、会社が変わっても持ち運べる形で書くと、使える年数を見積もりやすくなります。</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>寿命の数字は、ひとつの見通しとして使います</h2>
+    <p>「2007年に日本で生まれた子どもの半数は107歳より長く生きる」という海外の推計があり、国の人生100年時代構想会議の資料にも引用されました。ただしこれは、医療の進歩が今後も続くと仮定した推計です。実際にどこまで寿命が延びるかは、誰にも分かりません。</p>
+    <p>平均や推計は集団の話で、一人ひとりの寿命には大きな差があります。病気や事故で働けなくなる人もいれば、家族の介護で仕事を離れる人もいます。だから、長生きする前提で計画を立てることは、長生きを当てにすることとは違います。</p>
+    <p>中村さんも、最初は「95歳まで生きるなら、もっと貯金しなければ」とだけ考えました。けれども、貯金を増やす方法は、支出を減らすか収入を増やすかしかありません。50代で支出を大きく減らすのは難しく、収入を増やすには働く期間を延ばすことになります。そのため中村さんは、貯金の計画を立てる前に、スキルの線をどこまで延ばせるかを考えることにしました。</p>
+    <p>寿命の数字を計画に使うときは、二つの見通しを並べておきます。長く生きて長く働く見通しと、途中で働けなくなる見通しです。前者に備えて学び直しの移り目を置き、後者に備えて保険や貯金で、働けない期間の生活費を用意しておきます。長く働く見通しだけで計画すると、途中で働けなくなったときに生活費の手当てがありません。</p>
+  </section>
+
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>人生が延びると引退後の生活費が足りなくなり、それを補うために働く期間が延びます。</li>
+      <li>働く期間が延びると、若いころに身につけたスキルだけでは最後まで通用しなくなります。</li>
+      <li>生きる年齢・収入を得る年齢・スキルが使える年数の三本の線を引くと、移り目を入れる場所が見えます。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch00.html"><span>前へ</span><b>目次</b></a>
+    <a class="next" href="ch02.html"><span>次へ</span><b>同じ35歳でも、いる段階は人それぞれです</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>

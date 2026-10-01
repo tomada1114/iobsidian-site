@@ -18,3 +18,4 @@
 | AgentCore Reader（英語・B2・対話） | `agentcore-reader/ch00.html` |
 | Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |
 | 一拍おいて話す（日本語・Quick Book・解説型） | `book-pause-before-speaking/ch00.html` |
+| キャリアの移り目（日本語・Quick Book・解説型） | `book-career-transitions/ch00.html` |

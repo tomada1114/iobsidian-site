@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>キャリアの移り目 06 · 組み合わせて働く</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">キャリアの移り目</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" aria-current="page" lang="ja">キャリアの移り目</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="キャリアの移り目 pages">
+  <h2><a href="ch00.html">キャリアの移り目</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>一本道はもたない</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>年齢と段階</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>もう一冊の帳簿</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>移る力を育てる</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>空白ではなく移り目</span></a></li>
+    <li><a href="ch06.html" aria-current="page"><span class="n">06</span><span>組み合わせて働く</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>ひとりで完結しない設計</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html" aria-current="page"><span lang="ja">キャリアの移り目</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>キャリアの移り目</b><span>第6章 / 全7章</span></p>
+  <h1>一つの仕事に絞らず、組み合わせて働く道があります</h1>
+  <p class="lead">会社を辞めて独立するか、今の会社に残るか。働き方の切り替えは、この二択で考えられがちです。この章では、本業を続けながら別の活動を小さく始め、数年かけて重心を移していく働き方を扱います。読み終えると、試すときの時間とお金の上限、続けるかやめるかを決める日を、自分で書き出せるようになります。</p>
+  <p class="meta"><span>読了 約8分</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>いきなり辞めて独立する場合と、小さく試してから移る場合で、何が違うのか</li>
+      <li>仕事を一つに絞ると、なぜ危ういのか</li>
+      <li>新しい活動を小さく試すとき、何を先に決めておけばよいのか</li>
+      <li>組み合わせて働くことが向かないのは、どんな場合か</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>同じ得意を生かしても、移り方で結果が変わります</h2>
+    <p>森さんは48歳で、従業員300人ほどの食品会社で総務を担当しています。20年近く、社内規程の見直しや就業規則の改定を受け持ってきました。法律が変わるたびに条文を読み、現場の課長と話し合い、規程に落とし込む作業が得意です。</p>
+    <p>あるとき、地元の商店会で知り合った社長から相談を受けました。従業員が15人を超えたので就業規則を整えたいが、どこから手をつければよいか分からない、という話です。森さんが週末に二度ほど資料を見て助言すると、社長はとても喜び、ほかの会社にも紹介したいと言いました。</p>
+    <p>ここで森さんが取れる道を、二通り考えてみます。一つ目は、会社をすぐに辞めて、規程づくりの手伝いを仕事として始める道です。二つ目は、会社に勤めたまま週末に少しずつ引き受け、3年かけて新しい活動の割合を増やしていく道です。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 300" role="img" aria-label="すぐに辞めて独立する道と、本業を続けながら小さく試す道の比較。すぐに辞める道は収入が途切れ、引き返しにくい。小さく試す道は収入を保ちながら、続けるかどうかを確かめられる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">すぐに辞める</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">小さく試して移る</text>
+        <rect x="16" y="40" width="176" height="56" rx="6" class="node"/><text x="104" y="64" text-anchor="middle" class="t-sm">給料が止まる</text><text x="104" y="84" text-anchor="middle" class="t-sm">依頼は1社だけ</text>
+        <rect x="16" y="108" width="176" height="56" rx="6" class="node"/><text x="104" y="132" text-anchor="middle" class="t-sm">依頼を急いで</text><text x="104" y="152" text-anchor="middle" class="t-sm">集めることになる</text>
+        <rect x="16" y="176" width="176" height="56" rx="6" class="node-soft"/><text x="104" y="200" text-anchor="middle" class="t-sm">合わないと分かっても</text><text x="104" y="220" text-anchor="middle" class="t-sm">引き返しにくい</text>
+        <rect x="208" y="40" width="176" height="56" rx="6" class="node"/><text x="296" y="64" text-anchor="middle" class="t-sm">給料はそのまま</text><text x="296" y="84" text-anchor="middle" class="t-sm">週末に1社ずつ</text>
+        <rect x="208" y="108" width="176" height="56" rx="6" class="node"/><text x="296" y="132" text-anchor="middle" class="t-sm">頼まれる内容と</text><text x="296" y="152" text-anchor="middle" class="t-sm">謝礼の相場が分かる</text>
+        <rect x="208" y="176" width="176" height="56" rx="6" class="node-acc"/><text x="296" y="200" text-anchor="middle" class="t-hd">続けるかどうかを</text><text x="296" y="220" text-anchor="middle" class="t-hd">確かめてから決める</text>
+      </svg>
+      <figcaption>同じ得意を生かす場合でも、すぐに辞めると収入が途切れ、小さく試すと収入を保ったまま判断の材料が集まる。</figcaption>
+    </figure>
+    <p>すぐに辞めて独立する一つ目の道では、給料が止まった日から生活費を新しい仕事で稼ぐ必要があります。依頼が1社しかない段階で辞めると、森さんは条件の合わない依頼も断れなくなります。しかも、中小企業の社長が何に困り、いくらなら払うのかを、森さんはまだ知りません。</p>
+    <p>勤めたまま週末に引き受ける二つ目の道では、給料を受け取りながら、1社、また1社と依頼を引き受けられます。依頼を重ねるうちに、どんな相談が多いのか、1件にどれだけ時間がかかるのか、謝礼はいくらが相場なのかが分かってきます。3年目に依頼が途切れずに来るようになってから、森さんは勤務日数を減らせないかを会社に相談しました。</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>一つの仕事だけに頼ると、その仕事が縮んだときにすべてを失います</h2>
+    <p>勤め先の仕事が一つだけなら、収入も、スキルを使う場も、仕事で知り合う人も、すべてその会社の中にあります。会社の業績が落ちたり、部署がなくなったり、仕事の中身が機械に置き換わったりすると、その全部が同時に減ります。</p>
+    <p>働く期間が70代まで延びると、この危うさは大きくなります。40年、50年のあいだに、一つの会社や一つの職種が同じ形で続く見込みは低いからです。本業のほかにもう一つ活動を持っていれば、本業が縮んでも収入と仕事の場の一部が残ります。この本では、こうして複数の仕事や活動を並行して持つ働き方を「組み合わせて働く」と呼びます。</p>
+    <p>組み合わせて働くことは、学び直しのしかたも変えます。この本でいう移り目は、ひとつの働き方や暮らし方から次の働き方へ移るあいだの期間で、学び直しや次の道探し、休養を含み、人生の中で何度も訪れます。会社を辞めて1年間学ぶような、仕事から離れる移り目もあります。一方で、本業を続けながら新しい活動のために学ぶ移り目もあります。森さんの場合は、後者の移り目が3年続きました。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 214" role="img" aria-label="森さんの週あたりの時間配分の変化。1年目は本業40時間と新しい活動4時間、2年目は本業40時間と新しい活動8時間、3年目は本業32時間と新しい活動14時間">
+        <line x1="72" y1="8" x2="72" y2="190" class="ln-base"/>
+        <text x="60" y="38" text-anchor="end">1年目</text>
+        <rect x="73" y="16" width="200" height="36" class="bar"/><rect x="273" y="16" width="20" height="36" class="f-c2"/><text x="301" y="40" class="t-sm num">40＋4時間</text>
+        <text x="60" y="98" text-anchor="end">2年目</text>
+        <rect x="73" y="76" width="200" height="36" class="bar"/><rect x="273" y="76" width="40" height="36" class="f-c2"/><text x="321" y="100" class="t-sm num">40＋8時間</text>
+        <text x="60" y="158" text-anchor="end">3年目</text>
+        <rect x="73" y="136" width="160" height="36" class="bar"/><rect x="233" y="136" width="70" height="36" class="f-c2"/><text x="311" y="160" class="t-sm num">32＋14時間</text>
+        <text x="73" y="208" class="t-sm">灰色は本業、色つきは新しい活動（週あたり）</text>
+      </svg>
+      <figcaption>森さんは本業の時間を急に減らさず、新しい活動の時間を少しずつ増やした。比重が移ったのは3年目になってから。</figcaption>
+    </figure>
+    <p>本業と並行して学ぶ移り目には、学んだことをすぐに試せるという利点があります。森さんは、労働法の改正を本業のために調べ、その知識を週末の相談でも使いました。逆に、小さな会社で受けた質問をきっかけに、自分の会社の規程の古い箇所に気づいたこともあります。</p>
+    <p>組み合わせ方は、本業と副業の二つに限りません。経理の仕事を週4日続けながら、週1日は地元の専門学校で簿記を教える人もいます。会社員として働きながら、土日に親の店を手伝い、店の帳簿や仕入れの仕組みを整える人もいます。どの組み合わせでも、二つ目の活動が本業とは本業とは別の収入、別の人のつながり、別のスキルをもたらす点は共通しています。</p>
+    <p>組み合わせて働くと、学び直しのしかたも変わります。スキルは一度身につけて終わりではなく、仕事の道具や決まりが変わるたびに古くなります。そのため、学び直しは人生に一度ではなく、何度も、仕事と並行して起きます。組み合わせて働くと、その学び直しを仕事の中に組み込めます。</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>小さく試すときは、三つの枠を先に決めます</h2>
+    <p>新しい活動を小さく始めると、手応えがあるうちは時間とお金をどんどん注ぎ込みがちです。反対に、成果が出ないまま何年もずるずる続けてしまうこともあります。どちらも避けるために、始める前に次の三つを紙に書いておきます。</p>
+    <ol class="steps">
+      <li><strong>使う時間の上限。</strong>「平日の夜は使わず、土曜の午前だけ。週4時間まで」のように、曜日と時間数で書きます。</li>
+      <li><strong>使うお金の上限。</strong>本や講座、名刺や道具に使ってよい金額を、1年分の合計で決めます。</li>
+      <li><strong>続けるかやめるかを決める日。</strong>「1年後の3月末に、引き受けた件数と謝礼の合計を見て決める」のように、日付と、判断に使う数字を書きます。</li>
+    </ol>
+    <figure class="fig">
+      <svg viewBox="0 0 400 268" role="img" aria-label="小さく試す手順。時間の上限を決め、お金の上限を決め、決める日まで試し、決める日に続けるかやめるかを選ぶ">
+        <line x1="30" y1="40" x2="30" y2="226" class="ln"/>
+        <circle cx="30" cy="40" r="6" class="dot"/>
+        <circle cx="30" cy="102" r="6" class="dot"/>
+        <circle cx="30" cy="164" r="6" class="dot"/>
+        <circle cx="30" cy="226" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="48" rx="6" class="node"/><text x="72" y="46">時間の上限を決める（週4時間まで）</text>
+        <rect x="56" y="78" width="328" height="48" rx="6" class="node"/><text x="72" y="108">お金の上限を決める（1年で5万円まで）</text>
+        <rect x="56" y="140" width="328" height="48" rx="6" class="node"/><text x="72" y="170">決める日まで、枠の中で試す</text>
+        <rect x="56" y="202" width="328" height="48" rx="6" class="node-acc"/><text x="72" y="232" class="t-hd">決める日に、続けるかやめるかを選ぶ</text>
+      </svg>
+      <figcaption>枠を先に決めておくと、のめり込みすぎることも、ずるずる続けることも防げる。数字は森さんが1年目に置いた例。</figcaption>
+    </figure>
+    <p>森さんは1年目、週4時間、1年で5万円までと決めました。決める日は翌年の3月末で、判断の材料は「引き受けた件数が3件以上か」と「疲れが本業に響いていないか」の二つです。3月末に振り返ると、件数は4件で、本業にも響いていませんでした。そこで2年目は、時間の上限を週8時間に広げました。</p>
+    <p>もう一つ書き出しておきたいのが、1週間の時間の使い道です。本業以外の時間を、「回復」と「作り直す時間」に分けて書きます。回復は、睡眠や休養、家族と過ごす時間のように、疲れを取って元に戻すための時間です。作り直す時間は、新しい活動や学び直しのように、自分の仕事の力を新しく育てるための時間です。</p>
+    <p>森さんが書き出すと、日曜は丸ごと回復に使い、土曜の午前を作り直す時間に充てていました。新しい活動を増やした2年目には、土曜の午後も作り直す時間に移しました。そのぶん、平日の夜は早く寝ると決めて、回復の時間が減りすぎないようにしました。作り直す時間を増やすときは、回復の時間をどこで確保するかも一緒に決めます。</p>
+    <div class="aside caution">
+      <p class="label">つまずきやすいところ</p>
+      <p>決める日に「もう少し様子を見たい」と判断を先送りする人がいます。先送りするなら、新しい決める日と、そのときに見る数字を書き直してください。日付のない「様子見」は、やめる判断をしないまま時間とお金を使い続けることになります。</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>組み合わせて働けない場合や、無理が出る場合があります</h2>
+    <p>組み合わせて働く前に、勤め先の就業規則を確かめます。会社によっては、副業を禁じていたり、事前の届け出や許可を求めていたりします。本業と同じ業界の仕事や、本業の取引先と関わる仕事は、認められないこともあります。森さんも、引き受ける前に人事部へ届け出て、本業の取引先とは関わらないことを書面で約束しました。</p>
+    <p>もう一つの注意点は、心と体の疲れです。本業の忙しい時期と新しい活動の依頼が重なると、休む時間がなくなります。睡眠を削って続けると、本業でも新しい活動でもミスが増え、両方の評判を落とします。時間の上限を決めておくのは、この疲れを防ぐためでもあります。</p>
+    <p>お金の面でも注意が要ります。新しい活動の謝礼は、最初のうちは少なく、月によって大きく変わります。本業の収入を減らして新しい活動の割合を増やすのは、新しい活動の収入が半年から1年ほど安定して続いてからにします。森さんが勤務日数の相談を3年目まで待ったのも、依頼が途切れない状態を自分の帳簿で確かめるためでした。また、本業以外の収入が一定の額を超えると、確定申告が必要になる場合があります。始める前に、税金の扱いを税務署や専門家に確かめておきます。</p>
+    <p>家族の介護や子育てで、そもそも本業以外に使える時間がない時期もあります。その時期に無理に新しい活動を始める必要はありません。組み合わせて働く道は、いつでも取れるものではなく、時間と体力に余裕がある時期に選べる道の一つです。余裕がない時期には、回復の時間を守ることを優先します。</p>
+  </section>
+
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>本業を続けながら新しい活動を小さく試すと、収入を保ったまま、続けるかどうかを確かめられます。</li>
+      <li>仕事を一つに絞ると、その仕事が縮んだときに収入もスキルを使う場も一度に失うので、活動を組み合わせて分けておきます。</li>
+      <li>小さく試すときは、時間の上限・お金の上限・決める日を先に書き、回復の時間を削りすぎないようにします。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>働いていない期間は、空白ではなく「移り目」です</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>長い人生の設計は、ひとりでは完結しません</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>

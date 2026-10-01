@@ -25,6 +25,7 @@ READERS = [
     ("1on1-ops", "Operations", "ch00.html"),
     ("agentcore-reader", "AgentCore", "ch00.html"),
     ("book-pause-before-speaking", "一拍おいて話す", "ch00.html"),
+    ("book-career-transitions", "キャリアの移り目", "ch00.html"),
 ]
 CUR = " aria-current=\"page\""
 
@@ -218,6 +219,7 @@ BOOKS = {
     "1on1-ai": ("cloud-ai", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
     "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · dialogue", "en"),
     "book-pause-before-speaking": ("quick-books", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
+    "book-career-transitions": ("quick-books", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),
 }
 
 SHELF_CSS = """
