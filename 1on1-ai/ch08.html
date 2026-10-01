@@ -266,7 +266,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   .side .all{display:block}
 }
 @media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
-  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
 .offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
 .offline[hidden]{display:none}
 .save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
@@ -276,9 +277,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" data-root="../">
+<header class="site-head" lang="en" data-root="../">
 <div class="bar">
-  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ AI in Production</span>
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span>AI in Production</span></span>
   <nav aria-label="Readers"><ul class="readers">
     <li><a href="../easy-reads/index.html">Easy Reads</a></li>
     <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
@@ -309,7 +310,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
     <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
   </ol>
-  <div class="all">
+  <div class="all" lang="en">
   <h2><a href="../index.html">All readers</a></h2>
   <ul>
     <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
@@ -536,6 +537,12 @@ b.addEventListener("click",function(){set(!document.body.classList.contains("nav
 document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
 })();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
 navigator.serviceWorker.register(root+"sw.js").catch(function(){});
@@ -561,9 +568,8 @@ async function show(){btn.textContent=localStorage.getItem(K)?"Update offline co
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(!localStorage.getItem(K))note.textContent="Not saved on this device yet ("+list.length+" pages).";
-    else if(m||g)note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
-    else note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
     await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}

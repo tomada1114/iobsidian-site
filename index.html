@@ -244,13 +244,56 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   .side .all{display:block}
 }
 @media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
-  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
 .offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
 .offline[hidden]{display:none}
 .save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
   background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
 .save-btn:disabled{opacity:.6;cursor:progress}
 .save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+
+/* ---------- bookshelf (Site/_shared/nav.py) ---------- */
+.shelf .page{max-width:1120px}
+.shelf-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px}
+.shelf-head>*+*{margin-top:0}
+.shelf-head .intro>*+*{margin-top:12px}
+.shelf-head .offline{margin:0}
+.shelf-label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle)}
+.recent{margin-top:32px}
+.recent ol,.cards{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.recent li+li,.cards li+li{margin-top:0}
+.recent a{display:grid;gap:2px;height:100%;padding:12px 16px;border:1px solid var(--line);border-radius:var(--radius);color:var(--text);text-decoration:none;
+  box-shadow:inset 3px 0 0 var(--accent)}
+.recent a:hover,.cards a:hover{background:var(--surface);border-color:var(--line-strong)}
+.recent .kick,.cards .kick{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.recent b{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.recent .when{font-size:var(--fs-caption);color:var(--text-subtle)}
+.shelf-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:36px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.shelf-search{flex:1 1 240px;max-width:420px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--bg);color:var(--text);font:inherit;font-size:var(--fs-small)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg);color:var(--text-muted);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.chip:hover{border-color:var(--line-strong);color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.chip .n,.cat-head .n{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;opacity:.75}
+.cat{margin-top:36px}
+.cat>*+*{margin-top:4px}
+.cat-head{display:flex;align-items:center;gap:10px;font-size:var(--fs-h3)}
+.cat-head::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--accent);flex:none}
+.cat-head .n{color:var(--text-subtle)}
+.cat-note{font-size:var(--fs-small);color:var(--text-muted)}
+.cat>.cards{margin-top:14px}
+.cards a{position:relative;display:flex;flex-direction:column;gap:6px;height:100%;padding:16px 18px 16px 24px;border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--text);text-decoration:none}
+.cards a::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:6px;background:var(--accent);border-radius:var(--radius) 0 0 var(--radius)}
+.cards b{font-size:var(--fs-lead);line-height:var(--lh-tight)}
+.cards .blurb{font-size:var(--fs-small);color:var(--text-muted);line-height:1.55;flex:1}
+.cards .facts{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:var(--fs-caption);color:var(--text-subtle)}
+.no-hits{margin-top:32px;color:var(--text-muted)}
+.cards b:lang(ja),.recent a:lang(ja) b{line-height:1.5;word-break:auto-phrase}
+.cards .blurb:lang(ja){line-height:1.75}
 </style>
 <!-- app -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -259,9 +302,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <meta name="mobile-web-app-capable" content="yes">
 <!-- /app -->
 </head>
-<body>
+<body class="shelf acc-1">
 <!-- site-header -->
-<header class="site-head" data-root="">
+<header class="site-head" lang="en" data-root="">
 <div class="bar">
   <a class="brand" href="index.html">Bookshelf</a>
   <nav aria-label="Readers"><ul class="readers">
@@ -276,61 +319,90 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </div>
 </header>
 <!-- /site-header -->
-<div class="page acc-1">
-<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <defs>
-    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
-    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
-  </defs>
-</svg>
-<header class="page-head">
+<div class="page">
+<header class="page-head shelf-head">
+<div class="intro">
   <h1>Bookshelf</h1>
   <p class="lead">Readers I made for my own study.</p>
-</header>
-<!-- offline -->
+  <p class="meta"><span>7 readers</span><span>122 pages</span><span>English</span></p>
+</div>
 <div class="offline" hidden>
   <button class="save-btn" type="button">Save all readers for offline</button>
   <p class="save-note" aria-live="polite"></p>
 </div>
-<!-- /offline -->
-
-<div class="flow">
-  <section aria-labelledby="easy-reads">
-    <h2 id="easy-reads"><a href="easy-reads/index.html">Easy Reads</a></h2>
-    <p>Short and easy English reads on many topics. Six new ones every morning.</p>
-    <p class="meta"><span>New every day</span><span>3 to 4 min each</span><span>English, A2+ to B1</span></p>
-  </section>
-  <section aria-labelledby="1on1-architecture">
-    <h2 id="1on1-architecture"><a href="1on1-architecture/ch00.html">One-on-Ones: Architecture</a></h2>
-    <p>Maya and Leo talk through what architecture is for: dependency rules, ports and adapters, DDD, and how to choose.</p>
-    <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="1on1-api-types">
-    <h2 id="1on1-api-types"><a href="1on1-api-types/ch00.html">One-on-Ones: API and TypeScript</a></h2>
-    <p>Maya and Leo talk through types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.</p>
-    <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="1on1-aws">
-    <h2 id="1on1-aws"><a href="1on1-aws/ch00.html">One-on-Ones: AWS Foundation</a></h2>
-    <p>Maya and Leo talk through running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.</p>
-    <p class="meta"><span>14 pages</span><span>About 2 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="1on1-ai">
-    <h2 id="1on1-ai"><a href="1on1-ai/ch00.html">One-on-Ones: AI in Production</a></h2>
-    <p>Maya and Leo talk through LLM features in a real product: cost, typed output, evaluation, defenses and agents.</p>
-    <p class="meta"><span>13 pages</span><span>About 1.75 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="1on1-ops">
-    <h2 id="1on1-ops"><a href="1on1-ops/ch00.html">One-on-Ones: Operations and Quality</a></h2>
-    <p>Maya and Leo talk through running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.</p>
-    <p class="meta"><span>12 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
-  <section aria-labelledby="agentcore-reader">
-    <h2 id="agentcore-reader"><a href="agentcore-reader/ch00.html">AgentCore Reader</a></h2>
-    <p>Maya and Leo talk through building AI agents for companies on AWS, part by part, before the hands-on study.</p>
-    <p class="meta"><span>13 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
-  </section>
+</header>
+<div class="recent" hidden>
+  <h2 class="shelf-label">Continue reading</h2>
+  <ol></ol>
 </div>
+<div class="shelf-tools">
+  <input class="shelf-search" type="search" placeholder="Search readers" aria-label="Search readers">
+  <div class="chips" role="group" aria-label="Categories">
+    <button class="chip" type="button" data-cat="" aria-pressed="true">All <span class="n">7</span></button>
+    <button class="chip" type="button" data-cat="english" aria-pressed="false">Everyday English <span class="n">1</span></button>
+    <button class="chip" type="button" data-cat="software" aria-pressed="false">Building Software <span class="n">3</span></button>
+    <button class="chip" type="button" data-cat="cloud-ai" aria-pressed="false">AWS and AI <span class="n">3</span></button>
+  </div>
+</div>
+<section class="cat acc-3" data-cat="english" aria-labelledby="cat-english">
+  <h2 class="cat-head" id="cat-english">Everyday English <span class="n">1</span></h2>
+  <p class="cat-note">Short and easy reads for daily practice.</p>
+  <ul class="cards">
+    <li data-text=" easy reads short and easy english reads on many topics. six new ones every morning. everyday english a2+ to b1 english english"><a href="easy-reads/index.html" data-slug="easy-reads"><b>Easy Reads</b>
+      <span class="blurb">Short and easy English reads on many topics. Six new ones every morning.</span>
+      <span class="facts"><span>48 reads</span><span>3 to 4 min each</span><span>English, A2+ to B1</span></span></a></li>
+  </ul>
+</section>
+<section class="cat acc-1" data-cat="software" aria-labelledby="cat-software">
+  <h2 class="cat-head" id="cat-software">Building Software <span class="n">3</span></h2>
+  <p class="cat-note">Talks on how to shape code, types and APIs, and run a product safely.</p>
+  <ul class="cards">
+    <li data-text="one-on-ones architecture what architecture is for: dependency rules, ports and adapters, ddd, and how to choose. building software b2 · dialogue english english"><a href="1on1-architecture/ch00.html" data-slug="1on1-architecture"><span class="kick">One-on-Ones</span><b>Architecture</b>
+      <span class="blurb">What architecture is for: dependency rules, ports and adapters, DDD, and how to choose.</span>
+      <span class="facts"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></span></a></li>
+    <li data-text="one-on-ones api and typescript types and apis that last: parsing at the boundary, contracts, versioning, retries and offline. building software b2 · dialogue english english"><a href="1on1-api-types/ch00.html" data-slug="1on1-api-types"><span class="kick">One-on-Ones</span><b>API and TypeScript</b>
+      <span class="blurb">Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.</span>
+      <span class="facts"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></span></a></li>
+    <li data-text="one-on-ones operations and quality running and changing a product safely: logs, alarms, slos, tests, gates, deploys and launch. building software b2 · dialogue english english"><a href="1on1-ops/ch00.html" data-slug="1on1-ops"><span class="kick">One-on-Ones</span><b>Operations and Quality</b>
+      <span class="blurb">Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.</span>
+      <span class="facts"><span>12 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></span></a></li>
+  </ul>
+</section>
+<section class="cat acc-2" data-cat="cloud-ai" aria-labelledby="cat-cloud-ai">
+  <h2 class="cat-head" id="cat-cloud-ai">AWS and AI <span class="n">3</span></h2>
+  <p class="cat-note">Talks on running an app on AWS, LLM features in production, and agents.</p>
+  <ul class="cards">
+    <li data-text="one-on-ones aws foundation running a small app on aws: access, lambda, dynamodb, infrastructure as code, sign-in and cost. aws and ai b2 · dialogue english english"><a href="1on1-aws/ch00.html" data-slug="1on1-aws"><span class="kick">One-on-Ones</span><b>AWS Foundation</b>
+      <span class="blurb">Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.</span>
+      <span class="facts"><span>14 pages</span><span>About 2 hours</span><span>English, B2 · dialogue</span></span></a></li>
+    <li data-text="one-on-ones ai in production llm features in a real product: cost, typed output, evaluation, defenses and agents. aws and ai b2 · dialogue english english"><a href="1on1-ai/ch00.html" data-slug="1on1-ai"><span class="kick">One-on-Ones</span><b>AI in Production</b>
+      <span class="blurb">LLM features in a real product: cost, typed output, evaluation, defenses and agents.</span>
+      <span class="facts"><span>13 pages</span><span>About 1.75 hours</span><span>English, B2 · dialogue</span></span></a></li>
+    <li data-text=" agentcore reader building ai agents for companies on aws, part by part, before the hands-on study. aws and ai b2 · dialogue english english"><a href="agentcore-reader/ch00.html" data-slug="agentcore-reader"><b>AgentCore Reader</b>
+      <span class="blurb">Building AI agents for companies on AWS, part by part, before the hands-on study.</span>
+      <span class="facts"><span>13 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></span></a></li>
+  </ul>
+</section>
+<p class="no-hits" hidden>No readers match.</p>
+<script>
+(function(){var q=document.querySelector(".shelf-search"),chips=document.querySelectorAll(".chip"),none=document.querySelector(".no-hits"),cat="";
+function apply(){var s=q.value.trim().toLowerCase(),any=false;
+  document.querySelectorAll(".cat").forEach(function(sec){var n=0;
+    sec.querySelectorAll(".cards>li").forEach(function(li){var ok=(!cat||sec.dataset.cat===cat)&&(!s||li.dataset.text.indexOf(s)>=0);li.hidden=!ok;if(ok)n++});
+    sec.hidden=!n;if(n)any=true});
+  none.hidden=any}
+q.addEventListener("input",apply);
+chips.forEach(function(c){c.addEventListener("click",function(){cat=c.dataset.cat;chips.forEach(function(x){x.setAttribute("aria-pressed",x===c)});apply()})});
+var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+var box=document.querySelector(".recent");if(!box||!r.length)return;
+var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
+function ago(t){if(!fmt)return "";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
+r.slice(0,3).forEach(function(e){var card=document.querySelector('.cards a[data-slug="'+e.s+'"]');if(!card)return;
+  var li=document.createElement("li"),a=document.createElement("a");li.className=card.closest(".cat").className.replace("cat","").trim();a.href=e.u;if(card.dataset.lang)a.lang=card.dataset.lang;
+  [["kick",e.l],["b",e.t],["when",ago(e.at)]].forEach(function(p){var x=document.createElement(p[0]==="b"?"b":"span");if(p[0]!=="b")x.className=p[0];x.textContent=p[1];a.appendChild(x)});
+  li.appendChild(a);box.querySelector("ol").appendChild(li)});
+box.hidden=!box.querySelector("li")})();
+</script>
 </div>
 <!-- site-js -->
 <script>
@@ -339,6 +411,12 @@ function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("ari
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
@@ -365,9 +443,8 @@ async function show(){btn.textContent=localStorage.getItem(K)?"Update offline co
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(!localStorage.getItem(K))note.textContent="Not saved on this device yet ("+list.length+" pages).";
-    else if(m||g)note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
-    else note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
     await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}

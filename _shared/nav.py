@@ -63,7 +63,8 @@ CSS = """
   .side .all{display:block}
 }
 @media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
-  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
 .offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
 .offline[hidden]{display:none}
 .save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
@@ -78,6 +79,12 @@ function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("ari
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\\/ch00\\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \\| .*$/,"").replace(/^.*? (\\d\\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
@@ -104,9 +111,8 @@ async function show(){btn.textContent=localStorage.getItem(K)?"Update offline co
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(!localStorage.getItem(K))note.textContent="Not saved on this device yet ("+list.length+" pages).";
-    else if(m||g)note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
-    else note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
     await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
@@ -133,14 +139,20 @@ def offline_box():
 </div>"""
 
 
+def lang_attr(slug):
+    """ lang="xx" for a reader whose content is not English (the site UI is English)."""
+    lang = BOOKS[slug][6] if slug in BOOKS else "en"
+    return "" if lang == "en" else f' lang="{lang}"'
+
+
 def header(root, current=None, with_side=False):
     """root: relative path from the page to Site/ ("" or "../" or "../../")."""
     links = "\n".join(
-        f'    <li><a href="{root}{slug}/{entry}"{CUR if slug == current else ""}>{label}</a></li>'
+        f'    <li><a href="{root}{slug}/{entry}"{CUR if slug == current else ""}{lang_attr(slug)}>{label}</a></li>'
         for slug, label, entry in READERS)
-    here = next((f'<span class="here">/ {label}</span>' for slug, label, _ in READERS if slug == current), "") if with_side else ""
+    here = next((f'<span class="here">/ <span{lang_attr(slug)}>{label}</span></span>' for slug, label, _ in READERS if slug == current), "") if with_side else ""
     btn = '\n  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>' if with_side else ""
-    return f"""<header class="site-head" data-root="{root}">
+    return f"""<header class="site-head" lang="en" data-root="{root}">
 <div class="bar">
   <a class="brand" href="{root}index.html">Bookshelf</a>{here}
   <nav aria-label="Readers"><ul class="readers">
@@ -156,14 +168,14 @@ def sidebar(title, home, items, current, root, reader_slug):
         f'    <li><a href="{h}"{CUR if h == current else ""}><span class="n">{n}</span><span>{html.escape(t)}</span></a></li>'
         for h, n, t in items)
     others = "\n".join(
-        f'    <li><a href="{root}{slug}/{entry}"{CUR if slug == reader_slug else ""}><span>{label}</span></a></li>'
+        f'    <li><a href="{root}{slug}/{entry}"{CUR if slug == reader_slug else ""}><span{lang_attr(slug)}>{label}</span></a></li>'
         for slug, label, entry in READERS)
     return f"""<aside class="side" id="side" aria-label="{html.escape(title)} pages">
   <h2><a href="{home}">{html.escape(title)}</a></h2>
   <ol>
 {rows}
   </ol>
-  <div class="all">
+  <div class="all" lang="en">
   <h2><a href="{root}index.html">All readers</a></h2>
   <ul>
 {others}
@@ -183,21 +195,177 @@ def chapter_items(src_dir):
     return items
 
 
+# ---------- bookshelf (index.html) ----------
+# Categories in display order: (key, heading, one-line note, page accent 1-4)
+CATEGORIES = [
+    ("english", "Everyday English", "Short and easy reads for daily practice.", 3),
+    ("software", "Building Software", "Talks on how to shape code, types and APIs, and run a product safely.", 1),
+    ("cloud-ai", "AWS and AI", "Talks on running an app on AWS, LLM features in production, and agents.", 2),
+]
+# Bookshelf card per reader slug: category key, series kicker, title, blurb, reading time, level (may be ""),
+# language of the reader's content (a key of LANGS; it must match LANG in the reader's build.py).
+# Kicker, title and blurb are written in that language; the rest of the UI stays English.
+# The page count is read from the reader's src/ (chapters other than ch00, or Easy Reads' reads).
+LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
+BOOKS = {
+    "easy-reads": ("english", "", "Easy Reads", "Short and easy English reads on many topics. Six new ones every morning.", "3 to 4 min each", "A2+ to B1", "en"),
+    "1on1-architecture": ("software", "One-on-Ones", "Architecture", "What architecture is for: dependency rules, ports and adapters, DDD, and how to choose.", "About 1.5 hours", "B2 · dialogue", "en"),
+    "1on1-api-types": ("software", "One-on-Ones", "API and TypeScript", "Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.", "About 1.5 hours", "B2 · dialogue", "en"),
+    "1on1-ops": ("software", "One-on-Ones", "Operations and Quality", "Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.", "About 1.5 hours", "B2 · dialogue", "en"),
+    "1on1-aws": ("cloud-ai", "One-on-Ones", "AWS Foundation", "Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.", "About 2 hours", "B2 · dialogue", "en"),
+    "1on1-ai": ("cloud-ai", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
+    "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · dialogue", "en"),
+}
+
+SHELF_CSS = """
+/* ---------- bookshelf (Site/_shared/nav.py) ---------- */
+.shelf .page{max-width:1120px}
+.shelf-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px}
+.shelf-head>*+*{margin-top:0}
+.shelf-head .intro>*+*{margin-top:12px}
+.shelf-head .offline{margin:0}
+.shelf-label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle)}
+.recent{margin-top:32px}
+.recent ol,.cards{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.recent li+li,.cards li+li{margin-top:0}
+.recent a{display:grid;gap:2px;height:100%;padding:12px 16px;border:1px solid var(--line);border-radius:var(--radius);color:var(--text);text-decoration:none;
+  box-shadow:inset 3px 0 0 var(--accent)}
+.recent a:hover,.cards a:hover{background:var(--surface);border-color:var(--line-strong)}
+.recent .kick,.cards .kick{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.recent b{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.recent .when{font-size:var(--fs-caption);color:var(--text-subtle)}
+.shelf-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:36px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.shelf-search{flex:1 1 240px;max-width:420px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--bg);color:var(--text);font:inherit;font-size:var(--fs-small)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--bg);color:var(--text-muted);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.chip:hover{border-color:var(--line-strong);color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.chip .n,.cat-head .n{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;opacity:.75}
+.cat{margin-top:36px}
+.cat>*+*{margin-top:4px}
+.cat-head{display:flex;align-items:center;gap:10px;font-size:var(--fs-h3)}
+.cat-head::before{content:"";width:10px;height:10px;border-radius:2px;background:var(--accent);flex:none}
+.cat-head .n{color:var(--text-subtle)}
+.cat-note{font-size:var(--fs-small);color:var(--text-muted)}
+.cat>.cards{margin-top:14px}
+.cards a{position:relative;display:flex;flex-direction:column;gap:6px;height:100%;padding:16px 18px 16px 24px;border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--text);text-decoration:none}
+.cards a::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:6px;background:var(--accent);border-radius:var(--radius) 0 0 var(--radius)}
+.cards b{font-size:var(--fs-lead);line-height:var(--lh-tight)}
+.cards .blurb{font-size:var(--fs-small);color:var(--text-muted);line-height:1.55;flex:1}
+.cards .facts{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:var(--fs-caption);color:var(--text-subtle)}
+.no-hits{margin-top:32px;color:var(--text-muted)}
+.cards b:lang(ja),.recent a:lang(ja) b{line-height:1.5;word-break:auto-phrase}
+.cards .blurb:lang(ja){line-height:1.75}
+"""
+
+SHELF_JS = """<script>
+(function(){var q=document.querySelector(".shelf-search"),chips=document.querySelectorAll(".chip"),none=document.querySelector(".no-hits"),cat="";
+function apply(){var s=q.value.trim().toLowerCase(),any=false;
+  document.querySelectorAll(".cat").forEach(function(sec){var n=0;
+    sec.querySelectorAll(".cards>li").forEach(function(li){var ok=(!cat||sec.dataset.cat===cat)&&(!s||li.dataset.text.indexOf(s)>=0);li.hidden=!ok;if(ok)n++});
+    sec.hidden=!n;if(n)any=true});
+  none.hidden=any}
+q.addEventListener("input",apply);
+chips.forEach(function(c){c.addEventListener("click",function(){cat=c.dataset.cat;chips.forEach(function(x){x.setAttribute("aria-pressed",x===c)});apply()})});
+var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+var box=document.querySelector(".recent");if(!box||!r.length)return;
+var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
+function ago(t){if(!fmt)return "";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
+r.slice(0,3).forEach(function(e){var card=document.querySelector('.cards a[data-slug="'+e.s+'"]');if(!card)return;
+  var li=document.createElement("li"),a=document.createElement("a");li.className=card.closest(".cat").className.replace("cat","").trim();a.href=e.u;if(card.dataset.lang)a.lang=card.dataset.lang;
+  [["kick",e.l],["b",e.t],["when",ago(e.at)]].forEach(function(p){var x=document.createElement(p[0]==="b"?"b":"span");if(p[0]!=="b")x.className=p[0];x.textContent=p[1];a.appendChild(x)});
+  li.appendChild(a);box.querySelector("ol").appendChild(li)});
+box.hidden=!box.querySelector("li")})();
+</script>"""
+
+
+def page_count(slug):
+    """Counted from the sources, so it is right before the reader is built."""
+    src = SITE / slug / "src"
+    if (src / "reads").is_dir():
+        return len(list((src / "reads").glob("*.body.html"))), "reads"
+    return len([f for f in src.glob("ch[0-9][0-9].body.html") if not f.name.startswith("ch00")]), "pages"
+
+
+def shelf():
+    """The bookshelf page body: head with the save button, continue reading, search and category filter, category sections."""
+    entry = {slug: e for slug, _, e in READERS}
+    total = sum(page_count(s)[0] for s in BOOKS)
+    secs, chips = [], ['<button class="chip" type="button" data-cat="" aria-pressed="true">All <span class="n">%d</span></button>' % len(BOOKS)]
+    for key, name, note, acc in CATEGORIES:
+        books = [s for s, *_ in READERS if BOOKS[s][0] == key]
+        if not books:
+            continue
+        chips.append(f'<button class="chip" type="button" data-cat="{key}" aria-pressed="false">{html.escape(name)} <span class="n">{len(books)}</span></button>')
+        cards = []
+        for s in books:
+            _, series, title, blurb, time, level, lang = BOOKS[s]
+            n, unit = page_count(s)
+            la, words = LANGS[lang]
+            text = html.escape(" ".join([series, title, blurb, name, level, la, words]).lower(), quote=True)
+            lt, dl = lang_attr(s), f' data-lang="{lang}"' if lang != "en" else ""
+            kick = f'<span class="kick"{lt}>{html.escape(series)}</span>' if series else ""
+            facts = [f"{n} {unit if n != 1 else unit[:-1]}", time, f"{la}, {level}" if level else la]
+            cards.append(f"""    <li data-text="{text}"><a href="{s}/{entry[s]}" data-slug="{s}"{dl}>{kick}<b{lt}>{html.escape(title)}</b>
+      <span class="blurb"{lt}>{html.escape(blurb)}</span>
+      <span class="facts">{"".join(f"<span>{html.escape(f)}</span>" for f in facts)}</span></a></li>""")
+        secs.append(f"""<section class="cat acc-{acc}" data-cat="{key}" aria-labelledby="cat-{key}">
+  <h2 class="cat-head" id="cat-{key}">{html.escape(name)} <span class="n">{len(books)}</span></h2>
+  <p class="cat-note">{html.escape(note)}</p>
+  <ul class="cards">
+{chr(10).join(cards)}
+  </ul>
+</section>""")
+    return f"""<header class="page-head shelf-head">
+<div class="intro">
+  <h1>Bookshelf</h1>
+  <p class="lead">Readers I made for my own study.</p>
+  <p class="meta"><span>{len(BOOKS)} readers</span><span>{total} pages</span><span>{" and ".join(LANGS[l][0] for l in LANGS if any(b[6] == l for b in BOOKS.values()))}</span></p>
+</div>
+{offline_box()}
+</header>
+<div class="recent" hidden>
+  <h2 class="shelf-label">Continue reading</h2>
+  <ol></ol>
+</div>
+<div class="shelf-tools">
+  <input class="shelf-search" type="search" placeholder="Search readers" aria-label="Search readers">
+  <div class="chips" role="group" aria-label="Categories">
+    {(chr(10) + "    ").join(chips)}
+  </div>
+</div>
+{chr(10).join(secs)}
+<p class="no-hits" hidden>No readers match.</p>
+{SHELF_JS}"""
+
+
 def patch_index():
+    """Regenerate the bookshelf body from READERS, CATEGORIES and BOOKS, keeping index.html's head."""
+    missing = [s for s, *_ in READERS if s not in BOOKS]
+    if missing:
+        raise SystemExit(f"add a BOOKS entry for: {', '.join(missing)}")
     p = SITE / "index.html"
     s = p.read_text()
     s = re.sub(r"\n<style id=\"site-nav\">.*?</style>", "", s, flags=re.S)
-    s = s.replace("</head>", f'<style id="site-nav">{CSS}</style>\n</head>', 1)
-    s = re.sub(r"<!-- site-header -->.*?<!-- /site-header -->\n", "", s, flags=re.S)
-    s = re.sub(r"<body>\n", f"<body>\n<!-- site-header -->\n{header('')}\n<!-- /site-header -->\n", s, count=1)
+    s = s.replace("</head>", f'<style id="site-nav">{CSS}{SHELF_CSS}</style>\n</head>', 1)
     s = re.sub(r"<!-- app -->.*?<!-- /app -->\n", "", s, flags=re.S)
     s = s.replace("</head>", f"<!-- app -->\n{head('')}\n<!-- /app -->\n</head>", 1)
-    s = re.sub(r"<!-- offline -->.*?<!-- /offline -->\n", "", s, flags=re.S)
-    s = re.sub(r"(<header class=\"page-head\">.*?</header>\n)", lambda m: f"{m.group(1)}<!-- offline -->\n{offline_box()}\n<!-- /offline -->\n", s, count=1, flags=re.S)
-    s = re.sub(r"<!-- site-js -->.*?<!-- /site-js -->\n", "", s, flags=re.S)
-    s = s.replace("</body>", f"<!-- site-js -->\n{JS}\n<!-- /site-js -->\n</body>", 1)
+    s = re.sub(r"<body[^>]*>\n.*</body>", lambda m: f"""<body class="shelf acc-1">
+<!-- site-header -->
+{header('')}
+<!-- /site-header -->
+<div class="page">
+{shelf()}
+</div>
+<!-- site-js -->
+{JS}
+<!-- /site-js -->
+</body>""", s, count=1, flags=re.S)
     p.write_text(s)
-    print("patched index.html")
+    print("built index.html")
 
 
 if __name__ == "__main__":
