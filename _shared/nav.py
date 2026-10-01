@@ -24,6 +24,7 @@ READERS = [
     ("1on1-ai", "AI in Production", "ch00.html"),
     ("1on1-ops", "Operations", "ch00.html"),
     ("agentcore-reader", "AgentCore", "ch00.html"),
+    ("book-pause-before-speaking", "一拍おいて話す", "ch00.html"),
 ]
 CUR = " aria-current=\"page\""
 
@@ -201,6 +202,7 @@ CATEGORIES = [
     ("english", "Everyday English", "Short and easy reads for daily practice.", 3),
     ("software", "Building Software", "Talks on how to shape code, types and APIs, and run a product safely.", 1),
     ("cloud-ai", "AWS and AI", "Talks on running an app on AWS, LLM features in production, and agents.", 2),
+    ("quick-books", "Quick Books", "Japanese books you can finish in about an hour: business, ideas and skills.", 4),
 ]
 # Bookshelf card per reader slug: category key, series kicker, title, blurb, reading time, level (may be ""),
 # language of the reader's content (a key of LANGS; it must match LANG in the reader's build.py).
@@ -215,6 +217,7 @@ BOOKS = {
     "1on1-aws": ("cloud-ai", "One-on-Ones", "AWS Foundation", "Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.", "About 2 hours", "B2 · dialogue", "en"),
     "1on1-ai": ("cloud-ai", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
     "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · dialogue", "en"),
+    "book-pause-before-speaking": ("quick-books", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
 }
 
 SHELF_CSS = """
