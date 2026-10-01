@@ -17,6 +17,7 @@ head = """<!doctype html>
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
+{app}
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +45,6 @@ for f in sorted(here.glob("*.body.html")):
     if not m: raise SystemExit(f"{f.name}: missing header comment")
     title, acc = m.groups()
     body = src[m.end():]
-    out = head.format(lang=LANG, title=title, css=css, acc=ACCENT[acc], header=nav.header("../", slug, True), side=nav.sidebar(series, "ch00.html", items, f.name.replace(".body",""), "../", slug)) + body.rstrip("\n") + "\n</div>\n" + nav.JS + "\n</body>\n</html>\n"
+    out = head.format(lang=LANG, app=nav.head("../"), title=title, css=css, acc=ACCENT[acc], header=nav.header("../", slug, True), side=nav.sidebar(series, "ch00.html", items, f.name.replace(".body",""), "../", slug)) + body.rstrip("\n") + "\n</div>\n" + nav.JS + "\n</body>\n</html>\n"
     (here.parent/f.name.replace(".body","")).write_text(out)
     print("built", f.name.replace(".body",""), len(out))

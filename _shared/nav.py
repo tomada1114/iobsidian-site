@@ -4,7 +4,12 @@ Every page gets the header (links to the bookshelf and each reader). Reader page
 get a sidebar listing the reader's pages: fixed on the left on wide screens, a drawer
 opened from the header's menu button on phones.
 
-    python3 _shared/nav.py   # re-inserts the header into the bookshelf index.html
+The site is also an installable web app that works offline: head() links the manifest and
+icons, JS registers sw.js, and the bookshelf's "Save all readers for offline" button stores
+every page in the service worker's cache. Opened online, the bookshelf counts new pages not
+yet saved and removed pages still saved, so the reader knows when to press it again.
+
+    python3 _shared/nav.py   # re-inserts the header, app links and save button into the bookshelf index.html
 """
 import html, pathlib, re
 
@@ -59,6 +64,12 @@ CSS = """
 }
 @media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
   body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
 """
 
 JS = """<script>
@@ -68,7 +79,58 @@ b.addEventListener("click",function(){set(!document.body.classList.contains("nav
 document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
 })();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"\u2026"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(!localStorage.getItem(K))note.textContent="Not saved on this device yet ("+list.length+" pages).";
+    else if(m||g)note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
 </script>"""
+
+
+def head(root):
+    """App links for <head>: manifest, home-screen icon and title."""
+    return f"""<link rel="manifest" href="{root}manifest.webmanifest">
+<link rel="apple-touch-icon" href="{root}icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">"""
+
+
+def offline_box():
+    """Bookshelf button that saves every page of every reader, and removes pages the site no longer has."""
+    return f"""<div class="offline" hidden>
+  <button class="save-btn" type="button">Save all readers for offline</button>
+  <p class="save-note" aria-live="polite"></p>
+</div>"""
 
 
 def header(root, current=None, with_side=False):
@@ -78,7 +140,7 @@ def header(root, current=None, with_side=False):
         for slug, label, entry in READERS)
     here = next((f'<span class="here">/ {label}</span>' for slug, label, _ in READERS if slug == current), "") if with_side else ""
     btn = '\n  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>' if with_side else ""
-    return f"""<header class="site-head">
+    return f"""<header class="site-head" data-root="{root}">
 <div class="bar">
   <a class="brand" href="{root}index.html">Bookshelf</a>{here}
   <nav aria-label="Readers"><ul class="readers">
@@ -128,6 +190,12 @@ def patch_index():
     s = s.replace("</head>", f'<style id="site-nav">{CSS}</style>\n</head>', 1)
     s = re.sub(r"<!-- site-header -->.*?<!-- /site-header -->\n", "", s, flags=re.S)
     s = re.sub(r"<body>\n", f"<body>\n<!-- site-header -->\n{header('')}\n<!-- /site-header -->\n", s, count=1)
+    s = re.sub(r"<!-- app -->.*?<!-- /app -->\n", "", s, flags=re.S)
+    s = s.replace("</head>", f"<!-- app -->\n{head('')}\n<!-- /app -->\n</head>", 1)
+    s = re.sub(r"<!-- offline -->.*?<!-- /offline -->\n", "", s, flags=re.S)
+    s = re.sub(r"(<header class=\"page-head\">.*?</header>\n)", lambda m: f"{m.group(1)}<!-- offline -->\n{offline_box()}\n<!-- /offline -->\n", s, count=1, flags=re.S)
+    s = re.sub(r"<!-- site-js -->.*?<!-- /site-js -->\n", "", s, flags=re.S)
+    s = s.replace("</body>", f"<!-- site-js -->\n{JS}\n<!-- /site-js -->\n</body>", 1)
     p.write_text(s)
     print("patched index.html")
 
