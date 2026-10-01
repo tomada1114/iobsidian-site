@@ -1,0 +1,59 @@
+<!-- title: 整えてから変えるか、変えてから整えるか · 目次 | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>整えてから変えるか、変えてから整えるか</b><span>目次 · 全7章</span></p>
+  <h1>整えてから変えるか、変えてから整えるか</h1>
+  <p class="lead">乱雑なコードに機能を足すとき、先に整えるべきか、後で整えるべきか。この本は、ソフトウェア開発に関わる人に向けて、コードの動きを変えずに形だけを小さく整える「整頓」の型と、整える時機を手間で選ぶ判断を、短いコードと練習問題で身につけるための学習テキストです。最後の章では、整える習慣をチームとの話し方と自分の働き方につなげます。</p>
+  <p class="meta"><span>全7章</span><span>約60分</span><span>学習テキスト（練習問題つき）</span></p>
+</header>
+<div class="flow">
+  <section aria-labelledby="map">
+    <h2 id="map">この本の地図</h2>
+    <p>この本では、プログラムの動きを変えずに、コードの形だけを小さく直すことを「整える」、その作業を「整頓」と呼びます。前半の3章で整頓の手の動かし方を、中ほどの3章でいつ・なぜ整えるかの判断を、最後の章で人との話し方を扱います。コード例は Python 風の短いもので、言語の細部を知らなくても読めるように書いています。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="手の動かし方、時機の判断、設計の理屈を学び、最後にチームとの話し方と自分の働き方につなげる">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">手の動かし方（1〜3章）</text><text x="72" y="61" class="t-sm">分ける・型を当てる・小さく出す</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">時機の判断（4章）</text><text x="72" y="135" class="t-sm">先に・直後に・いつか・やらない</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">設計の理屈（5・6章）</text><text x="72" y="209" class="t-sm">今の価値と余地・つながり</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">人と働き方（7章）</text><text x="72" y="285" class="t-sm">手間と時期で話し、記録する</text>
+      </svg>
+      <figcaption>手を動かす技術から始めて、判断の理屈を学び、最後にチームとの話し方と自分の働き方につなげる。どの章から読んでも分かるように書いている。</figcaption>
+    </figure>
+  </section>
+  <section aria-labelledby="chapters">
+    <h2 id="chapters">目次</h2>
+    <ol>
+      <li><a href="ch01.html">「動きを変える」と「形を整える」は、別の作業として扱います</a> — 二つは確かめることが反対なので、手を動かす前に仕分けて別のコミットにする。</li>
+      <li><a href="ch02.html">読んでいて手が止まったところに、小さな整頓の型を当てます</a> — 深い入れ子にはガード節、意味の分からない数字には説明定数のように、止まった理由ごとに型が決まっている。</li>
+      <li><a href="ch03.html">整頓は小さく分けて出すほど、確かめやすくなります</a> — 整頓は機能と別のプルリクエストで先に小さく出し、絡まったら捨ててやり直す。</li>
+      <li><a href="ch04.html">先に整えるか後で整えるかは、手間の足し算で決めます</a> — 整頓と整えた後の変更の手間の和が、整えずに変える手間より小さければ先に整える。</li>
+      <li><a href="ch05.html">設計は、今すぐ出す価値と、次に選べる余地を比べる判断です</a> — 締切が近いほど早く出す価値が、先が読めないほど変えやすさの価値が重くなる。</li>
+      <li><a href="ch06.html">変更の手間を大きくしているのは、部品どうしのつながりです</a> — 片方を変えるともう片方も変える関係が手間を生むので、一緒に変わるものを一か所に寄せる。</li>
+      <li><a href="ch07.html">整える習慣は、チームとの話し方と自分の働き方を変えます</a> — 整頓の価値を「どの変更がどれだけ早くなるか」で伝え、記録を自分の仕事の説明に使う。</li>
+    </ol>
+  </section>
+  <section aria-labelledby="sources">
+    <h2 id="sources">着想元と参考文献</h2>
+    <p>この本は、次の本の問いと主張に着想を得て新しく書いた解説です。原典の要約や抜粋ではなく、章立て・文章・例・図はすべて独自に作りました。考え方をくわしく知りたいときは原典を読んでください。</p>
+    <ul>
+      <li>着想元：『Tidy First? 個人で実践する経験主義的ソフトウェア設計』Kent Beck 著、吉羽龍太郎・永瀬美穂・細澤あゆみ 訳（オライリー・ジャパン、2024年）。原著は "Tidy First? A Personal Exercise in Empirical Software Design"（O'Reilly Media、2023年）。ITエンジニア本大賞2026 技術書部門ベスト11。原典で「整頓（tidying）」「コンスタンティンの等価性」と呼ばれる考え方を、この本では「整える」「変更の手間は結合で決まる」と平易な言葉で説明しています</li>
+      <li>リファクタリングの定義：Martin Fowler, "Refactoring"（refactoring.com、2026年10月1日確認）</li>
+      <li>コードレビューの変更の大きさと待ち時間：Caitlin Sadowski ほか "Modern Code Review: A Case Study at Google"（ICSE-SEIP 2018）</li>
+      <li>結合と凝集の由来：Stevens, Myers, Constantine "Structured Design"（IBM Systems Journal、1974年）、Yourdon & Constantine『Structured Design』（1975年／1979年）</li>
+      <li>設計と人の関係についての講演：Kent Beck、QCon San Francisco 2022 基調講演（InfoQ の報告記事、2022年10月）</li>
+    </ul>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="../index.html"><span>前へ</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>次へ</span><b>「動きを変える」と「形を整える」は、別の作業として扱います</b></a>
+  </nav>
+  <p class="fine">2026-10-01 作成。Claude Code が公開情報をもとに書きました。数字と研究は出典で確かめていますが、内容は原典と同じではありません。</p>
+</div>

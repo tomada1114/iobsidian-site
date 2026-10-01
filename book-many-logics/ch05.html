@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>論理はひとつではない 05 · 原則から考える型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">論理はひとつではない</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" lang="ja">キャリアの移り目</a></li>
+    <li><a href="../book-spend-by-design/ch00.html" lang="ja">貯めるより、使いきる設計</a></li>
+    <li><a href="../book-world-by-data/ch00.html" lang="ja">思い込みを外して、世界をデータで見る</a></li>
+    <li><a href="../book-information-networks/ch00.html" lang="ja">情報は人をつなぎ、分断する</a></li>
+    <li><a href="../book-tidy-then-change/ch00.html" lang="ja">整えてから変えるか、変えてから整えるか</a></li>
+    <li><a href="../book-money-anxiety/ch00.html" lang="ja">その不安は、お金で消えるのか</a></li>
+    <li><a href="../book-what-follows/ch00.html" lang="ja">その文から何が言えるか</a></li>
+    <li><a href="../book-not-all-in/ch00.html" lang="ja">全身全霊で働かないという選択</a></li>
+    <li><a href="../book-loose-steady/ch00.html" lang="ja">ゆるく、でも毎日積み上げる</a></li>
+    <li><a href="../book-choose-the-question/ch00.html" lang="ja">答えを出す前に、問いを選ぶ</a></li>
+    <li><a href="../book-keep-skills-current/ch00.html" lang="ja">技能を更新しつづける</a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html" lang="ja">不確実性から考えるチームと組織</a></li>
+    <li><a href="../book-being-heard/ch00.html" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</a></li>
+    <li><a href="../book-job-membership/ch00.html" lang="ja">ジョブ型とメンバーシップ型で読む働き方</a></li>
+    <li><a href="../book-team-english/ch00.html" lang="ja">英語でチームを回す仕事の型</a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html" lang="ja">計画と対話を行き来する</a></li>
+    <li><a href="../book-wealth-mindset/ch00.html" lang="ja">富を積み上げる人の考え方</a></li>
+    <li><a href="../book-beyond-command/ch00.html" lang="ja">命令の組織から、探検の組織へ</a></li>
+    <li><a href="../book-adler-relationships/ch00.html" lang="ja">アドラー心理学で人間関係をほどく</a></li>
+    <li><a href="../book-where-gains-went/ch00.html" lang="ja">稼いだ分は、どこへ行ったのか</a></li>
+    <li><a href="../book-walk-and-think/ch00.html" lang="ja">歩くと、頭と体に何が起きるか</a></li>
+    <li><a href="../book-life-not-a-story/ch00.html" lang="ja">人生を物語にしない生き方</a></li>
+    <li><a href="../book-growing-sense/ch00.html" lang="ja">AIの時代に、センスはどう育つか</a></li>
+    <li><a href="../book-faith-divides-america/ch00.html" lang="ja">アメリカを割る信仰</a></li>
+    <li><a href="../book-job-yardstick/ch00.html" lang="ja">仕事選びのものさしを科学で直す</a></li>
+    <li><a href="../book-recall-to-learn/ch00.html" lang="ja">思い出して覚える、勉強の組み立て方</a></li>
+    <li><a href="../book-english-gaps/ch00.html" lang="ja">大人の英語は、ずれに気づいて身につける</a></li>
+    <li><a href="../book-grounded-words/ch00.html" lang="ja">ことばは体から育つ</a></li>
+    <li><a href="../book-many-logics/ch00.html" aria-current="page" lang="ja">論理はひとつではない</a></li>
+    <li><a href="../book-lasting-craft/ch00.html" lang="ja">流行に左右されない作り手の心得</a></li>
+    <li><a href="../book-finite-time/ch00.html" lang="ja">全部はできない前提で、時間を使う</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="論理はひとつではない pages">
+  <h2><a href="ch00.html">論理はひとつではない</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>順番を疑う</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>四つの目的</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>結論から言う型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>両方を吟味する型</span></a></li>
+    <li><a href="ch05.html" aria-current="page"><span class="n">05</span><span>原則から考える型</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>順にたどる型</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>型を選ぶ</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html"><span lang="ja">キャリアの移り目</span></a></li>
+    <li><a href="../book-spend-by-design/ch00.html"><span lang="ja">貯めるより、使いきる設計</span></a></li>
+    <li><a href="../book-world-by-data/ch00.html"><span lang="ja">思い込みを外して、世界をデータで見る</span></a></li>
+    <li><a href="../book-information-networks/ch00.html"><span lang="ja">情報は人をつなぎ、分断する</span></a></li>
+    <li><a href="../book-tidy-then-change/ch00.html"><span lang="ja">整えてから変えるか、変えてから整えるか</span></a></li>
+    <li><a href="../book-money-anxiety/ch00.html"><span lang="ja">その不安は、お金で消えるのか</span></a></li>
+    <li><a href="../book-what-follows/ch00.html"><span lang="ja">その文から何が言えるか</span></a></li>
+    <li><a href="../book-not-all-in/ch00.html"><span lang="ja">全身全霊で働かないという選択</span></a></li>
+    <li><a href="../book-loose-steady/ch00.html"><span lang="ja">ゆるく、でも毎日積み上げる</span></a></li>
+    <li><a href="../book-choose-the-question/ch00.html"><span lang="ja">答えを出す前に、問いを選ぶ</span></a></li>
+    <li><a href="../book-keep-skills-current/ch00.html"><span lang="ja">技能を更新しつづける</span></a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html"><span lang="ja">不確実性から考えるチームと組織</span></a></li>
+    <li><a href="../book-being-heard/ch00.html"><span lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span></a></li>
+    <li><a href="../book-job-membership/ch00.html"><span lang="ja">ジョブ型とメンバーシップ型で読む働き方</span></a></li>
+    <li><a href="../book-team-english/ch00.html"><span lang="ja">英語でチームを回す仕事の型</span></a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html"><span lang="ja">計画と対話を行き来する</span></a></li>
+    <li><a href="../book-wealth-mindset/ch00.html"><span lang="ja">富を積み上げる人の考え方</span></a></li>
+    <li><a href="../book-beyond-command/ch00.html"><span lang="ja">命令の組織から、探検の組織へ</span></a></li>
+    <li><a href="../book-adler-relationships/ch00.html"><span lang="ja">アドラー心理学で人間関係をほどく</span></a></li>
+    <li><a href="../book-where-gains-went/ch00.html"><span lang="ja">稼いだ分は、どこへ行ったのか</span></a></li>
+    <li><a href="../book-walk-and-think/ch00.html"><span lang="ja">歩くと、頭と体に何が起きるか</span></a></li>
+    <li><a href="../book-life-not-a-story/ch00.html"><span lang="ja">人生を物語にしない生き方</span></a></li>
+    <li><a href="../book-growing-sense/ch00.html"><span lang="ja">AIの時代に、センスはどう育つか</span></a></li>
+    <li><a href="../book-faith-divides-america/ch00.html"><span lang="ja">アメリカを割る信仰</span></a></li>
+    <li><a href="../book-job-yardstick/ch00.html"><span lang="ja">仕事選びのものさしを科学で直す</span></a></li>
+    <li><a href="../book-recall-to-learn/ch00.html"><span lang="ja">思い出して覚える、勉強の組み立て方</span></a></li>
+    <li><a href="../book-english-gaps/ch00.html"><span lang="ja">大人の英語は、ずれに気づいて身につける</span></a></li>
+    <li><a href="../book-grounded-words/ch00.html"><span lang="ja">ことばは体から育つ</span></a></li>
+    <li><a href="../book-many-logics/ch00.html" aria-current="page"><span lang="ja">論理はひとつではない</span></a></li>
+    <li><a href="../book-lasting-craft/ch00.html"><span lang="ja">流行に左右されない作り手の心得</span></a></li>
+    <li><a href="../book-finite-time/ch00.html"><span lang="ja">全部はできない前提で、時間を使う</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>論理はひとつではない</b><span>第5章 / 全7章</span></p>
+  <h1>動かさない原則から考える筋道は、信頼を守るためにあります</h1>
+  <p class="lead">品質、安全、お金、約束にかかわる場面では、損得を比べるより先に、決まっている原則から外れていないかを確かめることが、筋の通った考え方になります。この章では、その筋道が何を守っているのかと、判断の前に使う三つの問い、そしてこの筋道の限界を扱います。</p>
+  <p class="meta"><span>読了 約8分</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>損得だけで比べると、どんな判断に流れやすいのか</li>
+      <li>原則を先に置く筋道は、何を守っているのか</li>
+      <li>判断の前に、どんな三つの問いで案を確かめるのか</li>
+      <li>原則が古くなったときは、どうすればよいのか</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>損得だけで比べると、検査を一つ省く案が得に見えます</h2>
+    <p>自動車部品の工場で品質保証課長を務める松井さんのもとに、営業の東さんが相談に来ました。取引先の自動車メーカーに納めるブレーキまわりの部品が、機械の故障で3日遅れそうだと言います。「出荷前の寸法検査を、今月だけ全数から抜き取りに変えられませんか。そうすれば納期に間に合います」。</p>
+    <p>この工場では、出荷する部品をすべて測定器にかけ、寸法が決まった範囲に入っているかを確かめています。全数を測ると1日に4時間かかります。抜き取りにすれば、その時間がほぼなくなります。</p>
+    <p>東さんの案を、損得だけで比べてみます。検査を抜き取りに変えれば、3日の遅れを取り戻せます。この工場で過去3年に寸法の不良が見つかったのは、10万個に1個にも満たない割合でした。不良品が混ざる見込みは小さく、納期に遅れれば取引先の組み立てラインが止まります。数字を並べると、検査を省くほうが得に見えます。東さんは「確率で考えれば、こちらのほうが合理的です」と言いました。取引先の購買担当者からは、この2日間、納期を確かめる電話が毎日かかってきていました。</p>
+    <p>松井さんは、東さんの計算が間違っているとは思いませんでした。それでも、この比べ方には、工場が取引先と何を約束しているかが入っていないと考えました。</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>原則を先に置くと、結論はその場の損得で揺れません</h2>
+    <p>松井さんは、同じ相談を、別の順番で考え直しました。最初に、この場面で動かさない原則を一行で書きます。「取引先と約束した検査の方法は、正式な手続きを経ずに変えない」。この工場は取引先との取り決めで、ブレーキまわりの部品は全数を検査すると約束していました。</p>
+    <p>原則を先に置くと、結論は先に決まります。抜き取りへの変更は、この原則に反するので、選べません。そのうえで、原則の内側で納期を守る手を探します。松井さんと東さんは、検査員を休日に出勤させて検査の時間を確保し、間に合わない分は取引先に相談して2回に分けて納めることにしました。取引先の担当者は、事情の説明と分けて納める日程を聞いて了承しました。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 268" role="img" aria-label="取引先との約束という原則の内側で、納期を守る手を探す。検査を省く案は原則の外にあるので選ばない">
+        <rect x="8" y="8" width="384" height="252" rx="10" class="zone-soft"/>
+        <text x="24" y="36" class="t-hd">動かさない原則</text>
+        <text x="24" y="58" class="t-sm">約束した検査の方法は、手続きなしに変えない</text>
+        <rect x="32" y="76" width="336" height="164" rx="8" class="node"/>
+        <text x="48" y="104">この内側で探す</text>
+        <rect x="56" y="120" width="288" height="44" rx="6" class="node-acc"/>
+        <text x="72" y="148" class="t-sm">休日に検査員を増やす</text>
+        <rect x="56" y="176" width="288" height="44" rx="6" class="node"/>
+        <text x="72" y="204" class="t-sm">取引先と相談し、2回に分けて納める</text>
+      </svg>
+      <figcaption>原則が判断の外枠になる。検査を省く案は外枠の外にあるので比べる対象にせず、内側で納期を守る手を探す。</figcaption>
+    </figure>
+    <p>この本では、何をどんな順番で並べると「筋が通っている」と受け取られるかの決まりを「論理の型」と呼びます。損得を比べる型では、案を並べ、得の大きいほうを選ぶのが筋の通った順番です。原則から考える型では、まず動かさない原則を置き、案がそこから外れていないかを確かめるのが筋の通った順番です。この本では、決まった原則から外れていないかを確かめるこの筋道を「守る筋道」と呼びます。</p>
+    <p>守る筋道が守っているのは、信頼です。原則がその場の損得で動かないので、誰が判断しても、どんなに忙しい月でも、同じ結論になります。取引先は、工場の担当者が誰であっても約束が守られると分かるので、安心して部品を任せられます。東さんの計算は、不良品が混ざる確率は小さいと示しましたが、「忙しい月には約束を変える工場だ」と思われたときに失う信頼の大きさは、計算に入っていませんでした。</p>
+    <p>この筋道をはっきり教えている例に、イランの学校の作文があります。そこでは、宗教の教えや古くから伝わることわざ、詩を出発点に置き、それに照らして物事の正しさを確かめる書き方を練習します。出発点に置いた教えそのものは、作文の中で疑う対象にはしません。職場にも、同じ筋道で動いている仕事があります。法務、経理、監査、品質保証、医療や工事の安全管理などです。どれも、先に決まった基準から外れていないかを確かめることが仕事の中心にあります。</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>判断の前に、動かさない原則を書き、三つの問いで案を確かめます</h2>
+    <p>守る筋道で判断するときは、まず「この場面で動かさない原則」を一行で書きます。原則が書けたら、出てきた案を次の三つの問いに順に照らします。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="原則を一行で書いたあと、案が原則に反するか、例外の手続きはあるか、原則は誰が何のために決めたかを順に確かめる">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">動かさない原則を一行で書く</text><text x="72" y="61" class="t-sm">約束した検査の方法は変えない</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">この案は原則に反するか</text><text x="72" y="135" class="t-sm">抜き取りは全数検査の約束に反する</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">例外の正式な手続きはあるか</text><text x="72" y="209" class="t-sm">変更の申請はあるが、承認に2週間</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">誰が、何のために決めたか</text><text x="72" y="285" class="t-sm">5年前、取引先と不良の流出を防ぐため</text>
+      </svg>
+      <figcaption>三つ目の問いで原則の目的が分かると、断る理由を相手に説明でき、原則の内側で別の手を探しやすくなる。</figcaption>
+    </figure>
+    <p>一つ目の問い「この案は原則に反するか」で、反しない案はそのまま損得で比べてかまいません。反する案は、二つ目の問い「反するなら、例外を認める正式な手続きはあるか」に進みます。松井さんの工場には、取引先に検査方法の変更を申請する手続きがありました。ただし承認までに2週間かかるので、今回の納期には間に合いません。</p>
+    <p>原則の目的を確かめる三つ目の問い「その原則は、いつ、誰が、何のために決めたか」は、判断を相手に説明するときに役立ちます。全数検査の取り決めは、5年前に別の工場で寸法不良の部品が流出したのをきっかけに、取引先と結んだものでした。松井さんはこの経緯を東さんに話しました。東さんは、取引先にとって全数検査が、部品を任せる条件になっていると分かり、分けて納める相談を自分から取引先に持ちかけました。</p>
+    <p>三つの問いは、工場の外でも同じように使えます。小さな商社で経理を担当する人が、取引先から「請求書の日付を、先月の末日にしてもらえないか」と頼まれたとします。動かさない原則は「請求書は、実際に取引した日付で作る」です。頼まれた案はこの原則に反し、例外を認める手続きもありません。この原則は、帳簿が実際の取引を正しく示すように、会計と税の決まりに沿って会社が定めたものです。経理担当者は、日付は変えられないと伝え、その理由として帳簿の正しさを説明したうえで、取引先が困っている支払いの時期について営業と相談すると申し出ます。</p>
+    <p>原則を一行で書けないときは、判断の前に、上司や担当の部署に「この場面で守るべき決まりは何か」を確かめます。原則があいまいなまま損得で決めると、あとで「約束に反していた」と分かったときに取り返しがつきません。</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>原則が古くなっていても、この筋道の中からは問い直せません</h2>
+    <p>守る筋道には、はっきりした限界があります。原則を疑わないことで信頼を保つ筋道なので、原則が時代に合わなくなっていても、この筋道の中からは気づけません。</p>
+    <p>松井さんの工場には、検査の記録を紙に印刷し、担当者と課長が印鑑を押して3年間保管するという規程がありました。測定器の記録はすでにすべて電子データで残っていて、紙は誰も見返していません。それでも、規程がある限り、守る筋道で考えれば紙の記録は作り続けることになります。</p>
+    <p>原則そのものを見直すには、別の場で、別の型を使います。松井さんは、規程を改定する会議を開き、紙の記録が何のために作られたのか、電子データで同じ目的を果たせるのかを、品質保証と製造の担当者で吟味しました。規程が改まるまでは、紙の記録を作り続けました。日々の判断では原則を守り、原則を変えるのは決まった手続きの中で行います。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 196" role="img" aria-label="規則だからと断って終わる対応と、原則を守りながら別の手を探し、見直しは別の場で行う対応の比較">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">規則を盾にする</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">原則を生かす</text>
+        <text x="16" y="54" class="t-sm">頼まれたとき</text>
+        <rect x="16" y="62" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="89" text-anchor="middle" class="t-sm">できない、で終わる</text>
+        <rect x="208" y="62" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="89" text-anchor="middle" class="t-sm">内側で別の手を探す</text>
+        <text x="16" y="128" class="t-sm">原則が古いとき</text>
+        <rect x="16" y="136" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="163" text-anchor="middle" class="t-sm">そのまま続ける</text>
+        <rect x="208" y="136" width="176" height="44" rx="6" class="node"/><text x="296" y="163" text-anchor="middle" class="t-sm">改定の場で吟味する</text>
+      </svg>
+      <figcaption>原則を守ることと、原則の内側で考えるのをやめることは違う。見直しは、日々の判断とは別の場で行う。</figcaption>
+    </figure>
+    <p>もう一つの落とし穴は、原則を盾にして考えるのをやめてしまうことです。もし松井さんが「規則なのでできません」とだけ答えていたら、納期の問題は何も解決しなかったはずです。守る筋道は、原則に反する案を選ばないための筋道です。原則の内側で別の手を探すことは、この筋道の中でも続けます。案を断るときは、原則の目的と、原則の内側でできることを一緒に伝えます。</p>
+    <p>守る筋道に長く慣れた人は、別の型が求められる場所に移ったときに戸惑うことがあります。品質保証から新しい事業の企画に移った人が、企画会議で「その案には前例と基準がありません」と言い続けると、周りからは何も生み出さない人だと受け取られます。新しい事業の企画では、原則を守ることより、予想に合わない事実から新しい説明を見つけることが求められるからです。自分がどの型に慣れているかを知っておくと、移った先で求められる型との違いに早く気づけます。</p>
+  </section>
+
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>品質・安全・お金・約束にかかわる場面では、先に決まった原則から外れていないかを確かめることが筋の通った判断になり、それが相手の信頼を守ります。</li>
+      <li>判断の前に動かさない原則を一行で書き、案が原則に反するか、例外の手続きはあるか、原則は誰が何のために決めたかを順に確かめます。</li>
+      <li>この筋道の中では原則そのものを問い直せないので、古くなった原則は改定の場で別の型を使って見直し、それまでは守ります。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch04.html"><span>前へ</span><b>意見が割れたときは、両方を吟味してから一段上の答えを探します</b></a>
+    <a class="next" href="ch06.html"><span>次へ</span><b>出来事を順にたどる日本の書き方も、共感で合意をつくる論理です</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>

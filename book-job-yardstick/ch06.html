@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>仕事選びのものさしを科学で直す 06 · 判断の偏りを正す</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">仕事選びのものさしを科学で直す</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" lang="ja">キャリアの移り目</a></li>
+    <li><a href="../book-spend-by-design/ch00.html" lang="ja">貯めるより、使いきる設計</a></li>
+    <li><a href="../book-world-by-data/ch00.html" lang="ja">思い込みを外して、世界をデータで見る</a></li>
+    <li><a href="../book-information-networks/ch00.html" lang="ja">情報は人をつなぎ、分断する</a></li>
+    <li><a href="../book-tidy-then-change/ch00.html" lang="ja">整えてから変えるか、変えてから整えるか</a></li>
+    <li><a href="../book-money-anxiety/ch00.html" lang="ja">その不安は、お金で消えるのか</a></li>
+    <li><a href="../book-what-follows/ch00.html" lang="ja">その文から何が言えるか</a></li>
+    <li><a href="../book-not-all-in/ch00.html" lang="ja">全身全霊で働かないという選択</a></li>
+    <li><a href="../book-loose-steady/ch00.html" lang="ja">ゆるく、でも毎日積み上げる</a></li>
+    <li><a href="../book-choose-the-question/ch00.html" lang="ja">答えを出す前に、問いを選ぶ</a></li>
+    <li><a href="../book-keep-skills-current/ch00.html" lang="ja">技能を更新しつづける</a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html" lang="ja">不確実性から考えるチームと組織</a></li>
+    <li><a href="../book-being-heard/ch00.html" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</a></li>
+    <li><a href="../book-job-membership/ch00.html" lang="ja">ジョブ型とメンバーシップ型で読む働き方</a></li>
+    <li><a href="../book-team-english/ch00.html" lang="ja">英語でチームを回す仕事の型</a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html" lang="ja">計画と対話を行き来する</a></li>
+    <li><a href="../book-wealth-mindset/ch00.html" lang="ja">富を積み上げる人の考え方</a></li>
+    <li><a href="../book-beyond-command/ch00.html" lang="ja">命令の組織から、探検の組織へ</a></li>
+    <li><a href="../book-adler-relationships/ch00.html" lang="ja">アドラー心理学で人間関係をほどく</a></li>
+    <li><a href="../book-where-gains-went/ch00.html" lang="ja">稼いだ分は、どこへ行ったのか</a></li>
+    <li><a href="../book-walk-and-think/ch00.html" lang="ja">歩くと、頭と体に何が起きるか</a></li>
+    <li><a href="../book-life-not-a-story/ch00.html" lang="ja">人生を物語にしない生き方</a></li>
+    <li><a href="../book-growing-sense/ch00.html" lang="ja">AIの時代に、センスはどう育つか</a></li>
+    <li><a href="../book-faith-divides-america/ch00.html" lang="ja">アメリカを割る信仰</a></li>
+    <li><a href="../book-job-yardstick/ch00.html" aria-current="page" lang="ja">仕事選びのものさしを科学で直す</a></li>
+    <li><a href="../book-recall-to-learn/ch00.html" lang="ja">思い出して覚える、勉強の組み立て方</a></li>
+    <li><a href="../book-english-gaps/ch00.html" lang="ja">大人の英語は、ずれに気づいて身につける</a></li>
+    <li><a href="../book-grounded-words/ch00.html" lang="ja">ことばは体から育つ</a></li>
+    <li><a href="../book-many-logics/ch00.html" lang="ja">論理はひとつではない</a></li>
+    <li><a href="../book-lasting-craft/ch00.html" lang="ja">流行に左右されない作り手の心得</a></li>
+    <li><a href="../book-finite-time/ch00.html" lang="ja">全部はできない前提で、時間を使う</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="仕事選びのものさしを科学で直す pages">
+  <h2><a href="ch00.html">仕事選びのものさしを科学で直す</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>好きを仕事にする</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>年収で選ぶ</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>業界と診断で選ぶ</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>満足の条件</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>避けるべき職場</span></a></li>
+    <li><a href="ch06.html" aria-current="page"><span class="n">06</span><span>判断の偏りを正す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>選んだ仕事を作り変える</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html"><span lang="ja">キャリアの移り目</span></a></li>
+    <li><a href="../book-spend-by-design/ch00.html"><span lang="ja">貯めるより、使いきる設計</span></a></li>
+    <li><a href="../book-world-by-data/ch00.html"><span lang="ja">思い込みを外して、世界をデータで見る</span></a></li>
+    <li><a href="../book-information-networks/ch00.html"><span lang="ja">情報は人をつなぎ、分断する</span></a></li>
+    <li><a href="../book-tidy-then-change/ch00.html"><span lang="ja">整えてから変えるか、変えてから整えるか</span></a></li>
+    <li><a href="../book-money-anxiety/ch00.html"><span lang="ja">その不安は、お金で消えるのか</span></a></li>
+    <li><a href="../book-what-follows/ch00.html"><span lang="ja">その文から何が言えるか</span></a></li>
+    <li><a href="../book-not-all-in/ch00.html"><span lang="ja">全身全霊で働かないという選択</span></a></li>
+    <li><a href="../book-loose-steady/ch00.html"><span lang="ja">ゆるく、でも毎日積み上げる</span></a></li>
+    <li><a href="../book-choose-the-question/ch00.html"><span lang="ja">答えを出す前に、問いを選ぶ</span></a></li>
+    <li><a href="../book-keep-skills-current/ch00.html"><span lang="ja">技能を更新しつづける</span></a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html"><span lang="ja">不確実性から考えるチームと組織</span></a></li>
+    <li><a href="../book-being-heard/ch00.html"><span lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span></a></li>
+    <li><a href="../book-job-membership/ch00.html"><span lang="ja">ジョブ型とメンバーシップ型で読む働き方</span></a></li>
+    <li><a href="../book-team-english/ch00.html"><span lang="ja">英語でチームを回す仕事の型</span></a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html"><span lang="ja">計画と対話を行き来する</span></a></li>
+    <li><a href="../book-wealth-mindset/ch00.html"><span lang="ja">富を積み上げる人の考え方</span></a></li>
+    <li><a href="../book-beyond-command/ch00.html"><span lang="ja">命令の組織から、探検の組織へ</span></a></li>
+    <li><a href="../book-adler-relationships/ch00.html"><span lang="ja">アドラー心理学で人間関係をほどく</span></a></li>
+    <li><a href="../book-where-gains-went/ch00.html"><span lang="ja">稼いだ分は、どこへ行ったのか</span></a></li>
+    <li><a href="../book-walk-and-think/ch00.html"><span lang="ja">歩くと、頭と体に何が起きるか</span></a></li>
+    <li><a href="../book-life-not-a-story/ch00.html"><span lang="ja">人生を物語にしない生き方</span></a></li>
+    <li><a href="../book-growing-sense/ch00.html"><span lang="ja">AIの時代に、センスはどう育つか</span></a></li>
+    <li><a href="../book-faith-divides-america/ch00.html"><span lang="ja">アメリカを割る信仰</span></a></li>
+    <li><a href="../book-job-yardstick/ch00.html" aria-current="page"><span lang="ja">仕事選びのものさしを科学で直す</span></a></li>
+    <li><a href="../book-recall-to-learn/ch00.html"><span lang="ja">思い出して覚える、勉強の組み立て方</span></a></li>
+    <li><a href="../book-english-gaps/ch00.html"><span lang="ja">大人の英語は、ずれに気づいて身につける</span></a></li>
+    <li><a href="../book-grounded-words/ch00.html"><span lang="ja">ことばは体から育つ</span></a></li>
+    <li><a href="../book-many-logics/ch00.html"><span lang="ja">論理はひとつではない</span></a></li>
+    <li><a href="../book-lasting-craft/ch00.html"><span lang="ja">流行に左右されない作り手の心得</span></a></li>
+    <li><a href="../book-finite-time/ch00.html"><span lang="ja">全部はできない前提で、時間を使う</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>仕事選びのものさしを科学で直す</b><span>第6章 / 全7章</span></p>
+  <h1>迷ったときの判断の偏りは、どうすれば正せるのか</h1>
+  <p class="lead">仕事選びで迷ったとき、選択肢を二つに絞ったり、その夜の気分で決めたりすると判断がゆがむ理由を説明できるようになります。選択肢を増やし、時間をずらし、失敗を先に想像し、経験者の話を借りる4つの手順も身につきます。</p>
+  <p class="meta"><span>読了 約8分</span><span>11月、人事部の面談室</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>「辞めるか、残るか」の二択で、何が見えなくなるのか</li>
+      <li>夜に一人で考えると、なぜ判断がゆがむのか</li>
+      <li>失敗したと仮定すると、何が見えてくるのか</li>
+      <li>自分の気持ちの予測は、誰の話で確かめればいいのか</li>
+    </ul>
+  </nav>
+  <p class="stage">11月の朝、人事部の面談室。高山さんは目の下にくまを作って座っている。</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>「辞めるか、残るか」の二択で、何が見えなくなるのか</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>高山さん、眠れていないように見えます。何かありましたか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>不動産仲介の会社から内定が出て、返事の期限が1週間後なんです。毎晩、辞めるか残るかを考えていたら、眠れなくなりました。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>毎晩、何時ごろに考えていますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>布団に入ってからです。12時を過ぎても、辞めたほうがいい理由と残ったほうがいい理由が、交互に浮かんできます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>今日は、決め方そのものを点検しましょう。仕事選びのものさし、つまり何を見て何を重く見るかの基準を持っていても、使うときの判断が偏ると、比べ方を誤ります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>判断の偏り、ですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>一つ目は、選択肢の数です。高山さんは今、「辞めて移る」と「今のまま残る」の二つだけを比べていますね。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>内定が出たので、その二つしかないと思っていました。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>二つに絞ると、ほかの道が目に入らなくなります。迷っている人の多くが、この狭い見方のまま決めて、あとで「ほかにも道があった」と気づきます。比べてみますね。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="二択で考える場合と、選択肢を増やした場合の比較。選択肢を増やすと、二つの良いところを組み合わせた道が見える">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">二択で考える</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">選択肢を増やす</text>
+        <text x="16" y="56" class="t-sm">比べるもの</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle" class="t-sm">移る・残る</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">移る・残る・ほか3つ</text>
+        <text x="16" y="136" class="t-sm">考えること</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle" class="t-sm">どちらが正しいか</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle" class="t-sm">何が欲しいのか</text>
+        <text x="16" y="216" class="t-sm">見えてくる道</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle" class="t-sm">どちらかを諦める</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-sm">良い点を組み合わせる</text>
+      </svg>
+      <figcaption>二択では、どちらが正しいかだけを考えて、片方を諦めることになる。選択肢を増やすと、自分が何を欲しいのかが見えて、二つの良い点を組み合わせた道が出てくる。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>ほかの道というと、どんなものがありますか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>移りたい理由は何でしたか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>年収を上げたいことと、大きな案件を担当してみたいことです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>それなら、今の会社で大きな案件を持つ部署に異動を願い出る道があります。社内公募の商品企画部に出す道、内定先に返事の期限を延ばせないか頼む道もあります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>期限を延ばしてもらうなんて、考えもしませんでした。全部で五つになりますね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>五つを並べてみて、高山さんが本当に欲しいものは何だと思いますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>年収と、大きな案件です。でも、今の会社で大きな案件を持てるなら、移る理由の半分はなくなります。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>二択のままでは、その組み合わせは出てきませんでした。選択肢を増やすと、自分が欲しいものを分けて考えられるようになります。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>夜に一人で考えると、なぜ判断がゆがむのか</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>二つ目の偏りは、その時の気分です。夜中の布団の中では、疲れや不安が、判断に入り込みやすくなります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>たしかに、上司に注意された日の夜は「辞めよう」と思って、取引先にお礼を言われた日の夜は「残ろう」と思います。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>その日の出来事で答えが入れ替わるなら、答えを決めているのはその日の気分です。時間をずらして考える方法があります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>時間をずらす、というのはどういうことですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>この選択をしたら、10分後、10か月後、10年後に自分がどう感じるかを、それぞれ書きます。移る場合で書いてみますね。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 252" role="img" aria-label="移る選択を、10分後、10か月後、10年後に分けて考えた図。10分後の気持ちと、10年後に大事なことは違う">
+        <text x="16" y="18" class="t-sm">移る選択をしたら</text>
+        <rect x="16" y="28" width="368" height="48" rx="6" class="node"/>
+        <text x="32" y="58">10分後</text><text x="368" y="58" text-anchor="end" class="t-sm">ほっとする・少し怖い</text>
+        <rect x="16" y="82" width="368" height="48" rx="6" class="node"/>
+        <text x="32" y="112">10か月後</text><text x="368" y="112" text-anchor="end" class="t-sm">通勤と残業に慣れたか</text>
+        <rect x="16" y="136" width="368" height="48" rx="6" class="node-acc"/>
+        <text x="32" y="166" class="t-hd t-acc">10年後</text><text x="368" y="166" text-anchor="end" class="t-sm">何ができる人になったか</text>
+        <rect x="16" y="190" width="368" height="48" rx="6" class="node-soft"/>
+        <text x="32" y="220">決める基準</text><text x="368" y="220" text-anchor="end" class="t-sm">3つの答えを並べて比べる</text>
+      </svg>
+      <figcaption>10分後の気持ちは、その日の気分に左右される。10か月後と10年後を書くと、通勤や残業の重さと、身につく力のように、長く残るものが見えてくる。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>10年後は、正直に言って想像がつきません。今と同じような自分がいる気がします。</p></div></div>
+
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>そう感じるのは高山さんだけではありません。18歳から68歳までの1万9千人以上に聞いた研究で、どの年代の人も、過去10年では大きく変わったのに、次の10年はあまり変わらないと答えました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>振り返ると、10年前の大学生のころの自分とは、好きなものも考え方もかなり違います。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>この先の10年も、同じくらい変わる可能性が高いと考えておくほうが、実際に近いはずです。今の好みだけに合わせて選ぶと、変わったあとの自分に合わなくなることがあります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>10か月後のほうは書けそうです。毎日往復3時間の通勤に慣れているかどうか、残業が月45時間で収まっているかどうかです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>10か月後の行には、慣れたかどうかだけでなく、その間に失ったものも書いてください。平日の夜の時間や、友人と会う回数などです。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>失敗したと仮定すると、何が見えてくるのか</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>三つ目の方法は、プレモータムです。計画が失敗したと仮定して、その理由を先に挙げる方法で、もとはプロジェクトの計画を点検するために使われてきました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>プレモータムというのは、聞き慣れない言葉です。まだ決めてもいないのに、失敗したと考えるんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>英語で、亡くなったあとに原因を調べる検死を意味する言葉をもじっていて、事前検死とも訳されます。終わってから原因を探す代わりに、始める前に探すという意味です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>それで、失敗したと仮定するわけですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>そうです。「1年後、移った会社で後悔している。なぜか」と問いを立てて、理由を五つ書いてみてください。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>通勤で疲れて、平日の夜に何もできなくなった。評価の基準がわからず、頑張っても給料が上がらなかった。相談できる人がいなかった。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>あと二つ、挙げられますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>案件は大きいけれど、自分で進め方を決められなかった。それと、今の先輩たちと話せなくなって、さびしくなったことです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>すらすら出てきましたね。「うまくいくか」と聞かれると良い面ばかり考えますが、「なぜ失敗したか」と聞かれると、隠れていた不安が言葉になります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>残る場合でも、同じことをするんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>はい、残る道でも書きます。「1年後、残ったことを後悔している。なぜか」です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>見積もりの残業がずっと続いて、何も変わらなかったから、だと思います。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>挙がった理由の一つ一つに、防ぐ手を考えられるかを見てください。防げる理由が多い道は、選んでも失敗しにくい道です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>移る場合の通勤の疲れは、引っ越さない限り防げません。評価の基準は、次の面接で聞けば確かめられます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>残る場合の、見積もりの残業はどうですか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>上司に相談して、見積もりの型を作れば減らせるかもしれません。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>自分の気持ちの予測は、誰の話で確かめればいいのか</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>いろいろ書いても、移ったあとに自分がどう感じるかは、結局わからない気がします。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>そこで四つ目の方法です。2009年に米国の研究者たちが、これから経験する出来事への自分の気持ちを予測させる実験をしました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>どうやって予測させたんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>出来事の説明を読んで予測する人と、同じ出来事を経験した他人がどう感じたかだけを聞いて予測する人に分けました。当たったのは、他人の感じ方を聞いた人のほうでした。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>自分のことなのに、他人の話のほうが当たるんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>実験に参加した人たち自身は、説明を読むほうが当たると信じていました。そこが、この研究のいちばん大事な点です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>だとすると、不動産仲介の会社に移った人に、1年たってどう感じているかを聞けばいいわけですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>そうです。その会社の人でなくても、同じ業界に移った人なら参考になります。取引先や大学の同期に、一人くらいは見つかるはずです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>四つの方法を、順番に並べておきます。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="迷ったときの4つの手順。選択肢を増やし、時間をずらし、失敗を先に想像し、経験者の話を聞いて、決める">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">選択肢を3つ以上にする</text><text x="72" y="61" class="t-sm">異動・公募・期限の延長も入れる</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">時間をずらして書く</text><text x="72" y="135" class="t-sm">10分後・10か月後・10年後</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">失敗した理由を先に書く</text><text x="72" y="209" class="t-sm">1年後に後悔している、なぜか</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">経験者の感じ方を聞く</text><text x="72" y="285" class="t-sm">その道を選んで1年たった人に</text>
+      </svg>
+      <figcaption>選択肢を増やし、時間をずらし、失敗を先に想像し、最後に経験者の感じ方を聞く。どれも日中に行い、夜の気分で決めないための手順である。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>全部やるには、1週間では足りないかもしれません。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>だから、期限の延長を頼む道が役に立ちます。ただ、考える期限は必ず決めてください。手順を重ねても正解が保証されるわけではないので、考え続けるうちに機会を逃すこともあります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>決めたあと、ほかにしておくことはありますか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>決めた理由を、「高山さんは、〜と考えて決めた」と三人称で書き残してください。自分を外から見る書き方をすると、気分ではなく理由が記録に残ります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>三人称で書くと、どうして気分が入りにくくなるんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>他人のことを書くつもりになると、自分から少し離れて見られます。友人の相談には落ち着いて答えられるのに、自分のことになると迷う、という経験はありませんか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>あります。同期の転職の相談なら、すぐに意見が言えます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>三人称の記録は、その落ち着いた目を、自分の決定にも向けるための書き方です。</p></div></div>
+    </div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>高山さんが説明し直す</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>同じように内定の返事で眠れなくなっている人がいたら、どう話しますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>まず、移るか残るかの二択をやめて、選択肢を三つ以上にしてもらいます。異動や公募、期限の延長も選択肢に入ります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>次に、夜ではなく日中に、10分後・10か月後・10年後にどう感じるかを書いてもらいます。人は、この先の10年で自分があまり変わらないと思い込みやすいことも伝えます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>残りの二つは、どう話しますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">高</span><div class="say"><p><span class="vh">高山: </span>1年後に後悔していると仮定して理由を書き、防げるかを考えます。最後に、その道を選んで1年たった人に、どう感じているかを聞きます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">宮</span><div class="say"><p><span class="vh">宮坂: </span>考える期限を決めることが抜けています。手順は後悔の少ない決め方を整えるもので、正解を約束するものではありません。期限の日に、そこまでに集めた材料で決めます。</p></div></div>
+    </div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>移るか残るかの二択で考えると、ほかの道が見えなくなるので、異動や公募、期限の延長も含めて選択肢を三つ以上にします。</li>
+      <li>夜の気分や、この先あまり変わらないという思い込みで判断がゆがむので、10分後・10か月後・10年後に分け、1年後の失敗の理由を先に書きます。</li>
+      <li>自分の気持ちは、同じ道を選んだ人の感じ方を聞くほうが当たりやすく、考える期限を決めて、決めた理由を三人称で書き残します。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>良い条件を数える前に、避けるべき職場をどう見分けるか</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>選んだあとの仕事は、自分で作り変えられるのか</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>

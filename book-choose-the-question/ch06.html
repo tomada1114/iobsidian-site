@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>答えを出す前に、問いを選ぶ 06 · 粗く回して一つに削る</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">答えを出す前に、問いを選ぶ</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" lang="ja">キャリアの移り目</a></li>
+    <li><a href="../book-spend-by-design/ch00.html" lang="ja">貯めるより、使いきる設計</a></li>
+    <li><a href="../book-world-by-data/ch00.html" lang="ja">思い込みを外して、世界をデータで見る</a></li>
+    <li><a href="../book-information-networks/ch00.html" lang="ja">情報は人をつなぎ、分断する</a></li>
+    <li><a href="../book-tidy-then-change/ch00.html" lang="ja">整えてから変えるか、変えてから整えるか</a></li>
+    <li><a href="../book-money-anxiety/ch00.html" lang="ja">その不安は、お金で消えるのか</a></li>
+    <li><a href="../book-what-follows/ch00.html" lang="ja">その文から何が言えるか</a></li>
+    <li><a href="../book-not-all-in/ch00.html" lang="ja">全身全霊で働かないという選択</a></li>
+    <li><a href="../book-loose-steady/ch00.html" lang="ja">ゆるく、でも毎日積み上げる</a></li>
+    <li><a href="../book-choose-the-question/ch00.html" aria-current="page" lang="ja">答えを出す前に、問いを選ぶ</a></li>
+    <li><a href="../book-keep-skills-current/ch00.html" lang="ja">技能を更新しつづける</a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html" lang="ja">不確実性から考えるチームと組織</a></li>
+    <li><a href="../book-being-heard/ch00.html" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</a></li>
+    <li><a href="../book-job-membership/ch00.html" lang="ja">ジョブ型とメンバーシップ型で読む働き方</a></li>
+    <li><a href="../book-team-english/ch00.html" lang="ja">英語でチームを回す仕事の型</a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html" lang="ja">計画と対話を行き来する</a></li>
+    <li><a href="../book-wealth-mindset/ch00.html" lang="ja">富を積み上げる人の考え方</a></li>
+    <li><a href="../book-beyond-command/ch00.html" lang="ja">命令の組織から、探検の組織へ</a></li>
+    <li><a href="../book-adler-relationships/ch00.html" lang="ja">アドラー心理学で人間関係をほどく</a></li>
+    <li><a href="../book-where-gains-went/ch00.html" lang="ja">稼いだ分は、どこへ行ったのか</a></li>
+    <li><a href="../book-walk-and-think/ch00.html" lang="ja">歩くと、頭と体に何が起きるか</a></li>
+    <li><a href="../book-life-not-a-story/ch00.html" lang="ja">人生を物語にしない生き方</a></li>
+    <li><a href="../book-growing-sense/ch00.html" lang="ja">AIの時代に、センスはどう育つか</a></li>
+    <li><a href="../book-faith-divides-america/ch00.html" lang="ja">アメリカを割る信仰</a></li>
+    <li><a href="../book-job-yardstick/ch00.html" lang="ja">仕事選びのものさしを科学で直す</a></li>
+    <li><a href="../book-recall-to-learn/ch00.html" lang="ja">思い出して覚える、勉強の組み立て方</a></li>
+    <li><a href="../book-english-gaps/ch00.html" lang="ja">大人の英語は、ずれに気づいて身につける</a></li>
+    <li><a href="../book-grounded-words/ch00.html" lang="ja">ことばは体から育つ</a></li>
+    <li><a href="../book-many-logics/ch00.html" lang="ja">論理はひとつではない</a></li>
+    <li><a href="../book-lasting-craft/ch00.html" lang="ja">流行に左右されない作り手の心得</a></li>
+    <li><a href="../book-finite-time/ch00.html" lang="ja">全部はできない前提で、時間を使う</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="答えを出す前に、問いを選ぶ pages">
+  <h2><a href="ch00.html">答えを出す前に、問いを選ぶ</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>問いで価値が決まる</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>悩むと考える</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>解くべき問いの条件</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>一次情報と仮説</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>分けて筋書きを作る</span></a></li>
+    <li><a href="ch06.html" aria-current="page"><span class="n">06</span><span>粗く回して一つに削る</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>目指す姿を描く問い</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html"><span lang="ja">キャリアの移り目</span></a></li>
+    <li><a href="../book-spend-by-design/ch00.html"><span lang="ja">貯めるより、使いきる設計</span></a></li>
+    <li><a href="../book-world-by-data/ch00.html"><span lang="ja">思い込みを外して、世界をデータで見る</span></a></li>
+    <li><a href="../book-information-networks/ch00.html"><span lang="ja">情報は人をつなぎ、分断する</span></a></li>
+    <li><a href="../book-tidy-then-change/ch00.html"><span lang="ja">整えてから変えるか、変えてから整えるか</span></a></li>
+    <li><a href="../book-money-anxiety/ch00.html"><span lang="ja">その不安は、お金で消えるのか</span></a></li>
+    <li><a href="../book-what-follows/ch00.html"><span lang="ja">その文から何が言えるか</span></a></li>
+    <li><a href="../book-not-all-in/ch00.html"><span lang="ja">全身全霊で働かないという選択</span></a></li>
+    <li><a href="../book-loose-steady/ch00.html"><span lang="ja">ゆるく、でも毎日積み上げる</span></a></li>
+    <li><a href="../book-choose-the-question/ch00.html" aria-current="page"><span lang="ja">答えを出す前に、問いを選ぶ</span></a></li>
+    <li><a href="../book-keep-skills-current/ch00.html"><span lang="ja">技能を更新しつづける</span></a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html"><span lang="ja">不確実性から考えるチームと組織</span></a></li>
+    <li><a href="../book-being-heard/ch00.html"><span lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span></a></li>
+    <li><a href="../book-job-membership/ch00.html"><span lang="ja">ジョブ型とメンバーシップ型で読む働き方</span></a></li>
+    <li><a href="../book-team-english/ch00.html"><span lang="ja">英語でチームを回す仕事の型</span></a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html"><span lang="ja">計画と対話を行き来する</span></a></li>
+    <li><a href="../book-wealth-mindset/ch00.html"><span lang="ja">富を積み上げる人の考え方</span></a></li>
+    <li><a href="../book-beyond-command/ch00.html"><span lang="ja">命令の組織から、探検の組織へ</span></a></li>
+    <li><a href="../book-adler-relationships/ch00.html"><span lang="ja">アドラー心理学で人間関係をほどく</span></a></li>
+    <li><a href="../book-where-gains-went/ch00.html"><span lang="ja">稼いだ分は、どこへ行ったのか</span></a></li>
+    <li><a href="../book-walk-and-think/ch00.html"><span lang="ja">歩くと、頭と体に何が起きるか</span></a></li>
+    <li><a href="../book-life-not-a-story/ch00.html"><span lang="ja">人生を物語にしない生き方</span></a></li>
+    <li><a href="../book-growing-sense/ch00.html"><span lang="ja">AIの時代に、センスはどう育つか</span></a></li>
+    <li><a href="../book-faith-divides-america/ch00.html"><span lang="ja">アメリカを割る信仰</span></a></li>
+    <li><a href="../book-job-yardstick/ch00.html"><span lang="ja">仕事選びのものさしを科学で直す</span></a></li>
+    <li><a href="../book-recall-to-learn/ch00.html"><span lang="ja">思い出して覚える、勉強の組み立て方</span></a></li>
+    <li><a href="../book-english-gaps/ch00.html"><span lang="ja">大人の英語は、ずれに気づいて身につける</span></a></li>
+    <li><a href="../book-grounded-words/ch00.html"><span lang="ja">ことばは体から育つ</span></a></li>
+    <li><a href="../book-many-logics/ch00.html"><span lang="ja">論理はひとつではない</span></a></li>
+    <li><a href="../book-lasting-craft/ch00.html"><span lang="ja">流行に左右されない作り手の心得</span></a></li>
+    <li><a href="../book-finite-time/ch00.html"><span lang="ja">全部はできない前提で、時間を使う</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>答えを出す前に、問いを選ぶ</b><span>第6章 / 全7章</span></p>
+  <h1>答えは粗く速く作って確かめ、渡すときは一つの主張まで削ります</h1>
+  <p class="lead">問いと筋書きが決まったら、いよいよ手を動かして答えを作ります。この章では、完璧なデータをそろえてから始めるより、粗い答えを早く作って確かめるほうがよい理由と、自分に都合のよい読み方を防ぐ方法を確かめます。そのうえで、できた答えを相手に渡すときに、一つの主張まで削る手順を扱います。</p>
+  <p class="meta"><span>読了 約8分</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>完璧にそろえてから始めるのと、粗く始めるのとで、何が違うのか</li>
+      <li>粗く速く回すと、なぜ問いの間違いに早く気づけるのか</li>
+      <li>答えを渡すとき、どこまで削ればよいのか</li>
+      <li>粗くしてはいけない作業はどれで、働き方にはどう使えるのか</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>同じ確かめを、二通りに進めます</h2>
+    <p>岡田さんは、県内に30店舗を持つ家具店チェーンの店舗運営部で働いています。部で検討しているのは、商品を種類別に並べる今の陳列をやめて、ソファ・テーブル・照明を一つの部屋のように組み合わせて見せる陳列に変える案です。本部長からは「新しい陳列で売上が上がるのか、確かめて報告してほしい」と言われました。岡田さんが二通りの進め方をした場合を書いてみます。</p>
+    <p>一つ目の進め方では、岡田さんは全30店舗のレジの記録を集め、季節の売れ方の違いや店の広さの違いを取り除く準備から始めました。正確な比較をするためには、データを完全にそろえる必要があると考えたからです。準備だけで2か月かかり、分析を終えたのは3か月後でした。そのころには、本部長は別の資料をもとに、春の改装の計画を決め終えていました。</p>
+    <p>二つ目の進め方では、岡田さんは似た規模の2店舗を選び、片方の店だけ売り場の一角を新しい陳列に変えて、2週間比べました。結果は予想と違いました。新しい陳列の店では、来店客が売り場にいる時間は延びたのに、一人あたりの購入点数は増えていませんでした。岡田さんが店頭で客に話を聞くと、「部屋の展示を見て気に入ったけれど、同じ照明がどの売り場にあるのか分からなかった」という声が何人からも出ました。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="全店のデータをそろえてから始めた場合と、2店舗で粗く試した場合の比較。粗く試した場合は、2週間で問いの間違いに気づいている">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">そろえてから</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">粗く試す</text>
+        <text x="16" y="56" class="t-sm">使ったデータ</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle" class="t-sm">全30店舗の記録</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">2店舗の2週間</text>
+        <text x="16" y="136" class="t-sm">最初の結果まで</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle" class="t-sm">3か月</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle" class="t-sm">2週間</text>
+        <text x="16" y="216" class="t-sm">分かったこと</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle" class="t-sm">判断に間に合わない</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-sm">問いが違っていた</text>
+      </svg>
+      <figcaption>粗く試した進め方では、最初の結果が早く出たため、問いそのものの間違いに判断の前に気づけた。</figcaption>
+    </figure>
+    <p>二つ目の進め方で、売上が増えない理由は陳列そのものより、展示を見た客に売り場の場所を知らせる案内が足りないことにあるかもしれないと分かりました。岡田さんは問いを「展示の横に、同じ商品の売り場を示す案内を置けば、購入点数は増えるか」に直し、次の2週間で確かめることにしました。</p>
+    <p>岡田さんは、最初の2週間の結果を、その段階で本部長に見せました。結果は予想と逆で、データも2店舗分しかありません。それでも本部長は「全店の陳列を変える前に分かってよかった。案内の件も、結果が出たらすぐ知らせてほしい」と言い、春の改装の計画を決めるのを1か月待つことにしました。粗い結果でも、判断の前に渡せば、判断する人の役に立ちます。</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>粗い答えを早く出すと、問いの間違いに早く気づけます</h2>
+    <p>この本では、いま答えを出せばその後の判断や行動が大きく変わり、しかも手持ちの時間と材料で答えが出せる問いを「解くべき問い」と呼びます。どれほど丁寧に解くべき問いを選んでも、手を動かしてみると、問いの立て方が違っていたと分かることがあります。完璧なデータをそろえてから始めると、問いの間違いに気づくのは、すべての作業が終わった後になります。粗い答えを早く出せば、間違いに気づく時期が前に来て、問いを直す時間が残ります。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 236" role="img" aria-label="粗い答えを作って確かめ、結果を見て問いを直し、また粗い答えを作るという往復を繰り返す">
+        <path d="M94 84 C94 22 306 22 306 84" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <path d="M306 152 C306 214 94 214 94 152" class="ln-acc" marker-end="url(#arw-acc)"/>
+        <text x="200" y="30" text-anchor="middle" class="t-sm">結果を見る</text>
+        <text x="200" y="222" text-anchor="middle" class="t-sm">直した問いで作る</text>
+        <rect x="24" y="86" width="140" height="64" rx="6" class="node-c1"/>
+        <text x="94" y="114" text-anchor="middle" class="t-hd">粗い答え</text>
+        <text x="94" y="136" text-anchor="middle" class="t-sm">6割の出来</text>
+        <rect x="236" y="86" width="140" height="64" rx="6" class="node-c2"/>
+        <text x="306" y="114" text-anchor="middle" class="t-hd">問いを直す</text>
+        <text x="306" y="136" text-anchor="middle" class="t-sm">予想との差から</text>
+      </svg>
+      <figcaption>一回の往復を短くすると、決められた期間の中で問いを何度も直せる。往復の回数が、最後の答えの確かさにつながる。</figcaption>
+    </figure>
+    <p>粗く速く回すときは、次の順番で手をつけます。</p>
+    <ol class="steps">
+      <li><strong>結論を左右する部分から手をつける。</strong>岡田さんなら、陳列で購入点数が変わるかどうかです。店の広さの補正は、その後で足りなければ行います。</li>
+      <li><strong>6割の出来で一度、依頼した人に見せる。</strong>粗い段階で見せると、問いのずれをその場で指摘してもらえます。</li>
+      <li><strong>予想が外れたと判断する条件を、始める前に書く。</strong>「2週間で購入点数が変わらなければ、陳列だけでは売上は増えないと判断する」のように書いておきます。</li>
+    </ol>
+    <p>予想が外れたと判断する条件を先に書くのは、人には自分の予想に合うデータを拾い、合わないデータを例外として扱う傾向があるからです。新しい陳列を推していた岡田さんが、結果を見てから判断の基準を決めると、「滞在時間が延びたのだから成功だ」と読みたくなります。基準を先に紙に書いておけば、自分に都合のよい読み方をしにくくなります。</p>
+    <p>「6割」という目安には理由があります。資料でも分析でも、残りの4割を仕上げる作業には、最初の6割と同じくらいか、それ以上の時間がかかることが多いからです。仕上げに入る前に方向が合っているかを確かめれば、方向が違っていた場合に、仕上げの時間をまるごと無駄にせずに済みます。保育園で運動会の計画を立てる職員なら、進行表を細かく詰める前に、種目の案と大まかな時間割だけを園長と保護者の代表に見せます。種目の案に反対が出れば、そこで直せます。</p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>渡すときは、一つの主張と三つまでの根拠に削ります</h2>
+    <p>2回目の2週間で、岡田さんは案内を置いた店で購入点数が増えたことを確かめました。本部長への報告にも、二通りの作り方があります。一つ目は、分析したことをすべて載せた30枚の報告です。二つ目は、「陳列を全店で変える前に、まず展示の横に売り場への案内を置く」という一つの主張と、その根拠を三つに絞った2枚の報告です。二つ目の報告の1枚目には、主張の下に次の三つの根拠だけを書きました。</p>
+    <ul>
+      <li>新しい陳列の店では、売り場にいる時間は延びたが、購入点数は変わらなかった。</li>
+      <li>店頭で話を聞いた客の多くが、展示の商品がどの売り場にあるか分からなかったと答えた。</li>
+      <li>展示の横に案内を置いた2週間で、購入点数が増えた。</li>
+    </ul>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="分析を全部並べた報告と、一つの主張に削った報告の比較。削った報告では、本部長が会議の場で次の手を決められる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">全部並べる</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">一つに削る</text>
+        <text x="16" y="56" class="t-sm">枚数</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle" class="t-sm">30枚</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">2枚</text>
+        <text x="16" y="136" class="t-sm">最初に書くこと</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle" class="t-sm">調べた方法と経緯</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle" class="t-sm">案内を先に置く</text>
+        <text x="16" y="216" class="t-sm">読んだ本部長</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle" class="t-sm">要点を聞き返す</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-sm">その場で決められる</text>
+      </svg>
+      <figcaption>二つの報告で中身の正しさは同じでも、最初に主張を置いて削った報告だけが、読んだ人にその場で次の手を決めさせる。</figcaption>
+    </figure>
+    <p>削るときは、受け取る人を「この件の前提は何も知らないが、理解する力は十分にある人」と考えます。前提を知らない人を想定すると、社内の略語や経緯の説明を省かずに書けます。理解する力があると想定すると、細かい計算の途中までは書かずに済みます。本部長は家具の売り場に詳しくても、岡田さんの2週間の試しの中身は知りません。</p>
+    <p>主張を報告の最初に置くのは、読む人が最初の数行で、この報告を何のために読むのかを決めるからです。調べた方法から書き始めると、読む人は結論を探しながら読み進めることになり、途中の数字の意味を取り違えやすくなります。最初に主張があれば、続く根拠を、主張を支えるものとして読めます。</p>
+    <p>渡す前には、二つのことを確かめます。一つは、報告の中身を一言で言うと何か。もう一つは、報告を読んだ人が、何を決められるかです。一言が出てこなければ、主張がまだ一つに絞れていません。読んだ人が何も決められないなら、主張と判断のつながりが書かれていません。30枚の報告のために調べたことは、聞かれたときに見せる控えとして手元に残しておきます。</p>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>粗くしてはいけない作業と、働き方での小さな試し</h2>
+    <p>粗く速く回してよいのは、間違えても取り返せる部分に限ります。お金の支払い、商品の安全、法令に関わる作業は、粗くしてはいけません。家具なら、組み立て方の説明や耐荷重の表示を「6割の出来で一度出す」ことはできません。陳列の試しのように、間違えたら元に戻せる作業と、戻せない作業を、始める前に分けておきます。</p>
+    <p>小さく試して問いを直す進め方は、働き方を変えるときにも使えます。新しい分野の仕事に移りたいと考えたとき、いきなり会社を辞めて転職すると、その仕事が自分に合わなかったと分かっても、元に戻るのは簡単ではありません。社内の公募で関連する業務を一部だけ手伝う、会社が認めていれば週末に副業として受けてみる。そうした小さな試しを2〜3か月続けると、「この仕事のどこが自分に合い、どこが合わないか」という答えが粗く出ます。その答えを見て、次に確かめる問いを決めます。</p>
+    <p>新しい資格の勉強を始めるときも同じです。教科書を最後まで読み終えてから問題集に進むと、どこが弱いかが分かるのは数か月後になります。教科書を6割ほど読んだ段階で過去の試験問題を一回分解いてみると、点数の取れない分野が分かり、残りの勉強の時間をそこに集められます。</p>
+    <div class="aside caution">
+      <p class="label">つまずきやすいところ</p>
+      <p>副業は、会社の就業規則で届け出や許可が必要になっていることがあります。小さな試しを始める前に、就業規則を読み、必要なら上司や人事に相談します。また、本業と試しを掛け持つと休む時間が減るので、使う時間の上限と、続けるかやめるかを決める日を先に決めておきます。</p>
+    </div>
+  </section>
+
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>完璧なデータをそろえてから始めるより、結論を左右する部分から粗い答えを早く出すほうが、問いの間違いに判断の前に気づけます。</li>
+      <li>予想が外れたと判断する条件を始める前に書いておくと、自分に都合のよいデータだけを拾う読み方を防げます。</li>
+      <li>答えを渡すときは、前提を知らないが理解力のある人を想定し、一つの主張と三つまでの根拠に削ります。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>大きな問いは小さな問いに分け、調べる前に答えの筋書きと図の下書きを作ります</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>目指す姿が決まっていない仕事では、問いを立てることから仕事が始まります</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!-- title: 整えてから変えるか、変えてから整えるか 06 · 結合と凝集 | accent: think -->
+<header class="page-head">
+  <p class="kicker"><b>整えてから変えるか、変えてから整えるか</b><span>第6章 / 全7章</span></p>
+  <h1>変更の手間を大きくしているのは、部品どうしのつながりです</h1>
+  <p class="lead">一か所を直したつもりが、別の場所で表示が食い違う。このとき手間を大きくしているのは、コードの量より、部品どうしのつながり方です。この章では、変更が広がる原因になる「結合」と、それを抑える「凝集」を短いコードで確かめ、変更が広がる場所を見つけて寄せる整頓を練習します。</p>
+  <p class="meta"><span>読了 約8分</span><span>学習テキスト</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>一つの条件を変えたのに、なぜ三か所で食い違いが起きるのか</li>
+      <li>結合とは何で、なぜ変更の手間の大半を決めるのか</li>
+      <li>一緒に変わるものを近くに寄せると、何が変わるのか</li>
+      <li>練習問題：コードから結合を見つける</li>
+    </ul>
+  </nav>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>同じ条件の変更を、二通りに比べます</h2>
+    <p>加藤さんは、フィットネスクラブの会員管理システムを担当しています。このクラブには、月に8回以上通った会員を「ゴールド会員」とする制度があります。ゴールド会員には特典のお知らせメールが届き、ポイントの付き方が5倍になり、受付の管理画面では名前の横に「ゴールド」と表示されます。今回の依頼は、ゴールド会員の条件を「月に10回以上」に変えることでした。</p>
+    <p>コードを調べると、ゴールド会員かどうかの判定は、三つのファイルにそれぞれ書かれていました。</p>
+    <pre><code># mail.py
+if member.visits &gt;= 8:
+    send_gold_mail(member)
+
+# points.py
+rate = 0.01
+if member.visits &gt;= 8:
+    rate = 0.05
+
+# admin.py
+if member.visits &gt; 8:
+    label = "ゴールド"</code></pre>
+    <p>ここから先は、同じ依頼を二通りに書きます。</p>
+    <p>一つ目の加藤さんは、メールを送る処理の 8 を 10 に書き換えて作業を終えました。翌月、9回通った会員から「特典のメールは来なかったのに、ポイントは5倍で付いている」という問い合わせが受付に届きました。調べると、ポイントの計算は8回のままでした。さらに、管理画面の判定は <code>&gt;</code> で書かれていたので、もともと9回以上の会員にしか「ゴールド」と表示されていませんでした。三か所の判定が、変更の前から少しずつ食い違っていたことになります。</p>
+    <p>二つ目の加藤さんは、条件を書き換える前に、ゴールド会員の判定を一つの関数にまとめる整頓をしました。</p>
+    <pre><code># rank.py
+GOLD_VISITS = 8
+
+def is_gold(member):
+    return member.visits &gt;= GOLD_VISITS</code></pre>
+    <p>三つのファイルは、それぞれ <code>is_gold(member)</code> を呼ぶ形に書き換えました。管理画面だけは <code>&gt;</code> から <code>&gt;=</code> に変わり、8回ちょうどの会員の表示が変わるので、受付の責任者に確認してからこの変更を別のコミットにしました。その後、<code>GOLD_VISITS</code> の値を 10 に書き換えました。条件の変更は1行で済み、三か所の判定がそろって変わりました。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 300" role="img" aria-label="ゴールド会員の判定を中心に、メール、ポイント、管理画面の三つがつながっている。判定を変えると三方向すべてに変更が及ぶ">
+        <rect x="120" y="122" width="160" height="56" rx="6" class="node-acc"/>
+        <text x="200" y="146" text-anchor="middle" class="t-hd">ゴールドの判定</text>
+        <text x="200" y="167" text-anchor="middle" class="t-sm">月に何回以上か</text>
+        <line x1="200" y1="122" x2="200" y2="76" class="ln"/>
+        <rect x="120" y="20" width="160" height="56" rx="6" class="node"/>
+        <text x="200" y="46" text-anchor="middle">特典メール</text>
+        <text x="200" y="66" text-anchor="middle" class="t-sm">送るかどうか</text>
+        <line x1="160" y1="178" x2="104" y2="224" class="ln"/>
+        <rect x="16" y="224" width="168" height="56" rx="6" class="node"/>
+        <text x="100" y="250" text-anchor="middle">ポイント</text>
+        <text x="100" y="270" text-anchor="middle" class="t-sm">付き方の倍率</text>
+        <line x1="240" y1="178" x2="296" y2="224" class="ln"/>
+        <rect x="216" y="224" width="168" height="56" rx="6" class="node"/>
+        <text x="300" y="250" text-anchor="middle">管理画面</text>
+        <text x="300" y="270" text-anchor="middle" class="t-sm">表示の文字</text>
+      </svg>
+      <figcaption>一つの条件に三つの処理がつながっている。条件がつながり先ごとに書かれていると、変えるたびに三か所を探して直すことになる。</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>結合は、片方を変えるともう片方も変えなければならない関係です</h2>
+    <p>二つの部品のあいだで、片方を変えるともう片方も変えなければならない関係を<strong>結合</strong>と呼びます。加藤さんのコードでは、メール、ポイント、管理画面の三つの処理が、「ゴールド会員は月に何回以上か」という同じ決まりを通して結合していました。決まりが変わると、三つすべてを変える必要があります。三つの処理は互いを呼び出していないので、呼び出し関係をたどっても、このつながりは見えません。同じ決まりを別々の場所に書いていると、関数どうしの呼び出しがなくても結合が生まれ、しかも気づきにくくなります。</p>
+    <p>結合は、変更が起きたときに初めて手間として表に出ます。ゴールドの条件が10年間変わらなければ、三か所に同じ判定が書かれていても、誰も困りません。逆に、何度も変わる決まりほど、結合している場所の数だけ手間がかかります。結合の強さは、コードを眺めただけでは決まらず、「この先どんな変更が起きるか」とあわせて考えます。</p>
+    <p>さらに、結合は連鎖します。ポイントの倍率を変えると、ポイントの残高を表示する画面や、月末にポイントを集計する処理も変える必要が出てくることがあります。一つの変更が次の変更を呼び、それがまた次を呼ぶと、手間は急に大きくなります。多くの変更は数分で終わりますが、ときどき起きるこうした連鎖の大きな変更が、ソフトウェアにかかる手間の大半を占めます。ですから、変更の手間を減らすには、連鎖を起こす結合を減らすことが近道になります。</p>
+    <p>結合と、次の節で扱う凝集という考え方は、ラリー・コンスタンティンが1960年代後半に、プログラムを組み立てる方法の研究の中で考えたものです。1974年の論文と、その後の書籍『Structured Design』で広まり、いまも設計の基本の言葉として使われています。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="判定が三か所に書かれていると、条件を変えるときに三か所を探して直す必要があり、漏れると食い違いが起きる。一か所にまとめると、変える場所も確かめる範囲も一つになる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">三か所に書く</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">一か所にまとめる</text>
+        <text x="16" y="56" class="t-sm">条件を変えるときに触る場所</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">3か所</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">1か所</text>
+        <text x="16" y="136" class="t-sm">直し漏れたとき</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle" class="t-sm">処理ごとに食い違う</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle" class="t-sm">漏れようがない</text>
+        <text x="16" y="216" class="t-sm">結合の数</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle" class="t-sm">変わらず3つ</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle" class="t-sm">変わらず3つ</text>
+      </svg>
+      <figcaption>まとめても三つの処理が判定につながっていることは変わらない。変わるのは、条件を変えるときに触る場所の数。</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>一緒に変わるものを近くに寄せます</h2>
+    <p>一緒に変わるものが近くにまとまっている度合いを<strong>凝集</strong>と呼びます。二つ目の加藤さんの整頓の後も、三つの処理はゴールドの判定につながっています。整頓で変わったのは、決まりが変わったときに直す場所が <code>rank.py</code> の1か所に集まったことです。結合を消せなくても、一緒に変わるものを近くに寄せれば、変更の範囲は狭くなります。</p>
+    <p>確かめる範囲も狭くなります。判定が1か所にあれば、<code>is_gold</code> に9回と10回の会員を渡して結果を見るだけで、条件の変更が正しいかを確かめられます。三か所に書かれていると、メール、ポイント、管理画面のそれぞれで、9回と10回の会員を試す必要があります。</p>
+    <p>寄せる整頓は、ファイルをまたがない小さな形でもできます。一つのファイルの中で、一緒に変わる関数どうしが離れた場所に書かれているなら、隣り合うように並べ替えます。並べ替えるだけなら動きは変わらず、次に変更する人は、画面を上下に行き来せずに関係する関数をまとめて読めます。</p>
+    <p>変更が広がりそうな場所は、次の手順で見つけて寄せます。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="変更で触る場所を数え、一緒に変わるものを探し、近くに寄せる整頓をしてから、一か所で変える">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">触る場所を数える</text><text x="72" y="61" class="t-sm">何ファイルの何か所を変えるか</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">一緒に変わるものを探す</text><text x="72" y="135" class="t-sm">同じ決まりを別々に書いていないか</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">近くに寄せる整頓をする</text><text x="72" y="209" class="t-sm">関数や定数にまとめる</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">一か所で変える</text><text x="72" y="285" class="t-sm">動きの変更は別のコミットで</text>
+      </svg>
+      <figcaption>触る場所が二つ以上あると分かったら、変える前に一か所へ寄せる整頓をするかを考える。</figcaption>
+    </figure>
+    <p>触る場所を数える問いは、変更の見積もりにも使えます。「この依頼で、何ファイルの何か所を変えるか」を書き出すと、思っていたより多いときに気づけます。数が多いのは、同じ決まりが複数の場所に書かれているからです。</p>
+    <div class="aside caution">
+      <p class="label">つまずきやすいところ</p>
+      <p>結合はゼロにはできません。部品が互いに使い合わなければ、システムは一つの機能も果たせないからです。また、寄せるつもりで小さな関数やファイルに細かく分けすぎると、一つの処理を追うために何ファイルも開くことになり、読む手間がかえって増えます。寄せる対象は、実際に一緒に変わったもの、これから一緒に変わる見込みがあるものに限ります。</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>練習問題</h2>
+    <p>ネットスーパーの注文処理に、次のコードがあります。送料が無料になる金額は、店の方針で年に何度か変わります。</p>
+    <pre><code># cart.py
+if total &gt;= 3000:
+    show("送料無料")
+
+# checkout.py
+fee = 0 if total &gt;= 3000 else 400
+
+# banner.py
+msg = f"あと{3000 - total}円で送料無料"</code></pre>
+    <ol>
+      <li>この三つの処理は、どんな決まりを通して結合していますか。</li>
+      <li>送料無料の金額を4,000円に変えるとき、触る場所は何か所ですか。</li>
+      <li>一緒に変わるものを近くに寄せる整頓を、名前の例を添えて書いてください。</li>
+      <li>この決まりが10年間変わらないと分かっている場合、整頓の必要性はどう変わりますか。</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>解答と解説</h2>
+    <ol>
+      <li>「合計が何円以上なら送料無料か」という決まりです。三つの処理はどれも 3000 という同じ金額に頼っています。</li>
+      <li>3か所です。<code>banner.py</code> の式は形が違うので、検索で 3000 を探しても、合計との差を計算していることに気づかず、直し漏れが起きやすい場所です。漏れると、合計が3,500円の客に「あと-500円で送料無料」のような表示が出ます。</li>
+      <li>たとえば <code>FREE_SHIPPING_MIN = 3000</code> という定数と、<code>is_free_shipping(total)</code> という関数を一つのファイルにまとめ、三つの処理から呼びます。この整頓を先にして、金額を変える変更は別のコミットにします。</li>
+      <li>変更が起きないなら、結合は手間として表に出ません。整頓の価値は小さくなり、他の作業を先にしてかまいません。年に何度も変わる決まりだからこそ、寄せる価値があります。</li>
+    </ol>
+  </section>
+
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>片方を変えるともう片方も変えなければならない関係を結合と呼び、変更の手間の大半は結合が連鎖する大きな変更から生まれます。</li>
+      <li>結合は変更が起きたときに初めて手間になるので、何度も変わる決まりにつながる結合から先に手当てします。</li>
+      <li>結合を消せなくても、一緒に変わるものを一か所に寄せる整頓をすれば、変える場所と確かめる範囲が狭くなります。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>設計は、今すぐ出す価値と、次に選べる余地を比べる判断です</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>整える習慣は、チームとの話し方と自分の働き方を変えます</b></a>
+  </nav>
+</div>

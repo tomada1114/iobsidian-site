@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Bookshelf">
+<meta name="mobile-web-app-capable" content="yes">
+<title>その不安は、お金で消えるのか 01 · 不安の出どころ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
+
+/* ---------- tokens: light ---------- */
+:root{
+  color-scheme:light dark;
+  --bg:#FFFFFF; --surface:#F2F4F2;
+  --text:#1B1F1D; --text-muted:#4E5652; --text-subtle:#646C68;
+  --line:#DCE0DC; --line-strong:#A9B0AB;
+  --cat-1:#2A5D8F; --cat-1-bg:#E6EEF6;
+  --cat-2:#2B6E58; --cat-2-bg:#E1EFE9;
+  --cat-3:#765812; --cat-3-bg:#F3EDDA;
+  --cat-4:#7E4478; --cat-4-bg:#F4E8F2;
+  --caution:#9C4322; --caution-bg:#F8EAE3;
+  --accent:var(--cat-1); --accent-bg:var(--cat-1-bg);
+
+  --font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --fs-caption:.8125rem; --fs-small:.875rem; --fs-body:1.0625rem; --fs-lead:1.125rem;
+  --fs-h3:1.1875rem; --fs-h2:clamp(1.375rem,1.1rem + 1.1vw,1.625rem); --fs-h1:clamp(1.75rem,1.2rem + 2.6vw,2.375rem);
+  --lh-body:1.9; --lh-tight:1.45; --flow:1.1em;
+  --measure:40rem; --section-gap:64px; --radius:6px; --fig-max:460px;
+}
+/* ---------- tokens: dark ---------- */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131615; --surface:#1C201E;
+    --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+    --line:#2D3330; --line-strong:#4D5651;
+    --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+    --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+    --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+    --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+    --caution:#E89D7F; --caution-bg:#33221B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#131615; --surface:#1C201E;
+  --text:#E5E8E6; --text-muted:#A9B0AC; --text-subtle:#8F9792;
+  --line:#2D3330; --line-strong:#4D5651;
+  --cat-1:#8DB4DC; --cat-1-bg:#1C2A37;
+  --cat-2:#7CC4AB; --cat-2-bg:#182C25;
+  --cat-3:#D6BD72; --cat-3-bg:#2D2816;
+  --cat-4:#D49CCD; --cat-4-bg:#2E1E2C;
+  --caution:#E89D7F; --caution-bg:#33221B;
+}
+:root[data-theme="light"]{color-scheme:light}
+/* page accent: pick one category per page */
+.acc-1{--accent:var(--cat-1);--accent-bg:var(--cat-1-bg)}
+.acc-2{--accent:var(--cat-2);--accent-bg:var(--cat-2-bg)}
+.acc-3{--accent:var(--cat-3);--accent-bg:var(--cat-3-bg)}
+.acc-4{--accent:var(--cat-4);--accent-bg:var(--cat-4-bg)}
+
+/* ---------- base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:var(--font-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
+  -webkit-tap-highlight-color:transparent}
+:lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+.page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
+h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
+:lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
+h1{font-size:var(--fs-h1);letter-spacing:.01em}
+h2{font-size:var(--fs-h2);scroll-margin-top:24px}
+h3{font-size:var(--fs-h3);scroll-margin-top:24px}
+p,ul,ol,dl,figure,table,pre,blockquote{margin:0}
+p{text-wrap:pretty}
+ul,ol{padding-left:1.4em}
+li+li{margin-top:.35em}
+li::marker{color:var(--text-subtle)}
+a{color:var(--accent);text-underline-offset:.2em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+strong{font-weight:700}
+small,.small{font-size:var(--fs-small)}
+code,kbd{font-family:var(--font-mono);font-size:.86em;background:var(--surface);border-radius:4px;padding:.1em .35em}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- vertical flow ---------- */
+.page-head>*+*,section>*+*,.flow>*+*{margin-top:var(--flow)}
+.flow>*+section,.flow>section+*{margin-top:var(--section-gap)}
+section>h2+*{margin-top:.9em}
+section>*+h3{margin-top:2em}
+section>h3+*{margin-top:.6em}
+section>*+.fig,section>.fig+*,section>*+.tbl,section>.tbl+*{margin-top:1.8em}
+
+/* ---------- page head ---------- */
+.page-head{padding-bottom:28px;border-bottom:3px solid var(--accent)}
+.kicker{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:4px 12px}
+.kicker b{color:var(--accent)}
+.lead{font-size:var(--fs-lead);color:var(--text-muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:var(--fs-caption);color:var(--text-muted);letter-spacing:.02em}
+.meta span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:.12em}
+.flow{margin-top:40px}
+
+/* ---------- section number ---------- */
+h2 .no{display:block;font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;letter-spacing:.08em;color:var(--accent);margin-bottom:.35em}
+
+/* ---------- toc (この章で分かること) ---------- */
+.toc{border-block:1px solid var(--line);padding-block:16px 18px}
+.toc .label,.aside .label,.summary .label{font-size:var(--fs-caption);font-weight:700;letter-spacing:.08em}
+.toc .label{color:var(--accent);margin-bottom:6px}
+.toc ul,.toc ol{margin:0}
+
+/* ---------- asides ---------- */
+.aside{border-radius:var(--radius);padding:16px 18px;font-size:.96875rem;display:grid;gap:6px}
+.note{background:var(--surface)}
+.note .label{color:var(--text-muted)}
+.analogy{background:var(--accent-bg)}
+.analogy .label{color:var(--accent)}
+.caution{background:var(--caution-bg);box-shadow:inset 3px 0 0 var(--caution)}
+.caution .label{color:var(--caution)}
+.aside-quiet{border:1px dashed var(--line-strong)}
+.aside-quiet .label{color:var(--text-muted)}
+.tag{font-family:var(--font-mono);font-size:var(--fs-caption);font-weight:500;border:1px solid var(--line-strong);border-radius:4px;padding:0 .4em;margin-right:.4em;white-space:nowrap}
+
+/* ---------- figures ---------- */
+.fig{counter-increment:fig;display:grid;gap:10px}
+.fig svg{display:block;width:100%;max-width:var(--fig-max);height:auto;margin-inline:auto;overflow:visible}
+.fig.is-wide svg{max-width:100%}
+.fig figcaption{font-size:var(--fs-small);color:var(--text-muted);line-height:1.75;text-wrap:pretty}
+.fig figcaption::before{content:"図" counter(fig) "　";font-weight:700;color:var(--text)}
+:lang(en) .fig figcaption::before{content:"Fig. " counter(fig) "  "}
+.only-wide{display:none!important}
+@media (min-width:600px){.only-wide{display:block!important}.only-narrow{display:none!important}}
+/* svg vocabulary: text */
+.fig svg text{font-family:var(--font-body);font-size:16px;fill:var(--text)}
+.fig svg .t-sm{font-size:14px;fill:var(--text-muted)}
+.fig svg .t-hd{font-size:17px;font-weight:700}
+.fig svg .t-acc{fill:var(--accent)}
+.fig svg .t-c1{fill:var(--cat-1)} .fig svg .t-c2{fill:var(--cat-2)} .fig svg .t-c3{fill:var(--cat-3)} .fig svg .t-c4{fill:var(--cat-4)}
+/* svg vocabulary: shapes */
+.fig svg .node{fill:var(--bg);stroke:var(--line-strong);stroke-width:1.5}
+.fig svg .node-soft{fill:var(--surface);stroke:none}
+.fig svg .node-plan{fill:none;stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:5 4}
+.fig svg .node-acc{fill:var(--accent-bg);stroke:var(--accent);stroke-width:1.75}
+.fig svg .node-c1{fill:var(--cat-1-bg);stroke:var(--cat-1);stroke-width:1.5}
+.fig svg .node-c2{fill:var(--cat-2-bg);stroke:var(--cat-2);stroke-width:1.5}
+.fig svg .node-c3{fill:var(--cat-3-bg);stroke:var(--cat-3);stroke-width:1.5}
+.fig svg .node-c4{fill:var(--cat-4-bg);stroke:var(--cat-4);stroke-width:1.5}
+.fig svg .zone{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:6 5}
+.fig svg .zone-soft{fill:var(--surface);stroke:none}
+.fig svg .bar{fill:var(--line-strong)}
+.fig svg .bar-acc{fill:var(--accent)}
+.fig svg .dot{fill:var(--text-muted)}
+.fig svg .f-acc{fill:var(--accent)}
+.fig svg .f-c1{fill:var(--cat-1)} .fig svg .f-c2{fill:var(--cat-2)} .fig svg .f-c3{fill:var(--cat-3)} .fig svg .f-c4{fill:var(--cat-4)}
+/* svg vocabulary: lines (arrowheads come from the shared #arw / #arw-acc markers) */
+.fig svg .ln{fill:none;stroke:var(--text-muted);stroke-width:1.5}
+.fig svg .ln-acc{fill:none;stroke:var(--accent);stroke-width:2}
+.fig svg .ln-dash{fill:none;stroke:var(--text-muted);stroke-width:1.5;stroke-dasharray:4 4}
+.fig svg .ln-base{fill:none;stroke:var(--text);stroke-width:1.5}
+.ah{fill:var(--text-muted)} .ah-acc{fill:var(--accent)}
+
+/* ---------- tables ---------- */
+.tbl{overflow-x:auto;border-block:1.5px solid var(--text)}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-small);line-height:1.7}
+th,td{text-align:left;vertical-align:top;padding:10px 12px}
+th{font-size:var(--fs-caption);font-weight:700;letter-spacing:.04em;color:var(--text-muted);border-bottom:1px solid var(--line-strong)}
+td{border-top:1px solid var(--line)}
+tbody tr:first-child td{border-top:0}
+th:first-child,td:first-child{padding-left:2px}
+td.key{font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- terms, steps, code ---------- */
+dl.terms{display:grid;gap:0}
+dl.terms dt{font-weight:700;padding-top:12px;border-top:1px solid var(--line)}
+dl.terms dt:first-child{border-top:0;padding-top:0}
+dl.terms dd{margin:2px 0 12px;color:var(--text-muted);font-size:.96875rem}
+ol.steps{list-style:none;padding:0;counter-reset:step;display:grid;gap:14px}
+ol.steps>li{counter-increment:step;position:relative;padding-left:2.5em;margin:0}
+ol.steps>li::before{content:counter(step);position:absolute;left:0;top:.2em;font-family:var(--font-mono);font-weight:500;font-size:var(--fs-small);
+  color:var(--accent);border:1.5px solid var(--accent);border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center;line-height:1}
+pre{white-space:pre;background:var(--surface);border-radius:var(--radius);padding:14px 16px;overflow-x:auto;font-size:.8125rem;line-height:1.7}
+pre code{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0;font-size:inherit;white-space:pre}
+blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(--text-muted)}
+
+/* ---------- dialogue (mentor on the left, learner on the right) ---------- */
+.dialog{display:grid;gap:14px}
+.line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.line .who{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:var(--fs-small);font-weight:700;line-height:1;letter-spacing:0}
+.line .say{justify-self:start;max-width:34rem;border-radius:4px 14px 14px 14px;padding:9px 14px;display:grid;gap:.45em}
+.line .say>p{margin:0}
+.line.mentor .who{background:var(--accent);color:var(--bg)}
+.line.mentor .say{background:var(--accent-bg)}
+.line.learner{grid-template-columns:minmax(0,1fr) 34px}
+.line.learner .who{grid-column:2;grid-row:1;border:1.5px solid var(--line-strong);color:var(--text-muted);background:var(--bg)}
+.line.learner .say{grid-column:1;grid-row:1;justify-self:end;background:var(--surface);border-radius:14px 4px 14px 14px}
+.line .say pre{margin-top:.2em}
+.stage{font-size:var(--fs-small);color:var(--text-muted);font-style:italic;text-align:center;text-wrap:balance}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* ---------- ending ---------- */
+.summary{border-top:2px solid var(--accent);padding-top:14px;display:grid;gap:8px}
+.summary .label{color:var(--accent)}
+.summary ol,.summary ul{margin:0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:16px;font-size:var(--fs-small)}
+.pager a{display:inline-flex;flex-direction:column;min-height:44px;justify-content:center;text-decoration:none}
+.pager a span{font-size:var(--fs-caption);color:var(--text-muted)}
+.pager a b{text-decoration:underline;text-underline-offset:.2em}
+.pager .next{margin-left:auto;text-align:right}
+.fine{font-size:var(--fs-caption);color:var(--text-subtle);line-height:1.7}
+
+@media (max-width:480px){
+  :root{--fs-body:1rem;--fs-lead:1.0625rem;--section-gap:52px}
+  .aside{padding:14px 15px}
+  td.key{white-space:normal}
+  .line{grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .line.learner{grid-template-columns:minmax(0,1fr) 30px}
+  .line .who{width:30px;height:30px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
+.site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
+.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
+.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
+.site-head .readers a:hover{color:var(--text)}
+.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
+.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.side{font-size:var(--fs-small);line-height:var(--lh-tight)}
+.side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
+.side h2 a{color:inherit;text-decoration:none}
+.side ol,.side ul{list-style:none;margin:0 0 24px;padding:0}
+.side li a{display:flex;gap:10px;padding:7px 10px 7px 12px;border-left:2px solid var(--line);border-radius:0 var(--radius) var(--radius) 0;color:var(--text-muted);text-decoration:none}
+.side li a:hover{background:var(--surface);color:var(--text)}
+.side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
+.side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
+.side li a[aria-current] .n{color:var(--accent)}
+.side .all{display:none}
+@media (min-width:1080px){
+  .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
+  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+}
+@media (max-width:1079.98px){
+  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
+  .site-head .readers{display:none}
+  .has-side .site-head .here{display:block;margin-left:-12px}
+  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  body.nav-open{overflow:hidden}
+  body.nav-open .side{display:block}
+  .side .all{display:block}
+}
+@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
+  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
+  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+.offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
+.offline[hidden]{display:none}
+.save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
+  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.save-btn:disabled{opacity:.6;cursor:progress}
+.save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
+</style>
+</head>
+<body class="has-side acc-1">
+<header class="site-head" lang="en" data-root="../">
+<div class="bar">
+  <a class="brand" href="../index.html">Bookshelf</a><span class="here">/ <span lang="ja">その不安は、お金で消えるのか</span></span>
+  <nav aria-label="Readers"><ul class="readers">
+    <li><a href="../easy-reads/index.html">Easy Reads</a></li>
+    <li><a href="../1on1-architecture/ch00.html">Architecture</a></li>
+    <li><a href="../1on1-api-types/ch00.html">API & TypeScript</a></li>
+    <li><a href="../1on1-aws/ch00.html">AWS</a></li>
+    <li><a href="../1on1-ai/ch00.html">AI in Production</a></li>
+    <li><a href="../1on1-ops/ch00.html">Operations</a></li>
+    <li><a href="../agentcore-reader/ch00.html">AgentCore</a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
+    <li><a href="../book-career-transitions/ch00.html" lang="ja">キャリアの移り目</a></li>
+    <li><a href="../book-spend-by-design/ch00.html" lang="ja">貯めるより、使いきる設計</a></li>
+    <li><a href="../book-world-by-data/ch00.html" lang="ja">思い込みを外して、世界をデータで見る</a></li>
+    <li><a href="../book-information-networks/ch00.html" lang="ja">情報は人をつなぎ、分断する</a></li>
+    <li><a href="../book-tidy-then-change/ch00.html" lang="ja">整えてから変えるか、変えてから整えるか</a></li>
+    <li><a href="../book-money-anxiety/ch00.html" aria-current="page" lang="ja">その不安は、お金で消えるのか</a></li>
+    <li><a href="../book-what-follows/ch00.html" lang="ja">その文から何が言えるか</a></li>
+    <li><a href="../book-not-all-in/ch00.html" lang="ja">全身全霊で働かないという選択</a></li>
+    <li><a href="../book-loose-steady/ch00.html" lang="ja">ゆるく、でも毎日積み上げる</a></li>
+    <li><a href="../book-choose-the-question/ch00.html" lang="ja">答えを出す前に、問いを選ぶ</a></li>
+    <li><a href="../book-keep-skills-current/ch00.html" lang="ja">技能を更新しつづける</a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html" lang="ja">不確実性から考えるチームと組織</a></li>
+    <li><a href="../book-being-heard/ch00.html" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</a></li>
+    <li><a href="../book-job-membership/ch00.html" lang="ja">ジョブ型とメンバーシップ型で読む働き方</a></li>
+    <li><a href="../book-team-english/ch00.html" lang="ja">英語でチームを回す仕事の型</a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html" lang="ja">計画と対話を行き来する</a></li>
+    <li><a href="../book-wealth-mindset/ch00.html" lang="ja">富を積み上げる人の考え方</a></li>
+    <li><a href="../book-beyond-command/ch00.html" lang="ja">命令の組織から、探検の組織へ</a></li>
+    <li><a href="../book-adler-relationships/ch00.html" lang="ja">アドラー心理学で人間関係をほどく</a></li>
+    <li><a href="../book-where-gains-went/ch00.html" lang="ja">稼いだ分は、どこへ行ったのか</a></li>
+    <li><a href="../book-walk-and-think/ch00.html" lang="ja">歩くと、頭と体に何が起きるか</a></li>
+    <li><a href="../book-life-not-a-story/ch00.html" lang="ja">人生を物語にしない生き方</a></li>
+    <li><a href="../book-growing-sense/ch00.html" lang="ja">AIの時代に、センスはどう育つか</a></li>
+    <li><a href="../book-faith-divides-america/ch00.html" lang="ja">アメリカを割る信仰</a></li>
+    <li><a href="../book-job-yardstick/ch00.html" lang="ja">仕事選びのものさしを科学で直す</a></li>
+    <li><a href="../book-recall-to-learn/ch00.html" lang="ja">思い出して覚える、勉強の組み立て方</a></li>
+    <li><a href="../book-english-gaps/ch00.html" lang="ja">大人の英語は、ずれに気づいて身につける</a></li>
+    <li><a href="../book-grounded-words/ch00.html" lang="ja">ことばは体から育つ</a></li>
+    <li><a href="../book-many-logics/ch00.html" lang="ja">論理はひとつではない</a></li>
+    <li><a href="../book-lasting-craft/ch00.html" lang="ja">流行に左右されない作り手の心得</a></li>
+    <li><a href="../book-finite-time/ch00.html" lang="ja">全部はできない前提で、時間を使う</a></li>
+  </ul></nav>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+</div>
+</header>
+<aside class="side" id="side" aria-label="その不安は、お金で消えるのか pages">
+  <h2><a href="ch00.html">その不安は、お金で消えるのか</a></h2>
+  <ol>
+    <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
+    <li><a href="ch01.html" aria-current="page"><span class="n">01</span><span>不安の出どころ</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>もうけの出どころ</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>持ち運べる力</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>信頼の蓄え</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>年収という尺度</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>働き手が減る社会</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>仲間と動かす</span></a></li>
+  </ol>
+  <div class="all" lang="en">
+  <h2><a href="../index.html">All readers</a></h2>
+  <ul>
+    <li><a href="../easy-reads/index.html"><span>Easy Reads</span></a></li>
+    <li><a href="../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
+    <li><a href="../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
+    <li><a href="../1on1-aws/ch00.html"><span>AWS</span></a></li>
+    <li><a href="../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
+    <li><a href="../1on1-ops/ch00.html"><span>Operations</span></a></li>
+    <li><a href="../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
+    <li><a href="../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
+    <li><a href="../book-career-transitions/ch00.html"><span lang="ja">キャリアの移り目</span></a></li>
+    <li><a href="../book-spend-by-design/ch00.html"><span lang="ja">貯めるより、使いきる設計</span></a></li>
+    <li><a href="../book-world-by-data/ch00.html"><span lang="ja">思い込みを外して、世界をデータで見る</span></a></li>
+    <li><a href="../book-information-networks/ch00.html"><span lang="ja">情報は人をつなぎ、分断する</span></a></li>
+    <li><a href="../book-tidy-then-change/ch00.html"><span lang="ja">整えてから変えるか、変えてから整えるか</span></a></li>
+    <li><a href="../book-money-anxiety/ch00.html" aria-current="page"><span lang="ja">その不安は、お金で消えるのか</span></a></li>
+    <li><a href="../book-what-follows/ch00.html"><span lang="ja">その文から何が言えるか</span></a></li>
+    <li><a href="../book-not-all-in/ch00.html"><span lang="ja">全身全霊で働かないという選択</span></a></li>
+    <li><a href="../book-loose-steady/ch00.html"><span lang="ja">ゆるく、でも毎日積み上げる</span></a></li>
+    <li><a href="../book-choose-the-question/ch00.html"><span lang="ja">答えを出す前に、問いを選ぶ</span></a></li>
+    <li><a href="../book-keep-skills-current/ch00.html"><span lang="ja">技能を更新しつづける</span></a></li>
+    <li><a href="../book-uncertainty-teams/ch00.html"><span lang="ja">不確実性から考えるチームと組織</span></a></li>
+    <li><a href="../book-being-heard/ch00.html"><span lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span></a></li>
+    <li><a href="../book-job-membership/ch00.html"><span lang="ja">ジョブ型とメンバーシップ型で読む働き方</span></a></li>
+    <li><a href="../book-team-english/ch00.html"><span lang="ja">英語でチームを回す仕事の型</span></a></li>
+    <li><a href="../book-plan-and-dialogue/ch00.html"><span lang="ja">計画と対話を行き来する</span></a></li>
+    <li><a href="../book-wealth-mindset/ch00.html"><span lang="ja">富を積み上げる人の考え方</span></a></li>
+    <li><a href="../book-beyond-command/ch00.html"><span lang="ja">命令の組織から、探検の組織へ</span></a></li>
+    <li><a href="../book-adler-relationships/ch00.html"><span lang="ja">アドラー心理学で人間関係をほどく</span></a></li>
+    <li><a href="../book-where-gains-went/ch00.html"><span lang="ja">稼いだ分は、どこへ行ったのか</span></a></li>
+    <li><a href="../book-walk-and-think/ch00.html"><span lang="ja">歩くと、頭と体に何が起きるか</span></a></li>
+    <li><a href="../book-life-not-a-story/ch00.html"><span lang="ja">人生を物語にしない生き方</span></a></li>
+    <li><a href="../book-growing-sense/ch00.html"><span lang="ja">AIの時代に、センスはどう育つか</span></a></li>
+    <li><a href="../book-faith-divides-america/ch00.html"><span lang="ja">アメリカを割る信仰</span></a></li>
+    <li><a href="../book-job-yardstick/ch00.html"><span lang="ja">仕事選びのものさしを科学で直す</span></a></li>
+    <li><a href="../book-recall-to-learn/ch00.html"><span lang="ja">思い出して覚える、勉強の組み立て方</span></a></li>
+    <li><a href="../book-english-gaps/ch00.html"><span lang="ja">大人の英語は、ずれに気づいて身につける</span></a></li>
+    <li><a href="../book-grounded-words/ch00.html"><span lang="ja">ことばは体から育つ</span></a></li>
+    <li><a href="../book-many-logics/ch00.html"><span lang="ja">論理はひとつではない</span></a></li>
+    <li><a href="../book-lasting-craft/ch00.html"><span lang="ja">流行に左右されない作り手の心得</span></a></li>
+    <li><a href="../book-finite-time/ch00.html"><span lang="ja">全部はできない前提で、時間を使う</span></a></li>
+  </ul>
+  </div>
+</aside>
+<div class="page acc-1">
+<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+    <marker id="arw-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah-acc"/></marker>
+  </defs>
+</svg>
+<header class="page-head">
+  <p class="kicker"><b>その不安は、お金で消えるのか</b><span>第1章 / 全7章</span></p>
+  <h1>「やらなきゃ損」と聞いて焦るとき、その不安は誰が広げたのか</h1>
+  <p class="lead">将来のお金に焦りを感じたとき、その焦りのうちどれだけが広告やまわりの話から来たものかを見分けられるようになります。「老後に2,000万円」という数字が、どんな世帯の平均なのかも説明できるようになります。</p>
+  <p class="meta"><span>読了 約8分</span><span>社員食堂、水曜の昼休み</span></p>
+</header>
+<div class="flow">
+  <nav class="toc" aria-label="この章で分かること">
+    <p class="label">この章で分かること</p>
+    <ul>
+      <li>焦って決めかけていることは何か</li>
+      <li>不安で買うのと憧れで買うのは、何が違うのか</li>
+      <li>「2,000万円」は誰の数字なのか</li>
+      <li>疑ったあと、備えはどう決めるのか</li>
+    </ul>
+  </nav>
+  <p class="stage">水曜の昼休み、社員食堂の窓ぎわ。青木さんが定食に手をつけず、スマホを見ている。</p>
+  <section aria-labelledby="s1">
+    <h2 id="s1"><span class="no">01</span>締め切りのついた広告が続いている</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>青木さん、みそ汁が冷めますよ。何をそんなに熱心に見ているんですか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>すみません、沢井さん。老後のお金の広告です。「老後に2,000万円足りない」とか「今月中に始めないと損」とか、最近こればかり出てくるんです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>それを見て、何か決めようとしているのかな。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>はい。保険を見直して、積立の額も月3万円から5万円に増やそうかと思っています。今週中に申し込めば手数料が無料らしいので。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>増やすと決めた理由は、家計を計算したからですか。それとも広告を見て焦ったからですか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>正直に言うと、焦ったからです。計算はまだしていません。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>お金の不安は、将来、暮らしに要るものを手に入れられなくなるのでは、という心配ですよね。その心配を感じること自体は自然なことです。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>沢井さんも、若いころは不安でしたか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>信用金庫にいたころは、毎月のように不安でした。ただ、焦って決める前に、その焦りがどこから来たのかを一度確かめる習慣はつけていました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>どこから、ですか。自分の将来が心配だから、自分の中から出てきた気持ちだと思っていました。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>半分はそうでしょうね。もう半分は、広告やまわりの話がきっかけで生まれた気持ちかもしれません。広告は青木さんに何を売ろうとしていましたか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>保険と、投資の口座と、お金の講座です。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>どれも、見る人の不安が大きいほどよく売れる商品ですね。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>たしかに。不安が大きいほど、申し込む人は増えます。売る側には、不安を大きくしておく理由があるわけですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>広告を出す会社は、商品を売るのが仕事です。そのうえで、広告を読むときに書いた人がどんな理由で書いたのかを知っておくと、焦りにくくなります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>動画の解説も同じですか。「今すぐ始めないと手遅れ」という動画をよく見ます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>再生されるほど収入が増える人にとっては、見る人が焦るほど都合がいい場合があります。見ている人の老後がどうなっても、動画を作る人の収入は変わりません。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>そう聞くと、毎晩寝る前に動画を見て焦っていたのが、少しばかばかしくなってきました。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s2">
+    <h2 id="s2"><span class="no">02</span>不安で買うのと憧れで買うのは、何が違うのか</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>少し昔の話をします。私が子どものころ、家に初めて冷蔵庫が来た日のことを覚えています。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>冷蔵庫が来た日を覚えているんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>親は「これで毎日買い物に行かなくて済む」と喜んでいました。当時の広告も、新しい家電がある暮らしの絵を見せていました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>欲しい気持ち、つまり憧れで買っていたんですね。今の広告は、そういう暮らしの絵を見せてこないです。「このままだと困りますよ」という話ばかりです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>冷蔵庫や洗濯機がどの家にもそろうと、憧れだけでは物が売れにくくなります。そこで売る側は、買わないと取り残されるという気持ちに訴えるようになりました。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>取り残される気持ちなら、わかります。同期がみんな積立を始めたと聞いたとき、自分だけ遅れている気がしました。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>その「みんな」は、何人くらいでしたか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>言われてみると、昼休みに話した3人です。同期は40人いるので、ほかの人がどうしているかは知りません。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>3人の話を聞いて、40人みんながそうしていると思い込んでいたわけですね。周りと比べて遅れていると感じると、人は中身を確かめる前に動きたくなります。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>二つの買い方を、メモ用紙に並べてみますね。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="憧れで買うときと不安で買うときの比較。問いかけと決め手が違い、不安で買うと次の広告でまた不安になる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">憧れで買う</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">不安で買う</text>
+        <text x="16" y="56" class="t-sm">広告の問いかけ</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle" class="t-sm">こんな暮らしをしたい</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">このままで平気ですか</text>
+        <text x="16" y="136" class="t-sm">決め手</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">自分の満足</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">締め切りと損</text>
+        <text x="16" y="216" class="t-sm">買ったあと</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">満足して終わる</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">また不安になる</text>
+      </svg>
+      <figcaption>憧れで買うと、満足したところで買い物が終わる。不安で買うと、次の広告でまた不安になるので、買い物が終わらない。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>買ったあとの行が気になります。不安で買うと、本当にまた不安になるんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>保険を見直したら、次は「物価が上がると貯金が目減りする」という広告が届くかもしれません。不安は商品を1つ買っても消えないので、売る側から見ると何度でも使える呼びかけになります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>締め切りがつくのも、同じ理由ですか。「今月中」とか「先着100名」とか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>締め切りがあると、比べたり計算したりする時間がなくなります。考える時間が短いほど、人は不安を頼りに決めやすくなります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>手数料無料が今週中というのも、それですね。手数料はいくらか調べてみます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>手数料の金額がわかると、締め切りに急かされる気持ちはかなり弱まります。締め切りのあとに同じ条件が出てくることも、よくあります。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s3">
+    <h2 id="s3"><span class="no">03</span>「2,000万円」は誰の数字なのか</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>とはいえ、2,000万円は国が出した数字ですよね。広告が勝手に作った数字ではないと思うんですが。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>出どころは、2019年6月に金融庁の審議会がまとめた報告書です。どんな計算か覚えていますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>いえ、2,000万円という数字だけ覚えています。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>夫が65歳以上、妻が60歳以上で、二人とも働いていない世帯の平均では、毎月の赤字が約5万円でした。それが20年続くと約1,300万円、30年続くと約2,000万円になる、という計算です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>毎月5万円に、12か月と年数をかけただけなんですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>そうです。順番に書くとこうなります。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 312" role="img" aria-label="2,000万円は、働いていない夫婦世帯の平均の赤字月約5万円を、20年から30年分かけた数字で、不足額は人によって大きく違う">
+        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+        <circle cx="30" cy="44" r="6" class="dot"/>
+        <circle cx="30" cy="118" r="6" class="dot"/>
+        <circle cx="30" cy="192" r="6" class="dot"/>
+        <circle cx="30" cy="268" r="8" class="f-acc"/>
+        <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="40">無職の夫婦世帯の平均</text><text x="72" y="61" class="t-sm">夫65歳以上・妻60歳以上</text>
+        <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="114">毎月の赤字は約5万円</text><text x="72" y="135" class="t-sm">収入と支出の差の平均</text>
+        <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
+        <text x="72" y="188">20〜30年続くと仮定</text><text x="72" y="209" class="t-sm">約1,300万〜2,000万円</text>
+        <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
+        <text x="72" y="264" class="t-hd">家計ごとに大きく違う</text><text x="72" y="285" class="t-sm">報告書もそう書いている</text>
+      </svg>
+      <figcaption>2,000万円は、ある条件の世帯の平均の赤字に年数をかけた数字である。働き方や支出が違えば、答えも変わる。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>共働きか、何歳まで働くか、家賃があるかで、全然変わりそうです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>報告書自身も、不足額は収入や支出、暮らし方によって大きく違うと書いています。ところが広告になると、前提が抜けて「2,000万円足りない」だけが残ります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>前提が抜けると、全員に当てはまる話に聞こえますね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>平均には、もう1つ落とし穴があります。貯金がとても多い世帯と、ほとんどない世帯が混ざっても、平均は1つの数字になります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>平均の世帯にぴったり当てはまる家は、実際にはあまりないかもしれませんね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>融資の仕事でも同じでした。業界の平均の利益率だけを見て貸すと、目の前の会社の事情を見落とします。決算書は1社ずつ読むしかありません。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>家計も、平均ではなく自分の家の決算書を読む、ということですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>そこで、不安をあおる話を受け取ったら、3つ問いかけてみてください。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>1つ目は「この不安で得をするのは誰か」。2つ目は「その数字はどんな人の平均か」。3つ目は「今日決めないと、実際に何を失うか」です。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>今日の広告で試すと、得をするのは保険会社と証券会社です。数字は、働いていない夫婦の平均です。今週申し込まないと失うのは、手数料の数千円だけです。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>数千円の手数料と、毎月2万円を30年上乗せする判断は、重さがまるで違いますね。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>増やすかどうかは、自分の収入と支出を書き出してから決めます。</p></div></div>
+    </div>
+  </section>
+  <section aria-labelledby="s4">
+    <h2 id="s4"><span class="no">04</span>疑ったあと、備えはどう決めるのか</h2>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>3つの問いを使うと、広告の話はだいたい疑わしく見えてきます。老後の備えは、気にしなくていいということでしょうか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>そこは気をつけてほしいところです。問いを使ったあとも、老後への備えは要ります。問いは、備える額を自分の数字で決めるために使います。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>疑ったまま何もしないのも、別の失敗になるんですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>そうです。焦りを静めたら、次は漠然とした不安を、中身のある備えに書き直します。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>書き直すというのは、どういうことですか。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>「老後が不安」のままだと、何をすればいいか決まりません。何が起きたら困るのか、それはいつごろか、いくら要るのかを書きます。比べるとこうなります。</p></div></div>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 400 276" role="img" aria-label="漠然とした不安と書き出した備えの比較。出来事と時期と金額を書くと、打つ手が決まる">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">漠然とした不安</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">書き出した備え</text>
+        <text x="16" y="56" class="t-sm">困る出来事</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">老後が心配</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">病気で半年働けない</text>
+        <text x="16" y="136" class="t-sm">時期と金額</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">わからない</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle" class="t-sm">いつでも・生活費半年分</text>
+        <text x="16" y="216" class="t-sm">次にすること</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">広告を見て焦る</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">打つ手が決まる</text>
+      </svg>
+      <figcaption>不安を出来事・時期・金額に書き直すと、次にすることが決まる。書き直せない不安は、広告の言葉をそのまま使っていることが多い。</figcaption>
+    </figure>
+    <div class="dialog">
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>病気で働けない半年分なら、貯金でまかなえるか、会社の制度で足りるかを調べればいいわけですね。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>そうです。会社の休職の制度や、健康保険の手当も調べる対象に入ります。調べてみると、思ったより多くの手当が出る場合もあります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>老後のほうはどう書けばいいでしょう。30年以上先のことなので、数字が置けません。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>遠い将来の出来事は、いまは「何歳まで働くつもりか」「住まいはどうするか」くらいで十分です。数年おきに書き直していけば、そのときの数字で決められます。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>一度で正しい答えを出そうとしていたのが、焦りの原因だった気がします。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>働く期間を延ばすか、支出を見直すか、積立を続けるか。どれを選ぶかは、締め切りのない日に、自分の家計の数字を見て決めてください。</p></div></div>
+    </div>
+  </section>
+  <section data-part="teach-back" aria-labelledby="s5">
+    <h2 id="s5"><span class="no">05</span>青木さんが説明し直す</h2>
+    <div class="dialog">
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>同じ広告を見て焦っている後輩がいたら、青木さんならどう説明しますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>まず、お金の不安には、自分の中から出てくる分と、商品を売る側が広げた分があると話します。物が行き渡ると、売る側は憧れより不安に訴えるほうが売れるからです。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>不安で買うと、次の広告でまた不安になり、また買うことになります。締め切りがつくと、比べて考える時間がなくなります。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>2,000万円のことは、どう話しますか。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>2,000万円は、働いていない夫婦世帯の平均の赤字に、20〜30年をかけた数字です。自分の家計とは前提が違うことがあります。</p></div></div>
+      <div class="line learner"><span class="who" aria-hidden="true">青</span><div class="say"><p><span class="vh">青木: </span>焦ったときは、誰が得をするか、何の平均か、今日決めないと何を失うかの3つを聞いてから決めます。</p></div></div>
+      <div class="line mentor"><span class="who" aria-hidden="true">沢</span><div class="say"><p><span class="vh">沢井: </span>問いのあとにすることが抜けています。焦りが静まったら、自分の収入と支出を書き出して、備える額を決める。そこまでやって初めて、3つの問いが家計の役に立ちます。</p></div></div>
+    </div>
+  </section>
+  <section class="summary" aria-labelledby="sum">
+    <p class="label" id="sum">3行まとめ</p>
+    <ol>
+      <li>お金の不安の一部は、見る人の不安が大きいほど商品が売れる売り手が、広告を通して広げたものです。</li>
+      <li>「老後に2,000万円」は、働いていない夫婦世帯の平均の赤字に年数をかけた数字で、家計によって大きく変わります。</li>
+      <li>焦ったときは、誰が得をするか・何の平均か・今日決めないと何を失うかを問い、備える額は自分の家計の数字で決めます。</li>
+    </ol>
+  </section>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch00.html"><span>前へ</span><b>目次</b></a>
+    <a class="next" href="ch02.html"><span>次へ</span><b>投資のもうけは、誰の財布から来るのか</b></a>
+  </nav>
+</div>
+</div>
+<script>
+(function(){var b=document.querySelector(".menu-btn");if(!b)return;
+function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
+})();
+(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
+var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
+r=r.filter(function(e){return e.s!==s});
+r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
+})();
+(function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
+var root=new URL(h.dataset.root||"./",location.href).href;
+navigator.serviceWorker.register(root+"sw.js").catch(function(){});
+var box=document.querySelector(".offline");if(!box)return;
+var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
+function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
+function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
+function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+    return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
+  return uniq([].concat.apply([root+"index.html"],lists))}
+async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
+  return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
+async function save(list){var d=await diff(list),i=0,done=0;
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  await Promise.all([run(),run(),run(),run()]);
+  await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
+  var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
+function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+  if(!navigator.onLine){note.textContent="Offline. "+last();return}
+  note.textContent=last();
+  try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
+    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+btn.addEventListener("click",async function(){btn.disabled=true;
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+    await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
+  catch(e){note.textContent="Could not save. Check your connection and try again."}
+  finally{btn.disabled=false}});
+box.hidden=false;show();
+})();
+</script>
+</body>
+</html>
