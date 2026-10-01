@@ -14,7 +14,7 @@
 <title>富を積み上げる人の考え方 04 · 小さく始める</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 /* reading-page-designing / base.css — canonical copy. Inline it into each page; do not edit per page. */
 
@@ -76,6 +76,10 @@ body{margin:0;padding:0 16px;background:var(--bg);color:var(--text);font-family:
   font-size:var(--fs-body);line-height:var(--lh-body);line-break:strict;overflow-wrap:break-word;
   -webkit-tap-highlight-color:transparent}
 :lang(en){--lh-body:1.65;--lh-tight:1.25;--measure:38rem}
+/* Japanese text sets in the fixed-width BIZ UDGothic (full-width kana and punctuation); English stays proportional */
+[lang|="ja"]{--font-body:"BIZ UDGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
+[lang|="en"]{--font-body:"BIZ UDPGothic","Hiragino Sans","Noto Sans JP",system-ui,sans-serif}
+[lang]{font-family:var(--font-body)}
 .page{max-width:var(--measure);margin:0 auto;padding-block:40px 96px;counter-reset:fig}
 h1,h2,h3{line-height:var(--lh-tight);text-wrap:balance;margin:0;font-weight:700;font-feature-settings:"palt"}
 :lang(ja) :is(h1,h2,h3,.lead,figcaption){word-break:auto-phrase}
