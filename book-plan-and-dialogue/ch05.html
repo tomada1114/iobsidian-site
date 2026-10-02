@@ -11,6 +11,43 @@
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Bookshelf">
 <meta name="mobile-web-app-capable" content="yes">
+<script id="site-theme">
+(function(){
+var root=document.documentElement,K="bookshelf:theme",system=window.matchMedia("(prefers-color-scheme: dark)"),preferred=null;
+function valid(value){return value==="light"||value==="dark"?value:null}
+try{preferred=valid(localStorage.getItem(K))}catch(e){}
+var metas=Array.prototype.slice.call(document.querySelectorAll('meta[name="theme-color"]')),colors={};
+metas.forEach(function(m){colors[m.media.indexOf("dark")>=0?"dark":"light"]=m.content});
+function current(){return preferred||(system.matches?"dark":"light")}
+function apply(theme){
+  root.setAttribute("data-theme",theme);
+  var b=document.querySelector(".theme-btn"),dark=theme==="dark";
+  if(b){var label="Switch to "+(dark?"light":"dark")+" theme";b.hidden=false;b.setAttribute("aria-label",label);b.title=label;b.querySelector(".theme-label").textContent=dark?"Light":"Dark"}
+  var color=document.body?getComputedStyle(document.body).getPropertyValue("--bg").trim():colors[theme];
+  if(color)metas.forEach(function(m){m.content=color;m.removeAttribute("media")});
+}
+// Apply before the body is parsed so a saved theme is used on the first paint.
+apply(current());
+document.addEventListener("DOMContentLoaded",function(){
+  var b=document.querySelector(".theme-btn");
+  if(b)b.addEventListener("click",function(){
+    preferred=root.getAttribute("data-theme")==="dark"?"light":"dark";
+    try{localStorage.setItem(K,preferred)}catch(e){}
+    apply(current());
+  });
+  apply(current());
+});
+system.addEventListener("change",function(){if(!preferred)apply(current())});
+window.addEventListener("storage",function(e){
+  if(e.key!==K&&e.key!==null)return;
+  preferred=valid(e.key===null?null:e.newValue);apply(current());
+});
+window.addEventListener("pageshow",function(){
+  try{preferred=valid(localStorage.getItem(K))}catch(e){}
+  apply(current());
+});
+})();
+</script>
 <title>計画と対話を行き来する 05 · 週に一度30分の定例会議</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,11 +277,19 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .site-head .bar{display:flex;align-items:center;gap:20px;height:64px;padding:0 24px;max-width:1152px;margin:0 auto;min-width:0}
 .site-head .brand{display:inline-flex;align-items:center;gap:10px;min-height:44px;font:600 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;color:var(--text);text-decoration:none;white-space:nowrap;flex:none}
 .brand-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.site-head .here{display:flex;align-items:center;gap:16px;color:var(--text-muted);font-size:var(--fs-small);min-width:0}
+.site-head .here{display:flex;align-items:center;gap:16px;color:var(--text-muted);font-size:var(--fs-small);min-width:0;flex:1}
 .site-head .here::before{content:"/";color:var(--text-subtle);flex:none}
 .site-head .here>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.site-caption{margin-left:auto;font:400 13px/1.4 system-ui,sans-serif;letter-spacing:.01em;color:var(--text-subtle);white-space:nowrap}
-.menu-btn{display:none;align-items:center;justify-content:center;margin-left:auto;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:6px;
+.head-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+.site-caption{font:400 13px/1.4 system-ui,sans-serif;letter-spacing:.01em;color:var(--text-subtle);white-space:nowrap}
+.theme-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:6px;
+  background:var(--bg);color:var(--text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.theme-btn[hidden]{display:none}
+.theme-btn:hover{background:var(--surface)}
+.theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.theme-btn .theme-light-icon,:root[data-theme="dark"] .theme-btn .theme-dark-icon{display:none}
+:root[data-theme="dark"] .theme-btn .theme-light-icon{display:block}
+.menu-btn{display:none;align-items:center;justify-content:center;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:6px;
   background:var(--bg);color:var(--text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;flex:none}
 .menu-btn:hover{background:var(--surface)}
 .skip-link{position:fixed;left:16px;top:-100px;z-index:100;padding:8px 16px;background:var(--bg);color:var(--text);border:2px solid var(--accent)}
@@ -275,6 +320,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   .site-head .brand{font-size:14px;gap:8px}
   .site-head .here{gap:10px;font-size:12px}
   .site-caption{font-size:12px}
+  .theme-btn{padding:0;width:44px}
+  .theme-btn .theme-label{display:none}
   .side{top:57px}
   .brand-icon{width:18px;height:18px}
 }
@@ -290,7 +337,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="site-head" lang="en" data-root="../" data-reader="book-plan-and-dialogue" data-label="計画と対話を行き来する">
 <div class="bar">
   <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">計画と対話を行き来する</span></span>
-  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button>
+  <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
+    <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
+    <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <span class="theme-label">Dark</span>
+  </button>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
 <aside class="side" id="side" aria-label="計画と対話を行き来する pages">
@@ -426,9 +478,9 @@ function set(o){o=o&&small.matches;document.body.classList.toggle("nav-open",o);
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
 document.addEventListener("keydown",function(e){if(!document.body.classList.contains("nav-open"))return;
   if(e.key==="Escape"){e.preventDefault();set(false)}
-  if(e.key==="Tab"){var links=side.querySelectorAll("a[href]"),last=links[links.length-1];
-    if(e.shiftKey&&document.activeElement===b){e.preventDefault();last.focus()}
-    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();b.focus()}}
+  if(e.key==="Tab"){var links=side.querySelectorAll("a[href]"),last=links[links.length-1],first=document.querySelector(".theme-btn:not([hidden])")||b;
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
 });
 small.addEventListener("change",function(){if(!small.matches){document.body.classList.remove("nav-open");b.setAttribute("aria-expanded","false");b.textContent="Contents";if(main)main.inert=false}});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
