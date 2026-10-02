@@ -218,15 +218,18 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 
 /* ---------- site header + reader sidebar (Site/_shared/nav.py) ---------- */
 .site-head{position:sticky;top:0;z-index:30;margin:0 -16px;background:var(--bg);border-bottom:1px solid var(--line)}
-.site-head .bar{display:flex;align-items:center;gap:8px 20px;min-height:52px;padding:0 16px;max-width:1280px;margin:0 auto}
-.site-head .brand{font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
-.site-head .here{display:none;color:var(--text-muted);font-size:var(--fs-small);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.site-head .readers{display:flex;gap:4px 16px;flex-wrap:wrap;margin:0;padding:0;list-style:none;font-size:var(--fs-small)}
-.site-head .readers a{color:var(--text-muted);text-decoration:none;display:inline-block;padding:4px 0}
-.site-head .readers a:hover{color:var(--text)}
-.site-head .readers a[aria-current]{color:var(--accent);font-weight:700;box-shadow:inset 0 -2px 0 var(--accent)}
-.menu-btn{display:none;margin-left:auto;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-strong);border-radius:var(--radius);
-  background:var(--surface);color:var(--text);font:inherit;font-size:var(--fs-small);cursor:pointer}
+.site-head .bar{display:flex;align-items:center;gap:20px;height:64px;padding:0 24px;max-width:1152px;margin:0 auto;min-width:0}
+.site-head .brand{display:inline-flex;align-items:center;gap:10px;min-height:44px;font:600 15px/1.3 system-ui,sans-serif;letter-spacing:-.02em;color:var(--text);text-decoration:none;white-space:nowrap;flex:none}
+.brand-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.site-head .here{display:flex;align-items:center;gap:16px;color:var(--text-muted);font-size:var(--fs-small);min-width:0}
+.site-head .here::before{content:"/";color:var(--text-subtle);flex:none}
+.site-head .here>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.site-caption{margin-left:auto;font:400 13px/1.4 system-ui,sans-serif;letter-spacing:.01em;color:var(--text-subtle);white-space:nowrap}
+.menu-btn{display:none;align-items:center;justify-content:center;margin-left:auto;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:6px;
+  background:var(--bg);color:var(--text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;flex:none}
+.menu-btn:hover{background:var(--surface)}
+.skip-link{position:fixed;left:16px;top:-100px;z-index:100;padding:8px 16px;background:var(--bg);color:var(--text);border:2px solid var(--accent)}
+.skip-link:focus{top:8px}
 .side{font-size:var(--fs-small);line-height:var(--lh-tight)}
 .side h2{font-size:var(--fs-caption);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);margin:0 0 8px}
 .side h2 a{color:inherit;text-decoration:none}
@@ -236,23 +239,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .side li a[aria-current]{border-left-color:var(--accent);color:var(--accent);font-weight:700}
 .side .n{font-family:var(--font-mono);font-size:var(--fs-caption);color:var(--text-subtle);flex:none;min-width:1.6em;white-space:nowrap;padding-top:1px}
 .side li a[aria-current] .n{color:var(--accent)}
-.side .all{display:none}
+.side .all{margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+.side .all a{display:inline-flex;align-items:center;min-height:44px;color:var(--text-muted);text-decoration:none}
 @media (min-width:1080px){
   .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
-  .side{position:fixed;top:53px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
+  .side{position:fixed;top:65px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--line)}
 }
 @media (max-width:1079.98px){
-  .has-side .menu-btn,.site-head.no-side-mobile .menu-btn{display:inline-flex;align-items:center}
-  .site-head .readers{display:none}
-  .has-side .site-head .here{display:block;margin-left:-12px}
-  .side{position:fixed;inset:53px 0 0 0;z-index:25;overflow-y:auto;background:var(--bg);padding:20px 16px 48px;display:none}
+  .has-side .menu-btn{display:inline-flex}
+  .side{position:fixed;inset:65px 0 0 0;z-index:25;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);padding:20px 16px 48px;display:none}
   body.nav-open{overflow:hidden}
   body.nav-open .side{display:block}
-  .side .all{display:block}
 }
-@media (max-width:1079.98px){body:not(.has-side) .site-head .readers{display:flex;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;padding-bottom:2px}
-  body:not(.has-side) .site-head .bar{flex-wrap:wrap;padding-block:6px}
-  body:not(.has-side) .site-head nav{flex:1 1 100%;min-width:0}}
+@media (max-width:600px){
+  .site-head .bar{gap:12px;height:56px;padding:0 16px}
+  .site-head .brand{font-size:14px;gap:8px}
+  .site-head .here{gap:10px;font-size:12px}
+  .site-caption{font-size:12px}
+  .side{top:57px}
+  .brand-icon{width:18px;height:18px}
+}
 .offline{display:grid;gap:6px;justify-items:start;margin:28px 0 0}
 .offline[hidden]{display:none}
 .save-btn{min-height:44px;padding:0 14px;border:1px solid var(--line-strong);border-radius:var(--radius);
@@ -262,51 +268,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2" data-id="20260926-04">
-<header class="site-head" lang="en" data-root="../../">
+<header class="site-head" lang="en" data-root="../../" data-reader="easy-reads" data-label="Easy Reads">
 <div class="bar">
-  <a class="brand" href="../../index.html">Bookshelf</a><span class="here">/ <span>Easy Reads</span></span>
-  <nav aria-label="Readers"><ul class="readers">
-    <li><a href="../../easy-reads/index.html" aria-current="page">Easy Reads</a></li>
-    <li><a href="../../1on1-architecture/ch00.html">Architecture</a></li>
-    <li><a href="../../1on1-api-types/ch00.html">API & TypeScript</a></li>
-    <li><a href="../../1on1-aws/ch00.html">AWS</a></li>
-    <li><a href="../../1on1-ai/ch00.html">AI in Production</a></li>
-    <li><a href="../../1on1-ops/ch00.html">Operations</a></li>
-    <li><a href="../../agentcore-reader/ch00.html">AgentCore</a></li>
-    <li><a href="../../book-pause-before-speaking/ch00.html" lang="ja">一拍おいて話す</a></li>
-    <li><a href="../../book-career-transitions/ch00.html" lang="ja">キャリアの移り目</a></li>
-    <li><a href="../../book-spend-by-design/ch00.html" lang="ja">貯めるより、使いきる設計</a></li>
-    <li><a href="../../book-world-by-data/ch00.html" lang="ja">思い込みを外して、世界をデータで見る</a></li>
-    <li><a href="../../book-information-networks/ch00.html" lang="ja">情報は人をつなぎ、分断する</a></li>
-    <li><a href="../../book-tidy-then-change/ch00.html" lang="ja">整えてから変えるか、変えてから整えるか</a></li>
-    <li><a href="../../book-money-anxiety/ch00.html" lang="ja">その不安は、お金で消えるのか</a></li>
-    <li><a href="../../book-what-follows/ch00.html" lang="ja">その文から何が言えるか</a></li>
-    <li><a href="../../book-not-all-in/ch00.html" lang="ja">全身全霊で働かないという選択</a></li>
-    <li><a href="../../book-loose-steady/ch00.html" lang="ja">ゆるく、でも毎日積み上げる</a></li>
-    <li><a href="../../book-choose-the-question/ch00.html" lang="ja">答えを出す前に、問いを選ぶ</a></li>
-    <li><a href="../../book-keep-skills-current/ch00.html" lang="ja">技能を更新しつづける</a></li>
-    <li><a href="../../book-uncertainty-teams/ch00.html" lang="ja">不確実性から考えるチームと組織</a></li>
-    <li><a href="../../book-being-heard/ch00.html" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</a></li>
-    <li><a href="../../book-job-membership/ch00.html" lang="ja">ジョブ型とメンバーシップ型で読む働き方</a></li>
-    <li><a href="../../book-team-english/ch00.html" lang="ja">英語でチームを回す仕事の型</a></li>
-    <li><a href="../../book-plan-and-dialogue/ch00.html" lang="ja">計画と対話を行き来する</a></li>
-    <li><a href="../../book-wealth-mindset/ch00.html" lang="ja">富を積み上げる人の考え方</a></li>
-    <li><a href="../../book-beyond-command/ch00.html" lang="ja">命令の組織から、探検の組織へ</a></li>
-    <li><a href="../../book-adler-relationships/ch00.html" lang="ja">アドラー心理学で人間関係をほどく</a></li>
-    <li><a href="../../book-where-gains-went/ch00.html" lang="ja">稼いだ分は、どこへ行ったのか</a></li>
-    <li><a href="../../book-walk-and-think/ch00.html" lang="ja">歩くと、頭と体に何が起きるか</a></li>
-    <li><a href="../../book-life-not-a-story/ch00.html" lang="ja">人生を物語にしない生き方</a></li>
-    <li><a href="../../book-growing-sense/ch00.html" lang="ja">AIの時代に、センスはどう育つか</a></li>
-    <li><a href="../../book-faith-divides-america/ch00.html" lang="ja">アメリカを割る信仰</a></li>
-    <li><a href="../../book-job-yardstick/ch00.html" lang="ja">仕事選びのものさしを科学で直す</a></li>
-    <li><a href="../../book-recall-to-learn/ch00.html" lang="ja">思い出して覚える、勉強の組み立て方</a></li>
-    <li><a href="../../book-english-gaps/ch00.html" lang="ja">大人の英語は、ずれに気づいて身につける</a></li>
-    <li><a href="../../book-grounded-words/ch00.html" lang="ja">ことばは体から育つ</a></li>
-    <li><a href="../../book-many-logics/ch00.html" lang="ja">論理はひとつではない</a></li>
-    <li><a href="../../book-lasting-craft/ch00.html" lang="ja">流行に左右されない作り手の心得</a></li>
-    <li><a href="../../book-finite-time/ch00.html" lang="ja">全部はできない前提で、時間を使う</a></li>
-  </ul></nav>
-  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Menu</button>
+  <a class="brand" href="../../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>Easy Reads</span></span>
+  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button>
 </div>
 </header>
 <aside class="side" id="side" aria-label="Easy Reads pages">
@@ -375,48 +340,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <li><a href="20260923-01.html"><span class="n">9/23</span><span>Using a Computer With No Mouse</span></a></li>
   </ol>
   <div class="all" lang="en">
-  <h2><a href="../../index.html">All readers</a></h2>
-  <ul>
-    <li><a href="../../easy-reads/index.html" aria-current="page"><span>Easy Reads</span></a></li>
-    <li><a href="../../1on1-architecture/ch00.html"><span>Architecture</span></a></li>
-    <li><a href="../../1on1-api-types/ch00.html"><span>API & TypeScript</span></a></li>
-    <li><a href="../../1on1-aws/ch00.html"><span>AWS</span></a></li>
-    <li><a href="../../1on1-ai/ch00.html"><span>AI in Production</span></a></li>
-    <li><a href="../../1on1-ops/ch00.html"><span>Operations</span></a></li>
-    <li><a href="../../agentcore-reader/ch00.html"><span>AgentCore</span></a></li>
-    <li><a href="../../book-pause-before-speaking/ch00.html"><span lang="ja">一拍おいて話す</span></a></li>
-    <li><a href="../../book-career-transitions/ch00.html"><span lang="ja">キャリアの移り目</span></a></li>
-    <li><a href="../../book-spend-by-design/ch00.html"><span lang="ja">貯めるより、使いきる設計</span></a></li>
-    <li><a href="../../book-world-by-data/ch00.html"><span lang="ja">思い込みを外して、世界をデータで見る</span></a></li>
-    <li><a href="../../book-information-networks/ch00.html"><span lang="ja">情報は人をつなぎ、分断する</span></a></li>
-    <li><a href="../../book-tidy-then-change/ch00.html"><span lang="ja">整えてから変えるか、変えてから整えるか</span></a></li>
-    <li><a href="../../book-money-anxiety/ch00.html"><span lang="ja">その不安は、お金で消えるのか</span></a></li>
-    <li><a href="../../book-what-follows/ch00.html"><span lang="ja">その文から何が言えるか</span></a></li>
-    <li><a href="../../book-not-all-in/ch00.html"><span lang="ja">全身全霊で働かないという選択</span></a></li>
-    <li><a href="../../book-loose-steady/ch00.html"><span lang="ja">ゆるく、でも毎日積み上げる</span></a></li>
-    <li><a href="../../book-choose-the-question/ch00.html"><span lang="ja">答えを出す前に、問いを選ぶ</span></a></li>
-    <li><a href="../../book-keep-skills-current/ch00.html"><span lang="ja">技能を更新しつづける</span></a></li>
-    <li><a href="../../book-uncertainty-teams/ch00.html"><span lang="ja">不確実性から考えるチームと組織</span></a></li>
-    <li><a href="../../book-being-heard/ch00.html"><span lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span></a></li>
-    <li><a href="../../book-job-membership/ch00.html"><span lang="ja">ジョブ型とメンバーシップ型で読む働き方</span></a></li>
-    <li><a href="../../book-team-english/ch00.html"><span lang="ja">英語でチームを回す仕事の型</span></a></li>
-    <li><a href="../../book-plan-and-dialogue/ch00.html"><span lang="ja">計画と対話を行き来する</span></a></li>
-    <li><a href="../../book-wealth-mindset/ch00.html"><span lang="ja">富を積み上げる人の考え方</span></a></li>
-    <li><a href="../../book-beyond-command/ch00.html"><span lang="ja">命令の組織から、探検の組織へ</span></a></li>
-    <li><a href="../../book-adler-relationships/ch00.html"><span lang="ja">アドラー心理学で人間関係をほどく</span></a></li>
-    <li><a href="../../book-where-gains-went/ch00.html"><span lang="ja">稼いだ分は、どこへ行ったのか</span></a></li>
-    <li><a href="../../book-walk-and-think/ch00.html"><span lang="ja">歩くと、頭と体に何が起きるか</span></a></li>
-    <li><a href="../../book-life-not-a-story/ch00.html"><span lang="ja">人生を物語にしない生き方</span></a></li>
-    <li><a href="../../book-growing-sense/ch00.html"><span lang="ja">AIの時代に、センスはどう育つか</span></a></li>
-    <li><a href="../../book-faith-divides-america/ch00.html"><span lang="ja">アメリカを割る信仰</span></a></li>
-    <li><a href="../../book-job-yardstick/ch00.html"><span lang="ja">仕事選びのものさしを科学で直す</span></a></li>
-    <li><a href="../../book-recall-to-learn/ch00.html"><span lang="ja">思い出して覚える、勉強の組み立て方</span></a></li>
-    <li><a href="../../book-english-gaps/ch00.html"><span lang="ja">大人の英語は、ずれに気づいて身につける</span></a></li>
-    <li><a href="../../book-grounded-words/ch00.html"><span lang="ja">ことばは体から育つ</span></a></li>
-    <li><a href="../../book-many-logics/ch00.html"><span lang="ja">論理はひとつではない</span></a></li>
-    <li><a href="../../book-lasting-craft/ch00.html"><span lang="ja">流行に左右されない作り手の心得</span></a></li>
-    <li><a href="../../book-finite-time/ch00.html"><span lang="ja">全部はできない前提で、時間を使う</span></a></li>
-  </ul>
+    <a href="../../index.html">← All readers</a>
   </div>
 </aside>
 <div class="page acc-2">
@@ -483,44 +407,53 @@ var p=document.querySelector(".pager");if(p&&"IntersectionObserver" in window){n
 </div>
 <script>
 (function(){var b=document.querySelector(".menu-btn");if(!b)return;
-function set(o){document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",o);b.textContent=o?"Close":"Menu"}
+var side=document.querySelector(".side"),main=document.querySelector(".page"),small=window.matchMedia("(max-width:1079.98px)");
+function set(o){o=o&&small.matches;document.body.classList.toggle("nav-open",o);b.setAttribute("aria-expanded",String(o));b.textContent=o?"Close":"Contents";if(main)main.inert=o;
+  if(o){var first=side.querySelector("a[aria-current]")||side.querySelector("a");if(first)first.focus()}else b.focus()}
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
-document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+document.addEventListener("keydown",function(e){if(!document.body.classList.contains("nav-open"))return;
+  if(e.key==="Escape"){e.preventDefault();set(false)}
+  if(e.key==="Tab"){var links=side.querySelectorAll("a[href]"),last=links[links.length-1];
+    if(e.shiftKey&&document.activeElement===b){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();b.focus()}}
+});
+small.addEventListener("change",function(){if(!small.matches){document.body.classList.remove("nav-open");b.setAttribute("aria-expanded","false");b.textContent="Contents";if(main)main.inert=false}});
 var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&window.matchMedia("(min-width:1080px)").matches)c.scrollIntoView({block:"center"});
 })();
-(function(){var cur=document.querySelector(".site-head .readers a[aria-current]");if(!cur||!document.body.classList.contains("has-side"))return;
-var s=new URL(cur.href).pathname.split("/").slice(-2,-1)[0],r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}
-r=r.filter(function(e){return e.s!==s});
-r.unshift({s:s,l:cur.textContent,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+(function(){var h=document.querySelector(".site-head"),s=h&&h.dataset.reader;if(!s||!document.body.classList.contains("has-side"))return;
+var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
+r=r.filter(function(e){return e&&e.s!==s});
+r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
 try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
 navigator.serviceWorker.register(root+"sw.js").catch(function(){});
 var box=document.querySelector(".offline");if(!box)return;
-var btn=box.querySelector(".save-btn"),note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+var btn=box.querySelector(".save-btn"),label=btn.querySelector(".save-label")||btn,note=box.querySelector(".save-note"),C="bookshelf-pages",K="bookshelf:saved";
+function saved(){try{return localStorage.getItem(K)}catch(e){return null}}
 function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
-async function urls(){var lists=await Promise.all(Array.prototype.map.call(h.querySelectorAll(".readers a"),async function(a){
+async function urls(){var lists=await Promise.all(Array.prototype.map.call(document.querySelectorAll(".book-list a[data-slug]"),async function(a){
     var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
   return uniq([].concat.apply([root+"index.html"],lists))}
 async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
   return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
 async function save(list){var d=await diff(list),i=0,done=0;
-  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"…"}}
+  async function run(){while(i<list.length){var u=list[i++],r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);await d.c.put(u,r);note.textContent="Saving "+(++done)+" of "+list.length+"\u2026"}}
   await Promise.all([run(),run(),run(),run()]);
   await Promise.all(d.gone.map(function(u){return d.c.delete(u)}));
   var f=document.querySelector('link[href*="fonts.googleapis.com/css"]');if(f)await fetch(f.href).catch(function(){})}
-function last(){var t=localStorage.getItem(K);return t?"Last saved "+t+".":"Not saved on this device yet."}
-async function show(){btn.textContent=localStorage.getItem(K)?"Update offline copy":"Save all readers for offline";
+function last(){var t=saved();return t?"Last saved "+t+".":"Not saved on this device yet."}
+async function show(){label.textContent=saved()?"Update offline copy":"Save all for offline";
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(localStorage.getItem(K)&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
-    else if(localStorage.getItem(K))note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
+    if(saved()&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    else if(saved())note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
     await save(await urls());localStorage.setItem(K,new Date().toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}));await show()}
