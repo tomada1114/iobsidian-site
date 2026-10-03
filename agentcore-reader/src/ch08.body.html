@@ -3,7 +3,7 @@
   <p class="kicker"><b>AgentCore Reader</b><span>Page 8 of 13</span></p>
   <h1>Whose permission is the agent using?</h1>
   <p class="lead">After this page you can separate the two questions Identity answers: who may call the agent, and whose rights it uses outside. You can also choose between the user's rights and the agent's own, and explain the confused deputy.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,21 +15,11 @@
       <li>What is a confused deputy?</li>
     </ul>
   </nav>
-  <p class="stage">After Tuesday's design review. Leo's plan for a new tutor feature has a single line under "Access": one admin API key.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Entry and exit</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The reviewer circled my admin key. But it's simple. The agent gets one key, and it can reach everything it needs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Everything it needs, or everything?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Well… everything. That's what admin means.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's split the problem first. Identity handles two questions. On the entry side: who is calling this agent?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the exit side?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Whose rights the agent uses when it touches an outside service.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Aren't those the same? If I check the user at the door, the rest follows.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. They're handled by separate mechanisms. Finishing the entry check doesn't decide the exit rights.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a design mixes them up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how you get a confused deputy, the risk at the end of this.</p></div></div>
-</div>
+<p>A tutor agent needs access to a learner's records, but an administrator key gives it access to far more. That shortcut creates a difficult question: when the agent performs an action, whose permission makes the action possible? A user who can see only their own records must not gain access to everyone else's records by asking the agent.</p>
+<p>Separate the design into two directions. Inbound authentication checks who is calling the agent. Outbound authentication supplies the credentials the agent needs when it calls another service. A successful sign-in answers the first question; it does not automatically answer the second.</p>
+<p>Amazon Bedrock AgentCore Identity manages workload identities and credentials for agents. In the fictional Quickturn language-learning app, the tutor must know which learner started the session and use appropriately limited access when it reads that learner's data. Designing both directions makes that requirement explicit.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A user signs in; the entry check verifies the caller; the agent runs on Runtime; on the exit side it chooses a credential from Identity's token vault; and it reaches the outside service with those rights.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -54,47 +44,18 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Who comes in, and where keys live</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How is the caller checked?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two ways. If the caller already has AWS credentials, like another AWS service, it uses an IAM SigV4 signature.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for users?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A JWT, a signed token that proves an identity. It's issued by the company's existing ID system, such as Cognito, Microsoft Entra ID or Okta.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutor accepts the learner's sign-in token.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It checks that token at the entry, and acts only on behalf of that learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the agent have an identity of its own?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It gets a workload ID. Registering the agent as its own identity lets you trace which agent did what.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would that matter?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a finance agent approves a large batch of expenses overnight. With its own workload ID, the logs show which agent it was, quickly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now the exit side. Where do the keys for outside services go?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For Google, Slack, Salesforce or GitHub, the agent needs credentials for each. You register them with Identity as a credential provider, using OAuth2 or an API key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And they're stored where?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In a token vault, a secure store for tokens. So you never write API keys into code or environment variables.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how does the code get a key?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It asks Identity, "I want to use this credential provider." The actual tokens stay outside the code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So rotating a key doesn't mean a new deploy.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. And a key can't leak through a log line or a copied config file, because the code never held it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a simple picture for this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of the agent as a new employee. The entry is a building pass, checked by the guard.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the exit?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The exit is a key safe. The employee never gets the master key, only the one spare key they need, each time.</p></div></div>
-</div>
+<p>For inbound access, an AWS caller can use IAM credentials and a SigV4 signature. SigV4 is AWS's method of signing requests so the receiving service can verify the caller. A user-facing application may instead present a JWT, a signed token issued by an identity system such as Cognito, Microsoft Entra ID or Okta. The configured authorizer validates the token before the request reaches the agent.</p>
+<p>The agent also has a workload identity of its own. That identity makes agent activity traceable: an operations team can distinguish the tutor from a finance agent or an overnight reporting job. Identifying an agent is different from giving it permission to read every user's data.</p>
+<p>For outbound calls, register a credential provider for the target service. A provider may use OAuth or an API key. Identity's token vault manages the relevant credentials so developers can avoid embedding long-lived secrets in source files or copying them into application configuration.</p>
+<p>The application requests the credential it needs for a particular provider. Depending on the integration, a token may still be returned to application code and used in a request. The vault reduces secret handling; it does not make careless logging harmless. Protect returned credentials, request only necessary scopes, and plan rotation and revocation.</p>
+<p>Think of the two directions as a building pass and a key safe. The pass identifies the visitor entering the building. The key safe supplies access for a specific job. Checking the pass does not justify handing over a master key.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The user's rights or the agent's</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Whose key comes out of the safe, though?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There are two patterns. The first acts on behalf of the user. The agent uses that user's rights, limited to what they allowed on a consent screen.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the OAuth flow with a consent screen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's called 3LO, three-legged OAuth. The second pattern uses the agent's own rights.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With no user involved?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Systems exchange client credentials, a fixed system-to-system login, directly. That's 2LO, two-legged OAuth.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do I choose?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Ask one question: in whose name should this action happen?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the agent sends a Slack message for a user…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Use the user's rights, so the message truly comes from that user. Sending or approving something for someone fits that pattern.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a nightly inventory report from an outside service?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It isn't tied to any one user, so the agent's own rights are enough. Batch jobs and totals across users fit there.</p></div></div>
-</div>
+<p>There are two common ways to obtain outbound permission. In a user-delegated flow, the user authorizes access to their account. Three-legged OAuth, often shortened to 3LO, connects the user, the application and the authorization service. The granted scopes limit what the application can request, while the target service must still enforce its resource permissions.</p>
+<p>A system-to-system flow uses the application's own credentials. This is commonly called two-legged OAuth, or 2LO, and often uses the client credentials grant. It fits work that does not belong to one signed-in user, such as a nightly inventory report.</p>
+<p>Choose by asking in whose name the action should happen. A Slack integration that acts for one user should use a suitable delegated flow and the scopes needed for that action. An organization-wide batch report needs a separate service identity with narrow reporting rights. Neither case justifies using an unrestricted administrator credential.</p>
+<p>For the tutor, user-specific access is the starting point. If a later feature needs a batch process across learners, treat it as a separate workload with its own purpose, permissions and audit record.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="Acting on behalf of the user, 3LO, compared with the agent's own rights, 2LO. Whose rights: the consenting user, versus the agent itself. Consent: a consent screen, versus client credentials. Good for: acting for one user, versus batch work across users.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">For the user</text>
@@ -114,50 +75,18 @@
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>The confused deputy</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's wrong with my admin key, exactly?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Give an agent strong rights, like admin access. Now a user with weaker rights asks it for something.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The agent can reach it, so it does.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So even a low-rights user can reach any information through the agent. That's the confused deputy.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The agent mixes up its own rights with the rights of the person it's acting for.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Picture a learner asking the tutor, "Show me the top learner's mistakes." With admin rights, nothing in the agent stops it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model might even think it's being helpful.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It usually does. The model isn't the check; the rights are.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's an old, well-known problem, and agents make it easy to repeat.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the fix?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Design the agent so it can only touch what the current user is allowed to see. Always narrow it to that user's rights.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it carries over the user's rights, and never adds its own on top.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And there's a bonus. When you review access later, checking the user's rights is enough. There's no separate agent to audit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do security reviews ask?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Almost always the same three questions. Whose rights does this agent run with? Where are the tokens stored?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How do you stop the rights of an employee who has left?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With the user's rights, you'd switch off their account in the ID system.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent has no rights of its own. So removing the user's access, and the tokens stored for them, removes the agent's access too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With my admin key, I couldn't answer any of them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With the user's rights and the vault, you answer all three on the spot. That often decides whether a proof of concept reaches production.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutor uses the learner's token for everything about that learner.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And nothing else. If it ever needs a batch job, that gets its own narrow rights, not the learner's and not admin.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rewrite the "Access" line in your plan. What does it say now?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Check who comes in at the entry, with the learner's sign-in token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>On the exit, choose whose rights go out. The user's rights for their own data, and the agent's only for work not tied to one user.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Keys stay in the token vault, never in the code.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the admin key?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Gone. An agent with admin rights can easily become a confused deputy.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put the three review questions at the top of the plan, with your answers. The reviewer will ask them anyway.</p></div></div>
-</div>
+<p>A confused deputy is a service that uses its stronger permissions to perform an action for a caller who lacks those permissions. The service may be trying to help, yet it becomes a route around the original access rules.</p>
+<p>Suppose a learner asks the tutor to show another learner's mistakes. With an administrator key, the agent may be able to fetch those records. A prompt telling it to respect privacy does not remove that ability. The data service must reject a request that is outside the current learner's permitted scope.</p>
+<p>Carry the authenticated user's identity through the request and enforce it where the data is accessed. Check both the action and the target record. A valid token proves identity; the authorization check decides whether this person may read this particular record.</p>
+<p>An access review should be able to answer three questions: whose permissions are used, where credentials are stored, and how access is revoked when a user leaves. Disabling an account may prevent new sign-ins, but existing sessions and tokens also need a defined revocation or expiry process. Record that process rather than assuming account removal ends every active connection immediately.</p>
+<p>A useful access plan names the inbound authorizer, the outbound provider, the allowed scopes and resources, and the revocation path. Those details let a reviewer follow the permissions from the learner's request to the final data access.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Identity answers two separate questions: who calls the agent, and whose rights it uses outside.</li>
       <li>Use the user's rights (3LO) for their data and the agent's own (2LO) for batch work; keep tokens in the vault.</li>
-      <li>Never give an agent strong rights; let it touch only what the current user may see.</li>
+      <li>Give each workload only the permissions it needs, and enforce user access on user-specific requests.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Phase 1: set up the entry and exit steps yourself</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Identity chapter</li><li><span class="tag">3-6</span> Deep Dive: Authenticate and authorize</li></ul></div>
@@ -165,5 +94,5 @@
     <a class="prev" href="ch07.html"><span>Previous</span><b>How does an agent get the right tools?</b></a>
     <a class="next" href="ch09.html"><span>Next</span><b>Why isn't 'please don't' enough?</b></a>
   </nav>
-  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
+  <p class="fine">Revised on October 3, 2026. See the <a href="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html">AgentCore Identity developer guide</a> for current product behavior. Roadmap references come from the September 17, 2026 study notes. Quickturn is fictional.</p>
 </div>

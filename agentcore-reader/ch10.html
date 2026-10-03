@@ -399,7 +399,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <p class="kicker"><b>AgentCore Reader</b><span>Page 10 of 13</span></p>
   <h1>How do you know an agent is doing a good job?</h1>
   <p class="lead">After this page you can explain why an agent's behavior must be recorded as traces and spans. You can say how evaluations turn quality into a score. And you can describe the loop of observe, evaluate and fix.</p>
-  <p class="meta"><span>About 8 min read</span><span>The morning after a bad demo</span></p>
+  <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,36 +411,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>How do observing and evaluating lead to a fix?</li>
     </ul>
   </nav>
-  <p class="stage">The morning after a demo. Yesterday the tutor gave a great answer; today, the same question got a strange one.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The path changes every time</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It worked yesterday. Same question, same code. Today it went somewhere odd. I'll just run it a few more times until I see the bug.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What will you see if it works the next three times?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That it's fine, I guess.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Ask an agent the same question twice, and it may call its tools in a different order. The LLM chooses the next step every time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the results are hard to reproduce.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Reading the code line by line won't find the cause either, like normal bug-hunting would.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what will?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A record of that exchange. What the agent thought, which tools it called with what arguments, and what came back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And who keeps that record?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Observability keeps it. Evaluations turns it into a score for good or bad.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one working run proves very little.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It proves that one path worked, once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the demo audience saw a different path.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which is why you want every run recorded, not only the ones you watch.</p></div></div>
-</div>
+<p>An agent can answer the same question differently on two runs. It may choose another tool, supply different arguments or stop at a different point. One successful demo therefore shows that one execution path worked once. Repeating the request until it succeeds can hide the path that failed.</p>
+<p>To investigate a strange answer, preserve the record of the original exchange. Useful evidence includes the input, model and prompt versions, tool calls, arguments, tool results, timings and final response. It shows the observable execution; it should not be mistaken for access to the model's private reasoning.</p>
+<p>Observability records what happened. Evaluation judges the quality of the result and the steps taken. These jobs work together because an answer can be fast and free of system errors while still being incorrect.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Traces and spans</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the record look like?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AgentCore Observability follows OpenTelemetry, a common industry format. One user request becomes one trace: a record of everything that happens for it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And inside the trace?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each LLM call and each tool call becomes one span, a record of a single step.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is it hard to set up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If the agent runs on Runtime, it's easy. You check the traces in a CloudWatch dashboard built for generative AI.</p></div></div>
-</div>
+<p>OpenTelemetry provides a common way to describe execution data. A trace groups the work associated with a request. A span records an individual operation within it, such as a model call or tool call, with timing and other attributes.</p>
+<p>AgentCore Observability integrates with CloudWatch and agent instrumentation. Configure the supported telemetry path for the framework and runtime you use. The trace view then helps you locate a slow operation or an unexpected tool choice.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="One trace for one request, containing five spans in time order: LLM call one, tool A, LLM call two, tool B, which took much longer than the others, and LLM call three.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
@@ -453,58 +433,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Each bar is a span, and its length is how long it took. The accented span is where this request waited, and where to look first.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I'd see where it was slow, or where it took an unexpected path.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a glance. That's the point of the bars.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we have to use CloudWatch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Because it follows OpenTelemetry, you can send the same data to tools like Langfuse or Datadog. If a company already has a monitoring system, it can go there.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do people watch on it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mostly the usual web-service numbers. Response time, the number of tokens used, how often errors happen, and how many sessions run at once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But none of that says the answer was good.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A fast, error-free answer can still be wrong.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like today's. No errors, normal speed, and a strange explanation of the past tense.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The dashboard would show a healthy system. Only reading the answer, or scoring it, shows the problem.</p></div></div>
-</div>
+<p>In the timeline, a long tool span points to the part of this request that consumed time. Read its arguments and result before changing the prompt. If the agent skipped a tool entirely, the missing span may be more informative than any slow bar.</p>
+<p>OpenTelemetry also makes integration with other monitoring systems possible where the exporter and destination support it. An existing platform may use Langfuse or Datadog alongside its infrastructure monitoring.</p>
+<p>Watch response time, token consumption, failures and concurrent sessions, but distinguish those operational measures from answer quality. A tutor can produce a fluent, incorrect grammar explanation while every service reports success. Detecting that problem requires checking the content against a quality standard.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Quality as a score</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do you score "good"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's Evaluations. AgentCore comes with built-in evaluators, tools that check a response and give it a score.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do they check?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Whether an answer is correct, whether it's useful, whether the agent chose the right tools, and whether it's safe.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And our own standards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You can build a custom evaluator that matches them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Who does the grading? Nobody can read every conversation.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mostly another LLM. It's called LLM-as-a-judge. You give the judging LLM a set of standards, and it returns a score and a reason.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I trust a judge that's also an LLM?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only as far as its standards are clear. The reason it returns lets you check a sample of its scores by hand.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When does it run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two ways. Online evaluation takes samples of real conversations in production and scores them all the time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the other?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A batch of checks during development or in CI, the automatic checks that run on every code change.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So online catches a drop in production, and CI catches it before release.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the split. Quickturn does both: online evaluation scores tutor sessions in production, and a pre-merge evaluation lives in the repository.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So turning on an evaluator is enough?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Having the feature isn't what matters. The design of the evaluation is.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Meaning what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test set with common questions, edge cases and tricky questions. A clear standard for a passing score.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And something that runs on every change?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A regression test, which catches new problems caused by a change. It runs every time you change a prompt or a tool.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the team that builds that carefully…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Catches far more problems than a team that just turns on an evaluator.</p></div></div>
-</div>
+<p>AgentCore Evaluations offers built-in and custom evaluators. They can assess properties such as helpfulness, correctness, safety and tool use. Many evaluations use LLM-as-a-judge: a model receives a scoring rubric and returns an assessment with a reason.</p>
+<p>A judge model can also make mistakes. Define the rubric clearly, compare a sample of scores with human judgments, and investigate disagreements. Use deterministic checks where possible, such as verifying the shape of a result or whether a required tool was called.</p>
+<p>Production evaluation samples real interactions to identify changes in behavior. Development evaluation runs a known dataset before release, and can form part of CI, the automated checks applied to code changes. These two settings answer different questions: how the agent behaves now, and whether a proposed change harms known cases.</p>
+<p>The dataset should contain common questions, difficult inputs and previously observed failures. Define what passes, which failures block release, and which need manual review. Re-run it when prompts, models, tool descriptions or permissions change. Enabling an evaluator is only the first step; the dataset and decision rule determine what the team can learn from its scores.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Observe, evaluate, fix</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once we have scores?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They're material for fixing. Look at the parts that scored low, and check where the problem is.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The prompt, the model, or a tool's description.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start with those three. Today's trace might show the tutor never called the grammar tool, for example. Then the tool's description is the first suspect.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I'd fix the description.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Fix it, then run the same evaluation again to see if the score went up.</p></div></div>
-</div>
+<p>Start an improvement cycle with a low-scoring case and its trace. Suppose the tutor gave an incorrect answer and never called the grammar tool. The tool description may not make its purpose clear, or the prompt may fail to direct the agent toward it. The trace helps choose a specific hypothesis.</p>
+<p>Change one relevant part, then run the same evaluation again. Compare the failing case and the wider dataset so that an apparent improvement does not hide a regression elsewhere. The cycle is observe, evaluate, change and measure again.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 236" role="img" aria-label="A loop of four steps: observe the records, evaluate them with a score, fix the cause, and evaluate again, then back to observing.">
       <rect x="16" y="16" width="176" height="80" rx="8" class="node"/>
@@ -522,31 +465,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The loop turns clockwise. The accented step turns a guess into a measured result.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where can I practice this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The last lab in the official Phase 1, and a Deep Dive module called "Observe, evaluate, optimize."</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does all this cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every evaluation run costs judge calls and time. And a trace keeps the full conversation with a customer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So personal data sits in the logs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before you go live, decide how long you're allowed to keep them. Longer helps debugging, and shorter protects learners.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why pay for it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think about the next model upgrade.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Someone will ask whether it's better.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Without numbers, it's hard to get approval to release a new model version. You can't show it's better or worse.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the agent were a new employee, observability would be the daily work report.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And evaluations are the performance review, based on that report. Without the report, you can't explain why you gave a score.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tell me how you'll find today's bug, without rerunning it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An agent's path changes every run, so I read the trace for today's request, span by span.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then I score quality with evaluations: online in production, and in CI before release.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And after the fix?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Run the same evaluation again, and see if the score went up. Observe, evaluate, fix, and loop.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before anything else, add today's question to the test set. Then this bug can't come back unnoticed.</p></div></div>
-</div>
+<p>Evaluation consumes time and judge-model calls. Traces may contain learner text or other personal information. Decide what to record, how to redact sensitive fields, who may read the records and how long to retain them. Debugging value and privacy requirements both belong in that decision.</p>
+<p>The official evaluation lab and the “Observe, evaluate, optimize” study module provide practice for this cycle. The practical goal is evidence for a release decision: whether a new model, prompt or tool behaves better on the tasks the application serves.</p>
+<p>When a production question exposes a new failure, add a suitable version to the regression dataset. That converts one incident into a repeatable check. Observability supplies the work record; evaluation turns it into evidence the team can use.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -561,7 +482,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch09.html"><span>Previous</span><b>Why isn't 'please don't' enough?</b></a>
     <a class="next" href="ch11.html"><span>Next</span><b>What worries a company when every team builds agents?</b></a>
   </nav>
-  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
+  <p class="fine">Revised on October 3, 2026. See the <a href="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations.html">AgentCore Observability and Evaluations developer guide</a> for current product behavior. Roadmap references come from the September 17, 2026 study notes. Quickturn is fictional.</p>
 </div>
 </div>
 <script>

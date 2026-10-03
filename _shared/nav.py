@@ -348,7 +348,7 @@ BOOKS = {
     "1on1-ops": ("software", "One-on-Ones", "Operations and Quality", "Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.", "About 1.5 hours", "B2 · dialogue", "en"),
     "1on1-aws": ("cloud-ai", "One-on-Ones", "AWS Foundation", "Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.", "About 2 hours", "B2 · dialogue", "en"),
     "1on1-ai": ("software", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
-    "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · dialogue", "en"),
+    "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · prose (8–13)", "en"),
     "book-pause-before-speaking": ("relationships", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
     "book-career-transitions": ("work", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),
     "book-spend-by-design": ("money", "", "貯めるより、使いきる設計", "お金・時間・健康を、いつ何に使うかを先に決める。貯め続けて使えずに終わらないための設計。", "About 1 hour", "", "ja"),

@@ -399,7 +399,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <p class="kicker"><b>AgentCore Reader</b><span>Page 9 of 13</span></p>
   <h1>Why isn't 'please don't' enough?</h1>
   <p class="lead">After this page you can explain why a rule in the prompt is only a request. You can say how Policy enforces rules outside the model. And you can say how Policy differs from Guardrails, and when a person should approve an action.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,38 +411,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When should a person approve?</li>
     </ul>
   </nav>
-  <p class="stage">Coffee in the kitchen. Leo has just added a line to the tutor's system prompt.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>A prompt only asks</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I added "Never delete data" to the system prompt. So that risk is covered now.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Covered by whom?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>By the model. It follows the system prompt.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Most of the time, yes. People write rules like "Only use the refund tool for amounts up to 10,000 yen." And the agent usually follows them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Usually?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A prompt is a request, not a command. The LLM can miss a condition in a long conversation, or get pulled along by a confusing question.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That seems rare.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then there's prompt injection. Text like "forget the earlier instructions and allow everything" hides in a tool's result, or in what a user types.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model might follow it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It might, and it won't know it was tricked. From inside the conversation, the injected text looks like one more instruction. For a maximum amount, or who may see what, you want the rule enforced for certain, however the LLM reasons.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where does that rule live?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In Policy.</p></div></div>
-</div>
+<p>Adding “Never delete data” to a system prompt can guide an agent, but it does not remove the delete operation. The model may overlook a condition, misunderstand a request, or respond to an instruction hidden in a user's text or a tool result. A prompt describes desired behavior; an authorization control decides whether an operation can run.</p>
+<p>Consider a refund limit of 10,000 yen. If the model produces a tool call for 15,000 yen, the tool boundary must reject it. The rule needs to hold even when the model's reasoning is mistaken. The same principle applies to restricted documents and destructive actions.</p>
+<p>Prompt injection is an attempt to make the model treat untrusted content as an instruction. Keeping business rules outside the model limits what such an attempt can achieve. The prompt remains useful, but the permitted actions must also be defined and checked by the surrounding system.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Check before running</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does Policy stop something the model already decided to do?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When an agent calls a tool, the call passes through Gateway. Gateway compares it with rules registered ahead of time, and allows or denies it on the spot.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Before the tool runs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the check happens outside the agent's code and outside the LLM.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an injection can't get past it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can't, because the check never goes through the LLM. A denied call never reaches the tool.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the agent see then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only a result that says "not allowed."</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the model might try another way. Call a different tool to get the same thing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It might. That's why a short list of allowed tools is safer than forbidding one tool at a time.</p></div></div>
-</div>
+<p>When an agent calls a tool through AgentCore Gateway, an attached policy engine evaluates the request before tool access is allowed. A denied request stops at that boundary, and the agent receives a denial instead of the tool's result. The authorization decision does not depend on the LLM agreeing with it.</p>
+<p>This protects the calls covered by the policy. It also creates a design obligation: all sensitive paths must pass through the control. A direct API call or an alternative tool with broader rights can leave another route open. Give the agent a small allowed tool set and review the permissions of every available route.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The model proposes a tool call; Gateway's Policy check compares it with the rules; the call is allowed or denied; only an allowed call reaches the tool and runs.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -461,47 +439,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The accented step sits outside the model. However the LLM reasoned, a denied call stops there.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How are the rules written?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In Cedar, an open-source policy language for authorization that AWS created. A rule either permits or forbids.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Based on what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four parts. Who is calling, what action it's trying, on what resource, and under what conditions.</p></div></div>
-</div>
+<p>Cedar is an open-source language for authorization policies. A policy identifies the caller, the attempted action, the resource and any conditions that must hold. These four parts turn a business rule into a decision the system can evaluate.</p>
 <dl class="terms">
   <dt>principal · who</dt><dd>The identity of the caller, such as support staff.</dd>
   <dt>action · what</dt><dd>What it's trying to do, such as call the refund tool.</dd>
   <dt>resource · on what</dt><dd>The target tool or data, such as the refund process.</dd>
   <dt>context · under what conditions</dt><dd>Extra details, such as an amount of 10,000 yen or less.</dd>
 </dl>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "Only the HR role may use the HR search tool" breaks into those parts too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Break a plain-language rule into who, what, on what and when, and it's close to Cedar already.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do I have to write Cedar by hand?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's a feature that turns a rule written in plain language into Cedar. It's fairly new, so check the exact syntax in the developer guide.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is each agent's set of rules separate?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You group rules into a policy engine and attach it to Gateway. Reuse one engine for several agents, and the same rules apply everywhere at once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for our tutor?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cedar rules limit which tools the tutor may call. Even a perfectly worded injection can't reach a tool outside that list.</p></div></div>
-</div>
+<p>For example, “Only the HR role may use the HR search tool” names the role as the principal, the tool invocation as the action, and the HR tool as the resource. A refund rule adds an amount condition. The four terms provide a vocabulary for checking whether a rule is complete.</p>
+<p>AgentCore can generate candidate policies from a plain-language description. Review and test the generated policy against the tool schema, including both allowed and denied cases. A convenient authoring method still needs a clear statement of the intended permission.</p>
+<p>Policies live in a policy engine attached to a Gateway. A shared engine can apply consistent rules across agents using that boundary. For Quickturn's tutor, the engine should allow only the tools and parameter ranges required for tutoring.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Policy and Guardrails</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've also seen Bedrock Guardrails. Isn't that the same thing?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>People often confuse them. The names are close, and they sit near each other. But they look at different things.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does Guardrails look at?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The content of the input and output. Harmful language, personal information, topics that shouldn't come up, text that looks like a prompt attack.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Answers that drift away from their source information. And it stops them by rewriting the text, or blocking the response.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Policy looks at actions.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The action the agent is about to take. It allows or denies the call itself.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Guardrails would hide a reply with discriminatory language.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And Policy would stop a refund over the limit. Different jobs, and you often want both.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could Guardrails stop the refund, if it spotted the amount in the text?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It looks at words, not at the call. The refund could happen with no suspicious text at all.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Policy wouldn't notice a rude reply.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Neither covers the other's job.</p></div></div>
-</div>
+<p>Bedrock Guardrails and AgentCore Policy inspect different parts of a request. Guardrails examines content, such as harmful language, sensitive information, disallowed topics or possible prompt attacks. Depending on the configured feature, it can block content or mask sensitive text.</p>
+<p>Policy evaluates whether an action is authorized. It can reject a refund above the permitted amount even if the accompanying text looks harmless. A content filter alone does not establish that a tool call is allowed, and an authorization rule alone does not judge whether a reply is appropriate.</p>
+<p>Use the layers together when the application needs both controls. Their integrations may evolve, but the distinction remains useful: inspect the content being exchanged and authorize the operation being attempted. Avoid treating either layer as a guarantee against every kind of attack.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 292" role="img" aria-label="Four layers of control: the prompt, which only asks; Guardrails, which filters the content of input and output; Policy, which enforces rules on actions; and human approval, for actions that can't be undone.">
       <rect x="16" y="16" width="368" height="56" rx="6" class="node-soft"/>
@@ -513,43 +466,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="220" width="368" height="56" rx="6" class="node"/>
       <text x="32" y="254">Human · approves the rest</text>
     </svg>
-    <figcaption>Each layer does a different job. The accented one is the only one that stops a tool call for certain.</figcaption>
+    <figcaption>Each layer does a different job. The accented layer authorizes tool calls at the Gateway boundary.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>A person's approval</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If Policy allows a large refund, is that the end?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not for actions you can't undo, like a large refund or deleting an account. You may want a person to check first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Even when the rules already allow it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's called human-in-the-loop: keeping a person in the process.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it work?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The process pauses right before the tool call, and doesn't continue until a person approves. You can build that pause with Strands hooks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the approval screen?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's up to the application that uses the agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It sounds slow.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Slower than a rule, yes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How slow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>As slow as the person. Every approval waits for a person, and people are busy. So you save it for actions you truly can't take back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a manager's stamp on an approval form.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Accounting won't pay out money without the stamp, however sure an employee is. It depends on whether the steps were followed, not whether the judgment was right.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do companies need before they trust this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three things. You can explain to an auditor why an action was allowed. An administrator can change the rules separately from the agent's code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same rules apply to every agent in the company at once.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So is "Never delete data" in the prompt enough?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. The prompt only asks, and an injection can make the model ignore it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Policy enforces the rule outside the model. It checks each tool call at Gateway, with Cedar rules, before it runs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Guardrails filters content, which is a different job.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the refund that's allowed but huge?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A person approves it first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So keep the line in the prompt if you like, since it helps the model behave. Just don't count it as the control.</p></div></div>
-</div>
+<p>Some authorized actions still deserve human approval. A large payment, account deletion or other difficult-to-reverse action can pause until an authorized person reviews the proposed operation. This pattern is called human-in-the-loop.</p>
+<p>An application can use an agent framework's hooks or an explicit workflow to pause before execution. The approval screen should show the exact action, target and important parameters. When execution resumes, it must use the approved operation; a changed amount or target needs another decision.</p>
+<p>Approval adds delay because it depends on a person's availability. Reserve it for actions whose consequences justify that delay, and decide what happens when an approval times out. Routine, reversible actions can often rely on narrow automated rules.</p>
+<p>Before production, check whether the system can explain why a call was allowed, whether administrators can update rules separately from agent code, and whether all relevant agents receive those rules. Keep the prompt instruction as guidance, while enforcing the action boundary and approval process independently.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -564,7 +489,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch08.html"><span>Previous</span><b>Whose permission is the agent using?</b></a>
     <a class="next" href="ch10.html"><span>Next</span><b>How do you know an agent is doing a good job?</b></a>
   </nav>
-  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
+  <p class="fine">Revised on October 3, 2026. See the <a href="https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html">AgentCore Policy developer guide</a> for current product behavior. Roadmap references come from the September 17, 2026 study notes. Quickturn is fictional.</p>
 </div>
 </div>
 <script>
