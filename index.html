@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>tomada's Bookshelf</title>
+<title>tomada&#x27;s Bookshelf</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -289,7 +289,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .save-btn:disabled{opacity:.6;cursor:progress}
 .save-note{margin:0;font-size:var(--fs-caption);color:var(--text-muted);line-height:var(--lh-tight)}
 
-/* ---------- bookshelf: a flat, searchable reading index ---------- */
+/* ---------- bookshelf: a category directory and flat reading lists ---------- */
 .shelf{
   --bg:#fafafa;--surface:#f0f1f3;--text:#202124;--text-muted:#62656b;--text-subtle:#686b73;
   --line:#e2e3e6;--line-strong:#b5b8bf;--accent:var(--nav-accent);
@@ -304,111 +304,83 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   --bg:#111214;--surface:#1b1d21;--text:#eeeeef;--text-muted:#a4a6ad;--text-subtle:#9699a2;
   --line:#292b30;--line-strong:#555962;--accent:var(--nav-accent);
 }
-.shelf .page{max-width:1104px;margin:0 auto;padding:32px 0 48px}
+.shelf .page{max-width:960px;margin:0 auto;padding:48px 0 40px}
 .shelf [hidden]{display:none!important}
-.shelf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:24px;background:var(--nav-surface);border-bottom:1px solid var(--nav-line);border-radius:6px;scroll-margin-top:96px}
-.shelf-head>*+*{margin-top:0}
-.shelf-head h1{font-size:clamp(34px,3.8vw,48px);line-height:1.15;letter-spacing:-.045em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
-.shelf-head .lead{font-size:16px;line-height:1.55;margin-top:12px;color:var(--nav-muted)}
-.library-stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:13px;letter-spacing:.01em;color:var(--nav-muted)}
-.library-stats span+span::before{content:"·";margin-right:18px;color:var(--nav-muted)}
-.shelf .offline{margin:0;gap:8px;max-width:240px;justify-items:end;text-align:right}
-.shelf .save-btn{display:inline-flex;align-items:center;gap:8px;padding:0 12px;border-color:var(--nav-solid);background:var(--nav-solid);color:var(--nav-on-solid);font-size:13px;font-weight:500}
-.shelf .save-btn:hover{background:var(--nav-solid-hover);border-color:var(--nav-solid-hover)}
-.shelf .save-btn svg{height:16px;width:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.shelf .save-note{font-size:12px;letter-spacing:.01em;line-height:1.5;color:var(--nav-muted)}
+.shelf-head{margin:0 0 36px;scroll-margin-top:96px}
+.shelf-head h1{font-size:clamp(32px,4vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
+.shelf-head .lead{font-size:16px;line-height:1.6;margin-top:12px;color:var(--text-muted);max-width:55ch}
+.library-stats{margin-top:12px;font-size:13px;color:var(--text-subtle)}
 .shelf-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nav-accent)}
-.recent{margin-top:28px}
-.recent ol{list-style:none;margin:12px 0 0;padding:0;background:var(--nav-bg);border-top:1px solid var(--nav-line)}
-.recent li+li{margin-top:0}
-.recent a{display:grid;grid-template-columns:minmax(0,1fr) auto 16px;align-items:center;gap:20px;padding:14px 12px;border-bottom:1px solid var(--nav-line);color:var(--nav-text);text-decoration:none}
-.recent a:hover{background:var(--nav-hover)}
-.recent .resume-copy{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;min-width:0}
-.recent .resume-copy b{font-size:15px;font-weight:500;line-height:1.6}
-.recent .resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
+.category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
+.category-list,.book-list,.recent ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
+.category-list li+li,.book-list li+li,.recent li+li{margin-top:0}
+.category-row{display:grid;grid-template-columns:24px minmax(0,1fr) 16px;gap:14px;align-items:center;min-height:136px;padding:20px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--text)}
+.category-row:hover,.book-row:hover,.recent a:hover{background:var(--nav-bg)}
+.category-number{font:500 13px/1.5 var(--font-mono);color:var(--nav-accent)}
+.category-title{display:block;font-size:22px;font-weight:600;line-height:1.4;letter-spacing:-.02em;color:var(--nav-text);text-wrap:balance}
+.category-note{display:block;margin-top:5px;color:var(--text-muted);font-size:14px;line-height:1.6}
+.category-count{grid-column:2;grid-row:2;margin-top:-10px;font-size:13px;white-space:nowrap;color:var(--nav-muted)}
+.category-row .row-arrow{grid-column:3;grid-row:1}
+.row-arrow{color:var(--nav-accent)}
+.collection-menu{margin-bottom:24px;border-bottom:1px solid var(--nav-line)}
+.collection-menu summary{min-height:44px;cursor:pointer;color:var(--nav-accent);font-size:13px;line-height:44px;font-weight:500}
+.collection-menu summary:focus-visible{outline:2px solid var(--nav-focus);outline-offset:4px}
+.category-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.category-nav a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid var(--nav-line-strong);border-radius:6px;color:var(--nav-text);text-decoration:none;font-size:13px;font-weight:500}
+.category-nav a:hover{background:var(--nav-hover)}
+.category-nav a[aria-current]{background:var(--nav-surface);border-color:var(--nav-accent);font-weight:700}
+.breadcrumb{display:inline-flex;min-height:44px;align-items:center;margin-bottom:12px;color:var(--nav-accent);font-size:13px;text-decoration:none}
+.recent{margin-bottom:36px}
+.recent a{display:grid;grid-template-columns:minmax(0,1fr) auto 16px;gap:20px;align-items:center;padding:16px 12px;border-bottom:1px solid var(--nav-line);color:var(--nav-text);text-decoration:none;background:var(--nav-bg)}
+.resume-copy{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;min-width:0}
+.resume-copy b{font-size:15px;font-weight:500;line-height:1.6}
+.resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
 .recent .when{white-space:nowrap}
-.recent .row-arrow{font-size:16px;color:var(--nav-accent)}
-.library-layout{display:grid;grid-template-columns:176px minmax(0,1fr);gap:48px;margin-top:36px;align-items:start}
-.shelf-browse{position:sticky;top:96px}
-.shelf-browse .shelf-label{margin-bottom:12px}
-.filters{display:flex;flex-direction:column;gap:4px;padding:6px;background:var(--nav-bg);border:1px solid var(--nav-line);border-radius:6px}
-.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:8px 12px;border:0;border-radius:6px;background:transparent;color:var(--text-muted);font:inherit;font-size:13px;line-height:1.4;text-align:left;cursor:pointer}
-.filter:hover{background:var(--nav-hover);color:var(--nav-text)}
-.filter[aria-pressed="true"]{background:var(--nav-solid);color:var(--nav-on-solid);font-weight:600}
-.filter .n{font-size:12px;font-variant-numeric:tabular-nums;font-weight:400;color:var(--nav-muted)}
-.filter[aria-pressed="true"] .n{color:var(--nav-on-solid)}
-.browse-note{margin:24px 12px 0;padding-top:20px;border-top:1px solid var(--line);font-size:12px;line-height:1.65;letter-spacing:.01em;color:var(--text-subtle)}
 .library-main{min-width:0;scroll-margin-top:88px}
-.shelf-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
-.results-heading{font-size:18px;font-weight:600;line-height:1.4;letter-spacing:-.015em;color:var(--nav-text)}
-.result-count{margin-top:4px;font-size:12px;letter-spacing:.01em;color:var(--text-subtle)}
-.search-wrap{position:relative;flex:0 1 288px;min-width:0}
-.mobile-category{display:none}
-.search-wrap svg{position:absolute;top:14px;left:14px;width:16px;height:16px;fill:none;stroke:var(--nav-accent);stroke-width:1.7;stroke-linecap:round;pointer-events:none}
-.shelf-search{width:100%;min-height:44px;padding:10px 12px 10px 40px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--text);font:inherit;font-size:14px;line-height:1.4}
-.shelf-search::placeholder{color:var(--nav-muted);opacity:1}
-.cat{margin-top:32px}
-.cat:first-of-type{margin-top:0}
-.cat>*+*{margin-top:0}
-.cat-intro{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--nav-surface);border-radius:6px 6px 0 0}
-.library-main.filtered .cat-intro{display:none}
-.cat-head{font-size:13px;font-weight:600;letter-spacing:.01em;line-height:1.4;color:var(--nav-text)}
-.cat-head .n{margin-left:8px;font-size:12px;font-weight:500;color:var(--nav-accent);font-variant-numeric:tabular-nums}
-.cat-note{font-size:12px;color:var(--nav-muted);line-height:1.5;text-align:right;max-width:50ch}
-.book-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--nav-line)}
-.book-list li+li{margin-top:0}
-.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:20px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
-.book-row:hover{background:var(--nav-bg)}
-.book-row:hover .book-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
-.book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono);font-variant-numeric:tabular-nums}
+.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
+.book-row:hover .book-title,.category-row:hover .category-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono)}
 .book-copy{min-width:0}
 .book-title{display:block;font-size:17px;font-weight:600;line-height:1.5;letter-spacing:-.012em;text-wrap:balance;color:var(--nav-text)}
 .book-title:lang(ja){letter-spacing:0;word-break:auto-phrase}
-.book-series{font-weight:400;font-size:12px;letter-spacing:.01em;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
+.book-series{font-weight:400;font-size:12px;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
 .book-blurb{display:block;margin-top:6px;font-size:14px;color:var(--text-muted);line-height:1.6;text-wrap:pretty}
 .book-blurb:lang(ja){line-height:1.75}
-.book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;letter-spacing:.01em;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
+.book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
 .book-facts .reading-time{color:var(--text-muted)}
-.book-row .row-arrow{padding-top:1px;font-size:17px;color:var(--nav-accent)}
-.no-hits{padding:36px 0;border-top:1px solid var(--line)}
-.no-hits h2{font-size:20px;font-weight:600;letter-spacing:-.02em}
-.no-hits p{margin-top:8px;color:var(--text-muted);font-size:14px}
-.reset-filters{min-height:44px;margin-top:16px;padding:0;border:0;background:transparent;color:var(--nav-accent);font:inherit;font-size:14px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
-.shelf-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.01em;color:var(--text-subtle)}
+.shelf .offline{margin:0;max-width:320px;gap:8px}
+.shelf .save-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);background:var(--nav-bg);color:var(--nav-text);font-size:13px;font-weight:500}
+.shelf .save-btn:hover{background:var(--nav-hover)}
+.shelf .save-btn svg{height:16px;width:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.shelf .save-note{font-size:12px;line-height:1.5;color:var(--nav-muted)}
+.shelf-foot{display:flex;align-items:start;justify-content:space-between;gap:24px;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--text-subtle)}
+.shelf-foot p{margin:0}
 .shelf-foot a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);text-decoration:none}
-.shelf-foot a:hover{text-decoration:underline}
+.shelf :is(a,button):focus-visible{outline:2px solid var(--nav-focus);outline-offset:4px}
 .shelf button{touch-action:manipulation}
-@media(max-width:900px){
-  .library-layout{grid-template-columns:150px minmax(0,1fr);gap:28px}
-  .cat-note{display:none}
-  .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px}
-  .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
-  .book-row .row-arrow{grid-column:3;grid-row:1}
-}
 @media(max-width:700px){
-  .shelf .page{padding:24px 4px 24px}
-  .shelf-head{display:block;padding:20px}
-  .shelf-head .lead{font-size:14px}
-  .library-stats{font-size:12px;gap:6px 12px;margin-top:14px}
-  .library-stats span+span::before{margin-right:12px}
-  .shelf .offline{max-width:none;justify-items:start;text-align:left;margin-top:24px}
-  .shelf .save-note{max-width:36ch}
-  .library-layout{display:block;margin-top:28px}
-  .shelf-browse{display:none}
-  .shelf-tools{flex-wrap:wrap;gap:16px;margin-bottom:24px}
-  .search-wrap{flex:1 1 100%;order:-1}
-  .mobile-category{display:block;max-width:55%;min-width:0}
-  .category-select{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-surface);color:var(--nav-text);font:inherit;font-size:12px;line-height:1.4;cursor:pointer}
-  .book-row{padding:18px 0}
-  .book-title{font-size:16px}
-  .book-blurb{font-size:13px}
-  .book-number{font-size:11px}
-  .book-series{display:block;margin:4px 0 0}
-  .recent a{gap:12px;grid-template-columns:minmax(0,1fr) auto 16px}
-  .recent .resume-copy{display:block}
-  .recent .resume-copy span{display:block;margin-top:2px}
-  .recent .when{font-size:11px}
-  .shelf-foot{margin-top:32px}
+ .shelf .page{padding:28px 4px 24px}
+ .shelf-head{margin-bottom:28px}
+ .shelf-head .lead{font-size:14px}
+ .category-list{display:block}
+ .category-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 4px;min-height:0}
+ .category-title{font-size:20px}
+ .category-note{font-size:13px}
+ .category-count{grid-column:2;grid-row:2;margin-top:-8px;font-size:12px}
+ .category-row .row-arrow{grid-column:3;grid-row:1}
+ .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .category-nav a{padding:8px 10px}
+ .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 0}
+ .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
+ .book-row .row-arrow{grid-column:3;grid-row:1}
+ .book-title{font-size:16px}
+ .book-blurb{font-size:13px}
+ .book-series{display:block;margin:4px 0 0}
+ .recent a{gap:12px;grid-template-columns:minmax(0,1fr) 16px}
+ .recent .when{display:none}
+ .resume-copy{display:block}
+ .resume-copy span{display:block;margin-top:2px}
+ .shelf-foot{flex-direction:column;gap:16px;margin-top:32px}
 }
 </style>
 <!-- app -->
@@ -456,7 +428,6 @@ window.addEventListener("pageshow",function(){
 <!-- /app -->
 </head>
 <body class="shelf acc-1">
-<!-- site-header -->
 <a class="skip-link" href="#library">Skip to library</a>
 <header class="site-head" lang="en" data-root="">
 <div class="bar">
@@ -468,409 +439,72 @@ window.addEventListener("pageshow",function(){
   </button></div>
 </div>
 </header>
-<!-- /site-header -->
 <div class="page">
-<header class="page-head shelf-head" id="shelf-top">
-  <div class="intro">
-    <h1>Bookshelf</h1>
-    <p class="lead">Readers I made for my own study.</p>
-    <p class="library-stats"><span>39 readers</span><span>358 pages</span><span>English &amp; Japanese</span></p>
-  </div>
-  <div class="offline" hidden>
+<main class="library-main" id="library" tabindex="-1" aria-labelledby="shelf-title">
+<header class="shelf-head" id="shelf-top">
+  <h1 id="shelf-title">Bookshelf</h1><p class="lead">Readers for daily practice, technical study and new ideas.</p><p class="library-stats">9 collections · 39 readers</p>
+</header>
+<section class="recent" data-category="" aria-labelledby="recent-title" hidden>
+  <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
+</section>
+<h2 class="shelf-label" id="collections-title">Browse collections</h2><ul class="category-list"><li><a class="category-row" href="english.html">
+  <span class="category-number" aria-hidden="true">01</span>
+  <span><span class="category-title">English Reading</span><span class="category-note">Short, easy English for daily reading practice.</span></span>
+  <span class="category-count">1 reader</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="aws.html">
+  <span class="category-number" aria-hidden="true">02</span>
+  <span><span class="category-title">AWS</span><span class="category-note">Cloud foundations and building agents with AgentCore.</span></span>
+  <span class="category-count">2 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="engineering.html">
+  <span class="category-number" aria-hidden="true">03</span>
+  <span><span class="category-title">Engineering</span><span class="category-note">Architecture, code, APIs, production AI and operations.</span></span>
+  <span class="category-count">6 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="work.html">
+  <span class="category-number" aria-hidden="true">04</span>
+  <span><span class="category-title">Work &amp; Careers</span><span class="category-note">Choosing work, building a career and leading teams.</span></span>
+  <span class="category-count">9 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="relationships.html">
+  <span class="category-number" aria-hidden="true">05</span>
+  <span><span class="category-title">Communication &amp; Relationships</span><span class="category-note">Speaking, listening and understanding other people.</span></span>
+  <span class="category-count">3 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="money.html">
+  <span class="category-number" aria-hidden="true">06</span>
+  <span><span class="category-title">Money</span><span class="category-note">Spending, building wealth and living with money worries.</span></span>
+  <span class="category-count">3 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="learning.html">
+  <span class="category-number" aria-hidden="true">07</span>
+  <span><span class="category-title">Learning &amp; Language</span><span class="category-note">Memory, language learning and using English at work.</span></span>
+  <span class="category-count">4 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="thinking.html">
+  <span class="category-number" aria-hidden="true">08</span>
+  <span><span class="category-title">Thinking &amp; Society</span><span class="category-note">Logic, evidence, information and the forces shaping society.</span></span>
+  <span class="category-count">7 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li>
+<li><a class="category-row" href="life.html">
+  <span class="category-number" aria-hidden="true">09</span>
+  <span><span class="category-title">Life &amp; Wellbeing</span><span class="category-note">Time, habits, health and making room for life.</span></span>
+  <span class="category-count">4 readers</span><span class="row-arrow" aria-hidden="true">→</span></a></li></ul>
+</main>
+<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div><div class="offline" hidden>
   <button class="save-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg><span class="save-label">Save all for offline</span></button>
   <p class="save-note" aria-live="polite"></p>
-</div>
-</header>
-<section class="recent" aria-labelledby="recent-title" hidden>
-  <h2 class="shelf-label" id="recent-title">Continue reading</h2>
-  <ol></ol>
-</section>
-<div class="library-layout">
-  <aside class="shelf-browse" aria-label="Library categories">
-    <h2 class="shelf-label">Browse</h2>
-    <div class="filters" role="group" aria-label="Categories">
-      <button class="filter" type="button" data-cat="" data-name="All readers" aria-pressed="true"><span>All readers</span><span class="n">39</span></button>
-      <button class="filter" type="button" data-cat="english" data-name="Everyday English" aria-pressed="false"><span>Everyday English</span><span class="n">1</span></button>
-      <button class="filter" type="button" data-cat="software" data-name="Building Software" aria-pressed="false"><span>Building Software</span><span class="n">3</span></button>
-      <button class="filter" type="button" data-cat="cloud-ai" data-name="AWS and AI" aria-pressed="false"><span>AWS and AI</span><span class="n">3</span></button>
-      <button class="filter" type="button" data-cat="quick-books" data-name="Quick Books" aria-pressed="false"><span>Quick Books</span><span class="n">32</span></button>
-    </div>
-    <p class="browse-note">A little English practice.<br>A new way to think.<br>Something to build.</p>
-  </aside>
-  <main class="library-main" id="library" tabindex="-1" aria-labelledby="results-title">
-    <div class="shelf-tools">
-      <div><h2 class="results-heading" id="results-title">All readers</h2><p class="result-count" role="status" aria-live="polite" aria-atomic="true">39 readers</p></div>
-      <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input class="shelf-search" type="search" placeholder="Search titles or topics" aria-label="Search readers" autocomplete="off"></div>
-      <label class="mobile-category"><select class="category-select" aria-label="Browse category"><option value="">All readers (39)</option><option value="english">Everyday English (1)</option><option value="software">Building Software (3)</option><option value="cloud-ai">AWS and AI (3)</option><option value="quick-books">Quick Books (32)</option></select></label>
-    </div>
-    <section class="cat" data-cat="english" aria-labelledby="cat-english">
-  <div class="cat-intro"><h2 class="cat-head" id="cat-english">Everyday English <span class="n">1</span></h2><p class="cat-note">Short and easy reads for daily practice.</p></div>
-  <ul class="book-list">
-    <li data-text=" easy reads short and easy english reads on many topics. six new ones every morning. everyday english 3 to 4 min each a2+ to b1 english english">
-      <a class="book-row" href="easy-reads/index.html" data-slug="easy-reads" data-title="Easy Reads" data-lang="en">
-        <span class="book-number" aria-hidden="true">01</span>
-        <span class="book-copy"><span class="book-title">Easy Reads</span><span class="book-blurb">Short and easy English reads on many topics. Six new ones every morning.</span></span>
-        <span class="book-facts"><span class="reading-time">3 to 4 min each</span><span>60 reads</span><span>English · A2+ to B1</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-  </ul>
-</section>
-<section class="cat" data-cat="software" aria-labelledby="cat-software">
-  <div class="cat-intro"><h2 class="cat-head" id="cat-software">Building Software <span class="n">3</span></h2><p class="cat-note">Talks on how to shape code, types and APIs, and run a product safely.</p></div>
-  <ul class="book-list">
-    <li data-text="one-on-ones architecture what architecture is for: dependency rules, ports and adapters, ddd, and how to choose. building software about 1.5 hours b2 · dialogue english english">
-      <a class="book-row" href="1on1-architecture/ch00.html" data-slug="1on1-architecture" data-title="Architecture" data-lang="en">
-        <span class="book-number" aria-hidden="true">02</span>
-        <span class="book-copy"><span class="book-title">Architecture <span class="book-series">One-on-Ones</span></span><span class="book-blurb">What architecture is for: dependency rules, ports and adapters, DDD, and how to choose.</span></span>
-        <span class="book-facts"><span class="reading-time">About 1.5 hours</span><span>11 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text="one-on-ones api and typescript types and apis that last: parsing at the boundary, contracts, versioning, retries and offline. building software about 1.5 hours b2 · dialogue english english">
-      <a class="book-row" href="1on1-api-types/ch00.html" data-slug="1on1-api-types" data-title="API and TypeScript" data-lang="en">
-        <span class="book-number" aria-hidden="true">03</span>
-        <span class="book-copy"><span class="book-title">API and TypeScript <span class="book-series">One-on-Ones</span></span><span class="book-blurb">Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.</span></span>
-        <span class="book-facts"><span class="reading-time">About 1.5 hours</span><span>11 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text="one-on-ones operations and quality running and changing a product safely: logs, alarms, slos, tests, gates, deploys and launch. building software about 1.5 hours b2 · dialogue english english">
-      <a class="book-row" href="1on1-ops/ch00.html" data-slug="1on1-ops" data-title="Operations and Quality" data-lang="en">
-        <span class="book-number" aria-hidden="true">04</span>
-        <span class="book-copy"><span class="book-title">Operations and Quality <span class="book-series">One-on-Ones</span></span><span class="book-blurb">Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.</span></span>
-        <span class="book-facts"><span class="reading-time">About 1.5 hours</span><span>12 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-  </ul>
-</section>
-<section class="cat" data-cat="cloud-ai" aria-labelledby="cat-cloud-ai">
-  <div class="cat-intro"><h2 class="cat-head" id="cat-cloud-ai">AWS and AI <span class="n">3</span></h2><p class="cat-note">Talks on running an app on AWS, LLM features in production, and agents.</p></div>
-  <ul class="book-list">
-    <li data-text="one-on-ones aws foundation running a small app on aws: access, lambda, dynamodb, infrastructure as code, sign-in and cost. aws and ai about 2 hours b2 · dialogue english english">
-      <a class="book-row" href="1on1-aws/ch00.html" data-slug="1on1-aws" data-title="AWS Foundation" data-lang="en">
-        <span class="book-number" aria-hidden="true">05</span>
-        <span class="book-copy"><span class="book-title">AWS Foundation <span class="book-series">One-on-Ones</span></span><span class="book-blurb">Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.</span></span>
-        <span class="book-facts"><span class="reading-time">About 2 hours</span><span>14 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text="one-on-ones ai in production llm features in a real product: cost, typed output, evaluation, defenses and agents. aws and ai about 1.75 hours b2 · dialogue english english">
-      <a class="book-row" href="1on1-ai/ch00.html" data-slug="1on1-ai" data-title="AI in Production" data-lang="en">
-        <span class="book-number" aria-hidden="true">06</span>
-        <span class="book-copy"><span class="book-title">AI in Production <span class="book-series">One-on-Ones</span></span><span class="book-blurb">LLM features in a real product: cost, typed output, evaluation, defenses and agents.</span></span>
-        <span class="book-facts"><span class="reading-time">About 1.75 hours</span><span>13 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" agentcore reader building ai agents for companies on aws, part by part, before the hands-on study. aws and ai about 1.5 hours b2 · dialogue english english">
-      <a class="book-row" href="agentcore-reader/ch00.html" data-slug="agentcore-reader" data-title="AgentCore Reader" data-lang="en">
-        <span class="book-number" aria-hidden="true">07</span>
-        <span class="book-copy"><span class="book-title">AgentCore Reader</span><span class="book-blurb">Building AI agents for companies on AWS, part by part, before the hands-on study.</span></span>
-        <span class="book-facts"><span class="reading-time">About 1.5 hours</span><span>13 pages</span><span>English · B2 · dialogue</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-  </ul>
-</section>
-<section class="cat" data-cat="quick-books" aria-labelledby="cat-quick-books">
-  <div class="cat-intro"><h2 class="cat-head" id="cat-quick-books">Quick Books <span class="n">32</span></h2><p class="cat-note">Japanese books you can finish in about an hour: business, ideas and skills.</p></div>
-  <ul class="book-list">
-    <li data-text=" 一拍おいて話す 口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-pause-before-speaking/ch00.html" data-slug="book-pause-before-speaking" data-title="一拍おいて話す" data-lang="ja">
-        <span class="book-number" aria-hidden="true">08</span>
-        <span class="book-copy"><span class="book-title" lang="ja">一拍おいて話す</span><span class="book-blurb" lang="ja">口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" キャリアの移り目 人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-career-transitions/ch00.html" data-slug="book-career-transitions" data-title="キャリアの移り目" data-lang="ja">
-        <span class="book-number" aria-hidden="true">09</span>
-        <span class="book-copy"><span class="book-title" lang="ja">キャリアの移り目</span><span class="book-blurb" lang="ja">人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 貯めるより、使いきる設計 お金・時間・健康を、いつ何に使うかを先に決める。貯め続けて使えずに終わらないための設計。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-spend-by-design/ch00.html" data-slug="book-spend-by-design" data-title="貯めるより、使いきる設計" data-lang="ja">
-        <span class="book-number" aria-hidden="true">10</span>
-        <span class="book-copy"><span class="book-title" lang="ja">貯めるより、使いきる設計</span><span class="book-blurb" lang="ja">お金・時間・健康を、いつ何に使うかを先に決める。貯め続けて使えずに終わらないための設計。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 思い込みを外して、世界をデータで見る 判断の前に数字を集め、比べる相手・変化の向き・散らばりと一緒に読む。思い込みのずれを七つの場面で確かめる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-world-by-data/ch00.html" data-slug="book-world-by-data" data-title="思い込みを外して、世界をデータで見る" data-lang="ja">
-        <span class="book-number" aria-hidden="true">11</span>
-        <span class="book-copy"><span class="book-title" lang="ja">思い込みを外して、世界をデータで見る</span><span class="book-blurb" lang="ja">判断の前に数字を集め、比べる相手・変化の向き・散らばりと一緒に読む。思い込みのずれを七つの場面で確かめる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 情報は人をつなぎ、分断する 情報は事実を写すだけでなく人を結びつけ、ときに分ける。職場と社会で情報がどう働き、どこで誤るのか。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-information-networks/ch00.html" data-slug="book-information-networks" data-title="情報は人をつなぎ、分断する" data-lang="ja">
-        <span class="book-number" aria-hidden="true">12</span>
-        <span class="book-copy"><span class="book-title" lang="ja">情報は人をつなぎ、分断する</span><span class="book-blurb" lang="ja">情報は事実を写すだけでなく人を結びつけ、ときに分ける。職場と社会で情報がどう働き、どこで誤るのか。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 整えてから変えるか、変えてから整えるか コードの動きを変えずに形だけを小さく整える型と、整える時機の選び方を練習問題で身につける。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-tidy-then-change/ch00.html" data-slug="book-tidy-then-change" data-title="整えてから変えるか、変えてから整えるか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">13</span>
-        <span class="book-copy"><span class="book-title" lang="ja">整えてから変えるか、変えてから整えるか</span><span class="book-blurb" lang="ja">コードの動きを変えずに形だけを小さく整える型と、整える時機の選び方を練習問題で身につける。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" その不安は、お金で消えるのか 貯金を増やしても消えない将来の心配。その出どころを見分け、お金のほかに何を蓄えるかを昼休みの会話で考える。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-money-anxiety/ch00.html" data-slug="book-money-anxiety" data-title="その不安は、お金で消えるのか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">14</span>
-        <span class="book-copy"><span class="book-title" lang="ja">その不安は、お金で消えるのか</span><span class="book-blurb" lang="ja">貯金を増やしても消えない将来の心配。その出どころを見分け、お金のほかに何を蓄えるかを昼休みの会話で考える。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" その文から何が言えるか 文から必ず言えることと言えないことを見分ける。否定・量・前提・指示語の働きから、aiがつまずく所までを練習問題で。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-what-follows/ch00.html" data-slug="book-what-follows" data-title="その文から何が言えるか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">15</span>
-        <span class="book-copy"><span class="book-title" lang="ja">その文から何が言えるか</span><span class="book-blurb" lang="ja">文から必ず言えることと言えないことを見分ける。否定・量・前提・指示語の働きから、AIがつまずく所までを練習問題で。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 全身全霊で働かないという選択 働き始めて本が読めなくなったのはなぜか。仕事にすべてを注ぐ働き方を見直し、余力を残して働く決め方を考える。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-not-all-in/ch00.html" data-slug="book-not-all-in" data-title="全身全霊で働かないという選択" data-lang="ja">
-        <span class="book-number" aria-hidden="true">16</span>
-        <span class="book-copy"><span class="book-title" lang="ja">全身全霊で働かないという選択</span><span class="book-blurb" lang="ja">働き始めて本が読めなくなったのはなぜか。仕事にすべてを注ぐ働き方を見直し、余力を残して働く決め方を考える。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" ゆるく、でも毎日積み上げる 大事なことと毎日の小さな行動には厳しく、やり方とペースは柔らかく。情報の入口から続け方までを職場の場面で。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-loose-steady/ch00.html" data-slug="book-loose-steady" data-title="ゆるく、でも毎日積み上げる" data-lang="ja">
-        <span class="book-number" aria-hidden="true">17</span>
-        <span class="book-copy"><span class="book-title" lang="ja">ゆるく、でも毎日積み上げる</span><span class="book-blurb" lang="ja">大事なことと毎日の小さな行動には厳しく、やり方とペースは柔らかく。情報の入口から続け方までを職場の場面で。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 答えを出す前に、問いを選ぶ 手を動かす前に答えるべき問いを選び、答えの出る形に直し、粗く確かめて渡す。仕事の進め方の基本。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-choose-the-question/ch00.html" data-slug="book-choose-the-question" data-title="答えを出す前に、問いを選ぶ" data-lang="ja">
-        <span class="book-number" aria-hidden="true">18</span>
-        <span class="book-copy"><span class="book-title" lang="ja">答えを出す前に、問いを選ぶ</span><span class="book-blurb" lang="ja">手を動かす前に答えるべき問いを選び、答えの出る形に直し、粗く確かめて渡す。仕事の進め方の基本。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 技能を更新しつづける 技能が古くなる速さが増すなかで、古びた所を見つけ、学び直し、隣の分野へ広げて長く働き続けるための道具。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-keep-skills-current/ch00.html" data-slug="book-keep-skills-current" data-title="技能を更新しつづける" data-lang="ja">
-        <span class="book-number" aria-hidden="true">19</span>
-        <span class="book-copy"><span class="book-title" lang="ja">技能を更新しつづける</span><span class="book-blurb" lang="ja">技能が古くなる速さが増すなかで、古びた所を見つけ、学び直し、隣の分野へ広げて長く働き続けるための道具。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 不確実性から考えるチームと組織 職場の困りごとの多くは「わからなさ」から生まれる。不確実性を見分けて減らす考え方をチームと組織に当てはめる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-uncertainty-teams/ch00.html" data-slug="book-uncertainty-teams" data-title="不確実性から考えるチームと組織" data-lang="ja">
-        <span class="book-number" aria-hidden="true">20</span>
-        <span class="book-copy"><span class="book-title" lang="ja">不確実性から考えるチームと組織</span><span class="book-blurb" lang="ja">職場の困りごとの多くは「わからなさ」から生まれる。不確実性を見分けて減らす考え方をチームと組織に当てはめる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 話を聞いてもらうと、なぜ人は変わるのか カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-being-heard/ch00.html" data-slug="book-being-heard" data-title="話を聞いてもらうと、なぜ人は変わるのか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">21</span>
-        <span class="book-copy"><span class="book-title" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span><span class="book-blurb" lang="ja">カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" ジョブ型とメンバーシップ型で読む働き方 仕事が先か、人が先か。二つの型を物差しにすると、採用・給料・働く時間・非正規の問題が一本の筋でつながる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-job-membership/ch00.html" data-slug="book-job-membership" data-title="ジョブ型とメンバーシップ型で読む働き方" data-lang="ja">
-        <span class="book-number" aria-hidden="true">22</span>
-        <span class="book-copy"><span class="book-title" lang="ja">ジョブ型とメンバーシップ型で読む働き方</span><span class="book-blurb" lang="ja">仕事が先か、人が先か。二つの型を物差しにすると、採用・給料・働く時間・非正規の問題が一本の筋でつながる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 英語でチームを回す仕事の型 確認・依頼・任せ方・1on1・会議・意見の違い。六つの場面で、何をどの順にどんな短い英語で言うかを型で学ぶ。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-team-english/ch00.html" data-slug="book-team-english" data-title="英語でチームを回す仕事の型" data-lang="ja">
-        <span class="book-number" aria-hidden="true">23</span>
-        <span class="book-copy"><span class="book-title" lang="ja">英語でチームを回す仕事の型</span><span class="book-blurb" lang="ja">確認・依頼・任せ方・1on1・会議・意見の違い。六つの場面で、何をどの順にどんな短い英語で言うかを型で学ぶ。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 計画と対話を行き来する 計画どおりに進めるやり方と、対話で計画を変えるやり方を切り替え、結果を出しながら自分から動くチームをつくる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-plan-and-dialogue/ch00.html" data-slug="book-plan-and-dialogue" data-title="計画と対話を行き来する" data-lang="ja">
-        <span class="book-number" aria-hidden="true">24</span>
-        <span class="book-copy"><span class="book-title" lang="ja">計画と対話を行き来する</span><span class="book-blurb" lang="ja">計画どおりに進めるやり方と、対話で計画を変えるやり方を切り替え、結果を出しながら自分から動くチームをつくる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 富を積み上げる人の考え方 お金・技能・信頼を使い切らずに次の元手にして増やす。投資の手法より長く効く、絞り方・続け方・付き合い方。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-wealth-mindset/ch00.html" data-slug="book-wealth-mindset" data-title="富を積み上げる人の考え方" data-lang="ja">
-        <span class="book-number" aria-hidden="true">25</span>
-        <span class="book-copy"><span class="book-title" lang="ja">富を積み上げる人の考え方</span><span class="book-blurb" lang="ja">お金・技能・信頼を使い切らずに次の元手にして増やす。投資の手法より長く効く、絞り方・続け方・付き合い方。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 命令の組織から、探検の組織へ 会社を軍隊とみなす前提が、目標・会議・成長の場面で意欲をどう下げるか。成果と一人ひとりの関心を両立させる組み替え方。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-beyond-command/ch00.html" data-slug="book-beyond-command" data-title="命令の組織から、探検の組織へ" data-lang="ja">
-        <span class="book-number" aria-hidden="true">26</span>
-        <span class="book-copy"><span class="book-title" lang="ja">命令の組織から、探検の組織へ</span><span class="book-blurb" lang="ja">会社を軍隊とみなす前提が、目標・会議・成長の場面で意欲をどう下げるか。成果と一人ひとりの関心を両立させる組み替え方。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" アドラー心理学で人間関係をほどく 過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-adler-relationships/ch00.html" data-slug="book-adler-relationships" data-title="アドラー心理学で人間関係をほどく" data-lang="ja">
-        <span class="book-number" aria-hidden="true">27</span>
-        <span class="book-copy"><span class="book-title" lang="ja">アドラー心理学で人間関係をほどく</span><span class="book-blurb" lang="ja">過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 稼いだ分は、どこへ行ったのか 生産性が上がっても賃金が上がらなかったのはなぜか。会社の儲けの分け方から、日本の働き手の30年をたどる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-where-gains-went/ch00.html" data-slug="book-where-gains-went" data-title="稼いだ分は、どこへ行ったのか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">28</span>
-        <span class="book-copy"><span class="book-title" lang="ja">稼いだ分は、どこへ行ったのか</span><span class="book-blurb" lang="ja">生産性が上がっても賃金が上がらなかったのはなぜか。会社の儲けの分け方から、日本の働き手の30年をたどる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 歩くと、頭と体に何が起きるか 歩くと発想・対話・記憶・気分に何が起きるかを研究で確かめ、仕事と暮らしに歩く時間を取り戻す。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-walk-and-think/ch00.html" data-slug="book-walk-and-think" data-title="歩くと、頭と体に何が起きるか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">29</span>
-        <span class="book-copy"><span class="book-title" lang="ja">歩くと、頭と体に何が起きるか</span><span class="book-blurb" lang="ja">歩くと発想・対話・記憶・気分に何が起きるかを研究で確かめ、仕事と暮らしに歩く時間を取り戻す。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 人生を物語にしない生き方 キャリアのストーリーや「何者かになりたい」願いはなぜ人を縛るのか。人生を遊びとして見る別の見方を会話で。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-life-not-a-story/ch00.html" data-slug="book-life-not-a-story" data-title="人生を物語にしない生き方" data-lang="ja">
-        <span class="book-number" aria-hidden="true">30</span>
-        <span class="book-copy"><span class="book-title" lang="ja">人生を物語にしない生き方</span><span class="book-blurb" lang="ja">キャリアのストーリーや「何者かになりたい」願いはなぜ人を縛るのか。人生を遊びとして見る別の見方を会話で。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" aiの時代に、センスはどう育つか 何を取り入れ、何を捨て、どこまで仕上げるか。仕事の差がつく判断のものさしを、上司と部下の会話で育てる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-growing-sense/ch00.html" data-slug="book-growing-sense" data-title="AIの時代に、センスはどう育つか" data-lang="ja">
-        <span class="book-number" aria-hidden="true">31</span>
-        <span class="book-copy"><span class="book-title" lang="ja">AIの時代に、センスはどう育つか</span><span class="book-blurb" lang="ja">何を取り入れ、何を捨て、どこまで仕上げるか。仕事の差がつく判断のものさしを、上司と部下の会話で育てる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" アメリカを割る信仰 福音派の信仰、とくに終末についての考え方が、アメリカの政治と社会の分断にどう結びついてきたのか。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-faith-divides-america/ch00.html" data-slug="book-faith-divides-america" data-title="アメリカを割る信仰" data-lang="ja">
-        <span class="book-number" aria-hidden="true">32</span>
-        <span class="book-copy"><span class="book-title" lang="ja">アメリカを割る信仰</span><span class="book-blurb" lang="ja">福音派の信仰、とくに終末についての考え方が、アメリカの政治と社会の分断にどう結びついてきたのか。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 仕事選びのものさしを科学で直す 好きなこと・年収・適性で選ぶ方法は満足につながりにくい。研究で確かめた条件で仕事を比べ直す。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-job-yardstick/ch00.html" data-slug="book-job-yardstick" data-title="仕事選びのものさしを科学で直す" data-lang="ja">
-        <span class="book-number" aria-hidden="true">33</span>
-        <span class="book-copy"><span class="book-title" lang="ja">仕事選びのものさしを科学で直す</span><span class="book-blurb" lang="ja">好きなこと・年収・適性で選ぶ方法は満足につながりにくい。研究で確かめた条件で仕事を比べ直す。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 思い出して覚える、勉強の組み立て方 読み返すより思い出す。日を空ける・混ぜる・説明するなど、効果が確かめられた勉強の組み立て方を練習問題で。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-recall-to-learn/ch00.html" data-slug="book-recall-to-learn" data-title="思い出して覚える、勉強の組み立て方" data-lang="ja">
-        <span class="book-number" aria-hidden="true">34</span>
-        <span class="book-copy"><span class="book-title" lang="ja">思い出して覚える、勉強の組み立て方</span><span class="book-blurb" lang="ja">読み返すより思い出す。日を空ける・混ぜる・説明するなど、効果が確かめられた勉強の組み立て方を練習問題で。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 大人の英語は、ずれに気づいて身につける 同じ所で残る英語の誤りは、日本語と英語の使い方の「ずれ」から来る。ずれに気づいて直す手順を学ぶ。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-english-gaps/ch00.html" data-slug="book-english-gaps" data-title="大人の英語は、ずれに気づいて身につける" data-lang="ja">
-        <span class="book-number" aria-hidden="true">35</span>
-        <span class="book-copy"><span class="book-title" lang="ja">大人の英語は、ずれに気づいて身につける</span><span class="book-blurb" lang="ja">同じ所で残る英語の誤りは、日本語と英語の使い方の「ずれ」から来る。ずれに気づいて直す手順を学ぶ。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" ことばは体から育つ ことばの意味はどこから来るのか。オノマトペや子どもの言葉の覚え方から、学び直しや技能の伝え方まで。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-grounded-words/ch00.html" data-slug="book-grounded-words" data-title="ことばは体から育つ" data-lang="ja">
-        <span class="book-number" aria-hidden="true">36</span>
-        <span class="book-copy"><span class="book-title" lang="ja">ことばは体から育つ</span><span class="book-blurb" lang="ja">ことばの意味はどこから来るのか。オノマトペや子どもの言葉の覚え方から、学び直しや技能の伝え方まで。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 論理はひとつではない 「論理的」に求められる筋道は一つではない。四つの型の仕組みと使いどころを確かめ、目的と相手で選ぶ。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-many-logics/ch00.html" data-slug="book-many-logics" data-title="論理はひとつではない" data-lang="ja">
-        <span class="book-number" aria-hidden="true">37</span>
-        <span class="book-copy"><span class="book-title" lang="ja">論理はひとつではない</span><span class="book-blurb" lang="ja">「論理的」に求められる筋道は一つではない。四つの型の仕組みと使いどころを確かめ、目的と相手で選ぶ。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 流行に左右されない作り手の心得 道具が替わっても使える、結果を引き受ける構え・変えやすく作る原則・知識への投資を、作り手の仕事に当てはめる。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-lasting-craft/ch00.html" data-slug="book-lasting-craft" data-title="流行に左右されない作り手の心得" data-lang="ja">
-        <span class="book-number" aria-hidden="true">38</span>
-        <span class="book-copy"><span class="book-title" lang="ja">流行に左右されない作り手の心得</span><span class="book-blurb" lang="ja">道具が替わっても使える、結果を引き受ける構え・変えやすく作る原則・知識への投資を、作り手の仕事に当てはめる。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-    <li data-text=" 全部はできない前提で、時間を使う すべてをこなす前提を手放すと、時間の使い方はどう変わるか。限りある時間で何を選び、何を諦めるか。 quick books about 1 hour  japanese japanese 日本語">
-      <a class="book-row" href="book-finite-time/ch00.html" data-slug="book-finite-time" data-title="全部はできない前提で、時間を使う" data-lang="ja">
-        <span class="book-number" aria-hidden="true">39</span>
-        <span class="book-copy"><span class="book-title" lang="ja">全部はできない前提で、時間を使う</span><span class="book-blurb" lang="ja">すべてをこなす前提を手放すと、時間の使い方はどう変わるか。限りある時間で何を選び、何を諦めるか。</span></span>
-        <span class="book-facts"><span class="reading-time">About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>
-  </ul>
-</section>
-    <div class="no-hits" hidden><h2>No readers found</h2><p>Try another title or topic, or browse all readers.</p><button class="reset-filters" type="button">Clear search and filters</button></div>
-  </main>
-</div>
-<footer class="shelf-foot"><span>A personal library by tomada.</span><a href="#shelf-top">Back to top ↑</a></footer>
+</div></footer>
+<script id="shelf-catalog" type="application/json">{"pages": ["index.html", "english.html", "aws.html", "engineering.html", "work.html", "relationships.html", "money.html", "learning.html", "thinking.html", "life.html"], "readers": [{"slug": "easy-reads", "href": "easy-reads/index.html", "category": "english", "title": "Easy Reads", "lang": "en"}, {"slug": "1on1-architecture", "href": "1on1-architecture/ch00.html", "category": "software", "title": "Architecture", "lang": "en"}, {"slug": "1on1-api-types", "href": "1on1-api-types/ch00.html", "category": "software", "title": "API and TypeScript", "lang": "en"}, {"slug": "1on1-aws", "href": "1on1-aws/ch00.html", "category": "cloud-ai", "title": "AWS Foundation", "lang": "en"}, {"slug": "1on1-ai", "href": "1on1-ai/ch00.html", "category": "software", "title": "AI in Production", "lang": "en"}, {"slug": "1on1-ops", "href": "1on1-ops/ch00.html", "category": "software", "title": "Operations and Quality", "lang": "en"}, {"slug": "agentcore-reader", "href": "agentcore-reader/ch00.html", "category": "cloud-ai", "title": "AgentCore Reader", "lang": "en"}, {"slug": "book-pause-before-speaking", "href": "book-pause-before-speaking/ch00.html", "category": "relationships", "title": "一拍おいて話す", "lang": "ja"}, {"slug": "book-career-transitions", "href": "book-career-transitions/ch00.html", "category": "work", "title": "キャリアの移り目", "lang": "ja"}, {"slug": "book-spend-by-design", "href": "book-spend-by-design/ch00.html", "category": "money", "title": "貯めるより、使いきる設計", "lang": "ja"}, {"slug": "book-world-by-data", "href": "book-world-by-data/ch00.html", "category": "thinking", "title": "思い込みを外して、世界をデータで見る", "lang": "ja"}, {"slug": "book-information-networks", "href": "book-information-networks/ch00.html", "category": "thinking", "title": "情報は人をつなぎ、分断する", "lang": "ja"}, {"slug": "book-tidy-then-change", "href": "book-tidy-then-change/ch00.html", "category": "software", "title": "整えてから変えるか、変えてから整えるか", "lang": "ja"}, {"slug": "book-money-anxiety", "href": "book-money-anxiety/ch00.html", "category": "money", "title": "その不安は、お金で消えるのか", "lang": "ja"}, {"slug": "book-what-follows", "href": "book-what-follows/ch00.html", "category": "thinking", "title": "その文から何が言えるか", "lang": "ja"}, {"slug": "book-not-all-in", "href": "book-not-all-in/ch00.html", "category": "work", "title": "全身全霊で働かないという選択", "lang": "ja"}, {"slug": "book-loose-steady", "href": "book-loose-steady/ch00.html", "category": "life", "title": "ゆるく、でも毎日積み上げる", "lang": "ja"}, {"slug": "book-choose-the-question", "href": "book-choose-the-question/ch00.html", "category": "work", "title": "答えを出す前に、問いを選ぶ", "lang": "ja"}, {"slug": "book-keep-skills-current", "href": "book-keep-skills-current/ch00.html", "category": "work", "title": "技能を更新しつづける", "lang": "ja"}, {"slug": "book-uncertainty-teams", "href": "book-uncertainty-teams/ch00.html", "category": "work", "title": "不確実性から考えるチームと組織", "lang": "ja"}, {"slug": "book-being-heard", "href": "book-being-heard/ch00.html", "category": "relationships", "title": "話を聞いてもらうと、なぜ人は変わるのか", "lang": "ja"}, {"slug": "book-job-membership", "href": "book-job-membership/ch00.html", "category": "work", "title": "ジョブ型とメンバーシップ型で読む働き方", "lang": "ja"}, {"slug": "book-team-english", "href": "book-team-english/ch00.html", "category": "learning", "title": "英語でチームを回す仕事の型", "lang": "ja"}, {"slug": "book-plan-and-dialogue", "href": "book-plan-and-dialogue/ch00.html", "category": "work", "title": "計画と対話を行き来する", "lang": "ja"}, {"slug": "book-wealth-mindset", "href": "book-wealth-mindset/ch00.html", "category": "money", "title": "富を積み上げる人の考え方", "lang": "ja"}, {"slug": "book-beyond-command", "href": "book-beyond-command/ch00.html", "category": "work", "title": "命令の組織から、探検の組織へ", "lang": "ja"}, {"slug": "book-adler-relationships", "href": "book-adler-relationships/ch00.html", "category": "relationships", "title": "アドラー心理学で人間関係をほどく", "lang": "ja"}, {"slug": "book-where-gains-went", "href": "book-where-gains-went/ch00.html", "category": "thinking", "title": "稼いだ分は、どこへ行ったのか", "lang": "ja"}, {"slug": "book-walk-and-think", "href": "book-walk-and-think/ch00.html", "category": "life", "title": "歩くと、頭と体に何が起きるか", "lang": "ja"}, {"slug": "book-life-not-a-story", "href": "book-life-not-a-story/ch00.html", "category": "life", "title": "人生を物語にしない生き方", "lang": "ja"}, {"slug": "book-growing-sense", "href": "book-growing-sense/ch00.html", "category": "thinking", "title": "AIの時代に、センスはどう育つか", "lang": "ja"}, {"slug": "book-faith-divides-america", "href": "book-faith-divides-america/ch00.html", "category": "thinking", "title": "アメリカを割る信仰", "lang": "ja"}, {"slug": "book-job-yardstick", "href": "book-job-yardstick/ch00.html", "category": "work", "title": "仕事選びのものさしを科学で直す", "lang": "ja"}, {"slug": "book-recall-to-learn", "href": "book-recall-to-learn/ch00.html", "category": "learning", "title": "思い出して覚える、勉強の組み立て方", "lang": "ja"}, {"slug": "book-english-gaps", "href": "book-english-gaps/ch00.html", "category": "learning", "title": "大人の英語は、ずれに気づいて身につける", "lang": "ja"}, {"slug": "book-grounded-words", "href": "book-grounded-words/ch00.html", "category": "learning", "title": "ことばは体から育つ", "lang": "ja"}, {"slug": "book-many-logics", "href": "book-many-logics/ch00.html", "category": "thinking", "title": "論理はひとつではない", "lang": "ja"}, {"slug": "book-lasting-craft", "href": "book-lasting-craft/ch00.html", "category": "software", "title": "流行に左右されない作り手の心得", "lang": "ja"}, {"slug": "book-finite-time", "href": "book-finite-time/ch00.html", "category": "life", "title": "全部はできない前提で、時間を使う", "lang": "ja"}]}</script>
 <script>
 (function(){
-var q=document.querySelector(".shelf-search"),filters=document.querySelectorAll(".filter"),select=document.querySelector(".category-select"),none=document.querySelector(".no-hits"),count=document.querySelector(".result-count"),heading=document.querySelector(".results-heading"),cat="";
-if(!q)return;
-function normalize(s){return s.normalize("NFKC").toLowerCase()}
-function apply(){var words=normalize(q.value.trim()).split(/\s+/).filter(Boolean),total=0;
-  document.querySelector(".library-main").classList.toggle("filtered",!!cat);
-  document.querySelectorAll(".cat").forEach(function(sec){var n=0;
-    sec.querySelectorAll(".book-list>li").forEach(function(li){var text=normalize(li.dataset.text),ok=(!cat||sec.dataset.cat===cat)&&words.every(function(w){return text.indexOf(w)>=0});li.hidden=!ok;if(ok)n++});
-    sec.hidden=!n;sec.querySelector(".cat-head .n").textContent=n;total+=n});
-  count.textContent=total+" reader"+(total===1?"":"s")+(q.value.trim()?" found":"");none.hidden=total>0;
-  filters.forEach(function(f){f.setAttribute("aria-pressed",String(f.dataset.cat===cat))});
-  select.value=cat;
-  var active=Array.prototype.find.call(filters,function(f){return f.dataset.cat===cat});heading.textContent=active.dataset.name;
-}
-q.addEventListener("input",apply);
-filters.forEach(function(f){f.addEventListener("click",function(){cat=f.dataset.cat;apply()})});
-select.addEventListener("change",function(){cat=select.value;apply()});
-document.querySelector(".reset-filters").addEventListener("click",function(){cat="";q.value="";apply();q.focus()});
-apply();
 var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
-var box=document.querySelector(".recent"),catalog=new Map();
-document.querySelectorAll(".book-list a[data-slug]").forEach(function(a){catalog.set(a.dataset.slug,a)});
+var box=document.querySelector(".recent"),catalog=new Map(),source=document.getElementById("shelf-catalog");
+if(!box||!source)return;
+JSON.parse(source.textContent).readers.forEach(function(book){catalog.set(book.slug,book)});
+var category=box.dataset.category;
 var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
 function ago(t){if(!fmt)return "Recently";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
 var shown=0;
-r.forEach(function(e){if(!e||shown>=3||!catalog.has(e.s)||!Number.isFinite(e.at))return;
-  var book=catalog.get(e.s),url;try{url=new URL(e.u,location.href)}catch(err){return}
-  var readerRoot=new URL("./",book.href);if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
+r.forEach(function(e){if(!e||shown>=1||!catalog.has(e.s)||!Number.isFinite(e.at))return;
+  var book=catalog.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
+  var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
   var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
-  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.dataset.title+": "+(e.t||"Contents"));copy.className="resume-copy";
-  title.textContent=book.dataset.title;title.lang=book.dataset.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.dataset.lang:"en";
+  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
+  title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
   when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
   copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);box.querySelector("ol").appendChild(li);shown++;
 });
@@ -878,7 +512,6 @@ box.hidden=!shown;
 })();
 </script>
 </div>
-<!-- site-js -->
 <script>
 (function(){var b=document.querySelector(".menu-btn");if(!b)return;
 var side=document.querySelector(".side"),main=document.querySelector(".page"),small=window.matchMedia("(max-width:1079.98px)");
@@ -910,10 +543,11 @@ function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
-async function urls(){var lists=await Promise.all(Array.prototype.map.call(document.querySelectorAll(".book-list a[data-slug]"),async function(a){
-    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
+  var catalog=JSON.parse(source.textContent),lists=await Promise.all(catalog.readers.map(async function(book){
+    var u=clean(book.href,root),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
-  return uniq([].concat.apply([root+"index.html"],lists))}
+  return uniq([].concat.apply(catalog.pages.map(function(p){return clean(p,root)}),lists))}
 async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
   return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
 async function save(list){var d=await diff(list),i=0,done=0;
@@ -936,6 +570,5 @@ btn.addEventListener("click",async function(){btn.disabled=true;
 box.hidden=false;show();
 })();
 </script>
-<!-- /site-js -->
 </body>
 </html>

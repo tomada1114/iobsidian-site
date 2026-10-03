@@ -11,7 +11,7 @@ yet saved and removed pages still saved, so the reader knows when to press it ag
 
     python3 _shared/nav.py   # regenerates the bookshelf from the catalogue below
 """
-import html, pathlib, re
+import html, json, pathlib, re
 
 SITE = pathlib.Path(__file__).resolve().parent.parent
 
@@ -172,10 +172,11 @@ function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
-async function urls(){var lists=await Promise.all(Array.prototype.map.call(document.querySelectorAll(".book-list a[data-slug]"),async function(a){
-    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
+  var catalog=JSON.parse(source.textContent),lists=await Promise.all(catalog.readers.map(async function(book){
+    var u=clean(book.href,root),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
-  return uniq([].concat.apply([root+"index.html"],lists))}
+  return uniq([].concat.apply(catalog.pages.map(function(p){return clean(p,root)}),lists))}
 async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
   return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
 async function save(list){var d=await diff(list),i=0,done=0;
@@ -288,13 +289,19 @@ def sidebar(title, home, items, current, root, reader_slug):
     rows = "\n".join(
         f'    <li><a href="{h}"{CUR if h == current else ""}><span class="n">{n}</span><span>{html.escape(t)}</span></a></li>'
         for h, n, t in items)
+    category_link = ""
+    if reader_slug in BOOKS:
+        category = BOOKS[reader_slug][0]
+        category_name = next(name for key, name, *_ in CATEGORIES if key == category)
+        category_link = f'<a href="{root}{CATEGORY_PAGES[category]}">← {html.escape(category_name)}</a><br>'
     return f"""<aside class="side" id="side" aria-label="{html.escape(title)} pages">
   <h2><a href="{home}">{html.escape(title)}</a></h2>
   <ol>
 {rows}
   </ol>
   <div class="all" lang="en">
-    <a href="{root}index.html">← All readers</a>
+    {category_link}
+    <a href="{root}index.html">← Bookshelf</a>
   </div>
 </aside>"""
 
@@ -313,11 +320,22 @@ def chapter_items(src_dir):
 # ---------- bookshelf (index.html) ----------
 # Categories in display order: (key, heading, one-line note, page accent 1-4)
 CATEGORIES = [
-    ("english", "Everyday English", "Short and easy reads for daily practice.", 3),
-    ("software", "Building Software", "Talks on how to shape code, types and APIs, and run a product safely.", 1),
-    ("cloud-ai", "AWS and AI", "Talks on running an app on AWS, LLM features in production, and agents.", 2),
-    ("quick-books", "Quick Books", "Japanese books you can finish in about an hour: business, ideas and skills.", 4),
+    ("english", "English Reading", "Short, easy English for daily reading practice.", 3),
+    ("cloud-ai", "AWS", "Cloud foundations and building agents with AgentCore.", 2),
+    ("software", "Engineering", "Architecture, code, APIs, production AI and operations.", 1),
+    ("work", "Work & Careers", "Choosing work, building a career and leading teams.", 1),
+    ("relationships", "Communication & Relationships", "Speaking, listening and understanding other people.", 2),
+    ("money", "Money", "Spending, building wealth and living with money worries.", 4),
+    ("learning", "Learning & Language", "Memory, language learning and using English at work.", 3),
+    ("thinking", "Thinking & Society", "Logic, evidence, information and the forces shaping society.", 3),
+    ("life", "Life & Wellbeing", "Time, habits, health and making room for life.", 4),
 ]
+CATEGORY_PAGES = {
+    "english": "english.html", "cloud-ai": "aws.html", "software": "engineering.html",
+    "work": "work.html", "relationships": "relationships.html", "money": "money.html",
+    "learning": "learning.html", "thinking": "thinking.html", "life": "life.html",
+}
+
 # Bookshelf entry per reader slug: category key, series kicker, title, blurb, reading time, level (may be ""),
 # language of the reader's content (a key of LANGS; it must match LANG in the reader's build.py).
 # Kicker, title and blurb are written in that language; the rest of the UI stays English.
@@ -329,44 +347,44 @@ BOOKS = {
     "1on1-api-types": ("software", "One-on-Ones", "API and TypeScript", "Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.", "About 1.5 hours", "B2 · dialogue", "en"),
     "1on1-ops": ("software", "One-on-Ones", "Operations and Quality", "Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.", "About 1.5 hours", "B2 · dialogue", "en"),
     "1on1-aws": ("cloud-ai", "One-on-Ones", "AWS Foundation", "Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.", "About 2 hours", "B2 · dialogue", "en"),
-    "1on1-ai": ("cloud-ai", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
+    "1on1-ai": ("software", "One-on-Ones", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 1.75 hours", "B2 · dialogue", "en"),
     "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · dialogue", "en"),
-    "book-pause-before-speaking": ("quick-books", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
-    "book-career-transitions": ("quick-books", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),
-    "book-spend-by-design": ("quick-books", "", "貯めるより、使いきる設計", "お金・時間・健康を、いつ何に使うかを先に決める。貯め続けて使えずに終わらないための設計。", "About 1 hour", "", "ja"),
-    "book-world-by-data": ("quick-books", "", "思い込みを外して、世界をデータで見る", "判断の前に数字を集め、比べる相手・変化の向き・散らばりと一緒に読む。思い込みのずれを七つの場面で確かめる。", "About 1 hour", "", "ja"),
-    "book-information-networks": ("quick-books", "", "情報は人をつなぎ、分断する", "情報は事実を写すだけでなく人を結びつけ、ときに分ける。職場と社会で情報がどう働き、どこで誤るのか。", "About 1 hour", "", "ja"),
-    "book-tidy-then-change": ("quick-books", "", "整えてから変えるか、変えてから整えるか", "コードの動きを変えずに形だけを小さく整える型と、整える時機の選び方を練習問題で身につける。", "About 1 hour", "", "ja"),
-    "book-money-anxiety": ("quick-books", "", "その不安は、お金で消えるのか", "貯金を増やしても消えない将来の心配。その出どころを見分け、お金のほかに何を蓄えるかを昼休みの会話で考える。", "About 1 hour", "", "ja"),
-    "book-what-follows": ("quick-books", "", "その文から何が言えるか", "文から必ず言えることと言えないことを見分ける。否定・量・前提・指示語の働きから、AIがつまずく所までを練習問題で。", "About 1 hour", "", "ja"),
-    "book-not-all-in": ("quick-books", "", "全身全霊で働かないという選択", "働き始めて本が読めなくなったのはなぜか。仕事にすべてを注ぐ働き方を見直し、余力を残して働く決め方を考える。", "About 1 hour", "", "ja"),
-    "book-loose-steady": ("quick-books", "", "ゆるく、でも毎日積み上げる", "大事なことと毎日の小さな行動には厳しく、やり方とペースは柔らかく。情報の入口から続け方までを職場の場面で。", "About 1 hour", "", "ja"),
-    "book-choose-the-question": ("quick-books", "", "答えを出す前に、問いを選ぶ", "手を動かす前に答えるべき問いを選び、答えの出る形に直し、粗く確かめて渡す。仕事の進め方の基本。", "About 1 hour", "", "ja"),
-    "book-keep-skills-current": ("quick-books", "", "技能を更新しつづける", "技能が古くなる速さが増すなかで、古びた所を見つけ、学び直し、隣の分野へ広げて長く働き続けるための道具。", "About 1 hour", "", "ja"),
-    "book-uncertainty-teams": ("quick-books", "", "不確実性から考えるチームと組織", "職場の困りごとの多くは「わからなさ」から生まれる。不確実性を見分けて減らす考え方をチームと組織に当てはめる。", "About 1 hour", "", "ja"),
-    "book-being-heard": ("quick-books", "", "話を聞いてもらうと、なぜ人は変わるのか", "カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。", "About 1 hour", "", "ja"),
-    "book-job-membership": ("quick-books", "", "ジョブ型とメンバーシップ型で読む働き方", "仕事が先か、人が先か。二つの型を物差しにすると、採用・給料・働く時間・非正規の問題が一本の筋でつながる。", "About 1 hour", "", "ja"),
-    "book-team-english": ("quick-books", "", "英語でチームを回す仕事の型", "確認・依頼・任せ方・1on1・会議・意見の違い。六つの場面で、何をどの順にどんな短い英語で言うかを型で学ぶ。", "About 1 hour", "", "ja"),
-    "book-plan-and-dialogue": ("quick-books", "", "計画と対話を行き来する", "計画どおりに進めるやり方と、対話で計画を変えるやり方を切り替え、結果を出しながら自分から動くチームをつくる。", "About 1 hour", "", "ja"),
-    "book-wealth-mindset": ("quick-books", "", "富を積み上げる人の考え方", "お金・技能・信頼を使い切らずに次の元手にして増やす。投資の手法より長く効く、絞り方・続け方・付き合い方。", "About 1 hour", "", "ja"),
-    "book-beyond-command": ("quick-books", "", "命令の組織から、探検の組織へ", "会社を軍隊とみなす前提が、目標・会議・成長の場面で意欲をどう下げるか。成果と一人ひとりの関心を両立させる組み替え方。", "About 1 hour", "", "ja"),
-    "book-adler-relationships": ("quick-books", "", "アドラー心理学で人間関係をほどく", "過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。", "About 1 hour", "", "ja"),
-    "book-where-gains-went": ("quick-books", "", "稼いだ分は、どこへ行ったのか", "生産性が上がっても賃金が上がらなかったのはなぜか。会社の儲けの分け方から、日本の働き手の30年をたどる。", "About 1 hour", "", "ja"),
-    "book-walk-and-think": ("quick-books", "", "歩くと、頭と体に何が起きるか", "歩くと発想・対話・記憶・気分に何が起きるかを研究で確かめ、仕事と暮らしに歩く時間を取り戻す。", "About 1 hour", "", "ja"),
-    "book-life-not-a-story": ("quick-books", "", "人生を物語にしない生き方", "キャリアのストーリーや「何者かになりたい」願いはなぜ人を縛るのか。人生を遊びとして見る別の見方を会話で。", "About 1 hour", "", "ja"),
-    "book-growing-sense": ("quick-books", "", "AIの時代に、センスはどう育つか", "何を取り入れ、何を捨て、どこまで仕上げるか。仕事の差がつく判断のものさしを、上司と部下の会話で育てる。", "About 1 hour", "", "ja"),
-    "book-faith-divides-america": ("quick-books", "", "アメリカを割る信仰", "福音派の信仰、とくに終末についての考え方が、アメリカの政治と社会の分断にどう結びついてきたのか。", "About 1 hour", "", "ja"),
-    "book-job-yardstick": ("quick-books", "", "仕事選びのものさしを科学で直す", "好きなこと・年収・適性で選ぶ方法は満足につながりにくい。研究で確かめた条件で仕事を比べ直す。", "About 1 hour", "", "ja"),
-    "book-recall-to-learn": ("quick-books", "", "思い出して覚える、勉強の組み立て方", "読み返すより思い出す。日を空ける・混ぜる・説明するなど、効果が確かめられた勉強の組み立て方を練習問題で。", "About 1 hour", "", "ja"),
-    "book-english-gaps": ("quick-books", "", "大人の英語は、ずれに気づいて身につける", "同じ所で残る英語の誤りは、日本語と英語の使い方の「ずれ」から来る。ずれに気づいて直す手順を学ぶ。", "About 1 hour", "", "ja"),
-    "book-grounded-words": ("quick-books", "", "ことばは体から育つ", "ことばの意味はどこから来るのか。オノマトペや子どもの言葉の覚え方から、学び直しや技能の伝え方まで。", "About 1 hour", "", "ja"),
-    "book-many-logics": ("quick-books", "", "論理はひとつではない", "「論理的」に求められる筋道は一つではない。四つの型の仕組みと使いどころを確かめ、目的と相手で選ぶ。", "About 1 hour", "", "ja"),
-    "book-lasting-craft": ("quick-books", "", "流行に左右されない作り手の心得", "道具が替わっても使える、結果を引き受ける構え・変えやすく作る原則・知識への投資を、作り手の仕事に当てはめる。", "About 1 hour", "", "ja"),
-    "book-finite-time": ("quick-books", "", "全部はできない前提で、時間を使う", "すべてをこなす前提を手放すと、時間の使い方はどう変わるか。限りある時間で何を選び、何を諦めるか。", "About 1 hour", "", "ja"),
+    "book-pause-before-speaking": ("relationships", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
+    "book-career-transitions": ("work", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),
+    "book-spend-by-design": ("money", "", "貯めるより、使いきる設計", "お金・時間・健康を、いつ何に使うかを先に決める。貯め続けて使えずに終わらないための設計。", "About 1 hour", "", "ja"),
+    "book-world-by-data": ("thinking", "", "思い込みを外して、世界をデータで見る", "判断の前に数字を集め、比べる相手・変化の向き・散らばりと一緒に読む。思い込みのずれを七つの場面で確かめる。", "About 1 hour", "", "ja"),
+    "book-information-networks": ("thinking", "", "情報は人をつなぎ、分断する", "情報は事実を写すだけでなく人を結びつけ、ときに分ける。職場と社会で情報がどう働き、どこで誤るのか。", "About 1 hour", "", "ja"),
+    "book-tidy-then-change": ("software", "", "整えてから変えるか、変えてから整えるか", "コードの動きを変えずに形だけを小さく整える型と、整える時機の選び方を練習問題で身につける。", "About 1 hour", "", "ja"),
+    "book-money-anxiety": ("money", "", "その不安は、お金で消えるのか", "貯金を増やしても消えない将来の心配。その出どころを見分け、お金のほかに何を蓄えるかを昼休みの会話で考える。", "About 1 hour", "", "ja"),
+    "book-what-follows": ("thinking", "", "その文から何が言えるか", "文から必ず言えることと言えないことを見分ける。否定・量・前提・指示語の働きから、AIがつまずく所までを練習問題で。", "About 1 hour", "", "ja"),
+    "book-not-all-in": ("work", "", "全身全霊で働かないという選択", "働き始めて本が読めなくなったのはなぜか。仕事にすべてを注ぐ働き方を見直し、余力を残して働く決め方を考える。", "About 1 hour", "", "ja"),
+    "book-loose-steady": ("life", "", "ゆるく、でも毎日積み上げる", "大事なことと毎日の小さな行動には厳しく、やり方とペースは柔らかく。情報の入口から続け方までを職場の場面で。", "About 1 hour", "", "ja"),
+    "book-choose-the-question": ("work", "", "答えを出す前に、問いを選ぶ", "手を動かす前に答えるべき問いを選び、答えの出る形に直し、粗く確かめて渡す。仕事の進め方の基本。", "About 1 hour", "", "ja"),
+    "book-keep-skills-current": ("work", "", "技能を更新しつづける", "技能が古くなる速さが増すなかで、古びた所を見つけ、学び直し、隣の分野へ広げて長く働き続けるための道具。", "About 1 hour", "", "ja"),
+    "book-uncertainty-teams": ("work", "", "不確実性から考えるチームと組織", "職場の困りごとの多くは「わからなさ」から生まれる。不確実性を見分けて減らす考え方をチームと組織に当てはめる。", "About 1 hour", "", "ja"),
+    "book-being-heard": ("relationships", "", "話を聞いてもらうと、なぜ人は変わるのか", "カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。", "About 1 hour", "", "ja"),
+    "book-job-membership": ("work", "", "ジョブ型とメンバーシップ型で読む働き方", "仕事が先か、人が先か。二つの型を物差しにすると、採用・給料・働く時間・非正規の問題が一本の筋でつながる。", "About 1 hour", "", "ja"),
+    "book-team-english": ("learning", "", "英語でチームを回す仕事の型", "確認・依頼・任せ方・1on1・会議・意見の違い。六つの場面で、何をどの順にどんな短い英語で言うかを型で学ぶ。", "About 1 hour", "", "ja"),
+    "book-plan-and-dialogue": ("work", "", "計画と対話を行き来する", "計画どおりに進めるやり方と、対話で計画を変えるやり方を切り替え、結果を出しながら自分から動くチームをつくる。", "About 1 hour", "", "ja"),
+    "book-wealth-mindset": ("money", "", "富を積み上げる人の考え方", "お金・技能・信頼を使い切らずに次の元手にして増やす。投資の手法より長く効く、絞り方・続け方・付き合い方。", "About 1 hour", "", "ja"),
+    "book-beyond-command": ("work", "", "命令の組織から、探検の組織へ", "会社を軍隊とみなす前提が、目標・会議・成長の場面で意欲をどう下げるか。成果と一人ひとりの関心を両立させる組み替え方。", "About 1 hour", "", "ja"),
+    "book-adler-relationships": ("relationships", "", "アドラー心理学で人間関係をほどく", "過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。", "About 1 hour", "", "ja"),
+    "book-where-gains-went": ("thinking", "", "稼いだ分は、どこへ行ったのか", "生産性が上がっても賃金が上がらなかったのはなぜか。会社の儲けの分け方から、日本の働き手の30年をたどる。", "About 1 hour", "", "ja"),
+    "book-walk-and-think": ("life", "", "歩くと、頭と体に何が起きるか", "歩くと発想・対話・記憶・気分に何が起きるかを研究で確かめ、仕事と暮らしに歩く時間を取り戻す。", "About 1 hour", "", "ja"),
+    "book-life-not-a-story": ("life", "", "人生を物語にしない生き方", "キャリアのストーリーや「何者かになりたい」願いはなぜ人を縛るのか。人生を遊びとして見る別の見方を会話で。", "About 1 hour", "", "ja"),
+    "book-growing-sense": ("thinking", "", "AIの時代に、センスはどう育つか", "何を取り入れ、何を捨て、どこまで仕上げるか。仕事の差がつく判断のものさしを、上司と部下の会話で育てる。", "About 1 hour", "", "ja"),
+    "book-faith-divides-america": ("thinking", "", "アメリカを割る信仰", "福音派の信仰、とくに終末についての考え方が、アメリカの政治と社会の分断にどう結びついてきたのか。", "About 1 hour", "", "ja"),
+    "book-job-yardstick": ("work", "", "仕事選びのものさしを科学で直す", "好きなこと・年収・適性で選ぶ方法は満足につながりにくい。研究で確かめた条件で仕事を比べ直す。", "About 1 hour", "", "ja"),
+    "book-recall-to-learn": ("learning", "", "思い出して覚える、勉強の組み立て方", "読み返すより思い出す。日を空ける・混ぜる・説明するなど、効果が確かめられた勉強の組み立て方を練習問題で。", "About 1 hour", "", "ja"),
+    "book-english-gaps": ("learning", "", "大人の英語は、ずれに気づいて身につける", "同じ所で残る英語の誤りは、日本語と英語の使い方の「ずれ」から来る。ずれに気づいて直す手順を学ぶ。", "About 1 hour", "", "ja"),
+    "book-grounded-words": ("learning", "", "ことばは体から育つ", "ことばの意味はどこから来るのか。オノマトペや子どもの言葉の覚え方から、学び直しや技能の伝え方まで。", "About 1 hour", "", "ja"),
+    "book-many-logics": ("thinking", "", "論理はひとつではない", "「論理的」に求められる筋道は一つではない。四つの型の仕組みと使いどころを確かめ、目的と相手で選ぶ。", "About 1 hour", "", "ja"),
+    "book-lasting-craft": ("software", "", "流行に左右されない作り手の心得", "道具が替わっても使える、結果を引き受ける構え・変えやすく作る原則・知識への投資を、作り手の仕事に当てはめる。", "About 1 hour", "", "ja"),
+    "book-finite-time": ("life", "", "全部はできない前提で、時間を使う", "すべてをこなす前提を手放すと、時間の使い方はどう変わるか。限りある時間で何を選び、何を諦めるか。", "About 1 hour", "", "ja"),
 }
 
 SHELF_CSS = """
-/* ---------- bookshelf: a flat, searchable reading index ---------- */
+/* ---------- bookshelf: a category directory and flat reading lists ---------- */
 .shelf{
   --bg:#fafafa;--surface:#f0f1f3;--text:#202124;--text-muted:#62656b;--text-subtle:#686b73;
   --line:#e2e3e6;--line-strong:#b5b8bf;--accent:var(--nav-accent);
@@ -381,147 +399,102 @@ SHELF_CSS = """
   --bg:#111214;--surface:#1b1d21;--text:#eeeeef;--text-muted:#a4a6ad;--text-subtle:#9699a2;
   --line:#292b30;--line-strong:#555962;--accent:var(--nav-accent);
 }
-.shelf .page{max-width:1104px;margin:0 auto;padding:32px 0 48px}
+.shelf .page{max-width:960px;margin:0 auto;padding:48px 0 40px}
 .shelf [hidden]{display:none!important}
-.shelf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:24px;background:var(--nav-surface);border-bottom:1px solid var(--nav-line);border-radius:6px;scroll-margin-top:96px}
-.shelf-head>*+*{margin-top:0}
-.shelf-head h1{font-size:clamp(34px,3.8vw,48px);line-height:1.15;letter-spacing:-.045em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
-.shelf-head .lead{font-size:16px;line-height:1.55;margin-top:12px;color:var(--nav-muted)}
-.library-stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:18px;font-size:13px;letter-spacing:.01em;color:var(--nav-muted)}
-.library-stats span+span::before{content:"·";margin-right:18px;color:var(--nav-muted)}
-.shelf .offline{margin:0;gap:8px;max-width:240px;justify-items:end;text-align:right}
-.shelf .save-btn{display:inline-flex;align-items:center;gap:8px;padding:0 12px;border-color:var(--nav-solid);background:var(--nav-solid);color:var(--nav-on-solid);font-size:13px;font-weight:500}
-.shelf .save-btn:hover{background:var(--nav-solid-hover);border-color:var(--nav-solid-hover)}
-.shelf .save-btn svg{height:16px;width:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.shelf .save-note{font-size:12px;letter-spacing:.01em;line-height:1.5;color:var(--nav-muted)}
+.shelf-head{margin:0 0 36px;scroll-margin-top:96px}
+.shelf-head h1{font-size:clamp(32px,4vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
+.shelf-head .lead{font-size:16px;line-height:1.6;margin-top:12px;color:var(--text-muted);max-width:55ch}
+.library-stats{margin-top:12px;font-size:13px;color:var(--text-subtle)}
 .shelf-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nav-accent)}
-.recent{margin-top:28px}
-.recent ol{list-style:none;margin:12px 0 0;padding:0;background:var(--nav-bg);border-top:1px solid var(--nav-line)}
-.recent li+li{margin-top:0}
-.recent a{display:grid;grid-template-columns:minmax(0,1fr) auto 16px;align-items:center;gap:20px;padding:14px 12px;border-bottom:1px solid var(--nav-line);color:var(--nav-text);text-decoration:none}
-.recent a:hover{background:var(--nav-hover)}
-.recent .resume-copy{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;min-width:0}
-.recent .resume-copy b{font-size:15px;font-weight:500;line-height:1.6}
-.recent .resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
+.category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
+.category-list,.book-list,.recent ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
+.category-list li+li,.book-list li+li,.recent li+li{margin-top:0}
+.category-row{display:grid;grid-template-columns:24px minmax(0,1fr) 16px;gap:14px;align-items:center;min-height:136px;padding:20px 4px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--text)}
+.category-row:hover,.book-row:hover,.recent a:hover{background:var(--nav-bg)}
+.category-number{font:500 13px/1.5 var(--font-mono);color:var(--nav-accent)}
+.category-title{display:block;font-size:22px;font-weight:600;line-height:1.4;letter-spacing:-.02em;color:var(--nav-text);text-wrap:balance}
+.category-note{display:block;margin-top:5px;color:var(--text-muted);font-size:14px;line-height:1.6}
+.category-count{grid-column:2;grid-row:2;margin-top:-10px;font-size:13px;white-space:nowrap;color:var(--nav-muted)}
+.category-row .row-arrow{grid-column:3;grid-row:1}
+.row-arrow{color:var(--nav-accent)}
+.collection-menu{margin-bottom:24px;border-bottom:1px solid var(--nav-line)}
+.collection-menu summary{min-height:44px;cursor:pointer;color:var(--nav-accent);font-size:13px;line-height:44px;font-weight:500}
+.collection-menu summary:focus-visible{outline:2px solid var(--nav-focus);outline-offset:4px}
+.category-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.category-nav a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid var(--nav-line-strong);border-radius:6px;color:var(--nav-text);text-decoration:none;font-size:13px;font-weight:500}
+.category-nav a:hover{background:var(--nav-hover)}
+.category-nav a[aria-current]{background:var(--nav-surface);border-color:var(--nav-accent);font-weight:700}
+.breadcrumb{display:inline-flex;min-height:44px;align-items:center;margin-bottom:12px;color:var(--nav-accent);font-size:13px;text-decoration:none}
+.recent{margin-bottom:36px}
+.recent a{display:grid;grid-template-columns:minmax(0,1fr) auto 16px;gap:20px;align-items:center;padding:16px 12px;border-bottom:1px solid var(--nav-line);color:var(--nav-text);text-decoration:none;background:var(--nav-bg)}
+.resume-copy{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;min-width:0}
+.resume-copy b{font-size:15px;font-weight:500;line-height:1.6}
+.resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
 .recent .when{white-space:nowrap}
-.recent .row-arrow{font-size:16px;color:var(--nav-accent)}
-.library-layout{display:grid;grid-template-columns:176px minmax(0,1fr);gap:48px;margin-top:36px;align-items:start}
-.shelf-browse{position:sticky;top:96px}
-.shelf-browse .shelf-label{margin-bottom:12px}
-.filters{display:flex;flex-direction:column;gap:4px;padding:6px;background:var(--nav-bg);border:1px solid var(--nav-line);border-radius:6px}
-.filter{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:8px 12px;border:0;border-radius:6px;background:transparent;color:var(--text-muted);font:inherit;font-size:13px;line-height:1.4;text-align:left;cursor:pointer}
-.filter:hover{background:var(--nav-hover);color:var(--nav-text)}
-.filter[aria-pressed="true"]{background:var(--nav-solid);color:var(--nav-on-solid);font-weight:600}
-.filter .n{font-size:12px;font-variant-numeric:tabular-nums;font-weight:400;color:var(--nav-muted)}
-.filter[aria-pressed="true"] .n{color:var(--nav-on-solid)}
-.browse-note{margin:24px 12px 0;padding-top:20px;border-top:1px solid var(--line);font-size:12px;line-height:1.65;letter-spacing:.01em;color:var(--text-subtle)}
 .library-main{min-width:0;scroll-margin-top:88px}
-.shelf-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
-.results-heading{font-size:18px;font-weight:600;line-height:1.4;letter-spacing:-.015em;color:var(--nav-text)}
-.result-count{margin-top:4px;font-size:12px;letter-spacing:.01em;color:var(--text-subtle)}
-.search-wrap{position:relative;flex:0 1 288px;min-width:0}
-.mobile-category{display:none}
-.search-wrap svg{position:absolute;top:14px;left:14px;width:16px;height:16px;fill:none;stroke:var(--nav-accent);stroke-width:1.7;stroke-linecap:round;pointer-events:none}
-.shelf-search{width:100%;min-height:44px;padding:10px 12px 10px 40px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--text);font:inherit;font-size:14px;line-height:1.4}
-.shelf-search::placeholder{color:var(--nav-muted);opacity:1}
-.cat{margin-top:32px}
-.cat:first-of-type{margin-top:0}
-.cat>*+*{margin-top:0}
-.cat-intro{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--nav-surface);border-radius:6px 6px 0 0}
-.library-main.filtered .cat-intro{display:none}
-.cat-head{font-size:13px;font-weight:600;letter-spacing:.01em;line-height:1.4;color:var(--nav-text)}
-.cat-head .n{margin-left:8px;font-size:12px;font-weight:500;color:var(--nav-accent);font-variant-numeric:tabular-nums}
-.cat-note{font-size:12px;color:var(--nav-muted);line-height:1.5;text-align:right;max-width:50ch}
-.book-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--nav-line)}
-.book-list li+li{margin-top:0}
-.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:20px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
-.book-row:hover{background:var(--nav-bg)}
-.book-row:hover .book-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
-.book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono);font-variant-numeric:tabular-nums}
+.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
+.book-row:hover .book-title,.category-row:hover .category-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono)}
 .book-copy{min-width:0}
 .book-title{display:block;font-size:17px;font-weight:600;line-height:1.5;letter-spacing:-.012em;text-wrap:balance;color:var(--nav-text)}
 .book-title:lang(ja){letter-spacing:0;word-break:auto-phrase}
-.book-series{font-weight:400;font-size:12px;letter-spacing:.01em;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
+.book-series{font-weight:400;font-size:12px;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
 .book-blurb{display:block;margin-top:6px;font-size:14px;color:var(--text-muted);line-height:1.6;text-wrap:pretty}
 .book-blurb:lang(ja){line-height:1.75}
-.book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;letter-spacing:.01em;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
+.book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
 .book-facts .reading-time{color:var(--text-muted)}
-.book-row .row-arrow{padding-top:1px;font-size:17px;color:var(--nav-accent)}
-.no-hits{padding:36px 0;border-top:1px solid var(--line)}
-.no-hits h2{font-size:20px;font-weight:600;letter-spacing:-.02em}
-.no-hits p{margin-top:8px;color:var(--text-muted);font-size:14px}
-.reset-filters{min-height:44px;margin-top:16px;padding:0;border:0;background:transparent;color:var(--nav-accent);font:inherit;font-size:14px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
-.shelf-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.01em;color:var(--text-subtle)}
+.shelf .offline{margin:0;max-width:320px;gap:8px}
+.shelf .save-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);background:var(--nav-bg);color:var(--nav-text);font-size:13px;font-weight:500}
+.shelf .save-btn:hover{background:var(--nav-hover)}
+.shelf .save-btn svg{height:16px;width:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.shelf .save-note{font-size:12px;line-height:1.5;color:var(--nav-muted)}
+.shelf-foot{display:flex;align-items:start;justify-content:space-between;gap:24px;margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--text-subtle)}
+.shelf-foot p{margin:0}
 .shelf-foot a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);text-decoration:none}
-.shelf-foot a:hover{text-decoration:underline}
+.shelf :is(a,button):focus-visible{outline:2px solid var(--nav-focus);outline-offset:4px}
 .shelf button{touch-action:manipulation}
-@media(max-width:900px){
-  .library-layout{grid-template-columns:150px minmax(0,1fr);gap:28px}
-  .cat-note{display:none}
-  .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px}
-  .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
-  .book-row .row-arrow{grid-column:3;grid-row:1}
-}
 @media(max-width:700px){
-  .shelf .page{padding:24px 4px 24px}
-  .shelf-head{display:block;padding:20px}
-  .shelf-head .lead{font-size:14px}
-  .library-stats{font-size:12px;gap:6px 12px;margin-top:14px}
-  .library-stats span+span::before{margin-right:12px}
-  .shelf .offline{max-width:none;justify-items:start;text-align:left;margin-top:24px}
-  .shelf .save-note{max-width:36ch}
-  .library-layout{display:block;margin-top:28px}
-  .shelf-browse{display:none}
-  .shelf-tools{flex-wrap:wrap;gap:16px;margin-bottom:24px}
-  .search-wrap{flex:1 1 100%;order:-1}
-  .mobile-category{display:block;max-width:55%;min-width:0}
-  .category-select{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-surface);color:var(--nav-text);font:inherit;font-size:12px;line-height:1.4;cursor:pointer}
-  .book-row{padding:18px 0}
-  .book-title{font-size:16px}
-  .book-blurb{font-size:13px}
-  .book-number{font-size:11px}
-  .book-series{display:block;margin:4px 0 0}
-  .recent a{gap:12px;grid-template-columns:minmax(0,1fr) auto 16px}
-  .recent .resume-copy{display:block}
-  .recent .resume-copy span{display:block;margin-top:2px}
-  .recent .when{font-size:11px}
-  .shelf-foot{margin-top:32px}
+ .shelf .page{padding:28px 4px 24px}
+ .shelf-head{margin-bottom:28px}
+ .shelf-head .lead{font-size:14px}
+ .category-list{display:block}
+ .category-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 4px;min-height:0}
+ .category-title{font-size:20px}
+ .category-note{font-size:13px}
+ .category-count{grid-column:2;grid-row:2;margin-top:-8px;font-size:12px}
+ .category-row .row-arrow{grid-column:3;grid-row:1}
+ .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .category-nav a{padding:8px 10px}
+ .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 0}
+ .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
+ .book-row .row-arrow{grid-column:3;grid-row:1}
+ .book-title{font-size:16px}
+ .book-blurb{font-size:13px}
+ .book-series{display:block;margin:4px 0 0}
+ .recent a{gap:12px;grid-template-columns:minmax(0,1fr) 16px}
+ .recent .when{display:none}
+ .resume-copy{display:block}
+ .resume-copy span{display:block;margin-top:2px}
+ .shelf-foot{flex-direction:column;gap:16px;margin-top:32px}
 }
 """
 
-
 SHELF_JS = r"""<script>
 (function(){
-var q=document.querySelector(".shelf-search"),filters=document.querySelectorAll(".filter"),select=document.querySelector(".category-select"),none=document.querySelector(".no-hits"),count=document.querySelector(".result-count"),heading=document.querySelector(".results-heading"),cat="";
-if(!q)return;
-function normalize(s){return s.normalize("NFKC").toLowerCase()}
-function apply(){var words=normalize(q.value.trim()).split(/\s+/).filter(Boolean),total=0;
-  document.querySelector(".library-main").classList.toggle("filtered",!!cat);
-  document.querySelectorAll(".cat").forEach(function(sec){var n=0;
-    sec.querySelectorAll(".book-list>li").forEach(function(li){var text=normalize(li.dataset.text),ok=(!cat||sec.dataset.cat===cat)&&words.every(function(w){return text.indexOf(w)>=0});li.hidden=!ok;if(ok)n++});
-    sec.hidden=!n;sec.querySelector(".cat-head .n").textContent=n;total+=n});
-  count.textContent=total+" reader"+(total===1?"":"s")+(q.value.trim()?" found":"");none.hidden=total>0;
-  filters.forEach(function(f){f.setAttribute("aria-pressed",String(f.dataset.cat===cat))});
-  select.value=cat;
-  var active=Array.prototype.find.call(filters,function(f){return f.dataset.cat===cat});heading.textContent=active.dataset.name;
-}
-q.addEventListener("input",apply);
-filters.forEach(function(f){f.addEventListener("click",function(){cat=f.dataset.cat;apply()})});
-select.addEventListener("change",function(){cat=select.value;apply()});
-document.querySelector(".reset-filters").addEventListener("click",function(){cat="";q.value="";apply();q.focus()});
-apply();
 var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
-var box=document.querySelector(".recent"),catalog=new Map();
-document.querySelectorAll(".book-list a[data-slug]").forEach(function(a){catalog.set(a.dataset.slug,a)});
+var box=document.querySelector(".recent"),catalog=new Map(),source=document.getElementById("shelf-catalog");
+if(!box||!source)return;
+JSON.parse(source.textContent).readers.forEach(function(book){catalog.set(book.slug,book)});
+var category=box.dataset.category;
 var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
 function ago(t){if(!fmt)return "Recently";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
 var shown=0;
-r.forEach(function(e){if(!e||shown>=3||!catalog.has(e.s)||!Number.isFinite(e.at))return;
-  var book=catalog.get(e.s),url;try{url=new URL(e.u,location.href)}catch(err){return}
-  var readerRoot=new URL("./",book.href);if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
+r.forEach(function(e){if(!e||shown>=1||!catalog.has(e.s)||!Number.isFinite(e.at))return;
+  var book=catalog.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
+  var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
   var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
-  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.dataset.title+": "+(e.t||"Contents"));copy.className="resume-copy";
-  title.textContent=book.dataset.title;title.lang=book.dataset.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.dataset.lang:"en";
+  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
+  title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
   when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
   copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);box.querySelector("ol").appendChild(li);shown++;
 });
@@ -538,104 +511,83 @@ def page_count(slug):
     return len([f for f in src.glob("ch[0-9][0-9].body.html") if not f.name.startswith("ch00")]), "pages"
 
 
-def shelf():
-    """Generate the reading index, category rail, search, history and offline controls."""
-    entry = {slug: e for slug, _, e in READERS}
-    total = sum(page_count(s)[0] for s in BOOKS)
-    sections = []
-    filters = [f'<button class="filter" type="button" data-cat="" data-name="All readers" aria-pressed="true"><span>All readers</span><span class="n">{len(BOOKS)}</span></button>']
-    options = [f'<option value="">All readers ({len(BOOKS)})</option>']
-    number = 0
-    for key, name, note, _ in CATEGORIES:
-        books = [s for s, *_ in READERS if BOOKS[s][0] == key]
-        if not books:
+def catalogue():
+    """All readers, independent of which category is currently displayed."""
+    data = {"pages": ["index.html", *CATEGORY_PAGES.values()], "readers": [
+        {"slug": slug, "href": f"{slug}/{entry}", "category": BOOKS[slug][0],
+         "title": BOOKS[slug][2], "lang": BOOKS[slug][6]}
+        for slug, _, entry in READERS]}
+    return '<script id="shelf-catalog" type="application/json">' + json.dumps(data, ensure_ascii=False).replace("<", "\\u003c") + '</script>'
+
+
+def book_rows(category):
+    rows = []
+    for slug, _, entry in READERS:
+        key, series, title, blurb, time, level, lang = BOOKS[slug]
+        if key != category:
             continue
-        filters.append(f'<button class="filter" type="button" data-cat="{key}" data-name="{html.escape(name, quote=True)}" aria-pressed="false"><span>{html.escape(name)}</span><span class="n">{len(books)}</span></button>')
-        options.append(f'<option value="{key}">{html.escape(name)} ({len(books)})</option>')
+        n, unit = page_count(slug)
+        language = LANGS[lang][0]
+        lt = lang_attr(slug)
+        series_label = f' <span class="book-series"{lt}>{html.escape(series)}</span>' if series else ""
+        facts = [time, f"{n} {unit if n != 1 else unit[:-1]}", f"{language} · {level}" if level else language]
+        rows.append(f"""<li><a class="book-row" href="{slug}/{entry}">
+  <span class="book-number" aria-hidden="true">{len(rows)+1:02d}</span>
+  <span class="book-copy"><span class="book-title"{lt}>{html.escape(title)}{series_label}</span><span class="book-blurb"{lt}>{html.escape(blurb)}</span></span>
+  <span class="book-facts">{''.join(f'<span>{html.escape(f)}</span>' for f in facts)}</span>
+  <span class="row-arrow" aria-hidden="true">→</span></a></li>""")
+    return '<ul class="book-list">' + "\n".join(rows) + '</ul>'
+
+
+def shelf(category=None):
+    """Home is a directory; category pages contain only their own readers."""
+    if category:
+        _, title, note, _ = next(c for c in CATEGORIES if c[0] == category)
+        count = sum(b[0] == category for b in BOOKS.values())
+        breadcrumb = '<a class="breadcrumb" href="index.html">← Bookshelf</a>'
+        stats = f'{count} reader' + ('s' if count != 1 else '')
+        nav_links = ''.join(f'<a href="{CATEGORY_PAGES[key]}"{CUR if key == category else ""}>{html.escape(name)}</a>' for key, name, *_ in CATEGORIES)
+        content = f'<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories">{nav_links}</nav></details>' + book_rows(category)
+    else:
+        title, note, breadcrumb = "Bookshelf", "Readers for daily practice, technical study and new ideas.", ""
+        stats = f'{len(CATEGORIES)} collections · {len(BOOKS)} readers'
         rows = []
-        for slug in books:
-            number += 1
-            _, series, title, blurb, time, level, lang = BOOKS[slug]
-            n, unit = page_count(slug)
-            language, words = LANGS[lang]
-            text = html.escape(" ".join([series, title, blurb, name, time, level, language, words]).lower(), quote=True)
-            lt = lang_attr(slug)
-            series_label = f' <span class="book-series"{lt}>{html.escape(series)}</span>' if series else ""
-            facts = [time, f"{n} {unit if n != 1 else unit[:-1]}", f"{language} · {level}" if level else language]
-            rows.append(f"""    <li data-text="{text}">
-      <a class="book-row" href="{slug}/{entry[slug]}" data-slug="{slug}" data-title="{html.escape(title, quote=True)}" data-lang="{lang}">
-        <span class="book-number" aria-hidden="true">{number:02d}</span>
-        <span class="book-copy"><span class="book-title"{lt}>{html.escape(title)}{series_label}</span><span class="book-blurb"{lt}>{html.escape(blurb)}</span></span>
-        <span class="book-facts"><span class="reading-time">{html.escape(facts[0])}</span><span>{html.escape(facts[1])}</span><span>{html.escape(facts[2])}</span></span>
-        <span class="row-arrow" aria-hidden="true">→</span>
-      </a>
-    </li>""")
-        sections.append(f"""<section class="cat" data-cat="{key}" aria-labelledby="cat-{key}">
-  <div class="cat-intro"><h2 class="cat-head" id="cat-{key}">{html.escape(name)} <span class="n">{len(books)}</span></h2><p class="cat-note">{html.escape(note)}</p></div>
-  <ul class="book-list">
-{chr(10).join(rows)}
-  </ul>
-</section>""")
-    languages = " & ".join(LANGS[l][0] for l in LANGS if any(b[6] == l for b in BOOKS.values()))
-    return f"""<header class="page-head shelf-head" id="shelf-top">
-  <div class="intro">
-    <h1>Bookshelf</h1>
-    <p class="lead">Readers I made for my own study.</p>
-    <p class="library-stats"><span>{len(BOOKS)} readers</span><span>{total} pages</span><span>{html.escape(languages)}</span></p>
-  </div>
-  {offline_box()}
+        for key, name, description, _ in CATEGORIES:
+            count = sum(b[0] == key for b in BOOKS.values())
+            rows.append(f"""<li><a class="category-row" href="{CATEGORY_PAGES[key]}">
+  <span class="category-number" aria-hidden="true">{len(rows)+1:02d}</span>
+  <span><span class="category-title">{html.escape(name)}</span><span class="category-note">{html.escape(description)}</span></span>
+  <span class="category-count">{count} reader{'s' if count != 1 else ''}</span><span class="row-arrow" aria-hidden="true">→</span></a></li>""")
+        content = '<h2 class="shelf-label" id="collections-title">Browse collections</h2><ul class="category-list">' + "\n".join(rows) + '</ul>'
+    return f"""<main class="library-main" id="library" tabindex="-1" aria-labelledby="shelf-title">
+<header class="shelf-head" id="shelf-top">{breadcrumb}
+  <h1 id="shelf-title">{html.escape(title)}</h1><p class="lead">{html.escape(note)}</p><p class="library-stats">{stats}</p>
 </header>
-<section class="recent" aria-labelledby="recent-title" hidden>
-  <h2 class="shelf-label" id="recent-title">Continue reading</h2>
-  <ol></ol>
+<section class="recent" data-category="{category or ''}" aria-labelledby="recent-title" hidden>
+  <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
 </section>
-<div class="library-layout">
-  <aside class="shelf-browse" aria-label="Library categories">
-    <h2 class="shelf-label">Browse</h2>
-    <div class="filters" role="group" aria-label="Categories">
-      {(chr(10) + "      ").join(filters)}
-    </div>
-    <p class="browse-note">A little English practice.<br>A new way to think.<br>Something to build.</p>
-  </aside>
-  <main class="library-main" id="library" tabindex="-1" aria-labelledby="results-title">
-    <div class="shelf-tools">
-      <div><h2 class="results-heading" id="results-title">All readers</h2><p class="result-count" role="status" aria-live="polite" aria-atomic="true">{len(BOOKS)} readers</p></div>
-      <div class="search-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input class="shelf-search" type="search" placeholder="Search titles or topics" aria-label="Search readers" autocomplete="off"></div>
-      <label class="mobile-category"><select class="category-select" aria-label="Browse category">{"".join(options)}</select></label>
-    </div>
-    {chr(10).join(sections)}
-    <div class="no-hits" hidden><h2>No readers found</h2><p>Try another title or topic, or browse all readers.</p><button class="reset-filters" type="button">Clear search and filters</button></div>
-  </main>
-</div>
-<footer class="shelf-foot"><span>A personal library by tomada.</span><a href="#shelf-top">Back to top ↑</a></footer>
+{content}
+</main>
+<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div>{offline_box()}</footer>
+{catalogue()}
 {SHELF_JS}"""
 
 
-
 def patch_index():
-    """Regenerate the bookshelf body from READERS, CATEGORIES and BOOKS, keeping index.html's head."""
-    missing = [s for s, *_ in READERS if s not in BOOKS]
-    if missing:
-        raise SystemExit(f"add a BOOKS entry for: {', '.join(missing)}")
-    p = SITE / "index.html"
-    s = p.read_text()
-    s = re.sub(r"\n<style id=\"site-nav\">.*?</style>", "", s, flags=re.S)
-    s = s.replace("</head>", f'<style id="site-nav">{CSS}{SHELF_CSS}</style>\n</head>', 1)
-    s = re.sub(r"<!-- app -->.*?<!-- /app -->\n", "", s, flags=re.S)
-    s = s.replace("</head>", f"<!-- app -->\n{head('')}\n<!-- /app -->\n</head>", 1)
-    s = re.sub(r"<body[^>]*>\n.*</body>", lambda m: f"""<body class="shelf acc-1">
-<!-- site-header -->
-{header('')}
-<!-- /site-header -->
-<div class="page">
-{shelf()}
-</div>
-<!-- site-js -->
-{JS}
-<!-- /site-js -->
-</body>""", s, count=1, flags=re.S)
-    p.write_text(s)
-    print("built index.html")
+    """Build the directory and category pages using the existing reading head."""
+    if set(BOOKS) != {s for s, *_ in READERS}:
+        raise SystemExit("READERS and BOOKS must contain the same slugs")
+    if any(b[0] not in CATEGORY_PAGES for b in BOOKS.values()):
+        raise SystemExit("Every reader needs a category page")
+    template = (SITE / "index.html").read_text().split("<body", 1)[0]
+    template = re.sub(r'\n<style id="site-nav">.*?</style>', "", template, flags=re.S)
+    template = re.sub(r'<!-- app -->.*?<!-- /app -->\n', "", template, flags=re.S)
+    template = template.replace("</head>", f'<style id="site-nav">{CSS}{SHELF_CSS}</style>\n<!-- app -->\n{head("")}\n<!-- /app -->\n</head>')
+    for category, filename in [(None, "index.html"), *CATEGORY_PAGES.items()]:
+        title = "tomada's Bookshelf" if category is None else next(c[1] for c in CATEGORIES if c[0] == category) + " | Bookshelf"
+        page_head = re.sub(r'<title>.*?</title>', f'<title>{html.escape(title)}</title>', template)
+        (SITE / filename).write_text(page_head + f'<body class="shelf acc-1">\n{header("")}\n<div class="page">\n{shelf(category)}\n</div>\n{JS}\n</body>\n</html>\n')
+        print("built", filename)
 
 
 if __name__ == "__main__":

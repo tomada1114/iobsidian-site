@@ -378,7 +378,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <li><a href="ch07.html"><span class="n">07</span><span>型を選ぶ</span></a></li>
   </ol>
   <div class="all" lang="en">
-    <a href="../index.html">← All readers</a>
+    <a href="../thinking.html">← Thinking &amp; Society</a><br>
+    <a href="../index.html">← Bookshelf</a>
   </div>
 </aside>
 <div class="page acc-1">
@@ -535,10 +536,11 @@ function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
-async function urls(){var lists=await Promise.all(Array.prototype.map.call(document.querySelectorAll(".book-list a[data-slug]"),async function(a){
-    var u=clean(a.getAttribute("href"),location.href),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
+async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
+  var catalog=JSON.parse(source.textContent),lists=await Promise.all(catalog.readers.map(async function(book){
+    var u=clean(book.href,root),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
-  return uniq([].concat.apply([root+"index.html"],lists))}
+  return uniq([].concat.apply(catalog.pages.map(function(p){return clean(p,root)}),lists))}
 async function diff(list){var c=await caches.open(C),keys=(await c.keys()).map(function(k){return k.url}).filter(isPage);
   return {c:c,missing:list.filter(function(u){return keys.indexOf(u)<0}),gone:keys.filter(function(u){return list.indexOf(u)<0})}}
 async function save(list){var d=await diff(list),i=0,done=0;
