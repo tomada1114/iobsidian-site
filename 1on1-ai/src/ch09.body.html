@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 9 of 13</span></p>
   <h1>What if a learner types 'ignore your instructions'?</h1>
-  <p class="lead">After this page you can explain prompt injection, direct and indirect. You can also explain why limiting an attack beats detecting it, and which layers guard each end.</p>
+  <p class="lead">A learner’s answer tells the grader to ignore its rubric. The design must bound available capabilities even when instructions fail to resist that text.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is prompt injection?</li>
-      <li>What can a successful injection do here?</li>
-      <li>Which layers sit at the entry and the exit?</li>
-      <li>What is the bigger risk, and what do guards cost?</li>
+      <li>What injection is</li>
+      <li>What can a successful injection do?</li>
+      <li>Layers at the entry and the exit</li>
+      <li>The bigger risk, and the cost of guards</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -24,18 +24,18 @@
     <h2 id="s2"><span class="no">02</span>What can a successful injection do?</h2>
     <p>The grader has no tools and receives only the current task's data. Its output is limited to a grade shape, and the application binds storage to the verified learner. These choices reduce available capabilities even if the verdict is manipulated.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="Nested rings: all of Quickturn's data, inside it this learner's data, inside that this learner's own answer, and at the center the grading call, which can at most misgrade the learner's own answer.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="The grader receives restricted task context and no tools. Misleading feedback, disclosure of supplied context and abusive cost remain possible without access to other learners’ records.">
       <rect x="8" y="8" width="384" height="316" rx="12" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">All of Quickturn's data</text>
       <rect x="32" y="52" width="336" height="256" rx="10" class="node"/>
       <text x="48" y="80" class="t-hd">This learner's data</text>
       <rect x="56" y="96" width="288" height="196" rx="8" class="node"/>
-      <text x="72" y="124">This learner's own answer</text>
+      <text x="72" y="124">Current task data</text>
       <rect x="80" y="148" width="240" height="120" rx="8" class="node-acc"/>
-      <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">Misgrades their</text>
-      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">own answer</text>
+      <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">Feedback, context</text>
+      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">and cost risks</text>
     </svg>
-    <figcaption>The innermost ring is the most a successful injection can reach. The restricted grader has no tool actions, but incorrect feedback, context disclosure and cost remain risks.</figcaption>
+    <figcaption>The restricted task context limits what data the grader receives. With no tools, a model request cannot directly run an application command.</figcaption>
   </figure>
     <p>The remaining risks still matter: incorrect feedback, exposure of supplied context and abusive cost. Include adversarial cases in evaluation and measure whether they change verdicts. Schema compliance does not prove that the feedback or classification is safe.</p>
   </section>
@@ -67,15 +67,15 @@
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="478">Stored grade</text>
     </svg>
-    <figcaption>The entry layers make an attack harder. The exit check is the one that holds even when an attack gets through.</figcaption>
+    <figcaption>The entry layers make an attack harder. Output checks can reject invalid shape or domain values, but cannot guarantee that every plausible grade or feedback sentence is correct.</figcaption>
   </figure>
-    <p>The exit path parses the response, checks domain rules and displays model text safely rather than inserting it as HTML or running it. Output stays untrusted data even when the prompt was authored by the team.</p>
+    <p>The exit path parses the response and checks domain rules. It displays model text safely, without inserting it as HTML or running it. Output stays untrusted data even when the prompt was authored by the team.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>The bigger risk, and the cost of guards</h2>
-    <p>Token abuse needs input caps, bounded retries, a per-learner usage ledger and account-level cost containment. Content filtering also needs a policy for legitimate practice sentences that resemble an attack; a single detector hit is not a reliable grade.</p>
+    <p>Token abuse needs input caps, bounded retries, a per-learner usage ledger and account-level cost containment. Content filtering needs a policy for legitimate practice sentences that resemble attacks. A single detector hit is not a reliable grade.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="The grader has no tools, reads no outside content, and a successful injection can at most misgrade the learner's own answer; the tutor agent has tools, reads outside content, and a successful injection could make it call a tool, so it needs policy and grants.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="The grader has no tools, reads no outside content, and a successful injection can distort feedback, expose supplied context or waste tokens; the tutor agent has tools, reads outside content, and a successful injection could make it call a tool, so it needs policy and grants.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Grader</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Tutor agent</text>
       <text x="16" y="56" class="t-sm">Tools</text>
@@ -85,7 +85,7 @@
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">no</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">yes</text>
       <text x="16" y="216" class="t-sm">What injection can do</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">own grade only</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">feedback, context</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">call a tool</text>
     </svg>
     <figcaption>With tools, a successful injection can act. That's why an agent needs policy and grants, not just a better prompt.</figcaption>
@@ -95,7 +95,7 @@
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>A model can't reliably tell instructions from data, so injection can't be fully prevented.</li>
+      <li>A model can't reliably tell instructions from data, so prompt wording alone is not a reliable security boundary.</li>
       <li>Limit what a successful injection can do: no tools, schema-bound output, the caller's own data only.</li>
       <li>Treat guardrails as one layer, and meet cost abuse with caps, a per-learner ledger and an account budget limit.</li>
     </ol>

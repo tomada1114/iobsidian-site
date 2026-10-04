@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 10 of 13</span></p>
   <h1>Who pays for the tokens, and what stops a runaway bill?</h1>
-  <p class="lead">After this page you can explain how every token is traced to a feature and a learner. You can also explain a per-learner ledger with reserve and settle, and how it differs from rate limits and a kill switch.</p>
+  <p class="lead">A short request can produce many tokens, so counting requests alone misses its cost. Learner entitlement and the provider’s bill need distinct records and controls.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>How do we know what each call cost?</li>
-      <li>How does a ledger bound each learner's spending?</li>
-      <li>How do rate limits and a kill switch differ?</li>
-      <li>What does the ledger cost us?</li>
+      <li>Attribution first</li>
+      <li>The ledger</li>
+      <li>Rate limits and the kill switch</li>
+      <li>What the ledger costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -35,7 +35,7 @@
       <rect x="138" y="260" width="124" height="56" rx="6" class="node"/><text x="200" y="294" text-anchor="middle">Learner</text>
       <rect x="270" y="260" width="124" height="56" rx="6" class="node-acc"/><text x="332" y="294" text-anchor="middle" class="t-hd t-acc">Job key</text>
     </svg>
-    <figcaption>Each record also carries an estimated cost. The job key is the link to the ledger, so a record and a charge can always be matched.</figcaption>
+    <figcaption>Each record also carries an estimated cost. The job key is the link to the ledger, so reconciliation can compare the recorded attempt with its reservation and settlement.</figcaption>
   </figure>
     <p>Tagged application inference profiles support feature-level billing attribution. Those delayed reports answer a different question from call telemetry. Activate tags before relying on future costs to appear under them.</p>
   </section>
@@ -55,7 +55,7 @@
       <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="190" class="t-hd">Settle: give back the rest</text>
     </svg>
-    <figcaption>Settling records the call's actual cost. A reservation that is never settled expires, so a crashed job doesn't hold money forever.</figcaption>
+    <figcaption>The successful path records actual usage and releases any unused reservation. A crashed attempt follows the reconciliation policy below.</figcaption>
   </figure>
     <p>A stable job key identifies the reservation and eventual settlement. Successful work replaces the estimate with actual usage; failed or abandoned work needs an explicit reconciliation policy. Expiry alone does not prove that the provider performed no paid work.</p>
     <p>Refills, including payments or monthly allowances, must also be idempotent. The ledger controls learner entitlement while the application separately bears and measures provider costs.</p>
@@ -72,7 +72,7 @@
       <rect x="16" y="136" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="168">Budgets action: kill switch</text>
     </svg>
-    <figcaption>Only the middle layer knows both who is spending and how much. The other two are simple and coarse, and that's their job.</figcaption>
+    <figcaption>Only the middle layer knows both who is spending and how much. The three layers measure different signals, so the ledger still needs reconciliation with provider usage.</figcaption>
   </figure>
     <p>Billing lag means the account switch can activate after additional spend has occurred. It is a last resort, with a tested policy and recovery procedure, rather than an exact real-time ceiling. The three controls operate on different signals and should be used together.</p>
   </section>
@@ -86,7 +86,7 @@
     <ol>
       <li>Record every call's cost against a feature and a learner, and tag a profile per feature.</li>
       <li>Reserve the maximum before a call and settle the actual cost after, keyed by the job.</li>
-      <li>Rate limits count requests, the ledger counts money, and a Budgets action stops the account.</li>
+      <li>Rate limits count requests, the ledger counts money, and a delayed Budgets action can deny later calls.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

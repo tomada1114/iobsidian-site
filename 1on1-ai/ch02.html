@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 2 of 13</span></p>
   <h1>What am I actually paying for in one LLM call?</h1>
-  <p class="lead">After this page you can explain tokens, the context window and why the same prompt can get a different answer. You can also estimate what a call costs and how long it takes, and when caching helps.</p>
+  <p class="lead">A compact grade may use fewer output tokens than input tokens and still spend a substantial share on output. Context, rates and latency need separate measurements.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are tokens and the context window?</li>
-      <li>Why does the answer change, and what takes the time?</li>
-      <li>What does one call cost, and when does caching help?</li>
-      <li>How did one support bot's bill keep growing?</li>
+      <li>Tokens and the context window</li>
+      <li>Why answers change, and what takes time</li>
+      <li>Price per call, and caching</li>
+      <li>A bill that grew every week</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -424,7 +424,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="24" y="196" width="352" height="48" rx="6" class="node-acc"/><text x="40" y="226" class="t-hd t-acc">The learner's answer</text>
       <rect x="24" y="260" width="352" height="48" rx="6" class="node-soft"/><text x="40" y="290">Room for the output</text>
     </svg>
-    <figcaption>Only the learner's answer changes from call to call. Everything above it is the same each time, which is why it can be cached.</figcaption>
+    <figcaption>Only the learner's answer changes from call to call. A stable prefix can benefit from supported caching when its size, configuration and lifetime meet the model’s requirements.</figcaption>
   </figure>
     <p>The context and output limits constrain the request. Set an output cap high enough for a complete verdict and low enough to bound cost and latency. Monitor truncation rather than infer that the longest previously observed answer is an absolute upper bound.</p>
   </section>
@@ -441,7 +441,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="160" y="172" width="224" height="28" rx="4" class="node-acc"/>
       <text x="384" y="226" text-anchor="end" class="t-sm">time →</text>
     </svg>
-    <figcaption>The shape is illustrative, not measured. Output is written one token at a time, so its length drives most of the wait.</figcaption>
+    <figcaption>The shape is illustrative, not measured. Longer output often adds generation time, but this drawing does not establish which latency component dominates the actual endpoint.</figcaption>
   </figure>
     <p>Latency includes request and queue overhead, processing the input and generating output. Longer responses often take longer, which is one reason the grader returns a compact verdict rather than a full essay. Measure the actual endpoint instead of predicting latency solely from token count.</p>
   </section>
@@ -461,7 +461,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="276" y="192" class="t-hd t-acc">$0.0025</text>
       <text x="16" y="226" class="t-sm">About a quarter of a cent</text>
     </svg>
-    <figcaption>Token counts are assumed; prices are Claude Haiku 4.5 on Bedrock, checked 2026-09-23. Output is a small part of the tokens but 40% of the cost.</figcaption>
+    <figcaption>The example assumes these token counts and uses the dated Claude Haiku 4.5 Bedrock rates checked 2026-09-23. Output is a small part of the tokens but 40% of the cost.</figcaption>
   </figure>
     <p>The cost illustration uses 1,500 input and 200 output tokens at explicitly assumed rates. It is not a quote for every Tokyo inference profile. Prompt caching can discount a stable prefix, while cache writes and expiry have their own rules.</p>
     <p>Quickturn keeps instructions and examples before the changing answer and records ordinary input, output, cache-read and cache-write usage separately. It measures per-answer versus per-round grading, including latency and failure behavior, before choosing. Extra examples earn their cost only if evaluation shows a useful improvement.</p>
@@ -474,8 +474,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Every call sends the whole context, because the model remembers nothing between calls.</li>
-      <li>Output drives both latency and cost, and the same input can give a different answer.</li>
+      <li>A call uses the context supplied by the application; conversation memory and caching require surrounding system support.</li>
+      <li>Input and output contribute differently to cost and latency; the same input can produce a different answer.</li>
       <li>Put the stable part first so it can be cached, and record all four token counts on every call.</li>
     </ol>
   </section>

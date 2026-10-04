@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 7 of 13</span></p>
   <h1>How would we know a prompt change made grading worse?</h1>
-  <p class="lead">After this page you can explain why an evaluation comes first, and how to build a gold set from what you have. You can also read agreement, flip rate, precision and recall.</p>
+  <p class="lead">A new prompt produces a few convincing grades. A reviewed evaluation set must show which cases improved, worsened or became less stable before adoption.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why does the evaluation come first?</li>
-      <li>Where does a gold set come from?</li>
-      <li>Which numbers do we track?</li>
-      <li>What can go wrong with the numbers?</li>
+      <li>Why evals come first</li>
+      <li>Datasets from what exists</li>
+      <li>The metrics</li>
+      <li>What the numbers cost</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -440,7 +440,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="300" y="292" text-anchor="middle" class="t-hd">Self-graded</text>
       <text x="300" y="314" text-anchor="middle" class="t-sm">learners' own marks</text>
     </svg>
-    <figcaption>Each source reuses something Quickturn already stores or can make. Only a sample needs a person's check.</figcaption>
+    <figcaption>Each source reuses something Quickturn already stores or can make. Gold labels need a defensible review process, with particular attention to noisy self-grades and uncertain perturbations.</figcaption>
   </figure>
     <p>Include empty, oversized, wrong-language, off-task and adversarial inputs. Learner-marked data is useful but noisier than reviewed labels. Card review uses accepted and rejected cards with reasons. Treat each language pair as its own evidence requirement; labels in one pair do not prove another pair's quality.</p>
   </section>
@@ -472,7 +472,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="112" y="214" width="216" height="22" rx="2" class="node-acc"/><text x="336" y="230" class="t-hd t-acc">6</text>
       <text x="16" y="284" class="t-sm">Verdict changes in ten runs (illustrative)</text>
     </svg>
-    <figcaption>Most answers get the same verdict every time. The borderline one flips often, which is where a rubric needs a clearer rule.</figcaption>
+    <figcaption>In this illustration, two answers stay stable and two change once. The borderline answer changes six times, suggesting a case to investigate rather than proving a rubric defect.</figcaption>
   </figure>
     <p>For error tags, precision asks how many emitted tags are right; recall asks how many real errors were found.</p>
   <figure class="fig">
@@ -503,7 +503,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Build the evaluation before the feature; it is the test suite and the definition of done.</li>
-      <li>Make the gold set from what you already store: accepted answers, broken ones, attacks and rejects.</li>
+      <li>Use reviewed positives, candidate negatives, attacks and rejects, checking that each gold label matches the intended rubric.</li>
       <li>Track several metrics against a recorded baseline, because any one metric can be gamed.</li>
     </ol>
   </section>

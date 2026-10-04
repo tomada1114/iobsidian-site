@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 4 of 13</span></p>
   <h1>Can an LLM return a type instead of a paragraph?</h1>
-  <p class="lead">After this page you can explain structured output, and why a schema in the request still needs validation afterwards. You can also say where free text is allowed in the code, and where it never goes.</p>
+  <p class="lead">The learner needs readable feedback, but the application needs a verdict and known error tags. Separate fields let code check shape without treating prose as instructions.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why does parsing free text break?</li>
-      <li>How does a schema constrain the output?</li>
-      <li>Why validate again, and where does free text stop?</li>
-      <li>What does a tight schema cost?</li>
+      <li>Why free text breaks</li>
+      <li>Constrained output</li>
+      <li>Validate again anyway</li>
+      <li>What a tight schema costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -431,7 +431,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">"Sure! Here is…"</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">none</text>
     </svg>
-    <figcaption>The right column has one typed value per row. Nothing is left for a parser to guess.</figcaption>
+    <figcaption>The right column has one typed value per row. Code can parse these fields separately, then check whether their values satisfy the task’s rules.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -465,7 +465,7 @@ const Grade = z.object({
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="334" class="t-hd">Typed result in domain code</text>
     </svg>
-    <figcaption>If the fourth step fails, the adapter returns a typed LLM error instead. Either way, the domain never sees raw text.</figcaption>
+    <figcaption>If the fourth step fails, the adapter returns a typed LLM error instead. The domain receives a parsed result or typed failure rather than the unparsed model reply.</figcaption>
   </figure>
     <p>The adapter converts that definition to the supported JSON Schema subset and parses the result. Error tags use known concept IDs so “wrong tense” and “tense error” do not become unrelated categories. Support depends on model and API, and truncation or unsuccessful response status still needs handling.</p>
   </section>
@@ -483,7 +483,7 @@ const Grade = z.object({
       <text x="200" y="184" text-anchor="middle" class="t-hd t-acc">Domain core</text>
       <text x="200" y="208" text-anchor="middle" class="t-sm">typed fields only</text>
     </svg>
-    <figcaption>The model's raw text stops at the adapter. The domain core only ever receives a typed result or a typed error.</figcaption>
+    <figcaption>The adapter parses the model reply before returning a typed result or error. Feedback remains a string for safe display, rather than executable instructions.</figcaption>
   </figure>
     <p>Retries are bounded. A persistently invalid grade remains ungraded rather than becoming a fabricated success. Feedback is displayed as text and is never used as executable code or as a machine decision hidden in free-form wording.</p>
   </section>
@@ -496,7 +496,7 @@ const Grade = z.object({
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Ask for output that matches a schema, built from the same definitions as the API contract.</li>
-      <li>Validate again, because a schema guarantees shape but not meaning.</li>
+      <li>Parse the response and check domain rules; a schema-conforming value can still be wrong.</li>
       <li>Typed fields drive decisions, while feedback remains text to display safely.</li>
     </ol>
   </section>

@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 8 of 13</span></p>
   <h1>Where do evals run: in CI, at night or in production?</h1>
-  <p class="lead">After this page you can explain the three places an evaluation runs, and what each one catches. You can also explain when a model can judge another model, and how production failures become tests.</p>
+  <p class="lead">A prompt change can pass a small regression gate and still fail on new production inputs. Release checks and online investigation provide different evidence.</p>
   <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What runs before a merge?</li>
-      <li>When can a model judge another model?</li>
-      <li>What does online evaluation add?</li>
-      <li>What does each place cost, and how do they connect?</li>
+      <li>The pre-merge gate</li>
+      <li>A model as the judge</li>
+      <li>Online evaluation</li>
+      <li>Costs, and closing the loop</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -470,24 +470,24 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s4"><span class="no">04</span>Costs, and closing the loop</h2>
     <p>Live gates cost money and time, judges can be biased, and production traces may contain sensitive conversations. Configure collection, access and retention deliberately.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 260" role="img" aria-label="Production traces are scored online, the worst sessions become gold cases, and the pre-merge gate catches the same failure next time, before it reaches production.">
+    <svg viewBox="0 0 400 260" role="img" aria-label="Online scores help identify sessions to investigate. Reviewed, privacy-safe failures become regression cases that improve the next gate’s coverage.">
       <rect x="16" y="16" width="168" height="64" rx="6" class="node"/>
       <text x="100" y="54" text-anchor="middle">Production traces</text>
       <rect x="216" y="16" width="168" height="64" rx="6" class="node"/>
       <text x="300" y="54" text-anchor="middle">Online scores</text>
       <rect x="216" y="176" width="168" height="64" rx="6" class="node-acc"/>
-      <text x="300" y="204" text-anchor="middle" class="t-hd t-acc">Worst sessions</text>
+      <text x="300" y="204" text-anchor="middle" class="t-hd t-acc">Reviewed cases</text>
       <text x="300" y="226" text-anchor="middle" class="t-sm">become gold cases</text>
       <rect x="16" y="176" width="168" height="64" rx="6" class="node"/>
-      <text x="100" y="214" text-anchor="middle">Gate catches it</text>
+      <text x="100" y="214" text-anchor="middle">Gate tests case</text>
       <line x1="184" y1="48" x2="212" y2="48" class="ln" marker-end="url(#arw)"/>
       <line x1="300" y1="80" x2="300" y2="172" class="ln" marker-end="url(#arw)"/>
       <line x1="216" y1="208" x2="188" y2="208" class="ln" marker-end="url(#arw)"/>
       <line x1="100" y1="176" x2="100" y2="84" class="ln" marker-end="url(#arw)"/>
     </svg>
-    <figcaption>Each turn of the loop adds real failures to the gold set. The gate gets harder to pass in exactly the places that matter.</figcaption>
+    <figcaption>Investigated failures add relevant cases to the gold set. The gate can then exercise those cases without claiming to cover every future failure.</figcaption>
   </figure>
-    <p>The feedback loop promotes investigated failures into reviewed test cases. A tool-selection regression found in production should become a candidate pre-release case, with sensitive details removed and the expected behavior established by a person. The loop improves coverage without pretending a gold set is complete.</p>
+    <p>The feedback loop promotes investigated failures into reviewed test cases. A tool-selection regression can become a candidate pre-release case after investigation. Remove sensitive details and have a person establish the expected behavior. The loop improves coverage without pretending a gold set is complete.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>

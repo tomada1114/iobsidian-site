@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 6 of 13</span></p>
   <h1>Should the timed drill wait for the grader?</h1>
-  <p class="lead">After this page you can explain why a model call stays off a fast path, and how a background job grades instead. You can also explain why a stored result, not the model, makes a retry safe.</p>
+  <p class="lead">A learner answers before the timer ends, but the model is still waiting. Saving practice first lets the drill continue while grading has its own failure path.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why keep the model off the drill?</li>
-      <li>How does a job key make grading safe to repeat?</li>
-      <li>Where does the job run, and what about duplicates?</li>
-      <li>What does grading later cost?</li>
+      <li>The hot path</li>
+      <li>The job and its key</li>
+      <li>Where it runs</li>
+      <li>What grading later costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -416,7 +416,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>A model call in the timed card path makes each answer depend on external latency. Streaming feedback does not remove the wait for a complete verdict. Offline answers also arrive later, so synchronous grading cannot be the only successful practice path.</p>
     <p>Quickturn records the answer immediately and grades it in the background. The summary and recap show the result when it is ready, while the drill continues.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="With inline grading the drill waits, a model failure breaks the drill, and a retry calls the model again; with grading as a job the drill does not wait, a model failure leaves the drill working, and a retry reads the stored result.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="With inline grading the drill waits, a model failure breaks the drill, and a retry calls the model again; with grading as a job the drill continues, and matching retries reuse a completed result while unfinished attempts need coordination.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Inline</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">As a job</text>
       <text x="16" y="56" class="t-sm">Does the drill wait?</text>
@@ -427,7 +427,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">no</text>
       <text x="16" y="216" class="t-sm">Retry calls the model?</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">again</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">no, reads result</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">reuse if complete</text>
     </svg>
     <figcaption>For Quickturn's timed drill, the operational requirements favor a background job. What it costs is immediacy: the learner sees the grade after the round, not on the card.</figcaption>
   </figure>
@@ -436,7 +436,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>The job and its key</h2>
     <p>A grading job key combines answer ID and rubric version. The first accepted result is stored conditionally; duplicate deliveries and retries reuse it. A new rubric version creates a distinct grading job without erasing the previous result.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 516" role="img" aria-label="The answer is stored, a job is queued, the worker checks the key, cost is reserved, the model is called once, the result is stored under the key, and the grade is shown on the round summary.">
+    <svg viewBox="0 0 400 516" role="img" aria-label="The answer is stored, a job is queued, the worker checks the key, cost is reserved, the worker calls the model under the job’s attempt policy, the result is stored under the key, and the grade is shown on the round summary.">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -454,13 +454,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="262">Cost reserved</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Model called once</text>
+      <text x="64" y="334">Model call</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="406" class="t-hd">Result stored under the key</text>
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="478">Grade on the round summary</text>
     </svg>
-    <figcaption>The sixth step is what makes every later delivery cheap. Once the result is stored, nothing calls the model for that key again.</figcaption>
+    <figcaption>Later matching deliveries can reuse the stored grade. Concurrent provider attempts still need coordination; saving one accepted result protects the learner-visible outcome.</figcaption>
   </figure>
     <p>Two workers can still call the provider before one wins the conditional result write. Result deduplication protects the learner-visible effect, while attempt coordination and accounting must handle any duplicate provider cost. The UI represents the grade as pending until a result or final failure is known.</p>
   </section>
@@ -469,9 +469,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>The job function can run inline locally and from an SQS-triggered worker in the hosted system. Standard queues can redeliver messages, so the stable key is part of normal behavior. Repeated failures move to a dead-letter queue for diagnosis and controlled replay.</p>
     <p>A cost reservation is made before the call. Replaying a message must reuse the relevant job identity and settlement state. The saved answer remains available even when grading fails.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="On the first delivery the key is not found, the model is called, cost is reserved and the new result is returned; on a duplicate delivery the key is found, the model is not called, no cost is reserved, and the stored result is returned.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="An initial attempt reserves cost before calling the model. A matching delivery after result storage reuses that result; concurrent attempts need separate coordination.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">First delivery</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Duplicate</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">Completed repeat</text>
       <text x="16" y="56" class="t-sm">Key found?</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">yes</text>
@@ -485,7 +485,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">the new result</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">stored result</text>
     </svg>
-    <figcaption>A duplicate returns the stored result without a call. That's why a queue that sometimes delivers twice is safe here.</figcaption>
+    <figcaption>This completed repeat reuses the stored result without another call. A delivery arriving before completion requires the attempt and accounting controls described above.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
@@ -498,7 +498,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ol>
       <li>Keep model calls off a timed path; store the answer and grade it as a background job.</li>
       <li>Key the job by answer id and rubric version, and store the first result under that key.</li>
-      <li>Retries and duplicates read the stored result, because the model won't repeat itself.</li>
+      <li>Reuse a stored accepted result for matching retries; coordinate unfinished attempts and reconcile any duplicate provider cost.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

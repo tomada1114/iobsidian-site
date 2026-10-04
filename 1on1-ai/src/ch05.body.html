@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 5 of 13</span></p>
   <h1>Why not one complete(prompt) function for every feature?</h1>
-  <p class="lead">After this page you can explain why each LLM task gets its own port, and what each task owns. You can also explain how fakes and recordings test it, and when a direct SDK call is fine.</p>
+  <p class="lead">A learner disputes an old grade. A named grading task makes its prompt, rubric and model versions easier to identify and evaluate together.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What goes wrong with one generic helper?</li>
-      <li>What does a task port own?</li>
-      <li>How do ports make tests and swaps easy?</li>
-      <li>When is a port too much?</li>
+      <li>One helper for everything</li>
+      <li>Task-level ports</li>
+      <li>Tests and swaps</li>
+      <li>When a port is too much</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -20,7 +20,7 @@
     <p>A generic <code>complete(prompt)</code> helper centralizes transport but leaves each caller owning its prompt, parser, versions and cost attribution. When several features use it, there may be no clear unit for evaluation or investigating an old result.</p>
     <p>A named grading task instead records its model, prompt and rubric versions and has a specific evaluation set. That responsibility boundary is more useful than simply avoiding repeated SDK calls.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="With one generic complete function, the prompt, schema, version, evaluation set and cost tag are each owned by every caller, or by nobody; with task ports, each of them is owned by the task.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="With one generic complete function, the prompt, schema, version, evaluation set and cost tag are each owned by every caller, or by nobody; with task ports, named tasks give each responsibility an explicit owner in this design.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">complete(prompt)</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Task ports</text>
       <text x="16" y="56" class="t-sm">The prompt</text>
@@ -30,16 +30,16 @@
       <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">each caller</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the task</text>
       <text x="16" y="216" class="t-sm">The version</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">nobody</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">unspecified</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">the task</text>
       <text x="16" y="296" class="t-sm">The evaluation set</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">nobody</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">unspecified</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">the task</text>
       <text x="16" y="376" class="t-sm">The cost tag</text>
       <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">if remembered</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">the task</text>
     </svg>
-    <figcaption>On the right, every row has an owner. On the left, the rows that matter most depend on people remembering.</figcaption>
+    <figcaption>The example on the left leaves important ownership unspecified. A generic helper can have disciplined callers, but the helper alone does not establish those responsibilities.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -89,7 +89,7 @@
     <ol>
       <li>Give each LLM task its own port, named for the task, not the vendor.</li>
       <li>Each task owns its prompt, schema, rubric version and evaluation set.</li>
-      <li>Fakes and recordings test the code; an evaluation run approves a new model or prompt.</li>
+      <li>Fakes and recordings test code behavior; reviewed live evaluation provides evidence for adopting a new model or prompt.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

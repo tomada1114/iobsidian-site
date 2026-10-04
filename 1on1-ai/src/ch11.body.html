@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 11 of 13</span></p>
   <h1>What does AgentCore do that forty lines of code can't?</h1>
-  <p class="lead">After this page you can explain what Amazon Bedrock AgentCore is, and what it isn't. You can also name its parts, say how each is billed, and say when an agent is worth running on it.</p>
+  <p class="lead">The tutor loop runs on a laptop, but production needs trusted sessions, controlled tools and useful telemetry. Managed components shift parts of that operating work.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What's missing between a laptop demo and production?</li>
-      <li>What are AgentCore's parts?</li>
-      <li>How is it billed?</li>
-      <li>When is it worth it?</li>
+      <li>Laptop versus production</li>
+      <li>The parts</li>
+      <li>How it&#x27;s billed</li>
+      <li>When it&#x27;s worth it</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -36,12 +36,12 @@
       <rect x="206" y="216" width="188" height="52" rx="6" class="node"/><text x="300" y="238" text-anchor="middle" class="t-hd">Observability</text><text x="300" y="258" text-anchor="middle" class="t-sm">traces every step</text>
       <rect x="106" y="276" width="188" height="52" rx="6" class="node"/><text x="200" y="298" text-anchor="middle" class="t-hd">Evaluations</text><text x="200" y="318" text-anchor="middle" class="t-sm">scores sessions</text>
     </svg>
-    <figcaption>Every box around the center is something a production agent needs and a laptop demo skips. The center stays your own code.</figcaption>
+    <figcaption>The boxes show available production services, rather than a mandatory bundle. Adopt the responsibilities this workload needs while keeping the agent’s behavior in owned code.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The parts</h2>
-    <p>Runtime hosts sessions; Gateway exposes controlled tools; Identity handles credential flows; Memory stores configured conversational information; Policy checks permitted Gateway actions; observability and evaluations support investigation and quality measurement. Adopt the components the workload needs.</p>
+    <p>Runtime hosts sessions, Gateway exposes controlled tools, and Identity handles credential flows. Memory stores configured conversational information, while Policy checks permitted Gateway actions. Observability and evaluations support investigation and quality measurement. Adopt the components the workload needs.</p>
   <dl class="terms">
     <dt>Runtime</dt><dd>A microVM per session, up to 8 hours. Without it: containers, routing, isolation.</dd>
     <dt>Gateway</dt><dd>Many tool sources, one endpoint. Without it: tool plumbing per agent.</dd>
@@ -74,7 +74,7 @@
       <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="406">Tool</text>
     </svg>
-    <figcaption>Observability traces every step. The Policy check is where an action is allowed or stopped, before any tool runs.</figcaption>
+    <figcaption>Configured telemetry supports investigation. Gateway Policy checks the actions routed through it; tool targets still enforce ownership and application rules.</figcaption>
   </figure>
     <p>Memory can support conversation continuity while progress remains in the application database. Session isolation and namespace conventions still require correct identifiers and access policies; a service name does not automatically establish tenant ownership.</p>
   </section>
@@ -120,14 +120,14 @@
     <figcaption>On the left, you build five of the six rows yourself. That's the real difference, more than the price in the last row.</figcaption>
   </figure>
     <p>Quickturn puts the open-ended tutor on AgentCore while leaving grading on a worker. Its deployment uses a separate agent stack and the network mode appropriate to its resources. Verify current architectures, Regions and service support before adopting a sample.</p>
-    <p>A successful laptop demo establishes the loop's usefulness. Production readiness requires evidence that the surrounding controls work too.</p>
+    <p>A successful laptop demo shows behavior on the cases tried. Production readiness requires evidence that the surrounding controls work too.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>AgentCore doesn't build the agent; it provides the production parts around the loop.</li>
       <li>Its parts are billed by use, with no minimum fee, and can be adopted one at a time.</li>
-      <li>Use it once a feature needs multi-turn, open-ended tool use, and not before.</li>
+      <li>Consider selected services when session, tool and operating needs justify their cost; a model call alone does not require an agent runtime.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

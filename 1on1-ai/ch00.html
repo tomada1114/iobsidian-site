@@ -398,7 +398,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Contents · 13 pages</span></p>
   <h1>Engineering Readers: AI in Production</h1>
-  <p class="lead">Thirteen short chapters about putting LLM features into a real product. After them you can explain what a model call costs, how to shape and test it, and how to defend it. You can also say when an agent is worth it, and how it acts safely for a user.</p>
+  <p class="lead">A useful model reply is only one part of a product feature. Quickturn also needs trustworthy grades, bounded spending and tools that respect learner ownership.</p>
   <p class="meta"><span>13 pages</span><span>About 51 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 <div class="flow">
@@ -437,13 +437,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li><a href="ch01.html">Does every AI feature need to be an agent?</a> — Pick the smallest shape that works, and save agents for open-ended tool use.</li>
       <li><a href="ch02.html">What am I actually paying for in one LLM call?</a> — Tokens in and out, and why the same prompt can answer differently.</li>
       <li><a href="ch03.html">Why does Bedrock want an inference profile, not a model?</a> — The profile decides where a call runs and which feature pays.</li>
-      <li><a href="ch04.html">Can an LLM return a type instead of a paragraph?</a> — A schema shapes the output, and validation checks its meaning.</li>
+      <li><a href="ch04.html">Can an LLM return a type instead of a paragraph?</a> — A schema shapes output; domain checks and evaluations test its meaning.</li>
       <li><a href="ch05.html">Why not one complete(prompt) function for every feature?</a> — Each task gets a port that owns its prompt, schema and evaluation.</li>
       <li><a href="ch06.html">Should the timed drill wait for the grader?</a> — Grade later as a job, and store the first result.</li>
       <li><a href="ch07.html">How would we know a prompt change made grading worse?</a> — A gold set and a few metrics turn opinions into numbers.</li>
       <li><a href="ch08.html">Where do evals run: in CI, at night or in production?</a> — Each place catches what the others miss.</li>
       <li><a href="ch09.html">What if a learner types 'ignore your instructions'?</a> — Limit what a successful attack can do, instead of betting on detection.</li>
-      <li><a href="ch10.html">Who pays for the tokens, and what stops a runaway bill?</a> — A per-learner ledger counts money; a kill switch stops the account.</li>
+      <li><a href="ch10.html">Who pays for the tokens, and what stops a runaway bill?</a> — Reservations control learner entitlement; a delayed account guard contains wider spending.</li>
       <li><a href="ch11.html">What does AgentCore do that forty lines of code can't?</a> — It rents you the production parts around the agent loop.</li>
       <li><a href="ch12.html">When an agent acts for a learner, whose rights does it use?</a> — From the token, never from a tool argument.</li>
       <li><a href="ch13.html">Can a machine review the cards a machine wrote?</a> — Calibrate against human decisions for each language pair, and audit the results.</li>

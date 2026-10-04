@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 3 of 13</span></p>
   <h1>Why does Bedrock want an inference profile, not a model?</h1>
-  <p class="lead">After this page you can explain what Amazon Bedrock adds on top of a model, and what an inference profile decides. You can also say when batch inference beats calling a model on demand.</p>
+  <p class="lead">Quickturn wants to attribute grading costs and keep supported inference inside Japan. Model choice, profile routing and log storage must satisfy those needs together.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is Bedrock, beyond a model's API?</li>
-      <li>What does an inference profile decide?</li>
-      <li>When does a request go to batch?</li>
-      <li>What do we trade for keeping data in Japan?</li>
+      <li>What Bedrock is</li>
+      <li>Inference profiles</li>
+      <li>On demand or batch</li>
+      <li>Residency against model choice</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -432,7 +432,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="256" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="288">Model, in Tokyo or Osaka</text>
     </svg>
-    <figcaption>The two profile layers do the deciding. One names the feature that pays; the other keeps processing inside Japan.</figcaption>
+    <figcaption>In this supported Japan-route example, one layer attributes a feature and the other defines inference destinations. Log storage needs its own residency configuration.</figcaption>
   </figure>
     <p>Quickturn's Japan-residency example uses a Japan geographic profile where the chosen model supports it. Confirm destination Regions for the exact profile before making a residency claim.</p>
   <figure class="fig">
@@ -452,18 +452,18 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="200" y="292" text-anchor="middle" class="t-hd">Card generation</text>
       <text x="200" y="314" text-anchor="middle" class="t-sm">tag: cards</text>
     </svg>
-    <figcaption>Every feature calls its model through its own tagged profile. Cost Explorer then shows what grading costs apart from the rest.</figcaption>
+    <figcaption>Every feature calls its model through its own tagged profile. Activated cost-allocation tags can then separate feature costs in delayed billing reports.</figcaption>
   </figure>
     <p>Application inference profiles wrap supported sources and provide feature-level tagging. Create and activate cost-allocation tags before relying on their billing reports. Delayed billing data is useful for attribution, not a real-time call budget.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>On demand or batch</h2>
-    <p>On-demand inference serves interactive work. Batch inference places requests and results in S3 for work that can wait, with availability and discounted pricing depending on the supported model and route.</p>
+    <p>On-demand inference serves interactive work. Batch inference places requests and results in S3 for work that can wait. Availability and discounted pricing depend on the supported model and route.</p>
   <table>
     <thead><tr><th></th><th>On demand</th><th>Batch</th></tr></thead>
     <tbody>
       <tr><td>Answer</td><td>now</td><td>later</td></tr>
-      <tr><td>Price</td><td>per token</td><td>half of on demand</td></tr>
+      <tr><td>Price</td><td>per token</td><td>discount, if supported</td></tr>
       <tr><td>Input</td><td>one request</td><td>a file in S3</td></tr>
       <tr><td>Good for</td><td>grading an answer</td><td>cards overnight</td></tr>
     </tbody>
@@ -474,21 +474,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s4"><span class="no">04</span>Residency against model choice</h2>
     <p>Model choice and processing location must be evaluated together. A newer model with only a global route may not meet a Japan-only requirement. Quickturn's dated model examples illustrate that constraint; they are not a permanent availability list.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="A jp. profile may use Tokyo and Osaka, keeps processing in Japan, has less capacity and may get the newest models later; a global profile may use any region, gives no residency, has more capacity and gets the newest models first.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="The illustrated Japan profile uses its documented Japan destinations. Global profiles can route more broadly across commercial AWS Regions; model availability and quotas need separate checks.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">jp. profile</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Global profile</text>
       <text x="16" y="56" class="t-sm">Regions it may use</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">Tokyo, Osaka</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">any</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">broader set</text>
       <text x="16" y="136" class="t-sm">Data residency</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="172" text-anchor="middle" class="t-hd t-acc">in Japan</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="172" text-anchor="middle">none</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="172" text-anchor="middle">not Japan-only</text>
       <text x="16" y="216" class="t-sm">Capacity</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">less</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">more</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">check quotas</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">check quotas</text>
       <text x="16" y="296" class="t-sm">Newest models</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">sometimes later</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">often first</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">check support</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">check support</text>
     </svg>
     <figcaption>The residency row decides it for Quickturn. The last row is the price: a newer model may exist only on a global profile.</figcaption>
   </figure>
