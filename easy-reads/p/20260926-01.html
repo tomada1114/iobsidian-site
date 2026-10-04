@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>What Makes an AI Agent Different from a Chatbot | Easy Reads</title>
+<title>When a Chatbot Becomes an Agent | Easy Reads</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -398,12 +398,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <li><a href="20260927-03.html"><span class="n">9/27</span><span>Why Americans Ask How You Are and Keep Walking</span></a></li>
     <li><a href="20260927-02.html"><span class="n">9/27</span><span>Three Questions at the Morning Stand-Up</span></a></li>
     <li><a href="20260927-01.html"><span class="n">9/27</span><span>What Happens When You Type brew install</span></a></li>
-    <li><a href="20260926-06.html"><span class="n">9/26</span><span>Why English Words Are Not Spelled Like They Sound</span></a></li>
+    <li><a href="20260926-06.html"><span class="n">9/26</span><span>Why English Spelling Keeps Old Sounds</span></a></li>
     <li><a href="20260926-05.html"><span class="n">9/26</span><span>A Lost Dog at the Farmers Market</span></a></li>
-    <li><a href="20260926-04.html"><span class="n">9/26</span><span>Why Do Your Ears Pop on a Plane?</span></a></li>
-    <li><a href="20260926-03.html"><span class="n">9/26</span><span>Why Football Fans Eat Lunch in a Parking Lot</span></a></li>
-    <li><a href="20260926-02.html"><span class="n">9/26</span><span>Code Review Is Not Only About Bugs</span></a></li>
-    <li><a href="20260926-01.html" aria-current="page"><span class="n">9/26</span><span>What Makes an AI Agent Different from a Chatbot</span></a></li>
+    <li><a href="20260926-04.html"><span class="n">9/26</span><span>Why Do Ears Pop on a Plane?</span></a></li>
+    <li><a href="20260926-03.html"><span class="n">9/26</span><span>Why Fans Tailgate Before Football Games</span></a></li>
+    <li><a href="20260926-02.html"><span class="n">9/26</span><span>Code Review Is About More Than Bugs</span></a></li>
+    <li><a href="20260926-01.html" aria-current="page"><span class="n">9/26</span><span>When a Chatbot Becomes an Agent</span></a></li>
     <li><a href="20260925-06.html"><span class="n">9/25</span><span>How a Simple Metal Box Changed World Trade</span></a></li>
     <li><a href="20260925-05.html"><span class="n">9/25</span><span>The Wrong Drink in the Cup</span></a></li>
     <li><a href="20260925-04.html"><span class="n">9/25</span><span>Why Cutting an Onion Makes You Cry</span></a></li>
@@ -431,56 +431,61 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="page acc-1">
 <header class="page-head">
   <p class="kicker"><a href="../index.html"><b>Easy Reads</b></a><span>Sat, Sep 26, 2026</span></p>
-  <h1>What Makes an AI Agent Different from a Chatbot</h1>
-  <p class="lead">A chatbot answers you and stops. An agent keeps going. It tries something, looks at the result, and tries again.</p>
-  <p class="meta"><span>Technology</span><span>353 words</span><span>About 3 min</span></p>
+  <h1>When a Chatbot Becomes an Agent</h1>
+  <p class="lead">A chat window shows a conversation, but not how much work the system can do. Some systems use tools, check results, and continue until a clear stopping point.</p>
+  <p class="meta"><span>Technology</span><span>342 words</span><span>About 3 min</span></p>
 </header>
 
 <div class="flow">
 <section aria-labelledby="s1">
-  <h2 id="s1">A chatbot only talks</h2>
-  <p>When you ask a chatbot a question, it reads your words and writes an answer. Then it stops. It does not check if the answer works. It waits for your next message.</p>
-  <p>Say you ask a chatbot to fix a bug in your code. It can tell you what to change. But you must copy the change, run the tests, and read the error. If the tests fail, you go back and ask again. You are the one doing the loop.</p>
+  <h2 id="s1">The screen is not the system</h2>
+  <p>A chat window is just a way to talk with a program. A chatbot may answer in text, but a system in the same window can also call a tool or ask another program for information. The screen alone does not tell you how the work happens.</p>
+  <p>An AI agent is often a model, instructions, and tools arranged to work toward a goal. People use the word in different ways, so there is no single feature that makes every system an agent.</p>
 </section>
 
 <section aria-labelledby="s2">
-  <h2 id="s2">An agent can use tools</h2>
-  <p>An <strong>AI agent</strong> is a language model that can use tools. A tool is a small program the model is allowed to call. It might read a file, run a command, or search the web.</p>
-  <p>The model does not run the tool by itself. It writes a short request, like "run the tests." The program around the model runs the tool. Then it gives the output back to the model as text.</p>
+  <h2 id="s2">A tool gives the model a way to act</h2>
+  <p>A tool is a small program that can do one job, such as read a file, search a website, or run a test. The model asks for the tool. The program around it checks that request and runs the action.</p>
+  <p>Then the program sends the result back. The model can read that result instead of guessing whether the action worked. A tool might return test results, a page of text, or an error.</p>
 </section>
 
 <section aria-labelledby="s3">
-  <h2 id="s3">The loop</h2>
-  <p>Now the model can see what happened. Maybe the tests passed. Maybe there is an error on line 40. The model reads the output and decides the next step.</p>
-  <p>This is the <strong>agent loop</strong>. Pick a tool. Run it. Read the result. Decide what to do next. The loop goes on until the job is done or the model decides to stop and ask you.</p>
-  <p>So the same bug now looks different. The agent opens the file and makes a change. It runs the tests and reads the error. It changes the code again. You only see the end.</p>
+  <h2 id="s3">The result guides the next step</h2>
+  <p>In one common design, the system repeats a loop: choose a tool, run it, read the result, and choose what to do next. If the test fails, the system can show the error before the agent chooses what to do next.</p>
+  <p>The agent may go back, change a file, and run the test again. A person can also see the steps as they happen. The system does not need to hide its work until the end.</p>
 </section>
 
 <section aria-labelledby="s4">
-  <h2 id="s4">Why the loop matters</h2>
-  <p>A model often gets things wrong on the first try. A chatbot cannot see its own mistake. An agent can, because the tool shows it the real result. Each turn of the loop gives it a new chance to fix things.</p>
-  <p>The loop also has limits. An agent can go the wrong way for many steps. It can use a tool in a way you did not want. That is why many agents ask for <em>permission</em>, or a clear yes from you, before they do something risky.</p>
+  <h2 id="s4">A loop still needs limits</h2>
+  <p>A loop can stop when the task is complete, when the model has no useful next step, or when it reaches a set limit. Some systems ask a person before an action that could change important data or contact someone.</p>
+  <p>Tools give an agent more ways to act, but they do not make every choice correct. A test can miss a problem, and the model can misunderstand what it sees. A person may need to step in, check the result, or set a smaller task.</p>
 </section>
 
 <section class="words" aria-labelledby="w">
   <h2 id="w">Words to notice</h2>
   <dl class="terms">
-    <dt>AI agent</dt><dd>a language model that uses tools in a loop</dd>
-    <dt>tool</dt><dd>a small program the model is allowed to call</dd>
-    <dt>output</dt><dd>what a program gives back after it runs</dd>
-    <dt>agent loop</dt><dd>pick a tool, run it, read the result, repeat</dd>
-    <dt>permission</dt><dd>a clear yes that lets someone do something</dd>
+    <dt>AI agent</dt><dd>a system that uses tools to complete a task</dd>
+    <dt>tool</dt><dd>a small program that does one job</dd>
+    <dt>result</dt><dd>what happens after an action</dd>
+    <dt>go back</dt><dd>return to an earlier step</dd>
+    <dt>step in</dt><dd>take control to help</dd>
   </dl>
 </section>
 
 <div class="aside aside-quiet">
+  <p class="label">English to notice</p>
+  <p><q>If the test fails, the system can show the error before the agent chooses what to do next.</q></p>
+  <p>The if-clause gives a condition. The next clause tells what may happen in that case.</p>
+</div>
+
+<div class="aside aside-quiet">
   <p class="label">Think about it</p>
-  <p>What is one job at your computer that you do as a loop? Which steps could an agent do for you?</p>
+  <p>If an agent made an unexpected change, what would you check first? Use an if-clause and “step in” in your answer.</p>
 </div>
 
 <nav class="pager" aria-label="More reads">
   <a class="prev" href="20260925-06.html"><span>Previous</span><b>How a Simple Metal Box Changed World Trade</b></a>
-  <a class="next" href="20260926-02.html"><span>Next</span><b>Code Review Is Not Only About Bugs</b></a>
+  <a class="next" href="20260926-02.html"><span>Next</span><b>Code Review Is About More Than Bugs</b></a>
 </nav>
   <p class="fine"><a href="../index.html">All reads</a></p>
 </div>
