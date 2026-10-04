@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>One-on-Ones: AI in Production · Contents</title>
+<title>Engineering Readers: AI in Production · Contents</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html" aria-current="page"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,16 +396,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Contents · 13 pages</span></p>
-  <h1>One-on-Ones: AI in Production</h1>
-  <p class="lead">Thirteen short conversations about putting LLM features into a real product. After them you can explain what a model call costs, how to shape and test it, and how to defend it. You can also say when an agent is worth it, and how it acts safely for a user.</p>
-  <p class="meta"><span>13 pages</span><span>About 1 hour 45 min</span><span>English, B2 · dialogue</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Contents · 13 pages</span></p>
+  <h1>Engineering Readers: AI in Production</h1>
+  <p class="lead">Thirteen short chapters about putting LLM features into a real product. After them you can explain what a model call costs, how to shape and test it, and how to defend it. You can also say when an agent is worth it, and how it acts safely for a user.</p>
+  <p class="meta"><span>13 pages</span><span>About 51 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 <div class="flow">
-  <section aria-labelledby="who">
-    <h2 id="who">Who's talking</h2>
-    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He writes TypeScript every day with Claude Code. He wants to explain why the product's AI features are built the way they are. Each page is one of their one-on-ones.</p>
-    <p>Quickturn is a small company that makes a language-learning app, with a web app and iOS and Android apps on one API. Maya, Leo and Quickturn are fictional.</p>
+  <section aria-labelledby="case">
+    <h2 id="case">The example application</h2>
+    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
+    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
   </section>
   <section aria-labelledby="map">
     <h2 id="map">How the pages fit together</h2>
@@ -446,12 +446,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li><a href="ch10.html">Who pays for the tokens, and what stops a runaway bill?</a> — A per-learner ledger counts money; a kill switch stops the account.</li>
       <li><a href="ch11.html">What does AgentCore do that forty lines of code can't?</a> — It rents you the production parts around the agent loop.</li>
       <li><a href="ch12.html">When an agent acts for a learner, whose rights does it use?</a> — From the token, never from a tool argument.</li>
-      <li><a href="ch13.html">Can a machine review the cards a machine wrote?</a> — Only after it agrees with past human decisions, above all the rejections.</li>
+      <li><a href="ch13.html">Can a machine review the cards a machine wrote?</a> — Calibrate against human decisions for each language pair, and audit the results.</li>
     </ol>
   </section>
   <div class="aside note">
     <p class="label">How to read this</p>
-    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
   </div>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>

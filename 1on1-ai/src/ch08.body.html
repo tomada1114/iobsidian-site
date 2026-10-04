@@ -1,9 +1,9 @@
 <!-- title: AI in Production 08 · Where evals run | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 8 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 8 of 13</span></p>
   <h1>Where do evals run: in CI, at night or in production?</h1>
   <p class="lead">After this page you can explain the three places an evaluation runs, and what each one catches. You can also explain when a model can judge another model, and how production failures become tests.</p>
-  <p class="meta"><span>About 8 min read</span><span>On a video call</span></p>
+  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,25 +15,9 @@
       <li>What does each place cost, and how do they connect?</li>
     </ul>
   </nav>
-  <p class="stage">A video call. Both look at the required checks on Leo's pull request.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The pre-merge gate</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If evals call the real model, do they run on every pull request? CI would get slow, flaky and expensive.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They don't. Look at the checks on your pull request. What do you see?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Unit, contract, isolation, infrastructure synthesis and smoke tests. They're all required.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And they use fakes and recordings for the model. No real calls, no cost.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does the real model run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only when a pull request changes a prompt, an output schema or the model configuration. A path filter, a rule on which files changed, picks those out.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then it runs the whole suite?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small subset, under a spend cap.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Picked at random?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Chosen on purpose: past failures, attacks, and the borderline answers that flip. Random cases would mostly be easy ones.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't I just run the eval on my laptop and paste the numbers into the pull request?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then nobody can repeat it, and nobody knows which prompt you ran. The gate runs the committed code and records the result.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the gate actually do?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw the path.</p></div></div>
-</div>
+    <p>Ordinary CI uses fakes and recordings for deterministic application checks. Changes to prompts, schemas or model configuration additionally trigger a small live evaluation using committed code and a spending cap. The subset emphasizes past failures, attacks and borderline cases.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A pull request changes a prompt, a path filter selects the evaluation gate, a small subset runs against the real model under a spend cap, the results are compared with the recorded baseline, and the check passes or fails.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -53,60 +37,18 @@
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="334">Pass or fail</text>
     </svg>
-    <figcaption>The fourth step decides. The gate fails when a metric falls below its recorded baseline, not below a fixed target.</figcaption>
+    <figcaption>The comparison uses a recorded baseline and a noise tolerance for each metric.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why a baseline, and not a target like "90% agreement"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A target says nothing about whether this change made things worse. The baseline is what the current prompt scores.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And small subsets are noisy.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So there's a tolerance for noise. A tiny dip passes; a real drop fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How big is the tolerance?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each metric has its own, set from how much it moves between runs of the same prompt.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Who changes the baseline?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only a reviewed pull request. Otherwise someone could lower the bar to make their change pass.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the full suite?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nightly, or on demand. That's where rare failures show up.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the nightly run fails?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It doesn't block anyone's merge. It opens an issue, and the task's owner looks at it the next morning.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does CI need AWS access to call the model?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, through the same OIDC trust it deploys with, so no stored keys. And the gate is itself a CI change, so changing it needs approval.</p></div></div>
-</div>
+    <p>Compare against a recorded baseline with metric-specific noise tolerance. Updating that baseline is a reviewed change, not an automatic way to make a failing candidate pass. A larger nightly or on-demand suite catches cases the small gate omits.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>A model as the judge</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Some things have no right answer. Is the feedback helpful? Is it in the learner's language?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's where a judge helps. Another model scores the output against a written rubric. People call it LLM-as-a-judge.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we can skip human labels.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. A judge is a model too. First you check it against human labels, on the same outputs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it agrees with people?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you pin it. Its model and its prompt version stay fixed, like any other dependency.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What can go wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bias. Judges often prefer longer answers, for example. So you test for that on purpose.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Give it two answers of equal quality, one padded with extra words. If the padded one scores higher, the rubric needs fixing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could a judge check the language of the feedback?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It could, but a plain language detector in code is cheaper and never drifts. Use a judge only where code can't decide.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Doesn't Bedrock have evaluation built in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does. Managed evaluation supports a model as the judge, custom metrics and your own responses.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why not use it as the gate?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The thresholds must live in the repository, next to the code they judge. So Bedrock's evaluation supplements the harness; it doesn't replace it.</p></div></div>
-</div>
+    <p>An LLM judge can assess qualities that deterministic code cannot easily measure. Calibrate it against human labels, pin its model and rubric versions, and test biases such as favoring longer answers.</p>
+    <p>Use code for reliably decidable properties instead of paying a judge to guess them. Managed evaluation services can supplement the harness, while repository-owned cases, thresholds and configuration keep the release criterion reviewable.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Online evaluation</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the gate passes, are we done?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not after release. Real inputs drift, and learners write things no gold set predicted. And agents take new paths.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But we already monitor errors and latency in production.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those tell you it's running, not that it's good. A tutor can answer fast, with no errors, and still give wrong advice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we score production?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For the tutor agent, AgentCore Evaluations scores sessions. Online on a sample of real sessions, or on demand for chosen ones.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Built-in evaluators and custom ones, using traces as raw material. A trace is the record of every step and tool call in one session.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why only a sample? Why not score every session?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each score is a model call, so it costs tokens. A sample shows the trend at a fraction of the price.</p></div></div>
-</div>
+    <p>Pre-release tests cannot cover every production input. AgentCore evaluation can score selected or sampled sessions using traces, built-in criteria and custom evaluators. Quality signals complement latency and error metrics.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="The pre-merge harness runs on a pull request, uses gold sets, answers whether this change will make things worse, and its thresholds are set in the repository; online evaluation runs after release, uses real sessions, answers whether things are getting worse out there, and its thresholds are set on a dashboard.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Pre-merge</text>
@@ -126,29 +68,11 @@
     </svg>
     <figcaption>The third row is why you need both. One asks about a change before it ships; the other asks about the live system over time.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the harness asks "will this change make it worse?"</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And online evaluation asks "is it getting worse out there?" Different questions, so neither replaces the other.</p></div></div>
-</div>
+    <p>Sampling controls evaluation cost, and low scores need investigation rather than automatic acceptance as truth. Online evaluation asks whether deployed behavior is worsening; a merge gate asks whether a proposed change meets the current release bar.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Costs, and closing the loop</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does each one cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>CI evals cost money and minutes, and small subsets miss rare failures. Judges cost tokens, and they can drift when their model changes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And online evaluation?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It stores learners' conversations. That brings decisions about privacy and how long we keep them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is it worth that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For the tutor, yes. It's the one feature where the paths aren't known in advance, so a gold set alone can't cover it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen a team with only one of the three?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, a sales-assistant agent had only online evaluation. A prompt change passed code review.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its accuracy at choosing the right tool dropped. The dashboard showed it two days later.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two days of worse answers for everyone.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So they built a pre-merge set from the worst online sessions. Production failures became gate cases.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a loop.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me draw it.</p></div></div>
-</div>
+    <p>Live gates cost money and time, judges can be biased, and production traces may contain sensitive conversations. Configure collection, access and retention deliberately.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 260" role="img" aria-label="Production traces are scored online, the worst sessions become gold cases, and the pre-merge gate catches the same failure next time, before it reaches production.">
       <rect x="16" y="16" width="168" height="64" rx="6" class="node"/>
@@ -167,22 +91,7 @@
     </svg>
     <figcaption>Each turn of the loop adds real failures to the gold set. The gate gets harder to pass in exactly the places that matter.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a failure found online is only allowed to happen once.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the goal. We do the same with the tutor: its worst scored sessions feed the next gold cases.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your pull request touches a prompt. Tell me what will run, and why.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fakes run on every pull request. Because I changed a prompt, a small, capped real-model eval runs too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It compares with the baseline in the repository. The full suite runs nightly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>After release, online scoring watches real sessions. Every failure found in production becomes a test case for the gate.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a judge model?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only after checking it against human labels, and pinned like any dependency.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Online scoring stores real conversations, though. Decide how long we keep them before the first one is stored.</p></div></div>
-</div>
+    <p>The feedback loop promotes investigated failures into reviewed test cases. A tool-selection regression found in production should become a candidate pre-release case, with sensitive details removed and the expected behavior established by a person. The loop improves coverage without pretending a gold set is complete.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -196,5 +105,5 @@
     <a class="prev" href="ch07.html"><span>Previous</span><b>How would we know a prompt change made grading worse?</b></a>
     <a class="next" href="ch09.html"><span>Next</span><b>What if a learner types 'ignore your instructions'?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

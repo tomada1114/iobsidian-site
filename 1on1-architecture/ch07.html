@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Architecture pages">
-  <h2><a href="ch00.html">One-on-Ones: Architecture</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Architecture pages">
+  <h2><a href="ch00.html">Engineering Readers: Architecture</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Isn&#x27;t architecture just folders</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 7 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 7 of 11</span></p>
   <h1>What is an aggregate, really?</h1>
   <p class="lead">After this page you can explain an aggregate as a consistency boundary and show how versioned writes protect it. You can also say when it's fine to break the "one aggregate per transaction" rule.</p>
-  <p class="meta"><span>About 8 min read</span><span>Whiteboard room, morning</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,27 +409,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is it fine to bend the textbook rules?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room, the morning after a conflict in the logs.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The building blocks, quickly</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I saw an <code>ERR_CONFLICT</code> in the logs last night. A learner answered the same round from two phones at the same moment. One write lost and retried.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what was "in conflict", exactly?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's my question. The on-call engineer told me "that's the aggregate protecting itself". It didn't help.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you picture when you hear "aggregate"?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A big object that contains other objects. Or a table with its child tables.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual picture, and it isn't the important part. Let's go through the building blocks quickly. An entity has an identity that lasts while its values change.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a learner. Or a round. It's still the same round after I answer a card.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A value object is defined only by its values. A practice day, a time limit, a grade.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "missed it" is just "missed it". There's no identity to track.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Now the aggregate. It's a group of entities and values with one root, the single entry point other code goes through. And it has invariants.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Invariants being...?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rules that must be true after every change. Here are ours for a round: it takes answers only while it's open, and only for cards in its deck.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And an answer id is recorded only once.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And a day's portion is completed only once. So an aggregate isn't about size. It's about which rules must hold together.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question is "what must be consistent after one write", not "what contains what".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the whole idea. Let me draw what one learner's data looks like.</p></div></div>
-    </div>
+    <p>An entity keeps its identity as its values change: a round remains the same round after an answer. A value object is defined by its values, such as a grade or time limit. An aggregate groups related entities and values behind one root, so specified invariants hold after a change.</p>
+    <p>For a round, answers are accepted only while it is open and only for cards in its deck. Answer IDs must not be recorded twice, and a day's portion must not be completed twice. The boundary therefore follows consistency requirements, rather than the size of an object or a set of database tables.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 320" role="img" aria-label="One learner's partition contains several aggregates, each with a version tag: round, portion, day tally, item memory, totals and settings. The round holds its invariants, rules that hold after every commit.">
         <rect x="8" y="8" width="384" height="304" rx="10" class="zone-soft"/>
@@ -445,20 +428,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="208" y="224" width="168" height="40" rx="6" class="node"/><text x="220" y="250">Totals</text><text x="364" y="250" text-anchor="end" class="t-sm">v9</text>
         <rect x="24" y="272" width="168" height="32" rx="6" class="node"/><text x="36" y="294" class="t-sm">Settings</text><text x="180" y="294" text-anchor="end" class="t-sm">v1</text>
       </svg>
-      <figcaption>Every aggregate in a learner's partition carries a version. The round is the one Leo's conflict hit: its rules must hold after every commit.</figcaption>
+      <figcaption>Every aggregate in a learner's partition carries a version. The round illustrates a concurrency conflict: its rules must hold after every commit.</figcaption>
     </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>How the boundary protects itself</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, each one has a version. What does the version do?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A command is one request that changes data, like recording an answer. It reads the aggregates it needs, along with their versions.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A pure function, code that only computes from its inputs, decides the changes. Then the commit says "write these, but only if each is still at the version I read".</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if another write got there first?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the condition fails. The command loads again and decides again. After three attempts, it gives up and returns a conflict.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the <code>ERR_CONFLICT</code> I saw. But most of the time the retry just works.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me draw your two phones.</p></div></div>
-    </div>
+    <p>A command reads the aggregates it needs and their versions. A pure decision function computes intended changes. The commit accepts them only if the stored versions still match those read.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 304" role="img" aria-label="Two devices read the round at version 7 and decide; both commit only if the round is still version 7. One wins; the other's condition fails, so it reloads and decides again: optimistic concurrency.">
         <path d="M94 96 C94 34 306 34 306 96" class="ln" marker-end="url(#arw)"/>
@@ -475,41 +450,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Phone A committed first, so the round is at version 8. Phone B's commit fails its condition, and B retries from a fresh read. This is optimistic concurrency.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why "optimistic"?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because we don't lock anything in advance. We assume conflicts are rare, and handle them when they happen.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That fits. One learner rarely uses two phones at once.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly why it's the right choice here. With many people editing the same thing all day, you'd think harder.</p></div></div>
-    </div>
+    <p>If two phones act on the same round, the first write can advance its version. The second write's condition fails, so it reloads and recomputes rather than overwriting the newer state. Quickturn allows three attempts before returning a conflict.</p>
+    <p>This is optimistic concurrency: no lock is held while deciding. It suits records with infrequent contention, such as one learner's data. A heavily shared record needs a separate assessment of retry rates and throughput.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>No classes</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the books, an aggregate is a class with private fields. We don't have any classes.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We use plain read-only data instead. And literal types: a time limit can only be one of five values.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>15, 30, 45, 60…?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>15, 20, 30, 45 or 60; nothing else compiles. And a branded learner id: a string the type system won't confuse with other strings.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can't pass a card id where a learner id belongs.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And zod schemas validate input at the HTTP edge, where requests come in. Zod is a TypeScript library that checks the shape of data, so bad data doesn't get in.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But what gives the guarantee a class gives? With a class, only its methods can change its fields.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The decide functions, the pure functions that decide changes, are the only place that produces changes. Types narrow what's possible, and tests cover each decide function.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a promise we keep, not something the language enforces.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. That's one of the trade-offs we'll get to.</p></div></div>
-    </div>
+    <p>Quickturn uses read-only data, literal types and branded identifiers. A time limit is one of 15, 20, 30, 45 or 60 seconds. A branded learner ID helps prevent accidentally passing a card ID in its place. Zod schemas validate runtime input at the HTTP boundary.</p>
+    <p>These protections have different roles. Types narrow valid code, schemas reject malformed external values, and tests check decision behavior. Plain objects still lack the full encapsulation a class with private fields could provide. The project relies on decision functions as the designated path for producing changes.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Bending the textbook</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Vaughn Vernon wrote the simple rules most teams know. Keep aggregates small. Reference other aggregates by id.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Change one aggregate per transaction, and update the others later. A transaction is a set of writes that succeed or fail together.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we follow that?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We bend the third on purpose. Guess what recording one answer writes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The log entry. The round. Maybe the day's tally?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Also the item's memory state and the learner's totals. All in one DynamoDB transaction.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Five aggregates in one transaction. Isn't that exactly what the book says not to do?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is, and here's why we do it anyway.</p></div></div>
-    </div>
+    <p>The usual aggregate guidance favors small boundaries, references by ID and transactions that change one aggregate. Quickturn deliberately updates several learner-owned records together: the answer log, round, daily tally, card memory state and learner totals.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 276" role="img" aria-label="The textbook changes one aggregate per transaction and updates the rest eventually; Quickturn changes several aggregates of one learner in one transaction, because they share one partition and one actor.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Textbook</text>
@@ -526,53 +477,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Only the transaction row differs. We write several of a learner's aggregates at once because they share one partition and one person acts on them.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They all live in one learner's partition, the part of the table that holds only that learner's data. One learner rarely acts from two devices at once.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And streaks that are "eventually" right would need a queue for nothing.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the usual reason for the rule, lots of writers fighting, doesn't apply.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Picture a shop instead. An order and the stock count for a popular item.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Thousands of people buying the same item. If every order locked the stock count in the same transaction…</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>…they'd all fight over one record, and most orders would retry. So shops keep the order as one aggregate and update stock separately, a moment later.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And accept that the stock number is briefly wrong.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, with a rule for what happens when it runs out. That's the textbook case, and there Vernon's rule is exactly right.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the rule is really about contention. Many writers on one aggregate means small transactions.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the reason behind it. Know the reason, and you know when it applies.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>But we respect one hard limit. A transaction holds a bounded number of writes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a big batch of offline answers can't go in one commit.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We split it into chunks of 20 answers. Each chunk is its own commit.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the usage ledger for the AI features? Is it in the same transaction?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The ledger is its own consistency boundary. Mixing billing-like counts into every answer commit would tie together two things that change for different reasons.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the classes-versus-plain-data trade-off?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Classes enforce rules even when someone forgets. Plain data relies on discipline and tests. We chose short code and one obvious place for each rule.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the team got much bigger, you might revisit that.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>I would. That's a decision with a condition, not a belief.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The on-call engineer asks you what "the aggregate protecting itself" meant. Go.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An aggregate is the boundary of data whose rules must hold after every write. Like a round only taking answers while it's open.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each one has a version. A command reads, a pure function decides, and the commit only succeeds if nothing changed since the read.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If something did, we reload and decide again, up to three tries in all. That's the conflict I saw.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the rule we break?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One aggregate per transaction. We write several of one learner's aggregates at once, because they share a partition and one person acts on them.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the limit: a transaction holds only so many writes. So big offline batches go in chunks of 20 answers, one commit per chunk.</p></div></div>
-    </div>
+    <p>All belong to one learner, and contention is normally low. An atomic transaction avoids a queue solely to make a small set of counters agree. A busy shop's shared stock record is a different case: coupling every order to it can create contention, so inventory may need reservations, separate updates or compensation rules.</p>
+    <p>Transactions still have service limits. Offline answers are processed in bounded chunks, with each chunk committed separately; the implementation must count actual writes rather than assume a fixed answer count always fits. AI usage accounting has its own consistency boundary. The choice should be revisited if contention or team ownership changes.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>An aggregate is a consistency boundary: the data whose rules must hold after every write.</li>
       <li>Versioned, conditional commits protect it. A write that loses to another one reloads and decides again.</li>
-      <li>Bending "one aggregate per transaction" is fine when the aggregates share one partition and one actor.</li>
+      <li>Quickturn updates several learner-owned aggregates together because contention is low and immediate consistency matters.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="ch06.html"><span>Previous</span><b>Why not split it into microservices?</b></a>
     <a class="next" href="ch08.html"><span>Next</span><b>Where does the logic go, if not in the handler?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

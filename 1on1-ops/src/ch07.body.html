@@ -1,9 +1,9 @@
 <!-- title: Operations 07 · A fake you can trust | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 7 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 7 of 12</span></p>
   <h1>How do we know the fake database behaves like the real one?</h1>
   <p class="lead">After this page you can explain what a contract suite is, and why it makes a fake worth trusting. You can also say how the same idea proves one learner can't see another's data.</p>
-  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,51 +15,14 @@
       <li>What does it still not prove?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room. Leo's feature passed every test on the in-memory store, then failed on DynamoDB local.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>When a fake lies</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My change passed every test. Then I ran it against DynamoDB local, and the real store refused a commit the fake had accepted.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What was in the commit?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A big batch of review updates. Over a hundred items in one transaction.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And DynamoDB has a per-transaction item limit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why keep a fake at all, if it lies? Shouldn't we just test against the real database?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How many tests use the in-memory store today?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hundreds. The whole API suite runs on it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And how long do they take?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Seconds. Against a container, it would be minutes, and every run would need Docker.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the fake is worth keeping. The question is how to stop it lying.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Write more careful fakes?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful isn't a guarantee. Two people write two stores, and each reads the same docs differently.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the shape we're working with?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our application code talks to the learner store through a port. That's an interface: a list of what the store promises to do.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And two implementations sit behind it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>DynamoDB and in-memory. If the in-memory one accepts something DynamoDB refuses, every test built on it proves nothing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is what just happened to me.</p></div></div>
-</div>
+    <p>An in-memory store can accept a commit that DynamoDB rejects, making fast tests falsely reassuring about that case. The fake remains valuable, but its behavior needs a stated contract rather than a separate interpretation of database documentation.</p>
+    <p>Quickturn exposes storage through a port. Shared tests describe what each implementation must accept, reject and return.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The contract suite</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we keep them the same?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We write down, once, as tests, everything the port promises. Then we run the same tests against every implementation.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The same file, twice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The suite is a function. It takes a name and a way to make stores, and it holds every case.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What kind of cases?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An entry is created at version 1, and each update moves it on. An update at a stale version is refused.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So two tabs can't overwrite each other.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A commit is all or nothing when one condition fails. And a resent answer is rejected by its id, and changes nothing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And my case?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A commit over the item limit is refused. By the fake too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, the fake already refuses it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does now. Our code holds the limit as a constant, 100, and the in-memory store checks it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why did mine pass?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your branch was cut before that case was written down. Rebase, and your test fails on the fake, in seconds.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is where I wanted to find it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The function is called once for the in-memory store, in the everyday test run. And once for the DynamoDB store, against DynamoDB local, in its own suite.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does that suite run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In CI, with DynamoDB local as a service container. The learner directory has its own contract, built the same way.</p></div></div>
-</div>
+    <p>A contract-suite function receives a store factory and runs the same cases for each adapter. It checks version creation, stale updates, transaction atomicity and duplicate answer behavior.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="The contract suite, written once, in the center. Around it: the in-memory store, run in every test run; the DynamoDB store on DynamoDB local, run in CI; and any new implementation, which adds one more call.">
       <line x1="200" y1="166" x2="104" y2="48" class="ln"/>
@@ -80,32 +43,17 @@
     </svg>
     <figcaption>The center is written once. Each store around it earns trust by passing the same cases.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone adds a third store? Say, a cache.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They add one call to the contract function. Never a copy of the tests.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a copy would drift, like my fake did.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. One list of promises, checked everywhere. Here's the difference it makes.</p></div></div>
-</div>
+    <p>The fake also enforces the application's commit limits. DynamoDB's action and size limits and restrictions on repeated item targets are separate conditions that must be represented where relevant.</p>
 <dl class="terms">
   <dt>Accepts a 101-item commit?</dt><dd>Without a contract: maybe. With one: refused, like DynamoDB.</dd>
   <dt>Accepts a stale update?</dt><dd>Without a contract: maybe. With one: refused.</dd>
   <dt>Lets B read A's data?</dt><dd>Without a contract: nobody checked. With one: proven empty.</dd>
 </dl>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Maybe" is the worrying word in that list.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's what you had this morning. The fake wasn't wrong on purpose. On your branch, nobody had written the case down yet.</p></div></div>
-</div>
+    <p>The in-memory suite runs quickly; the DynamoDB suite runs against a pinned local service in CI. A future adapter invokes the same test function rather than copy-pasting a weaker suite. New failure cases improve both implementations.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Isolation as a contract</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the contract only about versions and commits?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The first block is about isolation. It writes learner A's data, then tries every read the port offers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>As A, it finds the data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And as B, it finds nothing. Then B writes the same keys, and A's data stays unchanged.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And B can't update A's entry?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the last check. Let me draw what it proves.</p></div></div>
-</div>
+    <p>Isolation cases write as learner A, try each read as B, then let B use the same record IDs without changing A's data. Compile-time coverage of the method list helps ensure that a new method cannot silently escape the suite.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of the caller down and whose data across. Learner A reading A's data finds it; learner B reading B's data finds it; learner A reading B's data, and learner B reading A's data, find nothing.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">A's data</text>
@@ -123,55 +71,12 @@
     </svg>
     <figcaption>The accented cells are what the isolation cases prove empty, for every store and every read.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Every read" sounds hard to keep true. What if someone adds a new read method next month?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The list of reads in the test is keyed by the port's own method names.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a new method without an isolation case…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Fails to compile. The type checker makes you cover it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "one learner can never see another's data" isn't a review comment.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a tested property of every store. A reviewer can miss a line. The compiler doesn't get tired.</p></div></div>
-</div>
+    <p>This makes ownership a tested store property as well as a review concern. It remains evidence for the covered methods and cases, not a mathematical proof that no production configuration or future code can leak data.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What it still doesn't prove</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So DynamoDB is fully covered now?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not fully. The contract runs against DynamoDB local, not the real service.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does local behave differently?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The suite doesn't prove local matches the service in every condition case. The team wrote that limit down.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else is missing from local?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Point-in-time recovery, for one. Restores are tested elsewhere.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the DynamoDB suite isn't in my everyday run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It needs a container, so it stays out of the everyday gate. CI runs it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if I run it and Docker isn't up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It fails, with an instruction to start the container. It never skips.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And in CI, the container is always there?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's declared in the job, with a pinned image version. If it doesn't start, the job fails before any test runs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not skip? That seems friendlier.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A skipped suite looks green. You'd think it passed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does writing all this cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Time up front. And it only pays when there are two or more implementations.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for a store with only a real version, you'd skip the contract.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You'd just test the real one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the pattern work outside databases?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It keeps a payment-provider fake or a model-client fake honest in the same way.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And between two teams' services?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's consumer-driven contract testing, with tools like Pact. The consumer writes what it expects, and the provider runs it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same idea, across a team boundary.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. One list of promises, run against whoever claims to keep them.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You asked why we keep a fake that lies. Answer it now.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We write what the store promises once, as a contract suite. We run it against the in-memory fake and DynamoDB local.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the fake passes the same tests as the real adapter, every fast test that uses the fake means something.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isolation is part of the contract, so no store can leak one learner's data to another.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's left?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>DynamoDB local isn't the real service.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When you find a new difference, add it as a case. The contract grows, and the fake keeps up.</p></div></div>
-</div>
+    <p>DynamoDB Local does not reproduce every cloud behavior, such as IAM or point-in-time recovery. Those need other tests or deployment checks. If the required container is unavailable, the integration suite fails with a useful prerequisite message instead of skipping and appearing green.</p>
+    <p>A shared contract is particularly valuable when several implementations claim the same semantics. Consumer-driven API contracts use a related idea: consumers state expectations and providers verify them. The precise test boundary and remaining gaps must be explicit.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -185,5 +90,5 @@
     <a class="prev" href="ch06.html"><span>Previous</span><b>Is a testing strategy just 'write more unit tests'?</b></a>
     <a class="next" href="ch08.html"><span>Next</span><b>How do you test things that aren't plain code?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

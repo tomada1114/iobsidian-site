@@ -1,15 +1,15 @@
-<!-- title: One-on-Ones: API and TypeScript · Contents | accent: reach -->
+<!-- title: Engineering Readers: API and TypeScript · Contents | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Contents · 11 pages</span></p>
-  <h1>One-on-Ones: API and TypeScript</h1>
-  <p class="lead">Eleven short conversations about types and APIs that last. After them you can explain what TypeScript checks and where runtime checks belong. You can also design an API that old apps, retries and offline phones can rely on.</p>
-  <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Contents · 11 pages</span></p>
+  <h1>Engineering Readers: API and TypeScript</h1>
+  <p class="lead">Eleven short chapters about types and APIs that last. After them you can explain what TypeScript checks and where runtime checks belong. You can also design an API that old apps, retries and offline phones can rely on.</p>
+  <p class="meta"><span>11 pages</span><span>About 44 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 <div class="flow">
-  <section aria-labelledby="who">
-    <h2 id="who">Who's talking</h2>
-    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He writes TypeScript every day with Claude Code. He wants to explain why the code and the API are shaped the way they are. Each page is one of their one-on-ones.</p>
-    <p>Quickturn is a small company that makes a language-learning app, with a web app and iOS and Android apps on one API. Maya, Leo and Quickturn are fictional.</p>
+  <section aria-labelledby="case">
+    <h2 id="case">The example application</h2>
+    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
+    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
   </section>
   <section aria-labelledby="map">
     <h2 id="map">How the pages fit together</h2>
@@ -38,7 +38,7 @@
       <li><a href="ch01.html">If types vanish at runtime, what are they for?</a> — Types check our code; outside data stays <code>unknown</code> until checked.</li>
       <li><a href="ch02.html">Which compiler flags change how I write code?</a> — <code>strict</code> is a floor, and a loosened gate stops being one.</li>
       <li><a href="ch03.html">Why not just add another boolean flag?</a> — A discriminated union makes nonsense combinations impossible to write.</li>
-      <li><a href="ch04.html">Should a function throw, or return its failure?</a> — Return expected failures with a code; throw only for bugs.</li>
+      <li><a href="ch04.html">Should a function throw, or return its failure?</a> — Return expected failures with a code, and handle unexpected failures separately.</li>
       <li><a href="ch05.html">Trust nothing at the boundary: parse it once</a> — Parse outside data once at the edge into a precise type.</li>
       <li><a href="ch06.html">REST, GraphQL or RPC: how do you choose?</a> — The API style follows the clients and how they read data.</li>
       <li><a href="ch07.html">Where does the API contract actually live?</a> — One set of schemas generates everything, and tests catch drift.</li>
@@ -50,7 +50,7 @@
   </section>
   <div class="aside note">
     <p class="label">How to read this</p>
-    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
   </div>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>

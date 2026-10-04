@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 06 · Why DynamoDB, not PostgreSQL | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 6 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 6 of 14</span></p>
   <h1>Why DynamoDB and not PostgreSQL?</h1>
   <p class="lead">After this page you can choose a database from decision drivers instead of habit. You can also say what DynamoDB costs, and when a relational database is the better pick.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,25 +15,10 @@
       <li>How do you defend the choice in a review?</li>
     </ul>
   </nav>
-  <p class="stage">After the Tuesday design review. A teammate said the team would have shipped faster with Postgres.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Drivers before products</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That comment in the review stuck with me. "We'd have shipped faster with Postgres." I half agree. Why didn't we pick it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which half do you agree with?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>PostgreSQL is the safe default. Everyone knows SQL. NoSQL is for companies with huge scale, and we're small.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how most teams choose: from habit, SQL or NoSQL first. We did it the other way round. We wrote down the decision drivers first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Decision drivers?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The things the choice must be good at, written before looking at any product. Then every option is judged against the same list.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What was on our list?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>First, a boundary per learner that holds by structure. One learner's data should be separate because of how it's stored, not because every query remembers a filter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Second?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Deleting and exporting one learner's data easily. Third, no cost when idle. Fourth, no VPC and no connection management from Lambda.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Connection management meaning a pooler, because many Lambdas would each open connections?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly that. Fifth, conditional writes, so resent answers are harmless. And sixth, a history complete enough to rebuild derived data, like stats.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>None of those say "SQL" or "NoSQL".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point. They describe what the app needs. Here's the process as a whole.</p></div></div>
-</div>
+    <p>Quickturn lists decision drivers before comparing database products: structural learner isolation, straightforward export and deletion, low idle cost, manageable Lambda access, conditional writes and sufficient history to rebuild derived state.</p>
+    <p>These are application needs rather than a preference for SQL or NoSQL. The comparison is useful only if each candidate is judged against the same needs and operational assumptions.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="List the drivers, list the options, judge each option on each driver, choose, and write down what would make you revisit the choice.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -58,22 +43,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The options side by side</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which options were on the list?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four. DynamoDB on-demand. Aurora DSQL, a serverless database that speaks PostgreSQL. Aurora Serverless v2, which is full PostgreSQL. And classic RDS PostgreSQL.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Start with RDS. That's the usual one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An instance billed every hour, used or not. It lives in a VPC. And many Lambdas need a connection pooler in front of it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it fails idle cost and the no-VPC driver right away.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Aurora Serverless v2 can scale down to zero on some versions. But it's unclear whether Lambda can reach it without a VPC. If not, NAT costs come back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And DSQL?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>DSQL was the real competitor. It's serverless, it speaks PostgreSQL, and an idle cluster costs nothing. It bills per unit of work.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds almost perfect. What was wrong with it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its transactions have limits. There's only one isolation level, the rule for how much one transaction sees of another's changes. There's also a cap on how many rows one transaction may change, and no savepoints.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a savepoint?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A marker inside a transaction you can roll back to, without undoing the whole thing. And DSQL retries a whole SQL transaction when another one wins. Ordinary PostgreSQL code written with locks doesn't carry over as it is.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And local development?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We'd run plain PostgreSQL on our laptops, a different engine from production. Tests could pass locally and fail in the cloud. Let me compare the two finalists.</p></div></div>
-</div>
+    <p>The candidates include DynamoDB on-demand, Aurora DSQL, Aurora Serverless v2 and RDS PostgreSQL. They differ in idle behavior, network and connection requirements, transaction semantics and local testing options.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 436" role="img" aria-label="DynamoDB and Aurora DSQL both cost nothing when idle and are reachable from Lambda without a VPC; DynamoDB isolates one learner with one partition key while DSQL needs a filter in every query; DSQL has transaction limits and a different local engine.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">DynamoDB</text>
@@ -96,31 +66,12 @@
     </svg>
     <figcaption>The first two rows tie. The middle row decided it: in DynamoDB, one learner's data is separate by structure, and deleting or exporting it is one key.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in DSQL, every query would need <code>WHERE learner_id = ?</code>, and one missing filter leaks data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the risk. In our table, a learner's data is one partition. Reading, deleting and exporting all start from one key.</p></div></div>
-</div>
+    <p>A PostgreSQL-compatible service is not necessarily identical to PostgreSQL in every transaction or supported feature. A decision must check the actual engine, version, limits and required network path. Quickturn prefers DynamoDB's learner-key model and its tested conditional commit contract for this workload; that is not a general verdict against relational serverless services.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What DynamoDB costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but the teammate wasn't completely wrong, right?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Partly right. Let's be honest about what DynamoDB costs. Every new read must be designed as a key pattern first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With SQL, I'd just write a new query.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Reporting needs an export to S3, not a query on the live table. And derived data, like stats, can drift from the answer log.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Drift, meaning the stats say something different from the answers?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If a bug updates one and not the other, yes. That's why the history must be complete enough to rebuild the stats.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does relational win?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When access patterns are still unknown. When data has many-to-many relations and constraints worth enforcing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Many-to-many, like cards and grammar points? One card trains several points, and one point has many cards.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a good example of the shape. In our case we store the tags on the card, and we never ask the reverse question live. If we did, a relational database would handle it with a join.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Any other cases?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When the business lives on ad hoc reports. And when the team's skills make the difference: a team fluent in SQL moves faster with it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for a quick prototype?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a CRUD prototype, Postgres is often faster to build. Your teammate is right about that. Our early prototype kept progress in a local SQL file on one machine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what changed?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Multi-learner sign-in. The moment many learners shared one system, the drivers changed, and so did the database. Here's the choice in two questions.</p></div></div>
-</div>
+    <p>DynamoDB requires a key design for each live read, exports for ad hoc reporting and maintenance of derived projections. A complete answer log helps repair projections, but a missed update can still cause drift.</p>
+    <p>Relational storage can be a faster starting point when access patterns are uncertain, many-to-many relationships need constraints, or a SQL-fluent team depends on exploratory reports. Quickturn's early local prototype used SQL; multi-learner operation introduced a different set of drivers.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether access patterns are known up front against whether you need joins and ad hoc queries: known patterns with few joins suit a key-value store; known patterns with joins can go either way; unknown patterns with few joins suit relational to start and learn; unknown patterns with joins suit relational.">
       <text x="44" y="18" class="t-sm">↑ Access patterns: known up front</text>
@@ -141,32 +92,8 @@
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Both, and how to defend it</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do teams ever use both?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many SaaS teams do. A relational database for the core records and reporting, and a key-value store for a hot path, like sessions or counters.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds like the best of both.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's also two systems to operate, and two copies of some data to keep in sync. You pay for it every day.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do I say all this in a review, without sounding defensive?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three moves. Name the drivers. Show each option against them. And write down what would make you revisit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's our revisit condition?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If exporting the answer log for reports gets easier with its own table, we move it there. It's written in the decision record, so nobody has to remember it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the revisit condition never comes true?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the record says why we're still here. A new teammate reads it and doesn't have to reopen the whole debate.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the teammate's comment isn't an attack. It's a chance to check the drivers again.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. If a driver changed, the choice may change too. If not, the answer is already written down.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what do you tell your teammate tomorrow?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We didn't start from "SQL or NoSQL". We listed what mattered first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A learner boundary that's structural, per-learner delete and export, nothing billed while idle, and no connections to manage from Lambda.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>DynamoDB fit those best. DSQL was close, but it brought transaction limits and a different engine for local development.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the price?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every new question needs a key design, and reports come from an export.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Finish with when you'd switch. If our questions were still unknown, or we needed joins and reports, PostgreSQL would be the right pick. Saying that makes the rest believable.</p></div></div>
-</div>
+    <p>Using both a relational and key-value database can serve different workloads, but creates two systems to run and sometimes two copies to synchronize. Add the second store for an observed requirement.</p>
+    <p>Defend the chosen database by stating drivers, rejected alternatives and a revisit condition. For Quickturn, a history lifecycle or reporting need that diverges from learner records could justify a separate log table. Reopen the decision when a driver changes, rather than whenever a new product appears.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -180,5 +107,5 @@
     <a class="prev" href="ch05.html"><span>Previous</span><b>How does DynamoDB find my data so fast?</b></a>
     <a class="next" href="ch07.html"><span>Next</span><b>List the questions first, then design the table</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

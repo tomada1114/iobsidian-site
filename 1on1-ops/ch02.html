@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Operations and Quality pages">
-  <h2><a href="ch00.html">One-on-Ones: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
+  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
@@ -395,10 +395,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 2 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 2 of 12</span></p>
   <h1>What makes a log line actually useful?</h1>
   <p class="lead">After this page you can explain why logs should be structured, one line per request, with fixed fields. You can also say which fields to write, and what must never go into a log.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -410,25 +410,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What goes wrong with prompts in logs?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. His terminal is full of debug output from a feature branch.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Why free text fails</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While debugging, I added <code>console.log('saving answers', body)</code>. Should I leave it in? More logs is safer, right?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Safer for what?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For the next time something breaks. More detail to look at.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's test that. Next week, you want every failed save of answers that took over half a second. How do you find them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Search for "saving answers"… and then read each one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And count how many failed, per day?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I can't. The line doesn't say whether it failed, or how long it took.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the problem with free text. You can't filter or count strings like "saving answers for…" reliably.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the alternative?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Structured logs. Each line is a JSON object with named fields. "All failed requests for this operation over 500 milliseconds" becomes one filter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a row in a table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And we write exactly one line per request, at the end, when we know how it went.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only one? My debugging had ten.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One wide line. Every field is always there, set to null when it doesn't apply. So a query never has to ask whether a key exists.</p></div></div>
-</div>
+    <p>Free-text messages such as “saving answers for…” are difficult to filter consistently. Structured logs make operation, outcome and duration explicit, allowing a query for failed answer saves over 500 milliseconds.</p>
+    <p>Quickturn writes one completion record per request with a stable field set. A nullable field distinguishes missing information from a schema that changes unpredictably. Additional lifecycle records may still be needed for crashes that prevent normal completion.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="A free-text log line cannot be filtered by operation, cannot be counted by outcome, makes one request hard to find, and leaks the request body; a structured JSON line can be filtered and counted, finds one request by its id, and carries no body.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Free text</text>
@@ -446,14 +431,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">yes</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">no</text>
     </svg>
-    <figcaption>The last row matters most. Your debug line was easy to write, and it would have copied a learner's answers into the logs.</figcaption>
+    <figcaption>The last row matters most. A raw debug line can copy a learner's answers into the logs.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The fields</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's in our one line?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's a trimmed example:</p><pre><code>{
+    <p>The server creates its own request ID rather than treating a client-provided identifier as authoritative. Operation names come from the contract; outcomes distinguish success, stable error codes, unmatched routes and unexpected failures. An authenticated internal learner ID aids investigation without logging the email.</p>
+    <pre><code>{
   "requestId": "3f9c…",
   "operation": "submitAnswers",
   "outcome": "ok",
@@ -461,28 +445,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   "durationMs": 184,
   "learnerId": "l_7a2…",
   "fault": null
-}</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does the request id come from? The client could send one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The server makes it, a fresh UUID. We never take it from a header, so a caller can't spoof one or collide with someone else's.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when a learner reports a problem, how do we get their request id?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We search by their internal learner id and the time. That narrows it to a few lines, and the request id then names exactly one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it finds one request.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The operation is the endpoint, named by the contract's operation name. The outcome says how it ended.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not just the status code?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many different failures share one status. The outcome is "ok", a stable error code, "unmatched" or "failed". A stable code is what makes counting possible.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the difference between the last two?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>"Unmatched" means no route matched the request. "Failed" means an unexpected error was thrown, and that's when <code>fault</code> is set.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a chart of outcomes per operation per day is just a query.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. No new code, just a new question.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And duration covers what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The whole request, from the moment it arrives until the response is ready.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>learnerId</code> is the email?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The internal id, set once the request is authenticated. Never the email.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And <code>fault</code>?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the thrown error's class name, never its message. There's also a reason field for some outcomes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No log level? I thought every log had debug, info, warn and error.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Levels help when you write many lines per request, or want to sample the noisy ones. We write one line, and the outcome code does that job.</p></div></div>
-</div>
+}</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A request arrives, the server makes a request id, the handler sets the operation and the outcome, and one line is written at the end with the duration.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -501,27 +464,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The line is written once, at the end, when the outcome and the duration are known.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One line per request, or many small lines. Is one always better?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One is cheaper to query, and nothing needs joining. Many lines show the order of events inside a request.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we trade order for simplicity.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for the rare case where order matters, a trace shows it better anyway.</p></div></div>
-</div>
+    <p>Duration covers the request's measured path. An unexpected fault records its safe class or category instead of its arbitrary message. This wide completion record avoids joining many lines for ordinary questions. Traces provide deeper ordering when it matters.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What stays out</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about my ten lines while debugging locally?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Fine on your machine. They come out before the merge.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what exactly can't go in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The request body. A card's text. A learner's answers. The path, tokens, cookies and auth codes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why the error message? That seems useful.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A message can carry user input. "Invalid answer: …" followed by what the learner typed. So only the class name is logged.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the path? It's just a URL.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Paths can hold ids or search text. The operation name tells you the endpoint without them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me draw what's left.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Go ahead. It should look small.</p></div></div>
-</div>
+    <p>Request bodies, answers, tokens, cookies, authentication codes and secret values stay out of general logs. Raw paths and exception messages may also contain input. A named operation or safe fault category gives useful information without copying the payload.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the request, containing what the server knows such as headers, body, tokens, card text and answers, containing what the log line may carry: request id, operation, outcome code, duration, internal learner id and error class.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
@@ -537,51 +484,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The innermost box is small on purpose. Everything else the server knows stays out of the log.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we make sure nobody slips a body in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tests. The log sink records lines in tests, and cases check that no body, card text, answer, token, cookie, code or secret appears.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But sometimes I'll wish I had the body.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the real cost. The answer is a specific, safe field for the question you have. Not the whole payload.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a count of answers in the batch, instead of the answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, a count gives the size without the content. And logs cost money too: CloudWatch bills them by volume beyond its free tier.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long do we keep them?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One month. Long enough to investigate, short enough that old data doesn't pile up.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a learner asks us to delete their data, the logs hold only an internal id?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. No names, no answers, no email. That makes deletion far simpler.</p></div></div>
-</div>
+    <p>Tests capture the log sink and search for representative sensitive values. When investigation needs another detail, add a narrowly defined safe field, such as answer count. Retention and access controls still apply to internal identifiers. Quickturn uses a bounded retention period rather than keeping request history indefinitely.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Prompts are payloads too</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this change for LLM features?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's where teams leak data most. Prompts and model outputs often contain what the user typed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So logging "the prompt" is logging personal data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Log the prompt version and the token counts, not the prompt text.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And our model calls?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Their records add the model id, the prompt version, tokens and cost. Not the learner's answer, and not the model's reply.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if someone really needs the full text to debug a bad grade?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it lives in a separate store, with its own access rules and its own retention. Not in the general logs everyone can search.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen that go wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, a support bot logged every prompt for debugging. A year later, the logs held thousands of customers' messages.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Readable by anyone with log access.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And kept far longer than anyone intended. Deleting it took weeks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because nobody knew which lines held what.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That was the problem. Free text made even the cleanup a guess.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my debug line comes out before I merge.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. If the question behind it is real, turn it into a field.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the rule the way you'd explain it in a code review.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Log one structured line per request, with a server-made request id, the operation, a stable outcome code and the duration.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every field is always there, so queries stay simple.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Keep out bodies, answers, tokens and error messages. Log the error's class instead.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose a bug needs more detail than that.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I add a specific, safe field, not the payload.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For model calls, the prompt itself is a payload. Log its version and token counts, and keep its text out of the general logs.</p></div></div>
-</div>
+    <p>Prompts and model outputs can contain learner content too. General call records use prompt versions and token counts, not full prompt text. A quality investigation that needs content belongs in a separate, restricted store with a stated retention period.</p>
+    <p>Logging everything for debugging creates a growing secondary dataset that must be secured and deleted. Defining the question first often reveals a smaller field that answers it.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -595,7 +503,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch01.html"><span>Previous</span><b>Isn't observability just a fancy word for monitoring?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>What should wake someone up at night?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

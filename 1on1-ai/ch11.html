@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 11 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 11 of 13</span></p>
   <h1>What does AgentCore do that forty lines of code can't?</h1>
   <p class="lead">After this page you can explain what Amazon Bedrock AgentCore is, and what it isn't. You can also name its parts, say how each is billed, and say when an agent is worth running on it.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,29 +411,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is it worth it?</li>
     </ul>
   </nav>
-  <p class="stage">Coffee in the kitchen, standing. Leo spent the weekend on an agent tutorial.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Laptop versus production</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I built a demo tutor agent on my laptop this weekend. About forty lines, running in an hour.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does it do?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It answers questions and looks up a fake learner's mistakes with one tool. So why does our real tutor run on a whole platform?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think AgentCore is?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A framework that builds the agent for you, I guess. Or overkill: an agent is just a loop, so a Lambda function should do.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Neither. The loop really is small. What's large is everything around it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But why not Lambda? It runs code, and we use it everywhere.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A tutor conversation can last a long time, with pauses. A Lambda invocation is stateless and stops after fifteen minutes at most.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the conversation state would live somewhere else, and I'd rebuild it on every message.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And keep one learner's state away from another's. That's the first thing Runtime gives you.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else sits around the loop?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Checking who is calling, for a start.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Mine had one user: me.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then exposing tools safely, remembering across sessions, stopping forbidden calls, and tracing and scoring every session.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And AgentCore does all of that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It offers those as parts. You can adopt them one at a time, with any framework or model. The agent code stays yours.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our tutor is still our code.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>TypeScript on Strands Agents, an open-source agent framework. AgentCore runs it and surrounds it. Let me draw the parts around it.</p></div></div>
-</div>
+    <p>An agent loop may fit in forty lines, while its production environment needs authentication, isolated sessions, safe tools, memory and telemetry. AgentCore offers managed components around code the team still owns.</p>
+    <p>Quickturn's tutor uses a TypeScript agent implementation with selected managed services. A one-call grader does not need a conversational runtime simply because it uses a model.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 340" role="img" aria-label="The agent code at the center, still yours, surrounded by seven parts: Runtime for isolated sessions, Gateway for tools as MCP, Identity for who is calling, Memory for remembering sessions, Policy to allow or stop tool calls, Observability to trace every step, and Evaluations to score sessions.">
       <line x1="100" y1="120" x2="200" y2="140" class="ln"/>
@@ -456,10 +437,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The parts</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does each one actually replace?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's each part, its job, and what you'd build without it.</p></div></div>
-</div>
+    <p>Runtime hosts sessions; Gateway exposes controlled tools; Identity handles credential flows; Memory stores configured conversational information; Policy checks permitted Gateway actions; observability and evaluations support investigation and quality measurement. Adopt the components the workload needs.</p>
   <dl class="terms">
     <dt>Runtime</dt><dd>A microVM per session, up to 8 hours. Without it: containers, routing, isolation.</dd>
     <dt>Gateway</dt><dd>Many tool sources, one endpoint. Without it: tool plumbing per agent.</dd>
@@ -469,14 +447,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <dt>Observability</dt><dd>OpenTelemetry traces and spans. Without it: tracing setup.</dd>
     <dt>Evaluations</dt><dd>Online and on-demand scoring. Without it: a homemade judge pipeline.</dd>
   </dl>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A microVM per session? That's a small virtual machine?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Each learner's conversation runs in its own, so one session can't see another's memory or files.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And MCP is the tool protocol?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The Model Context Protocol, a standard way for agents to call tools. Gateway turns our application's commands and queries into MCP tools, through a Lambda target.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does one request go through?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>This path.</p></div></div>
-</div>
+    <p>A JWT-authorized Gateway routes selected tools to the application's operations. Inbound authentication and outbound AWS signing are different steps; their configured relationship determines which verified learner reaches the target.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="A client request passes an inbound identity check, enters a Runtime session, reaches the agent code which reads Memory, goes through a Policy check at the Gateway, and only then reaches a tool.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -501,29 +472,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Observability traces every step. The Policy check is where an action is allowed or stopped, before any tool runs.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The identity check is our sign-in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A JWT authorizer against our Cognito user pool. The same tokens the app uses.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the Policy check? What does a rule look like?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rules are written in Cedar, a policy language. For example: the tutor may read this learner's mistakes, but may not change their settings.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So even a tricked model can't call a tool the rule forbids.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The Gateway refuses before the tool runs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do we keep in Memory?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The conversation only. The learner's progress stays in our own tables, where the rest of the app can read it.</p></div></div>
-</div>
+    <p>Memory can support conversation continuity while progress remains in the application database. Session isolation and namespace conventions still require correct identifiers and access policies; a service name does not automatically establish tenant ownership.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>How it's billed</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a monthly fee?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No minimum fee. You pay per use, per part.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Per second of running?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime is billed per second. And CPU isn't charged while the agent waits on I/O, like a model call. The memory, RAM, it holds is still charged.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An agent spends most of its time waiting for the model.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So an idle agent costs little, and a chatty one scales with use. Gateway is priced per thousand tool calls, and Memory per thousand events, records and retrievals.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Identity?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No extra charge when used through Runtime or Gateway. Here are the figures, with their date.</p></div></div>
-</div>
+    <p>AgentCore components have their own usage meters, separate from model inference. Runtime CPU and memory charges, Gateway calls and Memory operations should be considered together. The dated table is an example to validate against current Region and feature pricing.</p>
   <table>
     <thead><tr><th>Part</th><th>Price, checked 2026-09-23</th></tr></thead>
     <tbody>
@@ -532,19 +485,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <tr><td>Memory</td><td>$0.25 per 1,000 short-term events</td></tr>
     </tbody>
   </table>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the model calls are still the big line.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Usually. AgentCore is the part around the model, and it's priced to be small next to it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens to a session when the learner walks away?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By default it ends after fifteen minutes idle. A busy session can last up to eight hours.</p></div></div>
-</div>
+    <p>Idle and maximum session durations are configurable within service limits. Configure them for the interaction and bound model turns separately. Waiting on I/O may reduce CPU charging without making retained memory or every other component free.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When it's worth it</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why not just host the agent on Lambda or ECS ourselves?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You can. Let's compare what you'd build.</p></div></div>
-</div>
+    <p>Self-hosting is possible, but the team then owns the same session, identity, tool and telemetry responsibilities. Managed services add platform conventions, deployment constraints and a learning curve.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 516" role="img" aria-label="Self-hosted on Lambda or ECS, you build session isolation, long sessions, the inbound JWT check, tool policy and online evaluation yourself, and the minimum cost is low plus your time; on AgentCore each is provided, and there is no minimum fee.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Self-hosted</text>
@@ -570,40 +515,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>On the left, you build five of the six rows yourself. That's the real difference, more than the price in the last row.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch with AgentCore?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new platform to learn, and AWS's shapes to live with. Runtime is arm64 only, and features change month to month.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then when do we use it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our rule: a feature goes on AgentCore only when it needs multi-turn, open-ended tool use. That's why only the tutor runs there.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Grading doesn't qualify.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Grading is one call with a typed answer. A platform for sessions would add cost and nothing else.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How is the tutor deployed?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In its own agents stack in CDK. Runtime runs in public network mode, so still no VPC. The AgentCore CLI runs it locally and deploys it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wasn't there an older Bedrock Agents service?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There was. As of August 2026 it allows no new use, so new work goes to AgentCore.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen what the missing parts cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, the first internal agent was an operations assistant. It stayed a proof of concept for months.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the model wasn't good enough?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model was fine. The missing parts were sign-in, session isolation and audit traces.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once those were in place?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Production took weeks. The forty lines had been ready from the start.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my weekend demo is the easy part.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the part that proves the idea. Everything around it is what lets real learners use it safely, and that's the part to plan for.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then I'll start by listing which of the seven parts our tutor actually uses.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>All seven, today. A new agent might need only three or four at first.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A teammate shows you their weekend demo and asks the same question. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AgentCore doesn't write the agent. It rents you the production parts around the loop.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isolated long sessions, a tool gateway, identity, memory, policy, tracing and evaluation. Each is billed by use.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It's worth it once you truly have an agent, and not before.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And our tutor?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our own TypeScript on Strands Agents, running in Runtime, with our Cognito tokens at the door.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start small: you can adopt one part at a time. Nothing forces you to move everything at once.</p></div></div>
-</div>
+    <p>Quickturn puts the open-ended tutor on AgentCore while leaving grading on a worker. Its deployment uses a separate agent stack and the network mode appropriate to its resources. Verify current architectures, Regions and service support before adopting a sample.</p>
+    <p>A successful laptop demo establishes the loop's usefulness. Production readiness requires evidence that the surrounding controls work too.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -617,7 +530,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch10.html"><span>Previous</span><b>Who pays for the tokens, and what stops a runaway bill?</b></a>
     <a class="next" href="ch12.html"><span>Next</span><b>When an agent acts for a learner, whose rights does it use?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

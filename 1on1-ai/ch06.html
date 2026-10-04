@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 6 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 6 of 13</span></p>
   <h1>Should the timed drill wait for the grader?</h1>
   <p class="lead">After this page you can explain why a model call stays off a fast path, and how a background job grades instead. You can also explain why a stored result, not the model, makes a retry safe.</p>
-  <p class="meta"><span>About 8 min read</span><span>At the whiteboard</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,25 +411,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does grading later cost?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room. Leo's phone shows the drill's 30-second timer.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The hot path</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Here's my sketch. The learner sends a typed answer, the API calls Bedrock, and the verdict appears on the card.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what worries you about it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The call might take a few seconds. So I want a faster model, or streaming, to show the verdict sooner.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before picking a model, look at the timer on your phone. How long does a learner get per card?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Their own setting, from 15 to 60 seconds. 30 by default.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the drill never waits on anything slow today. What does your sketch add to that path?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Seconds of waiting. And a new way to fail, if Bedrock is slow or down.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>This path, the one the learner feels on every card, is the hot path. A model call on it makes every card depend on a service we don't run.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about streaming? The first words would appear sooner.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The verdict is what the learner needs, and it's one word. Streaming the explanation doesn't show it any sooner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a faster model only makes the wait shorter. It's still a wait.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. There's a second reason. Answers made offline arrive later, in batches.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So there's no card on screen to show a verdict on anyway.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So we record the answer and move on. Grades appear on the round summary and the recap, not on the card.</p></div></div>
-</div>
+    <p>A model call in the timed card path makes each answer depend on external latency. Streaming feedback does not remove the wait for a complete verdict. Offline answers also arrive later, so synchronous grading cannot be the only successful practice path.</p>
+    <p>Quickturn records the answer immediately and grades it in the background. The summary and recap show the result when it is ready, while the drill continues.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="With inline grading the drill waits, a model failure breaks the drill, and a retry calls the model again; with grading as a job the drill does not wait, a model failure leaves the drill working, and a retry reads the stored result.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Inline</text>
@@ -444,29 +429,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">again</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">no, reads result</text>
     </svg>
-    <figcaption>Every row favours the job. What it costs is immediacy: the learner sees the grade after the round, not on the card.</figcaption>
+    <figcaption>For Quickturn's timed drill, the operational requirements favor a background job. What it costs is immediacy: the learner sees the grade after the round, not on the card.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The job and its key</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So grading is a background job. How do we stop it grading the same answer twice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The job has a key: <code>grade:</code> plus the answer id, plus the rubric version.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Answer ids are made by the client.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, and a resent batch of answers is already ignored. The job builds on that.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the key does what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The job's first successful result is stored under the key. A retry, a duplicate delivery or an offline replay finds it and reads it back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Instead of calling the model again.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's what idempotency means here: doing it twice has the same effect as doing it once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I thought idempotency meant the model gives the same answer the second time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. The model's output isn't deterministic. Call it twice and you may get two different explanations, or even two verdicts.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the safety comes from storage, not from the model.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if two workers get the same job at the same moment? Both check, both find nothing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The result is stored with a condition: only if nothing is under that key yet. One write wins, and the other worker reads the winner's result.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one of them paid for a call that was thrown away.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rarely, yes. We pay for the extra call, but the learner is charged once and sees one grade. Here's one job from start to finish.</p></div></div>
-</div>
+    <p>A grading job key combines answer ID and rubric version. The first accepted result is stored conditionally; duplicate deliveries and retries reuse it. A new rubric version creates a distinct grading job without erasing the previous result.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 516" role="img" aria-label="The answer is stored, a job is queued, the worker checks the key, cost is reserved, the model is called once, the result is stored under the key, and the grade is shown on the round summary.">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
@@ -494,37 +462,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The sixth step is what makes every later delivery cheap. Once the result is stored, nothing calls the model for that key again.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why is the rubric version in the key?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When the grading rules change, we may want to grade old answers again. A new rubric version means a new key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a regrade is a deliberate choice, not an accident.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The old grades stay, under the old key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the learner see before a grade is ready?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The round summary shows the answer as pending, and fills the grade in when it arrives. Usually that's before they finish reading.</p></div></div>
-</div>
+    <p>Two workers can still call the provider before one wins the conditional result write. Result deduplication protects the learner-visible effect, while attempt coordination and accounting must handle any duplicate provider cost. The UI represents the grade as pending until a result or final failure is known.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Where it runs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does the job actually run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same job function runs in two places. Locally, it runs inline, so you can test without a queue.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And in production?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On a worker Lambda, triggered by SQS. SQS is a message queue, and its standard queues deliver each message at least once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>At least once. So sometimes twice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sometimes twice. So duplicates are normal, not an error. The key handles them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the worker never needs to ask whether a message is new.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It only asks whether a result already exists for the key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the model fails?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The job is retried. After a few failures, it lands in a dead-letter queue.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A separate queue for messages that keep failing, where a person can look at them. The answer stays ungraded meanwhile, and the drill doesn't notice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once the cause is fixed?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We send those messages back to the main queue. The keys make that safe too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's "cost reserved" in the steps?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before calling the model, the job reserves its cost in the learner's usage ledger, under the same key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a duplicate can't charge the learner twice either.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The same key guards the result and the money.</p></div></div>
-</div>
+    <p>The job function can run inline locally and from an SQS-triggered worker in the hosted system. Standard queues can redeliver messages, so the stable key is part of normal behavior. Repeated failures move to a dead-letter queue for diagnosis and controlled replay.</p>
+    <p>A cost reservation is made before the call. Replaying a message must reuse the relevant job identity and settlement state. The saved answer remains available even when grading fails.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="On the first delivery the key is not found, the model is called, cost is reserved and the new result is returned; on a duplicate delivery the key is found, the model is not called, no cost is reserved, and the stored result is returned.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">First delivery</text>
@@ -547,36 +490,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What grading later costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do we give up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Immediacy. The learner waits until the round ends to see grades.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And more parts.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A queue, a worker, a result store, and "pending" states on screen. That's real work.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is inline ever right?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When the user is waiting for that answer anyway. An "explain this" button, for example. The learner asked, and nothing else is timed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Did we consider grading once per round, instead of per answer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We weighed both. One call per round is fewer calls, but a longer one, and one failure affects every answer in it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And per answer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More calls, each small, and each can fail or retry alone. We measured both in a short experiment, a spike, before choosing, rather than arguing about it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen inline go wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, a support-ticket classifier ran inside ticket creation. Then the model provider slowed down.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And creating a ticket timed out.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For everyone. Nobody could file a ticket about the outage either.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What did they change?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They moved classification to a queue. Tickets kept flowing, and classification caught up when the provider recovered.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now explain the new design, instead of the sketch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The drill never waits on a model. The answer is saved, and a job grades it later.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The job is keyed by answer id and rubric version. The first result is stored under that key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a retry or a duplicate just reads it back. We can't count on the model to repeat itself.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What changes when the rubric does?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new key, so a regrade is on purpose.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The ledger belongs in that story as well: the same key reserves the cost, so a duplicate can't charge the learner twice.</p></div></div>
-</div>
+    <p>Background grading adds a queue, worker, result storage and pending UI states, and sacrifices immediate feedback on the card. A direct explanation request may reasonably wait synchronously because the learner has explicitly asked for it.</p>
+    <p>One call per round reduces call count but enlarges output and the failure unit. Per-answer calls isolate failure and retry. Compare measured cost, latency and recovery rather than choosing from request count alone. Keeping AI classification out of ticket creation is a similar way to preserve a core workflow during model outages.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -590,7 +505,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch05.html"><span>Previous</span><b>Why not one complete(prompt) function for every feature?</b></a>
     <a class="next" href="ch07.html"><span>Next</span><b>How would we know a prompt change made grading worse?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

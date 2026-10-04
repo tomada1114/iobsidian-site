@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 10 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 10 of 13</span></p>
   <h1>Who pays for the tokens, and what stops a runaway bill?</h1>
   <p class="lead">After this page you can explain how every token is traced to a feature and a learner. You can also explain a per-learner ledger with reserve and settle, and how it differs from rate limits and a kill switch.</p>
-  <p class="meta"><span>About 8 min read</span><span>The morning after an alert</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,21 +411,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does the ledger cost us?</li>
     </ul>
   </nav>
-  <p class="stage">The morning after an AWS Budgets alert on the dev account.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Attribution first</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My experiment script retried against Bedrock in a loop all night. The dev account's budget alert fired this morning.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Did you stop it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Yes, first thing. But it made me wonder. What stops one learner, or one bug, from doing the same in prod?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would you guess?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Rate limiting. API Gateway throttling, or a WAF rule.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those help with something else. We'll get there. First, a question: what did your loop cost?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have to wait for the bill.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the second trap. The monthly bill tells you the total, late. It can't tell you what one graded answer costs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we know?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every call writes a cost record against the learner who caused it. Let me draw one.</p></div></div>
-</div>
+    <p>Record usage per call before trying to control it. Quickturn associates model and prompt versions, token categories, latency and estimated cost with the task and learner that caused the call.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="One graded answer's cost record at the center, with its attributes around it: feature, model, prompt version, tokens, learner and job key; the job key links the record to the ledger.">
       <line x1="68" y1="72" x2="200" y2="136" class="ln"/>
@@ -445,27 +433,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Each record also carries an estimated cost. The job key is the link to the ledger, so a record and a charge can always be matched.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the per-feature picture?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each feature calls through its own tagged application inference profile. Cost Explorer then splits Bedrock spend by feature.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So two views.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Per call, from logs: what one graded answer costs. Per feature, from the bill: the monthly picture.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The tags show up right away?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Up to a day later, and only from when they're activated. So we create them before a feature launches.</p></div></div>
-</div>
+    <p>Tagged application inference profiles support feature-level billing attribution. Those delayed reports answer a different question from call telemetry. Activate tags before relying on future costs to appear under them.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The ledger</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Knowing the cost doesn't stop anyone spending, though.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. That's the ledger's job. It answers one question: how much billed work may this learner still use?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One item per learner?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One item per learner, holding a balance. Before any billed call, the job reserves money from it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Reserves how much? We don't know the cost until the model answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The most it could cost. We know the input size, and we set the output cap, so the maximum is known.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the reserve is just a write?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A conditional write. It succeeds only if the balance covers that maximum. The reservation is the permission to call.</p></div></div>
-</div>
+    <p>The usage ledger reserves an upper bound before starting billed work. A conditional write succeeds only if the learner's balance can cover the reservation. Input size, output cap and the applicable price rules must be included in the estimate.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 228" role="img" aria-label="Reserve with a conditional write that succeeds only if the balance covers the maximum cost, call Bedrock, then settle by giving back the maximum minus the actual cost.">
       <line x1="28" y1="40" x2="28" y2="184" class="ln"/>
@@ -481,37 +453,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Settling records the call's actual cost. A reservation that is never settled expires, so a crashed job doesn't hold money forever.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What key does the reservation use?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The grading job's key. So a retried or replayed job finds its reservation and is charged once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if the job crashes between the call and the settle?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The reservation expires, and the money goes back. The learner is never charged for a result they didn't get.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the same key guards the grade and the money.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the call can't exceed the reservation, because the output cap is part of the maximum.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if a learner runs out?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The reserve fails, and the call doesn't happen. The answer stays ungraded, and the learner sees why.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why reserve at all? We could charge after the call, when we know the real cost.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the check comes too late. A learner with one cent left could start a call that costs ten, and we'd pay the difference.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the reservation is what makes the limit real.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, it turns a limit on paper into one the database enforces.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does the balance come from? A subscription?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It could be either. A monthly allowance and prepaid credits differ only in how the balance is refilled.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the ledger doesn't care about pricing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Payments on the web and in the app stores are adapters that only top up the ledger. And they're idempotent too, so a repeated payment event adds credit once.</p></div></div>
-</div>
+    <p>A stable job key identifies the reservation and eventual settlement. Successful work replaces the estimate with actual usage; failed or abandoned work needs an explicit reconciliation policy. Expiry alone does not prove that the provider performed no paid work.</p>
+    <p>Refills, including payments or monthly allowances, must also be idempotent. The ledger controls learner entitlement while the application separately bears and measures provider costs.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Rate limits and the kill switch</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to my guess. Why doesn't rate limiting protect the bill?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A rate limit counts requests per client per time window. It doesn't know what a request costs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So ten huge answers could pass a limit that stops a hundred small ones.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Throughput belongs at the edge: WAF rules, API Gateway throttling. Entitlement is business state, in the application.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And my loop in dev?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The last guard: an AWS Budgets action. When spend crosses the budget, it attaches a policy denying Bedrock to the whole account.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A kill switch.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For bugs, not for one learner. Budget data lags actual spend, so it fires late. Here are the three guards together.</p></div></div>
-</div>
+    <p>A request rate limit measures throughput, not token spending. Edge throttles help control traffic; application reservations control entitlement; an account-wide budget action contains wider failures.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 212" role="img" aria-label="Three guards from edge to account: an edge rate limit counts requests per client, the application ledger counts money per learner, and a Budgets action is the whole-account kill switch.">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
@@ -523,45 +470,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Only the middle layer knows both who is spending and how much. The other two are simple and coarse, and that's their job.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the Budgets action cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Budgets without actions are free. The first two budgets with actions are free, then ten cents a day each, as checked in September 2026.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it can act without a person?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can apply the policy automatically, or wait for approval. For a runaway loop at night, automatic is the point.</p></div></div>
-</div>
+    <p>Billing lag means the account switch can activate after additional spend has occurred. It is a last resort, with a tested policy and recovery procedure, rather than an exact real-time ceiling. The three controls operate on different signals and should be used together.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What the ledger costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This ledger sounds like a bank.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's money-like state, so it's tested like one. Concurrent reserves, expiry and replays each have tests.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Concurrent reserves?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two jobs for the same learner reserve at the same moment. The conditional write lets only as many through as the balance covers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One more write per billed call. And reserving the maximum can refuse a learner who could have paid the actual cost.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because their balance covers the real cost, but not the worst case.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. We accept that. And the kill switch stops everyone at once, which is the price of catching bugs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen this go wrong somewhere else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, an internal coding agent ran on one shared key. A CI job looped over a repository all weekend.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like my script, but bigger.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It spent a month's budget. The alert only watched the total, so it fired on Monday.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What did they change?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three things. A profile and a budget per team, and a token cap per run.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An alert on the rate of spending, not only the total.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say how we'd stop your loop from happening in prod.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every call is tagged, so we can say what a feature costs and what one answer costs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Before a call, we reserve the maximum from the learner's balance under the job key. After, we settle the actual cost, so a retry is charged once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Rate limits at the edge count requests. The ledger counts money. A Budgets action is the account-wide kill switch.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And your script?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The kill switch would have stopped it, late. A token cap on the script would have stopped it early.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Watch the spending rate as well as the total. A loop shows up as a steep line long before the total looks alarming.</p></div></div>
-</div>
+    <p>Ledger writes, concurrency tests, expiry handling and replay protection add real work. Reserving the maximum can reject a call whose eventual actual price would have been affordable. That conservative trade prevents promising work before funds are available.</p>
+    <p>The account switch can stop legitimate use for everyone. Alerts on spending rate and per-run token limits help identify a runaway experiment sooner than a delayed monthly total. Test those limits as operational behavior, not only as arithmetic.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -575,7 +489,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch09.html"><span>Previous</span><b>What if a learner types 'ignore your instructions'?</b></a>
     <a class="next" href="ch11.html"><span>Next</span><b>What does AgentCore do that forty lines of code can't?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

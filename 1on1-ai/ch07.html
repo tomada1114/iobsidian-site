@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 7 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 7 of 13</span></p>
   <h1>How would we know a prompt change made grading worse?</h1>
   <p class="lead">After this page you can explain why an evaluation comes first, and how to build a gold set from what you have. You can also read agreement, flip rate, precision and recall.</p>
-  <p class="meta"><span>About 8 min read</span><span>At the whiteboard</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,44 +411,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What can go wrong with the numbers?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room. Leo holds a printout of ten graded answers.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Why evals come first</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I changed the grading prompt in my experiment. I read ten results, and they look better.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Better by how much? And on what?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hmm. Better on these ten. By… they read more naturally?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's an opinion. It may be right, but nobody can check it, including you next week.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I was going to add a proper evaluation once the feature works.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual order, and it's backwards. An LLM feature has no compiler, and often no single right output.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So without a number, every prompt tweak is an opinion.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a regression ships silently. An evaluation is the test suite of a model feature. It's also our definition of "done".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't that a lot of work up front? I thought you need thousands of labelled examples.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You need fewer than you think, and we already have most of them. Hamel Husain, and Chip Huyen in her book "AI Engineering", both put evaluation at the center.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do I start?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By reading real outputs, like you did, but with a pen. Write down each way a result fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like "missed a wrong tense" or "called a typo incorrect"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Those names become the labels. Error analysis first, metrics after.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my ten answers weren't wasted.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not at all. They're the first page of the error list.</p></div></div>
-</div>
+    <p>Reading ten improved-looking grades is useful error analysis, but not a reproducible quality result. Name the failures observed, label representative cases and define what improvement means before adopting a prompt.</p>
+    <p>An evaluation set becomes the feature's acceptance evidence. It should exercise the real adapter and record the configuration, not a separate copy of a prompt in a notebook.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Datasets from what exists</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where do the thousands of examples come from?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Look at what we already store. Every card has reviewed alternative answers, about two thousand in all.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Answers a person already accepted. So those are positives: the grader should call them correct or acceptable.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Now take a reference answer and break it on purpose. Drop an article. Change the tense.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then it's a negative, and we know which error tag it should get.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, because we made the error. Those are perturbations.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is a broken answer always wrong, though? Dropping "the" can still be fine in some sentences.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not always. "She plays the piano" and "She plays piano" are both fine. So a person checks a sample of them, and the ones that turn out acceptable move to the positives.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not just use the alternatives? Two thousand is plenty.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They're all positives. A grader that accepts everything would score perfectly on them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So without negatives, the set can't catch a grader that's too kind.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me draw the whole set.</p></div></div>
-</div>
+    <p>Quickturn starts with reviewed alternative answers as positive examples and deliberately perturbed answers as candidate negatives. A person checks perturbations because removing an article or changing a phrase can still produce valid English.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 344" role="img" aria-label="The grading gold set at the center is fed by four sources: reviewed alternative answers as positives, perturbed reference answers as tagged negatives, adversarial inputs, and typed answers learners graded themselves.">
       <line x1="100" y1="80" x2="200" y2="172" class="ln"/>
@@ -472,23 +442,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Each source reuses something Quickturn already stores or can make. Only a sample needs a person's check.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as an attack?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Instructions hidden inside an answer. Off-task text. The wrong language. Empty answers, and very long ones.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And self-graded?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Typed answers that learners marked themselves. Noisier, but real.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the card reviewer? It's a different task.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It gets its own suite. We keep every deleted card with the reason it was rejected, hundreds of them. Those are labelled negatives.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one suite per task.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And per language pair. Right now, only Japanese-to-English can get gold labels from someone on the team.</p></div></div>
-</div>
+    <p>Include empty, oversized, wrong-language, off-task and adversarial inputs. Learner-marked data is useful but noisier than reviewed labels. Card review uses accepted and rejected cards with reasons. Treat each language pair as its own evidence requirement; labels in one pair do not prove another pair's quality.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The metrics</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then? What numbers do we compare?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A few. Here they are, with what each tells you.</p></div></div>
-</div>
+    <p>Agreement measures verdict quality, especially on negatives that should not be accepted. Schema and tag validity expose operational failures. Cost and latency reveal whether a quality gain is worth its price.</p>
   <table>
     <thead><tr><th>Metric</th><th>What it tells you</th></tr></thead>
     <tbody>
@@ -499,14 +457,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <tr><td>Cost, latency</td><td>What one graded answer costs, and how long it takes</td></tr>
     </tbody>
   </table>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which one matters most for learners?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Agreement on the negatives. If the grader calls a wrong answer correct, the learner practises the mistake.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And why track cost and latency in an evaluation?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A prompt that grades slightly better but costs twice as much may not be worth it. The suite shows both, side by side.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Flip rate is new to me.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Grade the same answer several times. Count how often the verdict changes. The model isn't deterministic, so this is a real risk.</p></div></div>
-</div>
+    <p>Repeated grading estimates verdict stability. A mean agreement score can hide a category whose decisions change frequently.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="An illustrative flip rate for five answers each graded ten times: answers one to four flip zero, one, zero and one times, while the fifth, a borderline answer, flips six times.">
       <text x="16" y="36" class="t-sm">Answer 1</text>
@@ -523,10 +474,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Most answers get the same verdict every time. The borderline one flips often, which is where a rubric needs a clearer rule.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a high flip rate points at the rubric, not only the model.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often, yes. Now precision and recall, for the error tags. Picture four boxes.</p></div></div>
-</div>
+    <p>For error tags, precision asks how many emitted tags are right; recall asks how many real errors were found.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the grader gave a tag against whether the error is really there: tag given and real is a true positive; given but not real is a false positive; not given but real is a false negative; neither is a true negative. Precision is read along the given row, recall along the real column.">
       <text x="44" y="18" class="t-sm">↑ Tag given by the grader</text>
@@ -544,47 +492,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Precision reads along the top row: of the tags given, how many were real. Recall reads down the right column: of the real errors, how many got a tag.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Give me numbers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An illustration. The grader gives 10 tags, and 8 are right. Precision is 0.8.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And recall?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The answers really have 12 errors, and it found 8 of them. Recall is about 0.67.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And F1?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One number that combines both, their harmonic mean. Here it's about 0.73. It drops fast if either one is low.</p></div></div>
-</div>
+    <p>Finding 8 true errors among 10 emitted tags gives precision 0.8. If 12 errors were present, recall is about 0.67 and their harmonic-mean F1 is about 0.73. The denominator and label set need to be explicit.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What the numbers cost</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could a grader score well and still be bad?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Easily. A grader that calls everything "acceptable" agrees with every positive.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's why the negatives and attacks are in the set.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Any single metric can be cheated. Several together are much harder to fool.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Gold labels cost a person's time. And small sets are noisy, so one run can look better by luck.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we compare?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Against a recorded baseline, not against one earlier run. The baseline is the current prompt's scores, stored with the suite.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen what happens without any of this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, an HR policy question-and-answer bot launched on a good demo. Then the model was upgraded.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it got worse?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It started citing old policies, confidently. Nobody noticed for weeks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How did they find out?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An employee complained. Then the team built a gold set from real employee questions. The next regression was caught before release.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for my prompt change, I run the suite and compare with the baseline.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you can say "better" with a number next to it.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say how grading gets approved from now on.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Grading ships against its test. Positives come from reviewed alternatives, negatives from perturbations, and attacks are test data too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The card reviewer gets the rejected cards, each with its reason.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We track agreement, flip rate, tag precision and recall, cost and latency. So "better" is a number against a baseline.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And where does it all start?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With reading real outputs and naming how they fail.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the cheat: a grader that calls everything "acceptable" scores perfectly on positives. So every metric needs a second one beside it.</p></div></div>
-</div>
+    <p>A grader that accepts every positive can score well on a positive-only dataset. Include rejects, borderline cases and failure categories rather than rely on one aggregate metric.</p>
+    <p>Human labeling costs time, and small sets are noisy. Compare a candidate with a recorded baseline using tolerances justified by repeated runs. A convincing demo is not evidence that a model upgrade preserved policy answers or grading behavior. Real failures should become labeled regression cases.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -598,7 +511,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch06.html"><span>Previous</span><b>Should the timed drill wait for the grader?</b></a>
     <a class="next" href="ch08.html"><span>Next</span><b>Where do evals run: in CI, at night or in production?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

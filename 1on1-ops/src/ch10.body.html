@@ -1,9 +1,9 @@
 <!-- title: Operations 10 · Straight to production? | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 10 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 10 of 12</span></p>
   <h1>Should every merge go straight to production?</h1>
   <p class="lead">After this page you can explain the difference between continuous delivery and continuous deployment. You can also describe a safe deploy pipeline, and say why data changes are the hard part of going back.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,29 +15,10 @@
       <li>How do you ship a prompt change?</li>
     </ul>
   </nav>
-  <p class="stage">After Tuesday's design review. Someone asked why prod deploys wait for an approval.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Delivery and deployment</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dev deploys on every merge, and it's been fine for weeks. Prod should do the same. A manual approval feels like the old way.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think "CD" stands for?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Continuous deployment. Every merge goes live.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can mean two things. Let's start one step earlier, with continuous integration.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Merge small changes often, and check each one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Continuous delivery adds one promise: every commit on main is deployable. Releasing is a button.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And continuous deployment?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No button. Every commit that passes goes out by itself.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So both are CD.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both are. A manual approval doesn't mean you've stopped doing it. The book "Continuous Delivery", by Humble and Farley, draws the line this way.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But isn't deploying less often safer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The research in "Accelerate" found the opposite. Small batches and frequent deploys go with more stability, not less.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why the button?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The button isn't about size or speed. It's about who says yes, and when.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a team could deploy to prod ten times a day and still press a button each time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many do. The button takes seconds. What matters is that main is always ready, so pressing it is never scary.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if main isn't ready?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you don't have continuous delivery, with or without a button. You have a release that someone has to prepare.</p></div></div>
-</div>
+    <p>Continuous integration keeps changes validated together. Continuous delivery keeps the main branch deployable, with an explicit release decision. Continuous deployment sends accepted changes out automatically. A manual production approval can coexist with frequent, small releases.</p>
+    <p>The important question is whether release is a routine, validated action or a special preparation exercise. Deployment frequency alone does not answer who accepts production risk.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="Continuous delivery and continuous deployment compared: both keep every main commit deployable; delivery has no automatic release and needs a human approval, which is Quickturn's prod; deployment releases automatically with no approval, which is Quickturn's dev.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Delivery</text>
@@ -60,24 +41,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The pipeline</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Walk me through what happens after I merge.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The merge itself is the gate. The ruleset only lets a change reach main through a PR with green required checks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the deploy workflow doesn't wait for CI again?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It starts on the push to main. The checks already ran on the PR.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does it do first?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It builds the web client. Then it assumes a deploy role using GitHub's OIDC token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's OIDC giving us here?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Short-lived credentials. There are no stored AWS keys anywhere to leak.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where did the role itself come from? Something had to create it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small deploy-access stack, deployed by hand once per account. After that, the pipeline never needs a long-lived key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the role can do anything?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It trusts only this repository's main branch. And all it can do is assume CDK's bootstrap roles.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the deploy.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The stateful foundation stack goes first, with the table. Then the app stack. Each is deployed on its own.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why foundation first?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The app stack reads the foundation's values as it deploys. It needs them to exist.</p></div></div>
-</div>
+    <p>Quickturn's pipeline starts from an accepted main-branch commit, builds artifacts and uses OIDC for temporary deployment access. Foundation deployment precedes the app because it supplies durable resource identifiers.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 516" role="img" aria-label="Merge with required checks passed; build the web client; assume the OIDC role; deploy the stateful foundation stack; deploy the app stack, which ends the dev path; then, for prod, a manual approval and a deploy to prod.">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
@@ -105,39 +69,11 @@
     </svg>
     <figcaption>Dev stops at the accented step, with no command run by hand. Prod continues only after a person approves.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if two merges land a minute apart?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A running deploy is never cancelled. The next one waits for it, and if several merges land, only the newest waits, with all their changes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not cancel the older one? The newer code wins anyway.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cancelling the job doesn't stop CloudFormation. The stack keeps changing, and the next deploy has to wait for it anyway.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So waiting costs nothing extra.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And far easier to reason about.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does it ever ask for approval on dev? CDK asks when a change widens permissions.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not on dev. The workflow says never to wait for approval there, because nobody is watching the run. The review on the PR is where a wider permission gets questioned.</p></div></div>
-</div>
+    <p>Deployments are serialized so a new run does not race a CloudFormation update already in progress. Cancelling the runner does not necessarily cancel that update. Trust conditions and workflow permissions are reviewed together, including the protected production environment's OIDC subject.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Why prod waits</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why does prod wait, if dev doesn't?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does dev hold?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our own test data. If it breaks, we lose an afternoon.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And prod holds learners' data. An approval adds a human check and an audit trail. It costs some speed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't the prod role just trust the main branch, like dev's?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A trust keyed on the main branch can't express "approved." Any push to main would pass it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the prod role trust?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The workflow's protected prod environment. That job runs only after a reviewer approves.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a prod deploy goes wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If the stack update fails, CloudFormation rolls it back automatically.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it succeeds, but the code is bad?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you roll forward: revert the change, merge, and let the pipeline deploy the previous code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are there gentler options?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Blue/green and canary releases, like Lambda aliases shifting traffic gradually. And feature flags. Each makes the blast radius, the number of users hit, smaller.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the hard part?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Data. You can redeploy old code. You can't roll back a table's data.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the kind of change decides how careful to be.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two questions decide it. How reversible is it? And how many learners does it touch?</p></div></div>
-</div>
+    <p>Production approval adds a check and audit trail before touching learner data. The IAM trust and protected environment must express the intended approval boundary rather than merely accept any main-branch job.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of reversibility across and blast radius down. A code-only change with a small blast radius is safe to deploy automatically. A code-only change with a large blast radius should roll out gradually. A data change with a small blast radius needs a careful review. A data change with a large blast radius should slow down, in a separate stack.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">data change</text>
@@ -153,43 +89,14 @@
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="208" text-anchor="middle">roll out slowly</text>
     </svg>
-    <figcaption>Down is the blast radius. Only the accented corner is safe to ship with no one watching.</figcaption>
+    <figcaption>Down is the blast radius. The accented corner describes changes that may suit automatic deployment when checks and recovery are adequate.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And our table changes land in the bottom-left corner.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Usually, yes. A migration to a new key shape rewrites every learner's items, and there's no clean way back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is why the table has its own stack.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Separate, retained and changed rarely. The rollback runbook says it plainly: roll forward by revert and merge, and never roll back the stateful stack by hand.</p></div></div>
-</div>
+    <p>CloudFormation can roll back failed updates, but rollback is not guaranteed and does not reverse arbitrary data changes. A revert-and-redeploy can restore code; state migrations require their own recovery plan. Canary releases and feature flags reduce the number of users exposed before the team widens a change.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Shipping a prompt change</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about a prompt change? It's just text.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's code that changes behavior without changing any types. The compiler won't notice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how is it shipped safely?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Version it, like any code. Any change to a prompt, a schema or a model runs the evaluation subset in CI.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What makes it fail?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A metric falling below the recorded baseline. The run has a spend cap, so a test can't cost a fortune.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And after it passes?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Roll it out gradually. And keep the prompt version in every call record.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a regression next week points straight at the version.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Same pipeline idea: small steps, a check before each one, and a way to see what changed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does "gradually" mean for a prompt?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Send the new version to a small share of grading calls first. Compare its records with the old version's, then widen it.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Answer the question from the review, in your own words.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Continuous delivery means every commit on main could ship. Continuous deployment means it ships by itself.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dev auto-deploys through a short-lived OIDC role, foundation first, then app.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod waits for an approval because it holds learners' data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What about a bad deploy?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Code is easy to roll forward. Data is not, which is why the stateful stack is separate.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put the rule for a bad deploy in your notes: revert and merge. Never roll back the stateful stack by hand.</p></div></div>
-</div>
+    <p>Prompts change behavior without necessarily changing types. Version them, evaluate schema, prompt and model changes against a recorded baseline, and retain the version in each call record.</p>
+    <p>A limited rollout can compare old and new behavior before expansion. Observe both quality and operational effects, under a spending cap. Release decisions need the same traceability for model behavior as for ordinary application code.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -203,5 +110,5 @@
     <a class="prev" href="ch09.html"><span>Previous</span><b>What actually stops a bad change from merging?</b></a>
     <a class="next" href="ch11.html"><span>Next</span><b>What happens to a learner's data when things go wrong?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

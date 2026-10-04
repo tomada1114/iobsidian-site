@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Architecture pages">
-  <h2><a href="ch00.html">One-on-Ones: Architecture</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Architecture pages">
+  <h2><a href="ch00.html">Engineering Readers: Architecture</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Isn&#x27;t architecture just folders</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 2 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 2 of 11</span></p>
   <h1>If the rules can't touch the database, who saves?</h1>
   <p class="lead">After this page you can explain how classic layering makes the rules depend on the database, and how dependency inversion flips it. You can also say when plain layering is the better choice.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,17 +409,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is plain layering simpler and good enough?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. A domain file is open on his laptop.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The layers everyone learns first</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Maya, lint just refused my import. I wanted the domain package, where our drill rules live, to save the round with the DynamoDB client.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What were you trying to do?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The round finishes, so I thought the rule could just save itself. Why aren't the rules allowed to save their own data?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before I answer, how did you learn layers at your old job?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Top calls down. Pages call the business logic, the business logic calls the data layer, the data layer talks to the database.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's classic N-tier, or layered, architecture. Let me draw it the way you described it.</p></div></div>
-    </div>
+    <p>A conventional layered application lets pages call business logic, which calls data access, which calls the database. This is easy to explain and often adequate for CRUD tools. It also means the business rules depend on the data-access layer.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 296" role="img" aria-label="Classic N-tier layering: presentation depends on business logic, which depends on data access, which depends on the database, so everything ends up depending on the database.">
         <text x="16" y="18" class="t-sm">Closest to users</text>
@@ -434,29 +426,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>In classic layering every arrow points down. Follow them and everything, including the business rules, ends up depending on the database.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That looks normal to me. It's easy to explain to anyone.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is, and for simple apps it's fine. Now look at where the business logic's arrow goes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Down into data access. So the rules import the data layer.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what does that mean for testing a rule?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd need a database, or a mock of the data layer. Oh. And if the database changes, the change spreads up into the rules.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the problem in one sentence. Here's a small story. Our first prototype ran on one laptop with a local SQL database.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Before DynamoDB?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. But the rules were already plain functions that didn't know about SQL. So when we moved to DynamoDB, we rewrote the storage code and didn't touch the rules.</p></div></div>
-    </div>
+    <p>That dependency affects both change and testing: exercising a rule may need a database or a substitute, and changing storage can reach the rules. Quickturn's early SQL prototype avoided this by keeping its drill rules as plain functions. Moving to DynamoDB changed the storage implementation while those functions stayed the same.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Flip one arrow</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do the rules get saved, if they can't call the database?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Guess first. What would you do?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Maybe the domain returns what should change, and some other layer writes it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly the first half. The second half: that writer only knows an interface, and the interface belongs to the inner side.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The inner side owns the interface? I'd have put it next to the database code.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the key move. It's called the dependency inversion principle, the "D" in Robert C. Martin's SOLID.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I know the letters. I never knew what the D actually meant.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>High-level policy, like our rules, shouldn't depend on low-level detail, like the database. Both depend on an abstraction, an interface, and it belongs to the high-level side. Let me draw both versions.</p></div></div>
-    </div>
+    <p>Dependency inversion separates high-level policy from low-level technology. The inner side defines an interface describing what the application needs, and the outer adapter implements it. Runtime calls can still reach the database even though source-code dependencies point inward.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="On the left, business logic depends on data access. On the right, the application owns a store interface and the DynamoDB adapter points up into it, so the flipped arrow now points inward.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Classic</text>
@@ -474,29 +448,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>The boxes are the same; only the arrow between them flips. On the right the adapter depends on an interface the application defined, so storage points inward.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At Quickturn the application package declares a learner store interface. Read a round, read today's portion, commit a set of changes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the adapters package implements it. That's the code that talks to real tools, right?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, and it implements it twice. Once for DynamoDB, once in memory for fast tests. The HTTP app wires the real one in at startup.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the domain doesn't even see the interface? It's in the application package?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The domain has no interfaces to I/O at all. It takes plain values and returns decisions. The application loads, asks the domain, and commits through the store.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "who saves" has a clear answer. The application asks, the adapter writes, and the rule just decides.</p></div></div>
-    </div>
+    <p>Quickturn's application package owns a learner-store interface for reading a round, reading today's portion and committing changes. DynamoDB and in-memory adapters implement it. At startup, the HTTP application supplies the real adapter.</p>
+    <p>The domain does not call that interface. It takes values and returns decisions. The application loads the values, asks the domain to decide, then commits through the store. The application coordinates saving; the adapter performs it.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Enforced, not just drawn</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but an arrow on a whiteboard doesn't stop anyone. What stopped me today?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two checks. The domain package imports nothing outside itself. No workspace package, no npm library, no Node built-in.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even the date library?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not even that. Time, time zones and randomness arrive as arguments. That's also why a test can say "it's 3:59 a.m." without waiting.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the checks?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A lint rule refuses the import. That's what caught you. A separate test scans the import graph, the map of who imports whom, and each package's declared dependencies.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why both? The lint rule was enough for me.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because a lint rule can be deleted in one line. If that happens, the test still fails the build. A boundary that only one check holds is a boundary one edit removes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can you draw the rule on its own, without our package names?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sure. Here it is, stripped down to three plain layers.</p></div></div>
-    </div>
+    <p>A dependency diagram needs enforcement. Quickturn's domain accepts time, time zones and randomness as inputs instead of reading them through external libraries. A test can therefore exercise 3:59 a.m. directly.</p>
+    <p>Lint checks forbidden imports, and an independent test scans the import graph and declared dependencies. Removing a lint rule does not remove the second check.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 290" role="img" aria-label="The same rule drawn twice: in classic layering business depends on data; in the inverted version business defines an interface and data implements it, so the arrow points inward.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Classic</text>
@@ -515,53 +473,18 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>The same three layers, drawn twice. Only the arrow between business and data differs, and in the inverted version it points toward the rules.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the whole difference is the direction of the bottom arrow.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and that one direction decides what you can test alone, and what a storage change touches.</p></div></div>
-    </div>
+    <p>The important arrow is the one between application policy and storage implementation. Making the adapter depend on an application-owned interface lets rules be tested alone and limits what a storage change must touch.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When plain layering wins</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me push back. Isn't this too many extra steps? I just wanted to save a round.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does cost something. You write an interface, a composition step that wires the real implementation in, and some mapping between shapes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for every store, three extra things.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Roughly. And a cost people forget: reading the code. You jump from the command that handles the request to the interface, then search for the implementation.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My guess is that the mapping is the worst part. Converting shapes at every step.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half right. Mapping hurts when you copy data into new shapes at each layer. We avoid most of it: our domain types pass straight through, and the one mapping sits at the HTTP edge.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the real cost is the interface and the wiring, not endless conversions.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For us, yes. Teams that add a copy per layer pay much more.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now think of a small admin tool whose "rules" are just the database schema. Create, read, update, delete.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There's nothing to test alone. The logic is the table.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. There, plain layering is simpler and fine. Some teams even use relaxed layering, where a layer may skip the one below and call further down.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds messy.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a trade. Strict layering is cleaner; relaxed layering is less typing. For a CRUD tool, less typing often wins.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then when is inversion worth it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three signs. The rules are worth testing alone. The storage will change. Or several clients share the rules.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We have all three. Streak and level rules, a move from SQL to DynamoDB, and web plus two native apps.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why we pay for it here. If only one sign applied, I'd think harder.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what goes wrong if a team inverts everything, even the CRUD parts?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They get interfaces with one implementation each, and every change touches the interface too. The structure starts to cost more than it saves.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question isn't "is inversion good". It's "are these rules worth protecting".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the question I ask in every review.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate hits the same lint error tomorrow. What do you tell them?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd say in plain layering the rules depend on the database. So you can't test them alone, and storage changes leak into them.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dependency inversion flips that. The application side owns the store interface, and the DynamoDB code implements it. The arrow points inward.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The domain doesn't save anything. It decides; the application commits through the interface.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why couldn't they just disable the lint rule?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a separate test checks the same direction. We check it twice, on purpose.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the cost: an interface and its wiring. It's worth paying here because our rules deserve tests of their own. For a CRUD tool, plain layers are enough.</p></div></div>
-    </div>
+    <p>Inversion adds an interface, startup wiring and a search for the implementation when reading code. Mapping every object into a new shape at every layer adds another cost. Quickturn avoids most of that copying by passing domain types through the application and mapping at the HTTP boundary.</p>
+    <p>For a small admin tool whose behavior mostly follows its tables, conventional layering may be simpler. Strict layering allows calls only to the next layer; relaxed layering allows some layers to be skipped. Either needs an explicit dependency policy.</p>
+    <p>Protecting a core is particularly useful when its rules merit independent tests, storage has known alternatives, or several clients share the same behavior. Quickturn has all three. Adding an interface to every trivial operation can instead make each change larger without creating a useful boundary.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>In classic layering the business rules depend on the database, so they can't be tested or changed alone.</li>
+      <li>Conventional downward dependencies can make business-rule tests and changes depend on data-access behavior.</li>
       <li>Dependency inversion lets the rules' side own the interface and makes the storage code implement it.</li>
       <li>Inversion costs an interface and wiring; pay it when the rules are worth protecting, not for plain CRUD.</li>
     </ol>
@@ -570,7 +493,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch01.html"><span>Previous</span><b>Isn't architecture just folders?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>Should every dependency get a port?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

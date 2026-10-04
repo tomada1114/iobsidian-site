@@ -1,9 +1,9 @@
 <!-- title: API and TypeScript 06 · REST, GraphQL or RPC | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 6 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 6 of 11</span></p>
   <h1>REST, GraphQL or RPC: how do you choose?</h1>
   <p class="lead">After this page you can explain what REST really describes and how it differs from GraphQL and RPC. You can also pick a style from your clients instead of from taste.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,51 +15,20 @@
       <li>How does an AI agent call the same API?</li>
     </ul>
   </nav>
-  <p class="stage">The Tuesday design review has just ended. A new hire suggested tRPC, and Leo stays behind.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>What REST really is</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I liked the tRPC idea in there. I used it on a side project. The types just flow from server to client. No generated files.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's your question about it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why do we keep an OpenAPI document and a generation step at all? tRPC seems strictly better.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before we compare, what do you think REST means?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>JSON over HTTP, with verbs. GET to read, POST to create. The rest is taste.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common version. The idea comes from Roy Fielding's doctoral dissertation. He described an architectural style, a set of rules for how parts of a system talk.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which rules?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Resources are named by URLs. Every resource uses the same small set of methods; he called that a uniform interface.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the others?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each request carries everything it needs, so it's stateless. And responses can be cached.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our URLs look like that. <code>/v1/rounds</code>, and <code>/v1/rounds/{roundId}/answers</code>.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Rounds are resources, answers belong to a round, and we use standard status codes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've read that "real" REST also needs links in every response. We don't do that.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That part is called hypermedia. Most teams skip it, and so do we.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that still REST, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A useful subset of it. The part that matters to us is resources plus a published contract.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The contract being the OpenAPI document.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A description of every path and every body, in a format any language can read.</p></div></div>
-</div>
+    <p>REST is an architectural style, not merely JSON with GET and POST. Its constraints include a uniform interface, stateless interactions and cache semantics. Quickturn uses resource URLs, standard HTTP methods and statuses, with a published OpenAPI contract.</p>
+    <p>It does not implement hypermedia-driven navigation, so its API follows a common resource-oriented subset rather than every constraint of Fielding's REST model. The useful design question is which interaction and compatibility needs that subset serves.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Three families side by side</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There are three families worth knowing. Here's how they differ.</p></div></div>
-</div>
+    <p>REST, GraphQL and RPC offer different ways to expose capabilities. GraphQL lets consumers choose fields; RPC names operations directly. TypeScript-oriented RPC tools can closely connect server and browser types.</p>
   <dl class="terms">
     <dt>REST with OpenAPI</dt><dd>Any client language. The contract is an OpenAPI document. The server fixes each read's shape. HTTP caching works as normal. The server team runs ordinary HTTP routes.</dd>
     <dt>GraphQL</dt><dd>Any client language. The contract is a GraphQL schema. The client asks for exactly the fields it wants. HTTP caching is harder, since most queries are POSTs to one URL. The server team runs resolvers, one small function per field.</dd>
     <dt>RPC</dt><dd>The tRPC library serves TypeScript clients only. It shares types straight from the server code. The gRPC framework serves many languages, with a contract in protocol buffers. Browsers need a proxy or a special protocol to call it.</dd>
   </dl>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now try each one on our clients. Who calls our API?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The web app, in TypeScript. The iOS app in Swift, and the Android app in Kotlin.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So tRPC?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only the web app could use it. Swift and Kotlin can't import TypeScript types. Okay, that's a problem.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>GraphQL?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>All three could use it. And each screen could ask for exactly what it needs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How many different read shapes do our screens need?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not many. The home screen, records, settings, and the drill itself.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So GraphQL's main strength would sit unused. That doesn't rule it out, but it's a clue. Let me draw the whole question.</p></div></div>
-</div>
+    <p>Quickturn has TypeScript, Swift and Kotlin clients and a small number of predictable screen shapes. TypeScript types alone do not provide native clients with a language-neutral contract. GraphQL would support all three, but much of its flexible query surface would currently go unused.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of client languages against read shapes: TypeScript clients with few fixed reads suit tRPC, several languages with few fixed reads suit REST with OpenAPI, several languages with many varied reads suit GraphQL, and TypeScript with many reads suits tRPC or GraphQL.">
       <text x="44" y="18" class="t-sm">↑ Read shapes: many, varied</text>
@@ -80,34 +49,13 @@
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Why we chose REST</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we're bottom right. Several languages, a few fixed commands.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And clients that live for years. A phone app from last year still calls us today. Each language generates its own typed client from the same OpenAPI document.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would GraphQL have cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A schema language, resolvers, and a new caching story. All for flexibility our screens don't use. We looked at GraphQL on a managed AWS service, and at gRPC, before choosing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And gRPC fails on the browser.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not fails, but it needs a proxy or a special protocol. More moving parts for the web app.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does REST cost us, then? It can't be free.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Over-fetching and under-fetching. A resource endpoint returns more than a screen needs, or less, so the app makes three calls.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>GraphQL solves exactly that.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We solve it more simply: one view endpoint per screen. The home view returns everything the home screen shows, in one call.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A GraphQL query, but fixed on the server.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, a fixed query per screen. The other cost is more endpoints to keep compatible across versions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So was my side project wrong to use tRPC?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. If one team owns both ends, and every client is TypeScript, tRPC is great. An internal admin tool used only by our web app would be a good fit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the style follows the clients, not the other way round.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The question isn't which is best. It's who calls you, in what language, and for how long.</p></div></div>
-</div>
+    <p>Quickturn chose HTTP resource endpoints and OpenAPI because independently deployed clients can generate types or clients from the same document. GraphQL would add resolvers and another caching model; browser gRPC would add protocol or proxy considerations.</p>
+    <p>REST can over-fetch or require several calls. Quickturn uses a fixed view endpoint for each screen, such as one home response containing the required data. The cost is more endpoint contracts to keep compatible.</p>
+    <p>A TypeScript-only internal tool controlled by one team could reasonably choose tRPC. The decision follows client languages, ownership and expected lifetime.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>An agent calls the same commands</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's one more client that isn't an app. Our tutor agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The one on AgentCore. How does it call the API?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It calls a chosen set of our commands and queries as MCP tools. MCP, the Model Context Protocol, is an open protocol for giving a model tools it can call.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So there's a second API just for the agent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The tools go through a gateway to the same commands the apps use. Let me draw it.</p></div></div>
-</div>
+    <p>The tutor agent exposes selected commands and queries through MCP tools. A gateway adapts those tool calls to the same application operations used by ordinary clients.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="One API of commands and queries sits in the center; the web app and the mobile apps above it and the tutor agent through MCP tools below it all reach the same rules and the same authorization check.">
       <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
@@ -122,28 +70,8 @@
     </svg>
     <figcaption>Every client, including the agent, reaches the same commands. The rules and the authorization decision exist once.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How can the same command come in from HTTP and from a tool call?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because commands are plain data, checked by schemas, behind one authorization decision. HTTP, a queue message or a tool call all turn into the same data.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the transport doesn't matter to the command.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Now the pitfall I've seen teams hit. What does a tool need to know about the user?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The learner id, I guess. So the model passes it as an argument?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's exactly the mistake. Then the model decides whose data it touches, and a prompt can talk it into another user's id.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where does the user come from?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From the verified session. The agent acts on behalf of the signed-in learner, and no tool takes a learner id at all.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the new hire asks you why we didn't pick tRPC. What's your answer?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd pick the style from the clients. We have a few fixed commands, and clients in three languages that live for years.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>REST with a generated OpenAPI contract fits that. Any language can generate a client from it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>GraphQL earns its cost when many clients want many read shapes. The tRPC library fits when everything is TypeScript. One team must own both ends, too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And REST's weak spot?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Over-fetching. We answer it with one view endpoint per screen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent belongs in the answer too: because commands are plain data, its tools call the same ones as the apps. And the learner always comes from the session, never from a tool argument.</p></div></div>
-</div>
+    <p>Every transport must supply validated command data and a trusted actor context. The model does not choose the learner by passing an arbitrary learner ID. Identity comes from the verified session, and the same authorization decision applies before the command runs.</p>
+    <p>Sharing the command implementation avoids separate agent rules. It does not eliminate the need to secure the gateway, delegated identity and tool permissions.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -157,5 +85,5 @@
     <a class="prev" href="ch05.html"><span>Previous</span><b>Trust nothing at the boundary: parse it once</b></a>
     <a class="next" href="ch07.html"><span>Next</span><b>Where does the API contract actually live?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

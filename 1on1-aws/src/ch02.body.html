@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 02 · Why our deploy has no AWS keys | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 2 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 2 of 14</span></p>
   <h1>Why does our deploy have no AWS keys?</h1>
   <p class="lead">After this page you can explain IAM users, roles and least privilege. You can also describe how CI gets into AWS through OIDC, with no stored secret at all.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,25 +15,10 @@
       <li>Does an AI agent need a role too?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. The deploy workflow is open in the editor.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Users and roles</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I want to add a step to the deploy workflow. I went looking for the AWS access key in the repository secrets, and there isn't one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There isn't. What did you expect to find?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An access key and a secret key, stored as secrets. That's how my agency did it. And admin permissions, at least in dev.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the most common setup, and it's the one we avoid. Let's start with the two kinds of identity. What's an IAM user?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A person's account in AWS? With a password.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close. An IAM user is a long-lived identity. It can hold a password and access keys, and those keys work until someone deletes them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a role?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A role has no credentials of its own. Someone assumes it, and AWS returns temporary credentials that expire on their own. The service that hands them out is STS, the Security Token Service.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a role is more like a hat you put on for a while.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That works. One more rule under all of this: everything is denied unless a policy allows it. That's called default deny.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about people? How do I get into the console?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Through IAM Identity Center. You sign in once and get short-lived credentials for the console and the CLI. No person or agent here has a long-lived key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the root user, the one that created the account?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has MFA, no access keys, and nobody uses it day to day. Let me put a user and a role side by side.</p></div></div>
-</div>
+    <p>An IAM user is a long-lived identity that can have passwords or access keys. A role is assumed for temporary credentials issued by STS. Quickturn favors roles and Identity Center sessions rather than stored long-lived deployment keys.</p>
+    <p>IAM begins with implicit denial; policies allow specific operations, and an applicable explicit denial can override an allowance. Root access is reserved for tasks that require it.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="An IAM user with an access key gets credentials once and they live until deleted, so a copied key keeps working and must be rotated; a role gives temporary credentials that expire on their own, so a copied credential soon stops working and needs no rotation.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">User + access key</text>
@@ -56,16 +41,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Two sides of a role, and OIDC</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, roles. But who is allowed to put on the hat?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the first side of a role, the trust policy. It says who may assume the role. The second side, the permission policy, says what the role may do.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for our workflow, the trust policy must say "GitHub Actions may assume this".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More precisely than that. GitHub can give a workflow a signed token that says who it is. That's OIDC, OpenID Connect, a standard way to prove identity with a signed token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the token say?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which repository, which branch, and who the token is meant for, the audience. Our trust policy checks that the audience is STS, and that the subject is exactly our repository's main branch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Exactly? Not "starts with"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly, with a plain equals check. Let me walk through a deploy.</p></div></div>
-</div>
+    <p>A role has two distinct questions: its trust policy controls who may assume it, and its permission policies control what the resulting session may do. GitHub Actions can present an OIDC token rather than retrieve an AWS key from repository secrets.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="The workflow starts, GitHub issues a signed OIDC token, STS checks the role's trust conditions for audience, repository and branch, STS returns temporary credentials that expire on their own, and the deploy role hands off to the CDK bootstrap roles.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -87,16 +63,7 @@
     </svg>
     <figcaption>No step reads a stored secret. The credentials in the fourth step expire on their own, so there's nothing to leak or rotate.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the workflow need for this?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One line of permissions: <code>id-token: write</code>. That lets the job ask GitHub for the token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the deploy role itself can deploy anything?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It may only assume the CDK bootstrap roles. CDK, our infrastructure tool, creates those roles once per account, and they carry the real deploy permissions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the role from GitHub is only a door to the deploy roles.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the prod deploy waits for a person to approve it before it starts.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do running services use roles the same way?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every Lambda function has an execution role. It's the same idea, used in production. Here's the API function's role.</p></div></div>
-</div>
+    <p>The deployment trust checks audience and the exact repository and branch or environment subject. GitHub's <code>id-token: write</code> permission lets the job request that token. The resulting role is limited to assuming the intended CDK deployment roles; production adds an approval gate.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The API function's execution role sits in the center; it may read and write the learner table and read one secret parameter above, and decrypt only through Parameter Store and write its own logs below; nothing else is reachable.">
       <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
@@ -113,60 +80,17 @@
     </svg>
     <figcaption>The role lists exactly four things. Anything not drawn here is denied by default.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the KMS one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>KMS is the key service that encrypts our secret parameter. The role may decrypt only through Parameter Store, and only for that one parameter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So even a bug in the API can't read another secret.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or another table. The role is the limit, whatever the code tries.</p></div></div>
-</div>
+    <p>Lambda uses an execution role too. Quickturn limits it to the required table, queue and secret resources, with appropriate service conditions for decryption. The role limits AWS access even if application code attempts more.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What least privilege costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This is least privilege, right? Each identity gets only what it needs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And I won't pretend it's free. Every new kind of resource can mean a policy change.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a policy that's too narrow breaks the deploy.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At the worst moment, usually. That's why wildcards are tempting: <code>"Action": "*"</code>, and everything works.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd honestly be tempted in dev. It's just dev.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where would you spend the care, then? Think about what damage each role could do.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything that reaches data. Or production.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And the trust policy above all. What happens if the subject is a wildcard, like "any branch of our repository"?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then any branch could deploy. Someone's experiment branch could deploy to prod.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Worse. With a loose enough condition, a workflow in a fork of the repository could ask for the role too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one star in a trust policy lets strangers in.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the danger. Where would I relax? A personal sandbox account, with a budget alert, where nothing real lives.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for our deploy?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We compared plain administrator access with a role that can only assume the bootstrap roles. Admin would be one line and never break.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But one stolen token could do anything.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. We chose the narrow role and accepted the occasional policy change.</p></div></div>
-</div>
+    <p>Least privilege creates maintenance: a new resource can require a new policy. Broad wildcards reduce those failures by also allowing unwanted actions. Focus review on production permissions and trust conditions, where the potential damage is greatest.</p>
+    <p>An overly broad OIDC subject can admit unintended workflows. Exact repository identity still matters: accepting all branches of the correct repository is different from accepting unrelated repositories. Treat trust, not merely the attached permission list, as part of the deployment boundary.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Agents get roles too</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this matter for the tutor agent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Very much. An agent hosted on a managed agent runtime, like ours on AgentCore, runs with an execution role too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What goes in that role?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the model it calls and the tools it needs. Nothing for "just in case".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the role protects learners' data too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here teams often get confused. The role decides which AWS resources the agent's code can touch. It doesn't decide whose data a tool may read.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because every learner's data is in the same table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. The role must allow the table. Which learner's rows a tool reads is decided by our application's own authorization, from the signed-in learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So two layers. The role limits resources; the app limits whose data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the split our tutor follows. If you ask the role to do the second job, it can't.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose someone asks you in review why there's no AWS secret in the repository. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Users are long-lived identities with keys that work until deleted. Roles give out temporary credentials to whoever their trust policy admits.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our CI proves who it is with a signed OIDC token from GitHub. STS checks the audience and that it's exactly our main branch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So there's no key to leak or rotate. And the role it gets can only hand off to the CDK deploy roles.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the workloads?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each has its own role that lists exactly what it touches, like the API's table, one parameter, and its logs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say which part to review hardest: the trust policy. One loose condition there lets the wrong branch, or a fork, deploy.</p></div></div>
-</div>
+    <p>A hosted agent also has an execution role for model and AWS service access. That role does not automatically determine which learner's application records a tool may read.</p>
+    <p>Quickturn checks both layers: AWS permissions allow the service operation, and application authorization binds it to the verified learner and granted capability. Granting table access is not a substitute for tenant isolation.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -180,5 +104,5 @@
     <a class="prev" href="ch01.html"><span>Previous</span><b>What am I actually responsible for on AWS?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>What do we give up by running the API on Lambda?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

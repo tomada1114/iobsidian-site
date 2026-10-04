@@ -1,9 +1,9 @@
 <!-- title: AI in Production 01 · Does it need to be an agent | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 1 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 1 of 13</span></p>
   <h1>Does every AI feature need to be an agent?</h1>
   <p class="lead">After this page you can tell a single LLM call, a workflow and an agent apart. You can also say what each step toward an agent costs, and when an agent is worth it.</p>
-  <p class="meta"><span>About 8 min read</span><span>At the whiteboard</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,23 +15,9 @@
       <li>How did a helpdesk team pick its shape?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room, right after a planning meeting.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Three words, plainly</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the meeting, the PM asked to make grading of typed answers "an AI agent". Which agent framework should I look at?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before a framework, let's check what "agent" means. What would the agent do for grading?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Read the learner's answer, compare it with the expected one, and give a verdict. With some reasoning.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's one question and one answer. Let's define three words, because people use them loosely.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An LLM call is one request and one answer. You send a prompt, the model sends text back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a workflow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Code that decides the order of several calls. Call one, check the result, call two. Our code picks every step.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then an agent is a smarter workflow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An agent is a loop where the model decides the next step. It chooses which tool to call, and it stops when it decides to.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait. The model runs tools?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never by itself. It asks for a tool, and the program around it, called the harness, runs the tool and sends back the result.</p></div></div>
-</div>
+    <p>Quickturn needs to grade a typed answer against a rubric. That task may require one model call: input goes in and a verdict comes back. A workflow coordinates several steps whose order is determined by code. An agent gives the model some choice about the next step or tool.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The model asks for a tool, the harness runs it and returns the result, and the loop repeats until the model decides to stop and answer.">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
@@ -48,23 +34,13 @@
       <rect x="64" y="224" width="272" height="56" rx="6" class="node-acc"/>
       <text x="200" y="258" text-anchor="middle" class="t-hd">Model decides to stop</text>
     </svg>
-    <figcaption>Everything in the loop is ordinary code except one step. When to stop is the model's choice, and no code controls it.</figcaption>
+    <figcaption>Everything in the loop is ordinary code except one step. The model chooses a next action or a finish signal within limits enforced by the harness.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in a workflow, our code decides when it's done. In an agent, the model does.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the difference that matters. Everything else follows from it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does that look like for the tutor?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A learner asks why they keep missing a phrase. The model asks for their recent mistakes, then for the card, then answers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And nobody wrote those three steps down.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. With another question, it might ask for something else, or for nothing at all.</p></div></div>
-</div>
+    <p>The surrounding harness executes requested tools, returns their results and enforces limits. A tutor may choose whether to inspect recent mistakes before answering. A grader with a known input and output does not need that open-ended loop.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The ladder</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I thought workflows were the older, weaker version. Agents are what everyone builds now.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anthropic's article "Building effective agents" says nearly the opposite: start with the simplest thing that works. Let me draw the shapes as a ladder.</p></div></div>
-</div>
+    <p>Start with the simplest adequate interaction: one call, a chain, a router or a controlled workflow. Parallel calls and a second model checking output can still be workflows when code owns the plan.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A ladder from a single call, to a prompt chain, to a router, to a fixed workflow, to an agent; each step hands one more decision to the model, and the agent is the last resort, not the goal.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -86,37 +62,11 @@
     </svg>
     <figcaption>Each label names what the model decides at that step. The agent sits at the end as the last resort, not the goal.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a chain?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Several calls in a fixed order, each using the last one's output. A router is one call that picks which path the request takes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a fixed workflow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our code runs the steps, maybe in parallel, maybe with one model checking another's work. The model fills in parts, but the plan is ours.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me place our features. Grading is one call that returns a typed verdict.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, the first rung. Our code does everything around that call, behind a task port.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Card generation writes a card, checks it, and has it reviewed. That's a chain.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. An AI writer drafts, an AI reviewer judges, and a person supervises the stamp.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The tutor talks with a learner, over many turns, and chooses what to look up in their history. That one is an agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one agent in the whole product.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And not at the center. Our core loop is a timed drill, not a conversation.</p></div></div>
-</div>
+    <p>Quickturn uses one call for grading, a generation-and-review workflow for cards, and an agent for the tutor's variable multi-turn lookups. Its core timed drill remains a deterministic application flow.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What an agent costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But why not use an agent anyway? More freedom should mean better answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Freedom has a price. More calls per request. No fixed length, so no fixed cost or latency.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Different paths on the same input. That makes it harder to test and to evaluate. And every tool it can call is something an attacker can try to steer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does it pay?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When the steps can't be written down in advance. Here's my test: can you draw the steps on the whiteboard before the request arrives?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For grading, yes. Read, compare, return a verdict.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's a workflow. And it has something an agent rarely has: an expected answer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You mean we know what the verdict should be?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For about two thousand reviewed alternative answers, yes. So we can test a prompt change against them. With an agent, two good runs may take different paths, and there's no single right one to check.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So choosing the smaller shape is also what makes testing possible.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then let me put our features on two questions.</p></div></div>
-</div>
+    <p>An agent can take different paths for the same request, increasing variable latency, cost and testing difficulty. Each tool adds an action that untrusted input might influence. Define turn, time and spending limits even when the model is allowed to choose steps.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the steps are unknown in advance against whether the task needs several turns with tools: known steps in one turn is a single call or a fixed workflow, where grading and card generation sit; unknown steps in one turn is a router; known steps over several turns is a scripted chat; unknown steps over several turns is an agent, where the tutor sits.">
       <text x="44" y="18" class="t-sm">↑ Several turns with tools</text>
@@ -134,47 +84,12 @@
     </svg>
     <figcaption>Most of Quickturn's AI work sits bottom left. Only open-ended, multi-turn tool use moves to the top right.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But workflows break on inputs nobody planned for. A learner types something strange, and the fixed steps don't fit.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's true. And that's exactly where a router belongs. Or an agent, only for those rare, unusual cases.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the strange cases get the expensive shape, and the normal ones don't. And a scripted chat, top left?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A conversation with fixed steps, like a guided sign-up. Several turns, but our code still decides each one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the strange cases pay, and the rest stay cheap.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's how you keep most traffic cheap and testable.</p></div></div>
-</div>
+    <p>A fixed workflow is easier to compare against expected results. A router can handle variation without giving every request a general agent. A helpdesk, for example, may route ordinary password resets to a known workflow and reserve open-ended investigation for unusual cases.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>A helpdesk that split its traffic</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen that work?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, we built an IT helpdesk agent. Every ticket went through the agent loop.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What went wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nothing dramatic. It was just slow and costly, and we couldn't say whether a change made it better.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every ticket took a different path, so there was no expected answer to compare against. Then we looked at the tickets.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Most were password resets and access requests. They followed three fixed paths.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you put a router in front.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The router sent those to three fixed workflows, and only unusual tickets reached the agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't the router send a ticket to the wrong path?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It could, so the router had its own tests: past tickets with the path a person chose. And any ticket it wasn't sure about went to the agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What changed?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cost per ticket fell. And we could finally evaluate, because most traffic had one expected path.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I tell the PM grading stays a workflow.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tell them why: we can draw its steps today. If a feature ever needs open-ended, multi-turn tool use, we'll consider an agent for it.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The PM asks again tomorrow. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Start from the smallest shape: one call, then a chain or a router. Move up only when you can't write the steps down in advance.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every step up costs calls, money and predictability. Different paths on the same input are hard to test.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an agent is for open-ended, multi-turn tool use, like the tutor. Grading is one call with a typed answer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for strange inputs?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A router in front, and the expensive shape only for the rare, unusual cases.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model never runs a tool itself. Whatever an agent does, our harness does it, so our code still sets the limits.</p></div></div>
-</div>
+    <p>The helpdesk example also needs evaluation of the router. Past tickets can be labeled with the route a person chose; uncertain cases can escalate. Measure latency, cost and task success by route rather than assume the agent is always the more capable option.</p>
+    <p>A multi-turn conversation does not itself require an agent. Guided sign-up can span several turns while code determines each step. Introduce model-directed tool use when the possible next actions genuinely depend on information that cannot be planned beforehand.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -188,5 +103,5 @@
     <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
     <a class="next" href="ch02.html"><span>Next</span><b>What am I actually paying for in one LLM call?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

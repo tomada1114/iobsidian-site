@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: API and TypeScript pages">
-  <h2><a href="ch00.html">One-on-Ones: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
+  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 3 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 3 of 11</span></p>
   <h1>Why not just add another boolean flag?</h1>
   <p class="lead">After this page you can model cases that exclude each other as a discriminated union. You can also explain why the compiler then finds every place a new case must be handled.</p>
-  <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,30 +409,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is a union the wrong shape?</li>
     </ul>
   </nav>
-  <p class="stage">The small meeting room. Leo puts his laptop on the table, next to the whiteboard.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>A bag of flags</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm adding the background job that rebuilds a learner's stats. It needs to say who is acting. Here's my draft type.</p><pre><code>type Actor = {
+    <p>An actor represented by optional learner ID, system flag, job name and on-behalf-of ID permits many meaningless combinations. A system flag alone does not say which job is running or which learner it serves. Every reader would need to reconstruct those constraints.</p>
+    <p>“Make illegal states unrepresentable” means designing the type around valid alternatives. This improves the model inside checked code; runtime input still requires parsing, and unsafe assertions can bypass it.</p>
+    <pre><code>type Actor = {
   learnerId?: string;
   isSystem?: boolean;
   jobName?: string;
   onBehalfOf?: string;
-};</code></pre></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me ask one thing. What does <code>{ isSystem: true }</code> mean, with nothing else set?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A system job… for no learner? That can't happen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>But the type allows it. How many combinations does it allow, just by which fields are set?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four optional fields, each there or not. Two to the fourth. Sixteen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And how many of those make sense?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Maybe three. A learner. A system job for a learner. Hmm, and later an agent.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So thirteen are nonsense. Who stops them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd add a few <code>if</code> checks. If <code>isSystem</code>, then <code>onBehalfOf</code> must be set.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wherever we read an actor.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the problem. Every reader has to check the combination again, and one day one reader forgets. There's a phrase for the fix, often credited to Yaron Minsky: make illegal states unrepresentable.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Meaning the bad combinations can't even be written?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Not caught later. Impossible to type in the first place. Let me draw both.</p></div></div>
-</div>
+};</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Four optional flags allow sixteen combinations, of which thirteen are nonsense; a union allows exactly three rows, learner, system and agent, each with its own fields.">
       <text x="96" y="24" text-anchor="middle" class="t-hd">Flag bag</text>
@@ -458,27 +444,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One tag, exact fields</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do I write the right side?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>As a discriminated union. It's a union of object types, and each one has a tag field with a literal value. We call ours <code>kind</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And each member has only the fields it needs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly those fields, all required. Here's Quickturn's actor.</p><pre><code>type Actor =
+    <p>Quickturn's actor is a discriminated union. Its <code>kind</code> identifies a learner, a system job or an agent, and each member requires the fields appropriate to that case. Checking the tag narrows the available fields.</p>
+    <p>An agent actor names one learner and carries operation grants. The operation-name union can be derived from an <code>as const</code> list with <code>(typeof LIST)[number]</code>, keeping runtime names and the static type aligned. The type describes the grants; authorization must still enforce them.</p>
+    <pre><code>type Actor =
   | { kind: "learner"; learnerId: LearnerId }
   | { kind: "system"; job: SystemJob;
       onBehalfOf: LearnerId }
   | { kind: "agent"; onBehalfOf: LearnerId;
-      grants: readonly OperationKind[] };</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A system actor without a learner… I literally can't write it. <code>onBehalfOf</code> is required.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And once you check <code>actor.kind === "system"</code>, the compiler narrows to that member. You get <code>job</code> and <code>onBehalfOf</code>, and nothing else.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the grants on the agent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The list of operations the agent may do. Our tutor agent runs as that member, so it always acts for one learner, and only within its grants.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does <code>OperationKind</code> come from? Is it written out by hand?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From a list. We declare the operation names <code>as const</code>. That keeps the exact strings, not just "string".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then a type from the list?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span><code>(typeof LIST)[number]</code> turns the list into a union of its strings. So the list and the type can never disagree.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when I add a name to the list, the type grows by itself.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me draw what the actor looks like as a whole.</p></div></div>
-</div>
+      grants: readonly OperationKind[] };</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Actor sits in the center; a learner member with its learner id sits above, and a system member and an agent member sit below, each carrying the one learner it acts for.">
       <line x1="200" y1="76" x2="200" y2="118" class="ln"/>
@@ -502,11 +475,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Exhaustive, and no enums</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but next year someone adds a fourth kind. How do we find all the code that reads actors?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where does our code decide what an actor may do?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In <code>authorize</code>, I guess. And anywhere else that switches on <code>kind</code>.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those switches are written to be exhaustive. That means one <code>case</code> per member, and a check that fails if a member is missing.</p><pre><code>switch (actor.kind) {
+    <p>An exhaustive switch handles every union member. Assigning the remaining value to <code>never</code> makes a newly added case fail compilation. An exhaustiveness lint rule can serve the same purpose.</p>
+    <pre><code>switch (actor.kind) {
   case "learner": return actor.learnerId;
   case "system":  return actor.onBehalfOf;
   case "agent":   return actor.onBehalfOf;
@@ -514,14 +484,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     const unreachable: never = actor;
     return unreachable;
   }
-}</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's <code>never</code> doing there?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span><code>never</code> is the type with no values. If every case is handled, <code>actor</code> is <code>never</code> at that point. Add a fourth member, and it isn't anymore, so the line fails to compile.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's clever. Is that what we use?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We use a lint rule that does the same job, and we forbid a plain <code>default</code> branch on unions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why forbid it? A default seems safe.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A default quietly accepts the new case. The code compiles, and the new actor gets whatever the default does. Here's the flow we want instead.</p></div></div>
-</div>
+}</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Someone adds a member to the union, the compiler or lint marks every switch that lacks it, each switch is handled, and the change ships with no switch missed.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -540,49 +503,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The compiler turns "find every place that reads actors" into a list of errors. The change can't ship until the list is empty.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why do we use string unions instead of <code>enum</code>? My old team used enums for this.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our lint blocks <code>enum</code>, and its message says why. An enum is one of the few TypeScript features that create a real object in the JavaScript output. It can't just be erased.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does that matter?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tools that strip types without compiling, like Node's built-in type stripping, don't support enums at all. And numeric enums accept any number, even one you never listed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a string union is already the value we send in JSON.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. <code>"system"</code> in the code is <code>"system"</code> on the wire, meaning in the JSON we send over the network. No mapping in between.</p></div></div>
-</div>
+    <p>A catch-all default inside controlled code can conceal missing behavior. Across a public API, however, an installed client may receive an alternative added after it shipped, so a safe fallback is necessary.</p>
+    <p>Quickturn uses string unions instead of enums because its runtime relies on erasable TypeScript syntax. Enums can require JavaScript output that a type-stripping runtime does not provide. Exact strings also map directly to JSON.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When a union is the wrong shape</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should everything with a <code>kind</code> be a union, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. If the cases share almost every field and differ in one, a union repeats everything. Then keep one type with one tagged field, or a shared base.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a union with ten members?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often it's two ideas mixed together. Try splitting it first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about data from outside? A request can't promise it's a valid actor.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, so it's parsed into the union by a schema. Our schemas can check a discriminated union too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the exhaustive rule works everywhere?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside our program, yes. The API is the tricky place. Our home view in the contract is a tagged union, like <code>kind: "onboarding" | "placement" | "ready"</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a client switches on it, exhaustively.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And next month the server adds a new kind. What happens to an installed app that was exhaustive?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It hits a case it doesn't know. Oh. It breaks.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So clients of a public API keep a default branch. Inside, exhaustive; across the wire, forgiving.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the opposite of the rule for our own switches.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the owner changes. We control our code, not the apps already on phones.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this idea matter outside apps like ours?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A lot in agent systems. Think of the states you'd never want: an agent acting for no one, or an agent with wider rights than its user.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With our actor type, the first one can't be written. The second is limited by the grants.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. In an agent system, those are exactly the illegal states worth making unwritable.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A reviewer asks why you threw away your four flags. What's your answer?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four optional flags allow sixteen shapes, and most are nonsense. Every reader has to check the combination again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A discriminated union lists only the real cases. Each has a literal <code>kind</code> and exactly its own fields, so a system job without a learner can't be written.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Checking <code>kind</code> narrows to one member. And when someone adds a case, the exhaustive check lists every switch to update.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the enum question?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We use unions of strings. An enum makes a runtime object, and the string is already the value in the JSON.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One limit to add: across the wire it flips. The server may add a case later, so clients of a public API keep a default branch.</p></div></div>
-</div>
+    <p>A union is most helpful when cases have different required fields. If nearly every field is shared, use a common shape or base rather than repeat the entire object. A very large union may indicate that several independent concepts have been mixed together.</p>
+    <p>Parse external data into the union before relying on narrowing. Inside one controlled version, use exhaustive handling; across independently deployed clients, allow unknown variants safely. An actor type helps expose missing identity or grants, but the server must derive identity from trusted authentication and check permissions.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -596,7 +523,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch02.html"><span>Previous</span><b>Which compiler flags change how I write code?</b></a>
     <a class="next" href="ch04.html"><span>Next</span><b>Should a function throw, or return its failure?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

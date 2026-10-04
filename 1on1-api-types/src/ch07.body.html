@@ -1,9 +1,9 @@
 <!-- title: API and TypeScript 07 · Where the API contract lives | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 7 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 7 of 11</span></p>
   <h1>Where does the API contract actually live?</h1>
   <p class="lead">After this page you can explain how one set of schemas becomes the API document and the clients' types. You can also say why generated files are committed and tested for drift.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,17 +15,9 @@
       <li>What does owning the chain cost?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. His pull request shows a red CI run, on a test he never touched.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>One chain from one source</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I added one field to a response schema. Now CI fails. It says "the OpenAPI document differs from the committed file".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the second failure?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same thing, for the web client's types. Why are generated files even in git? I thought generated output never belongs there.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start earlier. Where do you think the OpenAPI document comes from?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Someone writes it? Or updates it after the code is done, like documentation?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how many teams do it. Ours is generated from the same schemas the server checks requests with. Let me draw the chain.</p></div></div>
-</div>
+    <p>Quickturn derives its OpenAPI document from the schemas used to parse requests. A route table supplies method, path, request, success response and error codes. The document then feeds client generation.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A zod schema becomes a JSON Schema, then a committed OpenAPI document, then generated types, then hand-written calls; the server validates with the first step, so a contract change fails the client's compile.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -47,33 +39,16 @@
     </svg>
     <figcaption>Every copy of the contract comes from the first step. Because the server checks requests with that same schema, the document can't say something the server doesn't do.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's JSON Schema?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A standard way to describe the shape of JSON. zod can turn its own schemas into it. An OpenAPI 3.1 document uses JSON Schema for every body, so the conversion is direct.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what builds the document around the schemas?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small function we own. It reads a route table: for each operation, the method, the path, the request, the success response and the error codes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the types for the web app are generated from the document.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, and the calls are written by hand. Each one is checked with <code>satisfies</code> against the generated request type.</p><pre><code>// breaks if the path or the request shape changes
+    <p>OpenAPI 3.1 uses JSON Schema for body shapes. The schema conversion must support the features the project uses; runtime-only transformations need special care. Web request objects are checked with satisfies against generated types, while Swift and Kotlin consume the same published contract.</p>
+    <pre><code>// breaks if the path or the request shape changes
 const settings = await call&lt;GetSettingsResponses&gt;(
   "GET",
   { url: "/v1/settings" } satisfies GetSettingsData,
-);</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The Swift and Kotlin apps too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They generate their clients from the same document. And the contract package depends on zod only. It's neither server code nor client code, so both sides can use it.</p></div></div>
-</div>
+);</code></pre>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Design-first or code-first</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've read that you should write the spec first. Design-first. Isn't generating it backwards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both are real options. Design-first means you write the OpenAPI document before any code. Code-first means you derive it from code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When is design-first better?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When several teams must agree before anyone builds. They review a spec, and one team can run a mock server from it while the other builds the real one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And code-first?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's no gap between the spec and the validator. The thing that checks requests is the thing that writes the spec. That's good for one team.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which one are we?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In between. Our schemas are code, but they sit in their own package, and we write them before any handler. Let me compare the two.</p></div></div>
-</div>
+    <p>Design-first starts with a specification that several teams can review before implementation. Code-first derives it from code and reduces duplication between the validator and document. Quickturn writes schemas in a dedicated contract package before handlers, combining an early contract discussion with generation from executable definitions.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="Design-first keeps the spec as the source of truth and teams review the spec, but drift can happen between the spec and the code; code-first keeps the schemas as the source and reviewers read code and the generated diff, and drift can happen between generated files and the source.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Design-first</text>
@@ -90,25 +65,11 @@ const settings = await call&lt;GetSettingsResponses&gt;(
     </svg>
     <figcaption>Neither side wins everywhere. The bottom row decides: each approach has one gap where copies can disagree, and you need a test on that gap.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So code-first still has a drift problem. Between the generated files and the schemas.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. And that's the test that just failed on you.</p></div></div>
-</div>
+    <p>Generation still leaves a possible gap between source and committed artifacts. A schema edit does not automatically mean the published document or client types have been refreshed. That gap needs a check.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Commit it, then test it</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but why commit the generated document at all? CI could generate it fresh every time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who reads your pull request?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A reviewer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If you change a response, what should the reviewer see?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The schema change, I guess.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The schema change is in TypeScript, in one file. The committed document shows what every client will actually see: the path, the field, whether it's required. That diff is what a reviewer reads.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So committing it turns a contract change into something you can review.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Now the test. It regenerates the document and compares it with the committed file. In CI, it never rewrites the file. A stale file just fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And locally?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One command rewrites it. You run it, commit the new file, and CI passes. Here's the loop.</p></div></div>
-</div>
+    <p>Committed generated files make the externally visible change reviewable. CI regenerates the document and client types in a temporary location and compares them with their committed versions. It fails on drift instead of silently rewriting or committing output.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A developer edits a schema and pushes; CI regenerates and compares; on a mismatch it sends the change back, the developer runs the generate command and commits, and CI passes with the diff in the pull request.">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
@@ -127,49 +88,13 @@ const settings = await call&lt;GetSettingsResponses&gt;(
     </svg>
     <figcaption>The loop only ends when the committed file matches the schemas. When it ends, the contract change is in the pull request for review.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't CI just regenerate the file and commit it for me? That would save a step.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It would. What would the reviewer see then?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My schema change, and then a bot commit after the review started. Hmm.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the bot might commit a change nobody meant to make. Say you renamed a field in a schema to tidy the code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then every app that reads the old name breaks, and the only sign is a commit from CI.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why the test only compares. A person runs the command, looks at the diff, and decides it's intended.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the extra step is where the decision happens.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. It costs you a minute, and it makes every contract change a choice someone made on purpose.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my red build isn't a bug. It's the test telling me I forgot to regenerate.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly that. The web client's types follow the same rule, with their own test.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything the tests can't catch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One thing. We check the response schemas against the application's view types at compile time, in both directions. But an optional field that the code never actually fills in passes that check.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because optional means "may be missing", and it's always missing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A compile-time check sees shapes, not behavior.</p></div></div>
-</div>
+    <p>Locally, a regeneration command updates the files so the author can inspect and commit the intended contract diff. That step prevents an accidental rename from appearing only as an unreviewed bot correction.</p>
+    <p>Compile-time agreement between response schemas and application view types checks shape, not population. An optional field that is never actually filled still requires a behavioral test.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What owning the chain costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why write our own document builder? There are libraries for this.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There are. We chose a small function over one more dependency. The cost is that anything the document doesn't express yet is our job.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A security scheme, a header, examples. Each one is an edit to our builder. And generated files add noise to diffs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Would you choose the same at a big company?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Maybe not. With several consumer teams, I might prefer design-first and a formal spec review. The teams need to agree before code exists.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the choice depends on how many teams have to agree.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. But one setup never works, at any size.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A spec written by hand next to separate validators. Two sources of truth, and nothing checks that they agree. They drift, and nobody notices until a client breaks.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate asks you where our API contract lives. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In one place: the schemas the server validates with. They're in their own package, and they depend only on zod.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Everything else is generated from them. zod makes JSON Schema, and our builder makes the OpenAPI document. The clients' types come from that.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The generated files are committed, so a contract change shows up as a diff in review.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And if someone forgets to regenerate?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A test regenerates each copy and fails in CI if it's stale. One command fixes it locally.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Name the alternative, so they know it's a choice: design-first is right when several teams must agree before anyone builds. What never works is a hand-written spec next to separate validators.</p></div></div>
-</div>
+    <p>Owning a small document builder avoids another integration dependency but creates maintenance work. Security schemes, headers and examples must be represented explicitly, and generated diffs need review.</p>
+    <p>Several consumer teams may favor specification-first review. Either approach needs a checked chain from agreed contract to validator and client output. A handwritten specification beside independent, unchecked validators leaves two sources that can drift.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -183,5 +108,5 @@ const settings = await call&lt;GetSettingsResponses&gt;(
     <a class="prev" href="ch06.html"><span>Previous</span><b>REST, GraphQL or RPC: how do you choose?</b></a>
     <a class="next" href="ch08.html"><span>Next</span><b>How do you change an API without breaking old apps?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

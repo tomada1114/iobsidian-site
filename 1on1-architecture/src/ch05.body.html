@@ -1,9 +1,9 @@
 <!-- title: Architecture 05 · Isn't DDD just another style | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 5 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 5 of 11</span></p>
   <h1>Isn't DDD just another architecture style?</h1>
   <p class="lead">After this page you can explain that domain-driven design answers "where are the boundaries and what do the words mean". Clean and hexagonal architecture answer "which way do dependencies point". You can also say how much of DDD a small team needs.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,27 +15,10 @@
       <li>How much tactical DDD does a small team need?</li>
     </ul>
   </nav>
-  <p class="stage">After the Tuesday design review. The room is emptying.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Two halves of DDD</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That was a strange ten minutes. The PM kept saying "session", and a teammate who works on sign-in kept answering about login.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did the PM mean?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One round of cards. The sign-in teammate heard "login session" and started talking about token expiry.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So two smart people argued for ten minutes, and each one meant something different by the same word.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that why people say "do DDD"? And honestly, is DDD an alternative to Clean Architecture?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think DDD is?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A folder structure. Entities, repositories, services. A rival to clean.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the most common picture, and it's only a small part. People usually split DDD into two halves, and Eric Evans's original book covers both.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two halves?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Strategic design and tactical design. Strategic is about boundaries and words: bounded contexts, a shared language, and a map of how contexts relate. A bounded context is a part of the system where each word has one fixed meaning.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And tactical is the entities and repositories?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Entities, value objects, aggregates, repositories, domain events. Building blocks inside one boundary.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I know entities and repositories. What are the others?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A value object is a small value with no id of its own, like a 30-second time limit. An aggregate is a group of data that one write must keep correct together. A domain event records that something happened, like "round finished".</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which half matters more?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a small team, most of the value is strategic. Today's review is a good example: no repository class would have saved those ten minutes. Let me put the two halves side by side.</p></div></div>
-    </div>
+    <p>The word “session” can mean a card round to product staff and a login session to an authentication engineer. A folder structure cannot fix that disagreement. Domain-driven design addresses both the model's vocabulary and the boundaries within which its words have a consistent meaning.</p>
+    <p>Strategic design includes bounded contexts, a shared language and relationships between contexts. Tactical design supplies building blocks inside a context: entities, value objects, aggregates, repositories and domain events. A time limit can be a value object; “round finished” can be an event. For a small team, agreeing on the model may be more useful than adopting every tactical pattern.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 320" role="img" aria-label="Strategic DDD (contexts, language, context map) next to tactical DDD (entities, value objects, aggregates, repositories, events); Quickturn adopts all of the strategic side and only aggregates as consistency boundaries on the tactical side.">
         <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Strategic</text>
@@ -55,21 +38,8 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One word everywhere</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The strategic idea behind today's mess is the ubiquitous language. One set of words shared by product, design and code.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Ubiquitous" meaning it's used everywhere?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Everywhere. In conversation, in specs, and in type names. Let's list ours. What's a round?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A short deck of cards. There are kinds: placement, today, yesterday and extra.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a portion?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The daily amount that keeps a streak going. Placement is the first round, the one that sets your level.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The review log is every answer, append-only, so we only add to it. An item's memory state says when a card is due again. And the learner model ranks weak grammar points from the answers.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And "session"?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Banned inside practice. It's ambiguous, as you saw today. The vocabulary activity has its own sessions, but that lives in its own context, where the word has one meaning.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the same word can mean different things in different contexts, as long as each context is strict.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. That's what "bounded" means in bounded context. Now, the important part: the words are the type and function names.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like <code>decideStart</code> and <code>decideAnswers</code>.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. When the PM says "start today's round", you can find that sentence in the code. Let me draw one word's journey.</p></div></div>
-    </div>
+    <p>A ubiquitous language is a vocabulary shared by product discussions, specifications and code. In Quickturn's practice context, a round is a short deck, a portion is the daily amount needed for a streak, and placement is the initial round that sets a level. The review log records answers, while an item's memory state determines when a card is due.</p>
+    <p>The practice context avoids “session” because it has competing meanings. A separate vocabulary activity may use that word within its own context. The boundary makes the meaning explicit.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="The word round sits in the center, linked to the PM's spec, the UI label, the API path, the domain type and the table key: one word everywhere.">
         <line x1="160" y1="128" x2="96" y2="64" class="ln"/>
@@ -87,19 +57,11 @@
       </svg>
       <figcaption>The same word appears in the spec, the screen, the API, the type and the stored key. When it means one thing in all five, a product sentence maps straight onto code.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the fix for today is boring. Agree on words and make the code use them.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Boring and powerful. Most design arguments I've seen were two meanings of one word.</p></div></div>
-    </div>
+    <p>Type and function names should carry the same language. A product request to start today's round should lead naturally to the corresponding command and decision function. This reduces translation between a requirement and its implementation.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Two different questions</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, so where does clean architecture fit?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It answers a different question. DDD decides boundaries and words. Clean or hexagonal decides which way the code depends, inside and between those boundaries.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So they don't compete.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Let me put them on two axes, and you tell me what each corner looks like.</p></div></div>
-    </div>
+    <p>DDD and Clean Architecture answer different questions. DDD helps model the problem, choose contexts and agree on terms. Clean or hexagonal architecture helps arrange dependencies so those rules are protected from technologies.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of clear boundaries and words against dependencies pointing inward; the corner with both is DDD plus clean, and the mixed corners are a muddled language in clean code, or a good language in tangled code.">
         <text x="44" y="18" class="t-sm">↑ Clear boundaries and words</text>
@@ -117,52 +79,13 @@
       </svg>
       <figcaption>The two axes are independent. A team can get either one right without the other, and the goal is the corner where both hold.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bottom right is a clean codebase where "session" means three things.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>I've seen it. The arrows are perfect, and nobody can tell what a class is for.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And top left is a great language inside a tangled codebase. Every class has a clear name, but the rules import the database.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So in the interview, when they ask how DDD differs from clean, what do you say?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>DDD is about modeling the problem and cutting it into contexts. Clean is about arranging code so the model doesn't depend on technology. And they combine.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the answer.</p></div></div>
-    </div>
+    <p>A codebase can have perfect dependency arrows and ambiguous concepts. It can also have excellent domain names while its rules depend directly on a database. Strong modeling and useful dependency boundaries complement each other; selecting one does not eliminate the need for the other.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>How much tactical DDD?</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why not do the full tactical part too? Entity classes, a repository per aggregate, a domain event bus.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Full tactical DDD is heavy. It pays off in large, complex domains with many teams. Think of an insurance company, or a bank's lending rules.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And us?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We took strategic DDD and a thin slice of tactical. Aggregates only as consistency boundaries, to decide what one write must check.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Plain data and pure functions instead of classes. A pure function only computes a result from its inputs. It doesn't read or save anything.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait. Isn't that the anemic domain model? Data without behavior. I read that's an anti-pattern.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Martin Fowler named it, yes. Half right: we do have data without methods. But look at where the rules live.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the domain package, as functions next to the types.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The anti-pattern is rules that move out of the domain and end up scattered across many services. It isn't the absence of classes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the streak rule were in the API handler, that would be anemic. Having it in a pure function beside the type is fine.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. What matters is that there's one home for each rule, and it's inside the domain.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But without classes, what stops someone from building a broken round by hand? Anyone can create the object.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nothing does, and that's the real cost. A class can hide its fields so only its methods change them. Plain data can't.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do we rely on instead?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three things. The decide functions are the only place that produces changes. Types narrow what's possible, like a round kind that can only be one of four words. And tests cover every decide function.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds like discipline more than a guarantee.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. We chose discipline plus types because the code stays short. An agent or a new hire finds the rule in one place. A bigger team might choose classes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would make you add the heavier parts?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Several teams working in one context, or rules that must be enforced by an object hiding its fields. We don't have either.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And an event bus?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only when many listeners need to react to one thing without the writer knowing them. Today our writers know exactly what they update.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The PM asks you tomorrow what DDD has to do with the "session" mix-up. What do you say?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>DDD tells us where to draw boundaries and which words mean what inside them. "Session" meant two things, so we banned it in practice.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our words, like round, portion and placement, are the names in our code, so a PM's sentence maps onto it.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Clean or hexagonal is a different question: which way the code depends. We use both.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the tactical half?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We use a thin slice: aggregates as consistency boundaries, with plain data and pure functions instead of classes.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "instead of classes": that doesn't make it anemic, because the rules still live in the domain. Anemic means rules outside the domain, not a missing class.</p></div></div>
-    </div>
+    <p>Quickturn uses aggregates as consistency boundaries but represents data with plain values and keeps behavior in pure domain functions. The absence of methods is not, by itself, evidence that rules have been scattered outside the domain. The important question is where those rules actually live.</p>
+    <p>Plain data has a cost: callers can construct an invalid object more easily than with a class that hides its fields. Quickturn relies on decision functions as the intended change-producing path, constrained types and tests. This is a discipline supported by checks, rather than complete language-enforced protection.</p>
+    <p>A larger team or a model needing stronger encapsulation could justify richer objects. An event bus becomes useful when several independent listeners must react to one event. Neither pattern needs to be added before that responsibility exists.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -176,5 +99,5 @@
     <a class="prev" href="ch04.html"><span>Previous</span><b>Clean vs Hexagonal — what's actually different?</b></a>
     <a class="next" href="ch06.html"><span>Next</span><b>Why not split it into microservices?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

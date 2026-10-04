@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AWS Foundation pages">
-  <h2><a href="ch00.html">One-on-Ones: AWS Foundation</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AWS Foundation pages">
+  <h2><a href="ch00.html">Engineering Readers: AWS Foundation</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>What am I responsible for on AWS</span></a></li>
@@ -397,10 +397,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 4 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 4 of 14</span></p>
   <h1>Why doesn't Quickturn have a VPC?</h1>
   <p class="lead">After this page you can explain how a CDN serves an app and its API from one origin. You can also say what a VPC is for, what it costs, and when you really need one.</p>
-  <p class="meta"><span>About 8 min read</span><span>Whiteboard room</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -412,25 +412,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When would we need a VPC?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room. Leo has a tutorial open on his laptop.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The edge</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I followed an AWS tutorial last night. Step one was "create a VPC with public and private subnets". We don't have a VPC at all. Are we insecure?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's check. Before we get to VPCs, what do you think sits between a learner's browser and our code?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CloudFront, I think. Then the API.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. CloudFront is a CDN, a content delivery network. It serves content from locations close to the user, and it caches what it can.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the web app's files come from S3?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From an S3 bucket that blocks all public access. Nobody can read it directly, not even with the exact URL.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how does CloudFront read it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Through origin access control. The bucket's policy lets only this one CloudFront distribution read it. Everyone else gets "access denied".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And traffic between CloudFront and the API?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>HTTPS only, on both paths. The bucket also refuses any request that isn't encrypted, so even a mistake in our settings can't send files in plain text.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about links inside the app, like <code>/records</code>? There's no file with that name.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A tiny CloudFront Function runs at the edge. It sends client routes like that to <code>index.html</code>, and the app's router takes over in the browser.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So CloudFront serves the app. And the API?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the interesting part. Let me draw the whole front door.</p></div></div>
-</div>
+    <p>CloudFront serves the browser app from edge locations. Its S3 origin blocks public access and grants the intended distribution access through origin access control. HTTPS is required for the viewer and origin paths.</p>
+    <p>A small edge function rewrites client-side routes to the static app entry page. That makes a direct visit to a settings route work without exposing the bucket as a public website.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="The browser talks only to CloudFront; CloudFront sends slash star to the private S3 bucket, cached, and slash api to the HTTP API, not cached, which leads on to Lambda and DynamoDB; the browser sees one origin.">
       <rect x="112" y="16" width="176" height="44" rx="6" class="node"/>
@@ -456,35 +441,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One origin for two backends</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>/*</code> goes to the bucket, and <code>/api/*</code> goes to the API.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The bucket path is cached. The API path is never cached, and CloudFront forwards all the browser's headers except <code>Host</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not cache the API too? Some reads don't change often.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every API response belongs to one signed-in learner. A cache that mixes them up would show one learner another's data. Not caching at all is the safe default.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. Why put both behind one address, though? The API could have its own hostname.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does the browser see when both are on one domain?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One origin. The same scheme, host and port for everything.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So what happens to the sign-in cookie?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It goes with every API call, because it's the same origin. No cross-site cookie rules.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And no CORS to set up. CORS is the browser's rule for calls between different origins. Every rule you don't configure is one you can't get wrong.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What would a separate API hostname give us, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It would separate the API from the web app's releases, which suits the native apps. But CORS comes back, and the cookie setup gets harder.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it's a real trade-off, not a mistake either way.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. We chose one origin, and we look at it again as the native apps grow.</p></div></div>
-</div>
+    <p>One domain routes static files to S3 and <code>/api</code> to the API. Static assets can be cached; learner-specific API responses use a disabled caching policy and the required header, cookie and query forwarding.</p>
+    <p>The browser sees one origin, simplifying cookies and avoiding cross-origin browser requests. Native clients are not governed by browser CORS in the same way. A separate API hostname remains an option if its operational benefits justify the additional web configuration.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What a VPC is for</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now the VPC. What is it, really?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A VPC is a private network you define inside AWS. You split it into subnets, set route tables that say where traffic may go, and put security groups on resources, like firewalls.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And "public and private subnets"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A public subnet has a route to the internet. A private subnet doesn't. You put a database in the private one, so nothing outside can reach it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds safer. Why don't we do that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the catch. Code in a private subnet can't reach the internet, or even AWS's public service endpoints, without help.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What kind of help?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A NAT gateway, which lets private resources call out. Or VPC endpoints, private doors to specific AWS services. Let me draw a typical setup next to ours.</p></div></div>
-</div>
+    <p>A VPC defines an AWS network with subnets, routing and security groups. A subnet is public when its route table provides an internet-gateway route; actual public reachability also depends on addresses and security controls. Private resources may use NAT or service endpoints for outbound access.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A typical VPC contains a public subnet with a NAT gateway billed every hour and a private subnet with Lambda and a database; Quickturn's Lambda sits outside any VPC and calls DynamoDB directly, so it pays no NAT gateway.">
       <rect x="8" y="8" width="384" height="232" rx="10" class="zone-soft"/>
@@ -509,47 +471,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The typical setup pays for the NAT gateway every hour, used or not. Quickturn's Lambda runs outside any VPC and calls DynamoDB directly.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The NAT gateway costs money even when nobody uses it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It bills every hour, plus a charge per gigabyte. Interface endpoints bill per hour too. Only the gateway endpoints for S3 and DynamoDB are free.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our Lambda just calls DynamoDB over the public endpoint?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and Cognito too. That sounds scary until you ask: what stops a stranger from calling DynamoDB on our table?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>IAM. They'd need credentials with permission on our table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Every call is signed and checked by IAM. Our protection comes from IAM and authentication, not from where the code sits on a network.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutorial's VPC wasn't wrong. It was solving a problem we don't have.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's exactly the point.</p></div></div>
-</div>
+    <p>Quickturn calls managed public service endpoints with signed, IAM-authorized requests and has no private database to reach. It therefore avoids VPC networking costs for this path. This does not mean “public endpoint” makes the application's table public, or that IAM alone covers every application threat.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When you do need a VPC</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When would we need one, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When there's something private to reach. A relational database like RDS or Aurora usually lives in private subnets.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if we ever moved to PostgreSQL, the VPC comes with it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Most likely, and the NAT or endpoint costs come with it too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What other cases?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A company's private data reached over a VPN or Direct Connect. Services meant to be internal only. And compliance rules that require private network paths.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The enterprise AI agents you built before, did they need one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Often, yes. The agent had to read internal systems that only existed on a private network. There the VPC wasn't a choice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for us, adding a NAT gateway is a big decision?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It needs the owner's OK first. It adds a fixed monthly cost to an app that otherwise costs almost nothing when idle.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What protects the edge, then, if not a network?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The CloudFront distribution has WAF rate-based rules, which slow down anyone sending too many requests. It runs on a CloudFront flat-rate plan: the Free plan, then Pro as traffic grows.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So security lives in layers: WAF at the edge, IAM on every call, and sign-in in the app.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A VPC is one more layer when you have private things to hide. We don't, so it would be cost without benefit.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a new teammate sees our setup and asks where the VPC is. What do you tell them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>CloudFront is our single front door. Static files come from a private bucket that only CloudFront can read.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And <code>/api</code> goes to the API, so the browser sees one origin. Cookies just work, with no CORS.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We don't need a VPC. Every AWS service we call has a public endpoint, and IAM checks each call.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And when would that change?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>When we have something private to reach, like a relational database or a system on a private network.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Name the price, too: then NAT gateways and endpoints add cost every hour, used or not. That's why adding one needs a real reason, not a tutorial's first step.</p></div></div>
-</div>
+    <p>A VPC is useful when reaching private RDS databases, internal corporate services or networks connected by VPN or Direct Connect. Regulatory and organizational requirements can also constrain network paths.</p>
+    <p>Quickturn instead combines edge controls, IAM and application authentication for its present architecture. WAF rules can limit abusive request rates but do not authenticate learners or enforce per-user model budgets. Add private networking when a concrete resource or policy needs it, and include its fixed and transfer costs in the decision.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -563,7 +490,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch03.html"><span>Previous</span><b>What do we give up by running the API on Lambda?</b></a>
     <a class="next" href="ch05.html"><span>Next</span><b>How does DynamoDB find my data so fast?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

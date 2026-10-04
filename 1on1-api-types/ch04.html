@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: API and TypeScript pages">
-  <h2><a href="ch00.html">One-on-Ones: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
+  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 4 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 4 of 11</span></p>
   <h1>Should a function throw, or return its failure?</h1>
   <p class="lead">After this page you can decide when a failure is a returned value and when it is a thrown error. You can also explain how a branded type stops two string ids from being swapped.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,54 +409,29 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does all this cost?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. A review on his pull request is open, with two comments.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Two strings that look the same</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I got two review comments on one pull request. Can we go through them?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sure. Read me the first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A test caught a bug where I passed a card id where a learner id belonged. The reviewer asked why the compiler didn't.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's the type of a learner id in your code?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>type LearnerId = string</code>. I thought that made it safe.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does a type alias like that create?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new type?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only a new name. <code>LearnerId</code> and <code>string</code> are the same thing to the compiler. And a card id is also a string.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the compiler compares shapes, not names?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, that's called structural typing. Same shape, so it fits.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The fix is called a brand. You add a marker that exists only at compile time.</p><pre><code>type LearnerId = string &amp; {
+    <p>A type alias such as <code>type LearnerId = string</code> creates a useful name but no distinction from a card ID. Structural typing still accepts either string. A brand adds a compile-time marker so those roles cannot be accidentally swapped in normally checked code.</p>
+    <p>The constructor is the audited assertion point: it validates the raw value before returning the branded type. The marker disappears at runtime and in JSON, so incoming values must be checked and branded again. A brand does not independently authenticate a user.</p>
+    <pre><code>type LearnerId = string &amp; {
   readonly __brand: "LearnerId";
 };
 
 function learnerId(raw: string): LearnerId {
   if (raw === "") throw new Error("empty learner id");
   return raw as LearnerId;
-}</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No real string has a <code>__brand</code> field. So a plain string doesn't fit anymore.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Only a value that went through <code>learnerId()</code> fits. That constructor is the one place with an <code>as</code>, and it checks the value first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the brand survive into JSON?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It's a type, so it's erased like every type. A value is branded again wherever it enters. Our API builds the learner id once per request, at the edge, from the signed-in user.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So inside the program, a card id can never go in a learner id's place.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The compiler will refuse it. What's the second comment?</p></div></div>
-</div>
+}</code></pre>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>A failure you can see</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My command throws <code>new Error("round closed")</code>. The handler catches it and checks the message. The reviewer wrote that the caller can't see this failure in the signature, and the message will change.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both true. Tell me: when you call a function in TypeScript, how do you know what it throws?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I read the code. Or the docs, if there are any.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The signature doesn't say. TypeScript has no checked exceptions and no <code>throws</code> clause. And in a <code>catch</code>, the value is <code>unknown</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a caller can forget the failure completely.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The alternative is to return the failure as a value. We use a type called <code>Result</code>.</p><pre><code>type Result&lt;T, E&gt; =
+    <p>TypeScript does not list thrown exceptions in a function signature. Expected outcomes such as “round closed” are easier for callers to handle when returned as a tagged <code>Result&lt;T, E&gt;</code>. Checking its <code>ok</code> field narrows to either a value or an error.</p>
+    <pre><code>type Result&lt;T, E&gt; =
   | { ok: true; value: T }
   | { ok: false; error: E };
 
 const result = finishRound(round, now);
 if (!result.ok) return handle(result.error);
-result.value; // the finished round</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It's a union with a tag. Checking <code>ok</code> narrows it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and small <code>ok()</code> and <code>err()</code> helpers build the two members. Now the failure is in the return type. Let me compare the two.</p></div></div>
-</div>
+result.value; // the finished round</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="Throwing is not visible in the signature and the caller can easily forget it; returning a Result is visible and hard to miss, and the caller branches on a code instead of a message.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">throw</text>
@@ -473,27 +448,11 @@ result.value; // the finished round</code></pre></div></div>
     </svg>
     <figcaption>The row to notice is the middle one. A returned failure is hard to ignore, because the value isn't reachable until you check <code>ok</code>.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the "stable code"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each error carries a <code>code</code>, like <code>ERR_ROUND_CLOSED</code>. The caller branches on the code. The <code>message</code> is prose for a human, and we may reword it any day.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So matching on "round closed" was the real bug in my handler.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It would break the first time someone fixed a typo.</p></div></div>
-</div>
+    <p>Errors carry stable machine codes such as <code>ERR_ROUND_CLOSED</code>. Human-readable messages can change without breaking callers. Matching a message string would turn editing its prose into an accidental API change.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Expected failures and bugs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should everything return a Result, then? Nothing throws?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Ask one question: can the caller do something useful about it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For "round already closed", yes. The app can show the results screen.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>"Not enough cards"? "Forbidden"?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Also yes. Show a message, or sign in again.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those are expected failures. They happen in normal use, and the caller can act, so they're values with a code. Now, what if a round has more answers than cards?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That should never happen. It means our own code is wrong.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a bug. A broken invariant, a rule our code promised to keep. No caller can fix it, so it throws, and our error handler turns it into a 500 and a log line.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the question is really about the caller, not about how bad it is.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here are the two answers side by side.</p></div></div>
-</div>
+    <p>An expected refusal is one the caller can act on: show a finished round, fix input or request permission. A broken invariant is an unexpected defect and needs logging and a server error, rather than being treated as ordinary learner behavior.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="When the caller can act, the failure is a Result with a code, like a closed round, handled by the caller; when no caller can act, it is a thrown bug, like a broken invariant, handled by the top-level error handler.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Result + code</text>
@@ -510,10 +469,7 @@ result.value; // the finished round</code></pre></div></div>
     </svg>
     <figcaption>One question decides it: can the caller do something about it? If yes, return it with a code; if no, it's a bug, and it throws.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the code travels all the way to the app?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Unchanged. Let me show the path of "round closed".</p></div></div>
-</div>
+    <p>The same stable code can pass from the domain to the API and client. Each boundary adds its presentation without guessing from an exception message.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The domain returns a round-closed failure as a value, the command returns it with its code, the HTTP layer maps the code to status 409 and the error envelope, and the client branches on the code.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -532,45 +488,12 @@ result.value; // the finished round</code></pre></div></div>
     </svg>
     <figcaption>The same code is never renamed on the way. The client makes its decision on exactly the value the domain produced.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What stops someone from adding a code and forgetting its HTTP status?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There's one list of error codes, shared by every layer. The status table and the message table are both checked against the full list, with <code>satisfies Record&lt;ErrorCode, …&gt;</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a new code without a status doesn't compile.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It's the same trick as the exhaustive switch, applied to a table.</p></div></div>
-</div>
+    <p>Quickturn keeps one error-code list and checks status and message tables with <code>satisfies Record&lt;ErrorCode, …&gt;</code>. Adding a code without its mapping then fails type checking. This verifies table coverage, while tests must still verify the intended status and behavior.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What it costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I like it. But <code>if (!r.ok) return r</code> on every call looks tiring.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. Rust has a <code>?</code> operator that does that in one character. TypeScript has nothing like it, so the line repeats.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could we use a library that adds nicer helpers?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Some teams do. But then everyone must learn that library's style, a dialect on top of TypeScript. We kept our Result small.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a function that returns a Result can still throw, right?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A Result is a promise about expected failures, not a proof that nothing throws. Brands have a cost too: you build them at every boundary.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So where is it worth it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In the core, the domain and the commands, where the rules live. Not in thin glue code in the UI.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the web app do? It gets codes back from the API.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It keeps its own small Result copy. But our query library, the one that caches server data, expects a thrown error when a request fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it throws just for the library?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only there. It turns a failed Result back into a thrown error at that one spot. Fighting the library would cost more.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is this a TypeScript idea, or do other languages do it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Go returns errors as ordinary values. Rust has a Result type in the standard library.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Java?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Java tried checked exceptions, which put failures in the signature. The need is the same everywhere.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose you reply to the reviewer. What do you write?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a failure is expected and the caller can act on it, I return it as a Result. Then it's in the signature, and it's hard to forget.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The error has a stable code, and callers branch on the code. The message is for people and can change.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bugs, like a broken invariant, still throw. No caller can fix them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first comment?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A type alias is just a name. A brand makes the compiler refuse a card id where a learner id belongs, and one constructor checks and builds it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say where you'd stop, too: in thin UI code, or where a library expects throws, a plain throw is the cheaper choice. Keep Result and brands for the core.</p></div></div>
-</div>
+    <p>Results require explicit propagation, which can become repetitive in TypeScript. A small local Result avoids teaching a large helper library, but does not guarantee that a function never throws. Brands likewise require constructors at incoming boundaries.</p>
+    <p>Use these tools where mistakes have meaningful consequences, such as domain decisions and commands. If a query library expects exceptions, translate a failed Result at that integration point. The application can keep explicit expected failures without fighting every surrounding library's conventions.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -584,7 +507,7 @@ result.value; // the finished round</code></pre></div></div>
     <a class="prev" href="ch03.html"><span>Previous</span><b>Why not just add another boolean flag?</b></a>
     <a class="next" href="ch05.html"><span>Next</span><b>Trust nothing at the boundary: parse it once</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

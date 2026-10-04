@@ -1,9 +1,9 @@
 <!-- title: Architecture 01 · Isn't architecture just folders | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 1 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 1 of 11</span></p>
   <h1>Isn't architecture just folders?</h1>
   <p class="lead">After this page you can explain architecture as two decisions: what changes together, and which way dependencies point. You can also say where structure is worth its cost and where it isn't.</p>
-  <p class="meta"><span>About 8 min read</span><span>Whiteboard room, after a review</span></p>
+  <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,27 +15,10 @@
       <li>When is structure worth its cost?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room, right after Leo's first design review.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Eleven files for one small rule</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I ask you something from the review? Someone asked why my change touched eleven files. I didn't have an answer.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What was the change?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A new rule for when a card counts as missed. If you flip the card before you say anything, it's a miss, even if the timer hasn't run out.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small rule. And where did the eleven files come from?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The UI checked it to show the right color. The API handler checked it again. And the database code had its own version, for the stats.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the same rule lived in three places. What's your guess about why?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Honestly? I think we picked the wrong folders. If the folders were better, the rule would sit in one place.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half of that is right: the rule should sit in one place. But folders are only labels.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Labels for what, though?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For decisions you already made. You could move those eleven files into perfect folders and still touch eleven files.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what decides it, if not the folders?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two words you've heard: coupling and cohesion. Coupling is how much one part must know about another. Cohesion is whether the things inside one part belong together.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my rule had low cohesion. It was spread out. And the three parts were coupled, because each had to agree with the others.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Here's a sharper test: a module should have one reason to change. Code that changes for the same reason lives together. Code that changes for different reasons lives apart.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The UI changes when design changes. The database code changes when storage changes. And the missed-card rule changes when the product rules change.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Three reasons, so three homes. But the rule itself should have one home: the domain, the code that holds only the product's rules. Let me draw both versions.</p></div></div>
-    </div>
+    <p>Quickturn is a language-learning app in which a learner answers a card before a timer ends. A product change says that flipping a card before answering counts as a miss, even while time remains. That small change touches eleven files because the UI, API handler and database statistics each contain their own version of the rule.</p>
+    <p>Moving the files into better folders would leave three copies to update. The useful questions concern <b>coupling</b>, how much one part must know about another, and <b>cohesion</b>, whether the things inside a part belong together. The UI changes for design reasons, storage code for database reasons, and the missed-card rule for product reasons. The rule therefore needs one home in the domain; the other parts display, carry or store its answer.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="Changing the missed-card rule in a tangled codebase touches the UI, the API handler and the database code; in a codebase split by reason to change, it touches only one domain module.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Tangled</text>
@@ -53,24 +36,11 @@
       </svg>
       <figcaption>On the left, the missed-card rule has three copies, so one change touches three layers. On the right, the rule has one home in the domain, and the other layers only pass along its answer.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the folders would show this only if they followed the reasons to change.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's it. Folders are a picture of the decision. They aren't the decision.</p></div></div>
-    </div>
+    <p>Folders become useful when they reflect those decisions. They show which code changes together, but a folder name cannot prevent duplicated rules or conflicting results.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Draw the arrows</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now the second decision. If A imports B, draw an arrow from A to B. Which way should the arrows point?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Toward the things that are used a lot? Like shared code?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close. They should point toward the things that change least. Stable things shouldn't depend on volatile things, the ones that change often.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as stable here?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The rules of the drill. How we deal cards, how streaks work, how levels move. Those change only for product reasons, never because a library or a database changed.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And volatile would be the web framework, the database client, AWS itself.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Those change for reasons that have nothing to do with learning, like a library's new major version or a table we move. Why should the streak rule care?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It shouldn't. But how do you stop it from caring? Somebody will import the database client one day.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We made that impossible to merge. Let me draw what our monorepo looks like.</p></div></div>
-    </div>
+    <p>If module A imports B, its dependency arrow points from A to B. In this design, dependencies point toward the product rules and away from the framework, database client and deployment platform. Dealing cards, calculating streaks and changing levels should not need rewriting because an SDK releases a new version.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 290" role="img" aria-label="The UI and API layer depends on the application layer, which depends on the domain; all arrows point inward, and the domain imports nothing.">
         <text x="16" y="18" class="t-sm">Closest to users and tools</text>
@@ -84,30 +54,15 @@
         <text x="32" y="232" class="t-hd t-acc">Domain</text><text x="32" y="254" class="t-sm">the rules of the drill</text>
         <text x="368" y="244" text-anchor="end" class="t-sm">imports nothing</text>
       </svg>
-      <figcaption>Every arrow points toward the domain, the most stable part. The domain imports nothing, so a new framework or database never reaches the rules.</figcaption>
+      <figcaption>Every arrow points toward the domain, the most stable part. The domain has no external imports, limiting direct coupling to frameworks and storage.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The domain package imports no other package. No npm library, not even Node's built-in modules.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not even for dates? That sounds strict.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Time comes in as an argument. And two separate checks guard the edge. A lint rule refuses the import, and a test reads the import graph and fails the build.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why two? One seems enough.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because someone can switch off a lint rule in one line. Deleting the lint rule still leaves the test failing.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the native apps? They're a different codebase.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They call the same API. That's one reason the rules live on the server, in a package with no framework. Three clients, one copy of every rule.</p></div></div>
-    </div>
+    <p>Quickturn makes that direction testable. The domain package imports no external package, including Node built-ins. Time arrives as an argument. A lint rule rejects forbidden imports, while a separate import-graph test also fails the build if a boundary is crossed.</p>
+    <p>The web, iOS and Android clients use the same API, so there is one server-side implementation of the rules. This is a deliberate boundary for this application, rather than a requirement that every domain package in every project have zero library dependencies.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Why named styles exist</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, but then what are all the styles for? Layered, hexagonal, onion, clean. I thought I had to pick one.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the thing: they aren't four different ideas. They're named recipes that answer the same two questions.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What changes together, and which way the arrows point.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. They draw different pictures and ask for different amounts of extra code. But each one keeps the core away from the database and the framework.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why bother with the names at all?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because names are short. In a review, someone says "ports and adapters", and everyone knows the rules without a lecture. A name is shared vocabulary.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when I read about one of them, I should ask how it answers the two questions.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the best way to read any of them. The details differ. The two questions are the part that lasts.</p></div></div>
-    </div>
+    <p>Layered, hexagonal, onion and clean architecture provide vocabulary for organizing responsibilities and dependencies. Their prescriptions differ: conventional layering can make business logic depend on data access, whereas ports and adapters and the inward dependency rule protect the core from that direction.</p>
+    <p>A style name helps a team communicate, but it does not replace inspecting the code. Ask what each boundary protects, where dependencies point, and how much extra wiring the style requires. Those questions reveal more than a familiar folder template.</p>
     <div class="aside note">
       <p class="label">Key point</p>
       <p>Architecture is the set of decisions about what changes together and which way dependencies point. Folders and named styles are ways to show and share those decisions.</p>
@@ -115,12 +70,7 @@
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What structure costs</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I push back a little? All this sounds like a lot of files. For a small team, isn't it overkill?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sometimes it is. Structure costs indirection. You follow a call through more files, and you write interfaces and wiring that a single script wouldn't need.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when is it worth it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where change is frequent, or where a part must be replaced. A database, a model provider, a new client platform. Let me put it on two axes.</p></div></div>
-    </div>
+    <p>Structure costs interfaces, wiring and indirection. A reader may need to follow a call through several files that a small script would keep together. That cost is justified where changes are frequent and expensive, or where a component already has alternatives, such as production and test stores.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of how often a part changes against how costly a change there is today; the high-change, high-cost quadrant is where to put structure, and the low-change quadrants are where to keep it simple.">
         <text x="44" y="18" class="t-sm">↑ Cost of a change today</text>
@@ -138,34 +88,8 @@
       </svg>
       <figcaption>Structure pays in the top-right corner: parts that change often and are expensive to change today. Where change is rare, keep the code plain.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the missed-card rule is top right. Product rules change all the time, and today a change costs eleven files.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And a script that exports a report once a quarter?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bottom left. Nobody touches it, so a clean structure gives us nothing.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's YAGNI: "you aren't gonna need it". It comes from Extreme Programming. Don't build for a change you can't name.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But how do I know a change is coming? I can't see the future.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You look at history: which files changed together in the last few months? What did we replace last year? Guess from evidence, not from fear.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "we might switch databases someday" isn't a reason.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not by itself. "We already have two stores, one for production and one for tests" is a reason.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply outside apps like ours?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Very much. Think of a company building an AI agent. The model provider and the tool APIs change every few months. The prompts and business steps change more slowly.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the provider goes at the edge, behind one adapter.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. An adapter is one small module that talks to the provider for us, so switching providers touches only it. Teams that call the provider from everywhere rewrite half the product when prices or models change.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the parts that never change stay plain.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the balance. Pay for structure where change happens, and nowhere else.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Next review, someone asks you what architecture is. What do you say?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd say it's two decisions. What changes together, and which way the dependencies point.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My change touched eleven files because one rule lived in three places. Code should be grouped by its reason to change.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the arrows?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The arrows should point toward stable things, like our rules, and away from frameworks and databases. At our company, a lint rule and a test check that.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The named styles are recipes for those two decisions. And structure costs indirection, so we only pay for it where change is frequent.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "frequent": say how you'd know. Check which files changed together before you say "we'll need this". Point to the history, not to a guess.</p></div></div>
-    </div>
+    <p>The missed-card rule is expensive to change because it has several copies. A rarely changed report script may gain little from additional layers. YAGNI, “you aren't gonna need it,” discourages paying for hypothetical variation: use change history and known requirements to identify the seams.</p>
+    <p>An AI application can benefit from a provider adapter when models or vendors change. The adapter concentrates provider-specific calls, although differing model behavior may still require prompt and evaluation changes. Keep stable, simple code plain, and spend structure where evidence shows that it reduces work.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -179,5 +103,5 @@
     <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
     <a class="next" href="ch02.html"><span>Next</span><b>If the rules can't touch the database, who saves?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 13 · Keeping learners apart | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 13 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 13 of 14</span></p>
   <h1>How do we prove one learner can't see another's data?</h1>
   <p class="lead">After this page you can explain how identity, one policy and learner-bound stores keep each learner's data apart. You can also explain the test that proves it, and the silo and pool models.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,19 +15,9 @@
       <li>What about an AI agent acting for a learner?</li>
     </ul>
   </nav>
-  <p class="stage">After Tuesday's design review. Leo is still thinking about one question.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Identity enters once</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the review, someone asked what stops learner B from reading learner A's round. I said each handler checks the learner id.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did they say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Every handler, forever?" I didn't have a better answer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What happens the day someone writes a new handler and forgets the check?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A learner can read someone else's data. And no test fails, because nobody wrote one for the new handler.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And signing in doesn't help there. It proves who is calling, not what they may touch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the better answer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Make the check impossible to forget. Let me draw how a request flows.</p></div></div>
-</div>
+    <p>Signing in identifies a caller but does not stop a handler from accidentally reading another learner's record. Quickturn derives identity once at the verified request edge and builds a context with actor, learner, time and request ID.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 392" role="img" aria-label="A request comes in at the top, is authenticated once at the edge, becomes a request context with an actor, passes one authorize check, gets a store bound to one learner, and can only reach keys inside that learner's partition.">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
@@ -45,37 +35,11 @@
     </svg>
     <figcaption>Each layer narrows what the next can do. By the time code touches the table, it can only reach one learner's items.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Start at the top. What does "authenticate once" mean?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The edge checks the token or cookie, one time. Then it builds a request context: the actor, the learner, the time and a request id.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And below the edge?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nothing reads headers or cookies again. And a learner id never comes from a request body, a path, or a tool argument.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not from the path? <code>/learners/123/rounds</code> looks normal.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the caller wrote it. The only learner id we trust is the one the edge got from a verified token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's an actor, exactly?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who is acting. A learner, a system job working for one learner, or an agent acting for a learner with named grants.</p></div></div>
-</div>
+    <p>The owned learner ID does not come from a body, path or model-written tool argument. Commands receive a trusted context identifying a learner, a scoped system job or an agent with grants. Any requested record ID remains subject to that ownership context.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One policy, bound stores, one test</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And authorize is the if-statement, just moved?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's one function over one table. A learner may run learner operations. A job may run only its own.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And an agent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only what it was granted, and never more than the learner could do. The tutor may read a learner's history, for example, but may not delete an account. A table test checks every actor against every operation.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the store. What does "bound" mean?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application can only get a store as <code>forLearner(id)</code>. No store method takes a learner id.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can't even write "get round X for learner B".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The adapter writes the learner's partition into every key. Ask for another learner's round, and it's simply not found.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the API answer then? 403?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>404. A 403 would confirm the round exists. With 404, B learns nothing about A.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does that matter? Round ids look random.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Picture A sharing a screenshot with a round id in the address bar. B tries it and gets 403.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now B knows the round is real, and that it belongs to someone.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. With 404, it looks like a typo.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But how do we know it holds? The reviewer will ask that next.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The isolation contract. Here are its steps.</p></div></div>
-</div>
+    <p>One authorization function checks actor and operation. Agents receive only their explicit grants and no broader authority than the learner. The application obtains a learner-bound store whose methods do not accept another arbitrary learner ID.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="Write learner A's data, read everything as learner B, expect nothing, write the same keys as B, and check that A's data is unchanged.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -97,29 +61,12 @@
     </svg>
     <figcaption>Reading proves B can't see A. Writing the same keys proves B can't overwrite A either.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why write the same keys as B? Reading already failed.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Reading proves B can't see A. A write with the same round id could still land on A's item if the partition were missing from the key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the write half catches a store that forgets the partition.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which stores does it run against?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every one. The in-memory store and DynamoDB running locally run the same suite.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And above the store?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>HTTP tests do the same with B's token. We also checked on dev with two learners an administrator created.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed the handler check was enough if we tested each handler.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then every new handler needs a new test, written by someone who remembers. The contract covers every read at once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a new handler is safe by default.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It gets a bound store or nothing. That's the answer for the reviewer.</p></div></div>
-</div>
+    <p>The adapter includes that learner key in every operation. Another learner's round appears absent, commonly returning 404 without confirming its existence. Contract tests exercise read and write isolation for in-memory and DynamoDB stores, and HTTP tests repeat the scenario with distinct tokens.</p>
+    <p>A bound interface reduces opportunities to omit ownership checks. It still needs tests for every method and future changes; passing today's contract suite is evidence rather than a proof of all possible isolation behavior.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Silo, pool and bridge</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why do we need all this? Couldn't each learner just have their own table?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a real model, called silo. Each tenant, one customer whose data must stay apart, gets its own resources: an account, a stack, or a table.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And ours?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Pool. Everything is shared, and the tenant key is in every item. Let me compare them.</p></div></div>
-</div>
+    <p>Silo isolation gives tenants separate resources; pool isolation shares resources with tenant keys; bridge designs mix these choices. Thousands of small learners can favor a shared table, while a few large customers may need dedicated resources.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="In the silo model the boundary is separate resources, cost per tenant is high, a bug reaches one tenant, and it is proven by the resource layout; in the pool model the boundary is a key in shared resources, cost per tenant is low, a bug can reach every tenant, and it is proven by a contract test.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Silo</text>
@@ -139,44 +86,12 @@
     </svg>
     <figcaption>Pool is cheap, but no separate resources keep tenants apart. The proof has to come from structure and tests.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Silo sounds safer. Why didn't we pick it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For thousands of learners, a table each is heavy to run and pay for. Silo suits a few large customers, each with their own contract.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there something in between?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bridge. Shared compute, say, with a table per tenant. We're pool, with one partition per learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't IAM enforce the partition? I've seen a condition on DynamoDB's leading keys.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can, but only when each user calls AWS with their own credentials. Our API calls DynamoDB with one role for everyone.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So IAM can't tell learners apart there.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And in that setup the key would be an identity-pool id, not the Cognito <code>sub</code> we map from. So the boundary lives in our code, and the test proves it.</p></div></div>
-</div>
+    <p>Quickturn's API uses one AWS execution role, so IAM alone does not distinguish each learner's application requests. The tenant boundary is enforced by trusted identity, authorization and key construction in code. Separate resources would add operations without removing all application-level obligations.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Agents follow the same rule</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the tutor agent? It reads a learner's history.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same rule. It's an agent actor with narrow grants. And the tools it can call declare no learner id parameter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does that matter so much?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the model writes the tool arguments. A prompt injection controls what the model writes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if a tool took a learner id, a hidden instruction could say "use learner B".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. The learner comes from the verified session, never from anything the model writes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tutor can only ever reach the learner who is talking to it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Even if the model is tricked, the worst it can do is read that same learner's own history.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the system jobs? Account deletion, export, the rebuild?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They go through a separate, clearly named interface in our code. So their wider reach is visible in the code, not hidden in a flag.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. Next review, my answer is the structure and the test, not the handlers.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Give me your answer for the reviewer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We don't rely on each handler remembering a check. Identity is resolved once into a request context.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One authorize function decides what each actor may do. And the only way to get a store is already bound to one learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a cross-learner read can't even be written. A contract test on every store proves B sees nothing of A's.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why does that test matter so much for us?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We share one table, the pool model. So that test is our isolation.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the 404: it hides whether another learner's round exists at all.</p></div></div>
-</div>
+    <p>The tutor follows the same ownership rule. Its tools do not accept a learner ID supplied by the model, and their granted operations remain narrow. Prompt injection cannot change the identity simply by changing a tool argument.</p>
+    <p>That limits cross-learner access; it does not eliminate harmful actions within allowed operations or disclosure of the current learner's data. Cross-learner administrative work uses a distinct, clearly named interface so its broader reach is visible and reviewable.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -190,5 +105,5 @@
     <a class="prev" href="ch12.html"><span>Previous</span><b>Where should a web app keep its tokens?</b></a>
     <a class="next" href="ch14.html"><span>Next</span><b>How much will this cost if nobody uses it?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

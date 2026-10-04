@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: API and TypeScript pages">
-  <h2><a href="ch00.html">One-on-Ones: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
+  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 11 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 11 of 11</span></p>
   <h1>Why a static SPA instead of server rendering?</h1>
   <p class="lead">After this page you can choose between server rendering, static generation and a single-page app. You can also explain why API data in the browser is a cached copy, not app state.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,36 +409,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When does server rendering win?</li>
     </ul>
   </nav>
-  <p class="stage">The office kitchen, standing with coffee.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Four ways to render</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I ask about the web app? At my agency, everything used a server-rendered React framework. I thought that was the modern default.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you heard we used one once?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Yes, and that we replaced it with a plain single-page app. Wasn't that a step backwards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's list the options first. What does server rendering do, exactly?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The server builds the HTML for each request, so the page shows up with content.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, that's SSR, server-side rendering. SSG, static site generation, builds the pages once at build time. And an SPA ships a static shell, then renders in the browser after the JavaScript loads and the API answers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the new mixes? Streaming, server components?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Hybrids. They combine the three in different ways. For each option, ask what you pay: a server to run and patch, a caching plan, and where data fetching lives.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With SSR, the fetching happens on the server.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the server needs the database, or an API, plus sign-in, plus its own deploys. It's a real backend.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And with an SPA, the browser fetches from the API directly.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The files themselves are just static, like images.</p></div></div>
-</div>
+    <p>Server-side rendering creates HTML per request. Static generation creates pages at build time. A single-page application sends a static shell, then renders after JavaScript and API data arrive. Hybrid frameworks combine these mechanisms.</p>
+    <p>Each option has operational consequences. Server rendering needs a runtime, a caching plan and secure data access. A static app moves interactive rendering and fetching into the browser while its API remains a separate responsibility.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Why Quickturn serves static files</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why did the framework go?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think about where our rules live.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Behind the one API. The native apps use it too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So a web server tier would be a second backend in front of it. A second place that checks sign-in, and a second thing to deploy and patch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But SSR helps with search engines. Doesn't that matter?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who can see our app?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only signed-in learners. Oh. A search engine never gets in.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The public landing page is a separate static page. The app itself has no reason to be crawled. Let me draw how the choice falls out.</p></div></div>
-</div>
+    <p>Quickturn's signed-in app shares an API with native clients and has little searchable public content. A web rendering server would add another session-aware tier. The public landing page can be static independently of the practice app.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of who sees the page against how often content changes: public pages that rarely change suit static generation, public pages that change per request suit server rendering, and pages behind sign-in suit a single-page app on a shared API in both rows.">
       <text x="44" y="18" class="t-sm">↑ Content changes per request</text>
@@ -455,12 +433,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>For public pages, how often content changes picks SSR or SSG. Behind a sign-in, neither matters as much: a static SPA on the shared API fits both rows.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about sign-in? How does the SPA send the session?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The API sets an HttpOnly cookie, one that page scripts can't read. And the web app and the API share one origin: the API lives under <code>/api</code> on the same domain.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the cookie just travels with each call.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With no CORS setup and no third-party cookie rules. CORS is the browser's rule for calls to another origin. Here's the shape.</p></div></div>
-</div>
+    <p>The browser app and API use one origin, with the API under <code>/api</code>. An HttpOnly session cookie travels with requests without exposing its value to page scripts. Same-origin routing simplifies CORS and cookie policy, while state-changing requests still need CSRF protection.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 260" role="img" aria-label="One origin on the CDN contains two paths: slash star goes to static files and slash api goes to the API, so the session cookie never leaves one origin.">
       <rect x="8" y="8" width="384" height="244" rx="10" class="zone-soft"/>
@@ -476,10 +449,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Both paths sit under the same domain. The browser sends the session cookie to the API as an ordinary same-site request.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the SPA cost? It can't all be good.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>First paint. Let me walk through the first load.</p></div></div>
-</div>
+    <p>The cost is an initial wait for JavaScript and data, during which the app shows a loading state.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="On first load the HTML shell comes from the CDN, then the JavaScript bundle, then a call to the home view with the cookie, and only then does the page render.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -498,26 +468,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The wait before the last step is what SSR would hide. We show loading skeletons during it, as the normal path.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a skeleton on every first load.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, it's the price, and we accept it. The learner is signed in and about to practice for minutes, not deciding in one second whether to stay.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we render only the home screen on a server? Just to hide that first wait.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would that server need, to render your home screen?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My streak and my weak points. So it would call the API with my cookie.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which means it handles sessions, runs somewhere, and needs deploys and patches. One screen brings back the whole second backend.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For a skeleton that shows for a moment.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how we weighed it. If the wait grew long, we'd first make the bundle smaller or the home view faster. A server tier is the last option, not the first.</p></div></div>
-</div>
+    <p>Rendering only the home screen on a server would still require running and securing that tier. Quickturn first optimizes its bundle and home endpoint. A measured, persistent first-load problem could justify reconsidering rendering.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Server state is a copy</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In my agency apps, API data went into a big global store. Is that what we do?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What is that data, really? Who owns the truth about your streak?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The server. The browser only has what it fetched last.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So it's a cached copy of the server's truth, not app state to manage by hand. People call it server state.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we use a library for that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>TanStack Query. It keys each read, tracks loading and errors, and refetches after a change. Here's the home view.</p><pre><code>const homeQuery = queryOptions({
+    <p>The browser's streak and home data are cached copies of server state. TanStack Query tracks loading, errors and invalidation for those reads. Quickturn explicitly disables automatic retries and focus refetches as a product choice, rather than letting background activity surprise the learner.</p>
+    <p>Writes use the answer queue's retry policy. Keeping read caching and write replay responsibilities separate makes it clear which layer owns repetition and recovery.</p>
+    <pre><code>const homeQuery = queryOptions({
   queryKey: ["home"],
   queryFn: () =&gt; api.getHome(),
 });
@@ -526,43 +483,12 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false, refetchOnWindowFocus: false },
   },
-});</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why turn retries off? Retries sound helpful.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We want each call the learner triggers to be made once. If a read fails, the screen shows it, and the learner decides.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And refetching when I switch back to the tab?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Off too, for the same reason: no surprise calls. And resending writes is the answer queue's job, not the cache's. Two retry systems would fight.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the cache is for reads, and the queue is for answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly that split.</p></div></div>
-</div>
+});</code></pre>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When server rendering wins</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So is SSR just worse?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. For public content, it's often better. Search engines, slow devices, and pages where the content is the product, like a blog or a store.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my agency wasn't wrong. Those were public marketing sites.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Probably the right call there. An SPA wins for an app behind sign-in, with rich interaction, on an API shared with native apps.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about AI chat screens? Our tutor's chat is in the same app.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's a different shape. The tutor's answers stream in piece by piece, through Server-Sent Events or a streamed fetch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Server-Sent Events being…?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A standard browser API. The server keeps a connection open and pushes small messages as they're ready.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can the query cache hold a stream?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not well. A stream isn't a finished answer you can cache. The UI needs to render text as it arrives, offer a stop button, and handle an answer that ends halfway.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So request and response for most screens, and a stream for the chat.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Pick the shape per screen, not per framework.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Suppose a friend at your old agency asks why we dropped server rendering. What do you tell them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Server rendering is a tool for public pages, search and fast first paint.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our app is behind sign-in, and all the rules are in an API that the native apps share. So a static SPA is the simplest client, with no web server to run.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The app and the API share one origin, so the HttpOnly cookie just travels with each call.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the data in the browser?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A copy of the server's truth, in a query cache. Retries are off; the answer queue handles resending.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You skipped the cost: first paint waits for the bundle and one API call, so skeletons are normal. We chose that wait on purpose, and we'd choose differently for a public page.</p></div></div>
-</div>
+    <p>SSR or static generation can be useful for public content, search visibility and quick initial display. A rich signed-in app may reasonably use a static SPA. These are conditions to evaluate, not a ranking of modern and obsolete frameworks.</p>
+    <p>AI chat introduces a streaming interaction. Server-Sent Events or a streamed fetch can deliver text incrementally. The UI needs cancellation, partial-response handling and a way to report an interrupted answer. A completed-response query cache does not by itself provide that interaction model; choose the data flow for each screen.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -576,7 +502,7 @@ const queryClient = new QueryClient({
     <a class="prev" href="ch10.html"><span>Previous</span><b>Can an app work offline if the server owns the rules?</b></a>
     <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

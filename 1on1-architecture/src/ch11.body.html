@@ -1,9 +1,9 @@
 <!-- title: Architecture 11 · How do I defend a design decision | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 11 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 11 of 11</span></p>
   <h1>How do I defend a design decision in a review?</h1>
   <p class="lead">After this page you can write an architecture decision record that answers a reviewer before they ask. You can also keep it current as things change, and match a decision's effort to how hard it is to reverse.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,38 +15,14 @@
       <li>How do I present a decision in a review?</li>
     </ul>
   </nav>
-  <p class="stage">After the Tuesday review. Leo looks a little upset.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The record, and its best part</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That was rough. I proposed a cache in front of the card catalog. One of the reviewers asked, "What else did you consider, and what would make you change your mind?"</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did you say?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"It's faster." That's all I had. How do you always have an answer to that question?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mostly because I wrote it down before the meeting. Do you know what an ADR is?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An architecture decision record. Honestly, I thought it was paperwork you write after the decision is made.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual view, and it's backwards. The record is how you think the decision through. The format comes from Michael Nygard.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's in it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A short file. A title, a status, the context, the decision itself, and the consequences, good and bad. The context is the situation behind the choice: its needs and limits.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's less than I expected.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our template adds a few parts: decision drivers, a "considered options" table with why each option lost, open questions, and dated sources. Drivers are the needs that push the choice one way.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dated sources?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prices and limits change. A number with a date tells a future reader how much to trust it.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which part matters most in a review?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The "considered and rejected" table. It answers the reviewer's question before it's asked.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we have examples?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Plenty. Microservices were rejected because the operational cost gives us nothing at our size. A relational serverless database was rejected for its transaction limits.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if someone asks "why not microservices?", the answer is already written, with the reason.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the reason can be checked. That's what makes it persuasive, not the confidence in your voice.</p></div></div>
-    </div>
+    <p>An architecture decision record, or ADR, explains a choice while it can still be challenged. The basic format records a title, status, context, decision and consequences. Quickturn also records decision drivers, considered options, open questions and dated sources.</p>
+    <p>The rejected options are particularly useful in review. “Microservices add operational cost without useful independence at our size” explains more than “we prefer a monolith.” Dated price or limit evidence lets future readers judge whether the decision's assumptions still hold.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Status and change</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the status part for?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where the decision is in its life. Proposed means a recommendation, not yet confirmed.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once it's confirmed?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Accepted: work builds on it. Later it may be Superseded, which means a later record replaced it and names it. Let me draw it.</p></div></div>
-    </div>
+    <p>A proposed record states a recommendation; an accepted record is a basis for implementation; a superseded record points to the decision that replaced it.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 312" role="img" aria-label="A decision record moves from Proposed to Accepted, may be amended in place with a date, and is finally Superseded by a later record; Accepted is where work builds on it.">
         <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
@@ -65,32 +41,12 @@
       </svg>
       <figcaption>Most of a record's life is spent Accepted, where work builds on it. Small changes amend it in place; only a full replacement supersedes it.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nygard's original advice is to never edit an accepted record. You only supersede it with a new one.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we don't follow that?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We chose differently. An accepted record is rewritten in place to state the current decision. It gets a dated "amended" line that says what changed and why. We supersede only when the decision is replaced whole.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't that rewriting history?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Git keeps the history. The file keeps the current truth, which is what a reader needs.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I don't have to read three records to know what's true today.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The cost is that to see how it changed, you read the diff. Some records are accepted only in part, and it says which part.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a partial supersede?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One record's line about generating the API document was a decision of its own, replaced whole by a later record. The rest is still valid.</p></div></div>
-    </div>
+    <p>Many teams preserve accepted records unchanged and write a replacement when the decision evolves. Quickturn instead amends an accepted record in place, adding a dated explanation, and reserves superseding for a replaced decision. Git retains the historical versions.</p>
+    <p>The trade is readability versus historical browsing: the file states the current choice, while a reader must inspect diffs to reconstruct its development. Partial acceptance or replacement must identify exactly which part still applies.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Effort matches reversibility</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we write a record for every choice, then?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Some decisions are cheap to undo: a date-formatting library, a dashboard layout. Spend little time on those.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And some are expensive.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The data shape, how learners are isolated from each other, authentication, infrastructure as code, fast deploys. Our rule is "build early what is hard to add later".</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What came later, then?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A firewall, the email service, restore drills. Those arrived in a later phase that added guards for production, because adding them later is easy.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the effort of a decision should match the cost of reversing it.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the rule. Jeff Bezos wrote about one-way and two-way doors: walk through two-way doors quickly, and slow down at one-way doors.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A one-way door being a choice you can't undo?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here it is on two axes.</p></div></div>
-    </div>
+    <p>Decision effort should match the cost of reversal. A formatting library or dashboard arrangement may be easy to replace. A learner-isolation scheme or data model can require a migration of every record.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of cost to reverse later against cost to build now; high cost to reverse with low cost now means build it early, such as learner isolation and data shape; low cost to reverse means decide fast and change later, such as a firewall and restore drills.">
         <text x="44" y="18" class="t-sm">↑ Cost to reverse later</text>
@@ -110,29 +66,14 @@
       </svg>
       <figcaption>The top-left corner is where to act first: cheap now, expensive to add later. Anything in the bottom row can wait for a later phase.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A firewall isn't cheap to build, though.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>True, it isn't free. But adding it later doesn't force us to rewrite anything. Changing how learners are isolated later would mean migrating every record.</p></div></div>
-    </div>
+    <p>Quickturn therefore establishes hard-to-add foundations early and introduces some operational guards later. “Later” is appropriate only while their absence fits the current exposure and requirements. The useful distinction is whether adding a component later forces a redesign, not whether the component itself is effortless.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Presenting a decision</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. How do I actually say it in a review?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say the drivers first, then the options and why each lost, then the consequences you accept. Then what would change your mind.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does "what would change your mind" sound like?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Something concrete, like "We'll store this projection once a rule needs history we don't keep." A projection is data we keep ready for one screen. The sentence shows you know the limit of your decision.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me try my cache again.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Go.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Drivers: the home screen reads the catalog on every load. Options: a cache in memory, a cache service, or doing nothing.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why each lost?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A cache service adds an extra network call and another service to run. Doing nothing... hmm. I never measured it.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the honest answer. The catalog is a snapshot, a fixed copy built with the app, so reading it may already be cheap.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my first driver is a guess. I should measure first, and write "we'll add a cache if reads cross this number".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Now your proposal has a reason, a rejected option and a trigger. Let me show you both versions side by side.</p></div></div>
-    </div>
+    <p>Present a decision by stating its drivers, alternatives, consequences and a condition that would change it. A cache proposal should identify an observed performance problem and compare an in-process cache, a cache service and leaving the current design alone.</p>
+    <p>Quickturn's catalog is already a fixed snapshot built with the app. Before adding a cache, measure whether reading it is costly. A measurable trigger for revisiting the decision is stronger than a claim that caching must be faster.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="Leo's first answer in review was only 'it's faster'; his reshaped answer states drivers, options considered and why each lost, and what would change his mind. The options-considered row is the difference.">
+      <svg viewBox="0 0 400 276" role="img" aria-label="A weak review answer says only 'it is faster'; a supported answer states drivers, options considered and why each lost, and what would change his mind. The options-considered row is the difference.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">First answer</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Reshaped</text>
         <text x="16" y="56" class="t-sm">Drivers</text>
@@ -147,30 +88,7 @@
       </svg>
       <figcaption>The same proposal, answered twice. The middle row, the options considered and why each lost, is what turns an opinion into a decision a reviewer can check.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I ask about the rejected options? Doesn't listing them make the decision look weaker, like I wasn't sure?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the opposite. A reviewer trusts a choice more when they can see what it beat. A single option looks like the first idea you had.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But what if a reviewer likes one of the rejected ones better?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the table did its job. You argue about the reason it lost, which is concrete, instead of about taste.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And sometimes they'll be right.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sometimes. Then you change the decision early, when it's cheap. That's a good outcome, not a defeat.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should I write an ADR for it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Records take time, and they can go stale. A team that writes one for every small choice has no time left to build. Write one when a reasonable reviewer could argue against the choice.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That reviewer clearly argued against it.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then yes. A short one.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Next time a reviewer asks what you rejected, what's your plan?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'll have an ADR: the context, the options we rejected and why, and the consequences we accept.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We amend accepted records in place, with a date and a reason. We supersede only when the decision is replaced whole.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'll spend decision time in proportion to how hard it is to reverse. Isolation and data shape early; a firewall can come later.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And in the room?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Drivers first, then the rejected options, then what would change my mind.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "it's faster": it was a guess that sounded like a reason but wasn't one. Measure before you name a driver.</p></div></div>
-    </div>
+    <p>Rejected alternatives make assumptions reviewable. A reviewer can challenge why an option lost, and the team can change course while that is cheap. ADRs themselves take time and become stale, so use them for choices a reasonable reviewer could dispute, rather than documenting every minor preference.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -184,5 +102,5 @@
     <a class="prev" href="ch10.html"><span>Previous</span><b>Who stops a bad import when nobody is watching?</b></a>
     <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

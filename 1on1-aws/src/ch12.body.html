@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 12 · Where a web app keeps tokens | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 12 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 12 of 14</span></p>
   <h1>Where should a web app keep its tokens?</h1>
   <p class="lead">After this page you can explain why tokens stay out of page JavaScript, and what each cookie attribute protects. You can also explain how CSRF defenses and refresh-token rotation fit in.</p>
-  <p class="meta"><span>About 8 min read</span><span>On a video call</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,24 +15,9 @@
       <li>What does this design cost?</li>
     </ul>
   </nav>
-  <p class="stage">A video call. Leo has a tutorial open in another tab.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The risk in localStorage</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I read a tutorial that keeps the access token in localStorage. The page sends it as a Bearer header. It's about ten lines.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And ours?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four auth endpoints on the API, three cookies, and Origin checks. Why didn't we do the simple thing?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What can read localStorage?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our own JavaScript.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Any JavaScript running on the page. Ours, and anything that gets in.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But we have no XSS bug. We escape everything.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An XSS bug, cross-site scripting, lets an attacker run their script on our page. You're sure there are none today.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Today. And our dependencies? One compromised npm package runs with the same rights as our code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it reads localStorage and sends the tokens somewhere else.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Including the refresh token. That one gives access for weeks, not minutes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a cookie is different how?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An HttpOnly cookie can't be read by scripts at all. The browser attaches it to requests by itself.</p></div></div>
-</div>
+    <p>JavaScript on a page can read localStorage, including injected scripts or compromised dependencies. Persisting a refresh token there can turn a browser compromise into continued access after the page closes.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="A token in localStorage can be read by page scripts, is attached by the app's code, can be stolen by an XSS bug, and needs no CSRF defense; a token in an HttpOnly cookie cannot be read by scripts, is attached by the browser, can only be used while the page is open during an XSS bug, and does need a CSRF defense.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">localStorage</text>
@@ -52,23 +37,11 @@
     </svg>
     <figcaption>The first row decides the rest. A cookie trades a stolen token for a new job: defending against forged requests.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an XSS bug is still bad with cookies.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Still bad. But the attacker can only act while the page is open. They can't carry the token away and use it for weeks.</p></div></div>
-</div>
+    <p>An HttpOnly cookie prevents direct script reads of that cookie value. It does not make XSS harmless: injected code can still issue authenticated requests, read permitted responses and exfiltrate data. Use cookie protection together with injection defenses and appropriately scoped sessions.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The backend and its cookies</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If scripts can't touch the tokens, who does the sign-in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our API, acting as a small backend-for-frontend. It hosts login, callback, refresh and logout, and keeps the client secret on the server.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it sets the cookies.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three of them. The access token, the refresh token, and a short-lived one holding the sign-in state and the PKCE verifier.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long does each live?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The access cookie lives as long as the token. The refresh cookie lasts 30 days. The sign-in state lasts ten minutes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the attributes? I always forget what each one does.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me put the access cookie in the middle.</p></div></div>
-</div>
+    <p>Quickturn's API also acts as a backend-for-frontend for login, callback, refresh and logout. It keeps client secrets server-side and sets access, refresh and temporary sign-in cookies with explicit lifetimes and attributes.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 360" role="img" aria-label="The __Host-access-token cookie in the center; HttpOnly means no script access, Secure means HTTPS only, SameSite=Lax means it is not sent on cross-site POSTs, and having no Domain means no sibling host can set it.">
       <line x1="100" y1="88" x2="200" y2="180" class="ln"/>
@@ -92,18 +65,7 @@
     </svg>
     <figcaption>Each attribute closes one door. The prefix in the name makes the browser enforce two of them.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the <code>__Host-</code> prefix add?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The browser refuses the cookie unless it's Secure, on <code>Path=/</code>, and has no Domain. So no sibling subdomain can plant one for us.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would anyone plant a cookie?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>To sign you in as the attacker. Then everything you practice lands in their account, where they can read it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the refresh token, if it leaks anyway?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Rotation. Each refresh returns a new refresh token, and the old one stops working after a ten-second grace period. Logout revokes it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why a grace period at all?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two tabs may refresh at the same moment. Without it, one of them fails for no reason.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens when the access token expires mid-session?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>This loop. The learner never sees it.</p></div></div>
-</div>
+    <p>A <code>__Host-</code> cookie requires Secure, Path=/ and no Domain attribute, reducing cookie injection from sibling subdomains. Refresh rotation and a short concurrency grace period help manage renewal, but access-token revocation behavior must be evaluated separately.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="The access token expires, the API answers 401, the page posts to refresh with its Origin checked, the backend exchanges the old refresh token, new tokens are set as cookies, and the original request is retried and succeeds.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -128,70 +90,17 @@
     </svg>
     <figcaption>The page tries a refresh once. If that also fails, it sends the browser to sign in again.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does the refresh itself need an Origin check?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a POST that changes state: it swaps tokens. Logout is the same. Another site shouldn't be able to trigger either one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the refresh token has expired too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the refresh fails, and the page sends the browser to sign in. The learner types their password once a month at most.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And all this works because the API and the app share an address?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. CloudFront puts both on one origin, so the cookies reach the API.</p></div></div>
-</div>
+    <p>Refresh and logout are state-changing POSTs. Expired or unusable refresh credentials send the user through sign-in again. Same-origin app and API routing simplifies delivery of these cookies.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Forged requests</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You said cookies need a CSRF defense. Isn't CSRF a solved problem?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only if you add the defenses yourself. The browser sends our cookie automatically, even when another site starts the request.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an evil page could post a form to our API, and my cookie goes along.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the attack. Picture a page that quietly posts "reset my progress" to our API. The learner visits it, and their history is gone.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without ever touching our site.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. We have three defenses.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>SameSite=Lax is one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. With Lax, the cookie isn't sent on cross-site POSTs. Second, every state-changing request has its Origin header checked against an allowlist.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't SameSite enough on its own?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not quite. "Same site" includes sibling subdomains, and some older browsers ignore the attribute. The Origin check doesn't depend on either.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not check Origin on reads too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Reads change nothing, so a forged read gains nothing. The attacker's page can't see the response anyway.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The callback. It's a navigation from Cognito's page, so it carries no Origin we could check.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we compare the state value instead.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In constant time, so the comparison doesn't leak how many characters matched.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the phone apps' Bearer path?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No CSRF check needed. Nothing is attached automatically, so another site can't borrow it.</p></div></div>
-</div>
+    <p>Cookies are attached automatically, which creates CSRF risk. Quickturn combines SameSite=Lax with an exact Origin allowlist on state-changing requests and a validated state value for the sign-in callback. The callback needs its own protection because it is a navigation from the identity provider.</p>
+    <p>Safe reads must not change state. Bearer-token paths have different CSRF properties because another site does not automatically possess their Authorization header. XSS and token leakage remain separate threats even when CSRF checks are correct.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What it costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This is clearly safer. What did it cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The API now owns the login flow, the cookies and the refresh timing. And the cookie path and the Bearer path must behave the same, so we test both.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything that surprised you?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Cookies hold about 4 KB. A large token might not fit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And locally?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Safari won't keep Secure cookies over plain http on 127.0.0.1. So local sign-in uses another browser.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if we moved the API to its own domain one day?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>This setup breaks. The cookies belong to one origin.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why Lax and not Strict? Strict sounds safer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Strict drops the cookie on every arrival from another site. A learner following a link from their email would look signed out.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the redirect back from Cognito is from another site too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, so Strict would break the sign-in itself. Lax sends the cookie on those top-level navigations, but not on cross-site POSTs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is localStorage ever acceptable?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a low-risk app, a token kept only in memory, short-lived, can be fine. Native apps use Bearer tokens in the system's secure storage.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I was sure the ten-line version was just the modern way.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's shorter because it leaves the risk with the learner. We chose to carry it on the server.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone posts that tutorial in our channel. What do you reply?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If a token sits in localStorage, any script on the page can steal it. That includes a compromised dependency.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So our API does the sign-in exchange and puts the tokens in HttpOnly cookies with the <code>__Host-</code> prefix. Scripts can't read them, and other hosts can't set them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The browser sends them automatically, so we add CSRF defenses. That means SameSite=Lax, an Origin check on every change, and the state value on the callback.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the refresh token?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It rotates on every use, and logout revokes it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It all rests on one thing: CloudFront serves the app and the API from one origin.</p></div></div>
-</div>
+    <p>The backend now owns login, cookies and renewal, and both cookie and Bearer paths need equivalent authorization tests. Cookie size limits and local HTTPS behavior also affect implementation. Separate production origins require revisiting cookie and CORS policy rather than assuming this arrangement transfers unchanged.</p>
+    <p>An in-memory browser token can suit some threat models, while native apps use platform secure storage. Choose persistence and session design from actual risks and interaction needs. No storage choice replaces protecting the application from script injection.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -205,5 +114,5 @@
     <a class="prev" href="ch11.html"><span>Previous</span><b>What actually happens when a learner signs in?</b></a>
     <a class="next" href="ch13.html"><span>Next</span><b>How do we prove one learner can't see another's data?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

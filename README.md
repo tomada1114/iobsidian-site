@@ -13,11 +13,11 @@
 
 | 読み物 | 目次 |
 |---|---|
-| One-on-Ones: Architecture（英語・B2・対話） | `1on1-architecture/ch00.html` |
-| One-on-Ones: API and TypeScript（英語・B2・対話） | `1on1-api-types/ch00.html` |
-| One-on-Ones: AWS Foundation（英語・B2・対話） | `1on1-aws/ch00.html` |
-| One-on-Ones: AI in Production（英語・B2・対話） | `1on1-ai/ch00.html` |
-| One-on-Ones: Operations and Quality（英語・B2・対話） | `1on1-ops/ch00.html` |
+| Engineering Readers: Architecture（英語・B2・解説文） | `1on1-architecture/ch00.html` |
+| Engineering Readers: API and TypeScript（英語・B2・解説文） | `1on1-api-types/ch00.html` |
+| Engineering Readers: AWS Foundation（英語・B2・解説文） | `1on1-aws/ch00.html` |
+| Engineering Readers: AI in Production（英語・B2・解説文） | `1on1-ai/ch00.html` |
+| Engineering Readers: Operations and Quality（英語・B2・解説文） | `1on1-ops/ch00.html` |
 | AgentCore Reader（英語・B2・08〜13は解説文、01〜07は対話） | `agentcore-reader/ch00.html` |
 | Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |
 | 一拍おいて話す（日本語・Quick Book・解説型） | `book-pause-before-speaking/ch00.html` |
@@ -26,14 +26,14 @@
 | 思い込みを外して、世界をデータで見る（日本語・Quick Book・解説型） | `book-world-by-data/ch00.html` |
 | 情報は人をつなぎ、分断する（日本語・Quick Book・解説型） | `book-information-networks/ch00.html` |
 | 整えてから変えるか、変えてから整えるか（日本語・Quick Book・学習テキスト型） | `book-tidy-then-change/ch00.html` |
-| その不安は、お金で消えるのか（日本語・Quick Book・対話型） | `book-money-anxiety/ch00.html` |
+| その不安は、お金で消えるのか（日本語・Quick Book・解説型） | `book-money-anxiety/ch00.html` |
 | その文から何が言えるか（日本語・Quick Book・学習テキスト型） | `book-what-follows/ch00.html` |
 | 全身全霊で働かないという選択（日本語・Quick Book・解説型） | `book-not-all-in/ch00.html` |
 | ゆるく、でも毎日積み上げる（日本語・Quick Book・解説型） | `book-loose-steady/ch00.html` |
 | 答えを出す前に、問いを選ぶ（日本語・Quick Book・解説型） | `book-choose-the-question/ch00.html` |
 | 技能を更新しつづける（日本語・Quick Book・解説型） | `book-keep-skills-current/ch00.html` |
 | 不確実性から考えるチームと組織（日本語・Quick Book・解説型） | `book-uncertainty-teams/ch00.html` |
-| 話を聞いてもらうと、なぜ人は変わるのか（日本語・Quick Book・対話型） | `book-being-heard/ch00.html` |
+| 話を聞いてもらうと、なぜ人は変わるのか（日本語・Quick Book・解説型） | `book-being-heard/ch00.html` |
 | ジョブ型とメンバーシップ型で読む働き方（日本語・Quick Book・解説型） | `book-job-membership/ch00.html` |
 | 英語でチームを回す仕事の型（日本語・Quick Book・学習テキスト型） | `book-team-english/ch00.html` |
 | 計画と対話を行き来する（日本語・Quick Book・解説型） | `book-plan-and-dialogue/ch00.html` |
@@ -42,13 +42,13 @@
 | アドラー心理学で人間関係をほどく（日本語・Quick Book・解説型） | `book-adler-relationships/ch00.html` |
 | 稼いだ分は、どこへ行ったのか（日本語・Quick Book・解説型） | `book-where-gains-went/ch00.html` |
 | 歩くと、頭と体に何が起きるか（日本語・Quick Book・解説型） | `book-walk-and-think/ch00.html` |
-| 人生を物語にしない生き方（日本語・Quick Book・対話型） | `book-life-not-a-story/ch00.html` |
-| AIの時代に、センスはどう育つか（日本語・Quick Book・対話型） | `book-growing-sense/ch00.html` |
+| 人生を物語にしない生き方（日本語・Quick Book・解説型） | `book-life-not-a-story/ch00.html` |
+| AIの時代に、センスはどう育つか（日本語・Quick Book・解説型） | `book-growing-sense/ch00.html` |
 | アメリカを割る信仰（日本語・Quick Book・解説型） | `book-faith-divides-america/ch00.html` |
-| 仕事選びのものさしを科学で直す（日本語・Quick Book・対話型） | `book-job-yardstick/ch00.html` |
+| 仕事選びのものさしを科学で直す（日本語・Quick Book・解説型） | `book-job-yardstick/ch00.html` |
 | 思い出して覚える、勉強の組み立て方（日本語・Quick Book・学習テキスト型） | `book-recall-to-learn/ch00.html` |
 | 大人の英語は、ずれに気づいて身につける（日本語・Quick Book・学習テキスト型） | `book-english-gaps/ch00.html` |
 | ことばは体から育つ（日本語・Quick Book・解説型） | `book-grounded-words/ch00.html` |
 | 論理はひとつではない（日本語・Quick Book・解説型） | `book-many-logics/ch00.html` |
 | 流行に左右されない作り手の心得（日本語・Quick Book・解説型） | `book-lasting-craft/ch00.html` |
-| 全部はできない前提で、時間を使う（日本語・Quick Book・対話型） | `book-finite-time/ch00.html` |
+| 全部はできない前提で、時間を使う（日本語・Quick Book・解説型） | `book-finite-time/ch00.html` |

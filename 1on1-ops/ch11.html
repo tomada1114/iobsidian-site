@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Operations and Quality pages">
-  <h2><a href="ch00.html">One-on-Ones: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
+  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
@@ -395,10 +395,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 11 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 11 of 12</span></p>
   <h1>What happens to a learner's data when things go wrong?</h1>
   <p class="lead">After this page you can name the guards against different kinds of data loss, and say which failure each one covers. You can also explain why deleting and exporting an account are features, not scripts.</p>
-  <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -410,62 +410,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>How do deletion and export work?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room, the week a friend of Leo's told him about a deleted production table.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Different failures, different guards</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A friend's company deleted a production table by accident last week. But AWS backs up DynamoDB automatically, right? So we're safe.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think it backs up, exactly?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Everything, I assumed. Isn't that the point of a managed database?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A plain table has no recovery and no deletion protection turned on. Each one is a decision. And each covers a different failure.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What failures are there?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start with a bug that writes wrong data. Every learner's review dates shifted by a day, say.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The table is still there. It's just wrong.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For that, you want point-in-time recovery. You restore the table to any second within a recovery window.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not just fix the dates with another script?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If you know exactly what the bug did, you might. Usually you don't, and a restore to the minute before the release is the only honest answer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long is the window?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From 1 to 35 days, as of 23 September 2026. And the restore goes into a new table, not over the old one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And my friend's case, someone deleting the table?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's deletion protection. The delete call is simply refused until someone turns the protection off.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't a stack change delete it too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the third failure. A stack change can replace the table, or a stack deletion can remove it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the guard for that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A CloudFormation Retain policy. The table stays even when the stack says otherwise.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a learner who wants to leave?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's not a failure, but it's the fourth case. Their rights need a guard of their own: delete my account, export my data.</p></div></div>
-</div>
+    <p>Point-in-time recovery, deletion protection and stack retention address different failures. Recovery helps with corrupted data by restoring another table. Deletion protection blocks a delete until disabled. Retention protects an existing resource when its stack is deleted or replaced.</p>
 <dl class="terms">
   <dt>A bug writes wrong data</dt><dd>Point-in-time recovery, into a new table.</dd>
   <dt>Someone deletes the table</dt><dd>Deletion protection refuses the call.</dd>
   <dt>A stack would replace or remove it</dt><dd>A Retain policy keeps the table.</dd>
   <dt>A learner asks to leave</dt><dd>Deletion and export, as features.</dd>
 </dl>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So each failure has one main guard.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And they don't stand in for each other. Deletion protection won't undo a bad write.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And recovery won't stop someone deleting the table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It would help you afterwards, into a new table. But the app would be down until you pointed it there.</p></div></div>
-</div>
+    <p>None substitutes for the others. Recovery does not keep the app online automatically, and retention does not undo a bad write. Account export and deletion are separate product operations that also need a designed path.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Choices per stage</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which ones do we have?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Retain on delete and on replacement, in every stage. Deletion protection and point-in-time recovery are on in prod from the table's creation, and off in dev.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why from creation? Couldn't you turn them on later?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You could, but the window only starts when recovery is on. A gap there is a gap you can't restore.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the user pool?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has deletion protection in every stage, dev included.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why dev too? It's only our data.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new pool issues new user ids. Our mapping from those ids to learners would point at nobody, so every learner's data would be stranded.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Even ours.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Even ours. Rebuilding the table from nothing is easy. Matching old data to new ids isn't.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the pool is almost more precious than the table.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one sense, yes. The table can be restored from a backup. A pool's user ids can't be issued again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we know the settings stay that way?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test asserts each setting for both stages. Turning one off fails the build.</p></div></div>
-</div>
+    <p>Quickturn sets retain-on-delete and retain-on-replacement in both stages, with production table protection and recovery enabled from creation. The available recovery window starts only after recovery is active.</p>
+    <p>Identity resources deserve separate care. A replacement pool issues new provider identities, requiring mapping migration to reach existing learners. It is not enough to restore table records. Tests check these stage-specific protections, while drills test the recovery procedure.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 436" role="img" aria-label="Dev and prod compared. Retain policy: on in both. Deletion protection: off in dev, on in prod. Point-in-time recovery: off in dev, on in prod. User pool protection: on in both. Whose data: the team's own in dev, learners' in prod.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Dev</text>
@@ -491,35 +450,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The accepted risk</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So in dev, a bad write can't be undone?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. And the table can be deleted from the console.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds like a mistake someone should fix.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a decision someone wrote down. Dev holds only the team's own practice history.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And recovery costs money.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's priced by table size. For one person's history, it wasn't worth it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "accepted risk" means somebody chose it, on purpose, in writing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. An oversight is a risk nobody knew about. This one has a name and a reason.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is recovery a cost in any other way?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Privacy. In prod, the recovery window bounds how long a deleted learner's data can still be restored.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a restore could bring it back.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the privacy policy has to state that period. A learner deletes their account, and a copy survives in the window.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd never have thought of that as a cost.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Most people don't. Every copy you keep is a copy you have to explain.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we trust the restore works?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A backup you never restored is a hope. So we run restore drills: restore prod into a new table, and check what comes back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Check it how?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Count the items, read a few learners' histories, and time the whole thing. The time matters when learners are waiting.</p></div></div>
-</div>
+    <p>Development accepts losing the team's test history; that is a stated risk rather than an omitted setting. Production recovery retains recoverable copies for a configured period, so deletion and privacy descriptions must include that lifecycle.</p>
+    <p>A restore drill creates a protected replacement table, checks counts and representative records, measures time and tests the planned cutover or repair process. Restore access must remain controlled because the new copy contains production information.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Deletion and export as features</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does deleting an account actually work?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every learner's data lives in one partition of one table.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So deleting it is one query?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One query over that partition, plus the identity mapping item that links their login to their id. Export works the same way.</p></div></div>
-</div>
+    <p>A learner-bound partition simplifies export and deletion, but the operation must follow pagination and batch limits and include identity mappings. Tests make it a repeatable feature rather than a script someone remembers to run.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the table, containing one partition per learner, containing that learner's items. One learner's partition is the unit of deletion and export.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
@@ -534,32 +470,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Because one learner's data sits in one place, removing or exporting it doesn't need a search across the database.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Who runs it? An engineer, with a script?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. They're product features, with tests. The learner asks, and the app does it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does that matter, if the script works?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A script runs when someone remembers it. A feature runs every time, and the privacy policy can describe it honestly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about AI products? They keep more copies.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. Logs, analytics exports, embeddings, conversation memory. Each one is a derived copy.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if any one is missed?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then "delete my data" is a promise the system can't keep.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that why the learner model stays in DynamoDB, not in agent memory?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Partly. In the table, it's deleted and exported with the rest of the partition.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the conversation memory itself?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It has its own retention, and it holds conversations, not the learner's record. That keeps the list of copies short enough to check.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your friend asks how Quickturn would survive their mistake. Tell them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each guard covers a different failure: point-in-time recovery for bad writes, deletion protection for a deleted table, Retain policies for stack changes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We keep Retain everywhere, but skip recovery in dev because it's only the team's data. That's a risk we wrote down.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Prod gets all of them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone asks to close their account. Then what?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Deleting or exporting an account is one partition, and it's a feature, not a script.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the drills. Until a restore has actually run, nobody knows how long a recovery takes.</p></div></div>
-</div>
+    <p>Derived copies include exports, logs, embeddings and conversation memory. Maintain an inventory and an explicit retention or deletion policy for each. Restoring a backup must also respect deletions made after its recovery point. Keeping progress in the main record makes that inventory smaller without removing responsibility for the remaining copies.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -573,7 +484,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch10.html"><span>Previous</span><b>Should every merge go straight to production?</b></a>
     <a class="next" href="ch12.html"><span>Next</span><b>What has to be true before we open to the public?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

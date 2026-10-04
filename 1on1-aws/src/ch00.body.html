@@ -1,15 +1,15 @@
-<!-- title: One-on-Ones: AWS Foundation · Contents | accent: run -->
+<!-- title: Engineering Readers: AWS Foundation · Contents | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Contents · 14 pages</span></p>
-  <h1>One-on-Ones: AWS Foundation</h1>
-  <p class="lead">Fourteen short conversations about running a small app on AWS. After them you can explain accounts, access, serverless compute and DynamoDB design. You can also explain infrastructure as code, sign-in, keeping users' data apart, and cost.</p>
-  <p class="meta"><span>14 pages</span><span>About 2 hours</span><span>English, B2 · dialogue</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Contents · 14 pages</span></p>
+  <h1>Engineering Readers: AWS Foundation</h1>
+  <p class="lead">Fourteen short chapters about running a small app on AWS. After them you can explain accounts, access, serverless compute and DynamoDB design. You can also explain infrastructure as code, sign-in, keeping users' data apart, and cost.</p>
+  <p class="meta"><span>14 pages</span><span>About 55 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 <div class="flow">
-  <section aria-labelledby="who">
-    <h2 id="who">Who's talking</h2>
-    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He writes TypeScript every day with Claude Code. He wants to explain why the system runs on AWS the way it does. Each page is one of their one-on-ones.</p>
-    <p>Quickturn is a small company that makes a language-learning app, with a web app and iOS and Android apps on one API. Maya, Leo and Quickturn are fictional.</p>
+  <section aria-labelledby="case">
+    <h2 id="case">The example application</h2>
+    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
+    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
   </section>
   <section aria-labelledby="map">
     <h2 id="map">How the pages fit together</h2>
@@ -46,17 +46,17 @@
       <li><a href="ch06.html">Why DynamoDB and not PostgreSQL?</a> — A learner boundary built into the keys decided it.</li>
       <li><a href="ch07.html">List the questions first, then design the table</a> — Every access pattern becomes a key before any data exists.</li>
       <li><a href="ch08.html">What if the app crashes halfway through a write?</a> — One transaction with conditions keeps the log and its summaries in step.</li>
-      <li><a href="ch09.html">Why write infrastructure as code at all?</a> — Reviewed code stops drift, and tests check what CDK produces.</li>
-      <li><a href="ch10.html">Split what breaks often from what must never be lost</a> — Data lives in a retained stack that app deploys can't touch.</li>
+      <li><a href="ch09.html">Why write infrastructure as code at all?</a> — Reviewed code describes the intended state; tests and live checks detect drift.</li>
+      <li><a href="ch10.html">Split what breaks often from what must never be lost</a> — Durable resources have a separate lifecycle and explicit retention policies.</li>
       <li><a href="ch11.html">What actually happens when a learner signs in?</a> — A one-time code becomes tokens, and the API verifies before it trusts.</li>
       <li><a href="ch12.html">Where should a web app keep its tokens?</a> — HttpOnly cookies keep tokens away from page scripts.</li>
-      <li><a href="ch13.html">How do we prove one learner can't see another's data?</a> — Stores bound to one learner, and a test that proves it.</li>
+      <li><a href="ch13.html">How do we prove one learner can't see another's data?</a> — Stores bound to one learner, with shared isolation tests.</li>
       <li><a href="ch14.html">How much will this cost if nobody uses it?</a> — Per-use parts, free tiers and budgets from the first day.</li>
     </ol>
   </section>
   <div class="aside note">
     <p class="label">How to read this</p>
-    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
   </div>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>

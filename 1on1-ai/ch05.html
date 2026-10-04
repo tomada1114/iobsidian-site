@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 5 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 5 of 13</span></p>
   <h1>Why not one complete(prompt) function for every feature?</h1>
   <p class="lead">After this page you can explain why each LLM task gets its own port, and what each task owns. You can also explain how fakes and recordings test it, and when a direct SDK call is fine.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,27 +411,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is a port too much?</li>
     </ul>
   </nav>
-  <p class="stage">After Tuesday's design review. Leo stops by Maya's desk.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>One helper for everything</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the review, a teammate proposed a shared <code>llmClient.complete(prompt)</code> helper. One function, any prompt, less code. I liked it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>I argued against it. Want to know why?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Yes. It looked like the clean abstraction to me. Task-specific code felt like duplication.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Picture it a year from now. Grading, explanations and card generation all call <code>complete</code>. Who owns the grading prompt?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Whoever wrote the grading code, I guess.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the output schema? The parsing?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Also the caller. So every caller has its own prompt, schema and parser.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now a learner complains about a grade from last Tuesday. Which prompt version produced it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Nobody knows, unless every caller remembered to log it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With a task port, every grade records its model id, prompt version and rubric version. We can run the same answer through the same setup and see what happened.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the complaint becomes something we can check, not an argument.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Same with cost. Tagging which feature spent the tokens depends on every caller remembering.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And evaluations?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the biggest gap. An evaluation needs a unit to attach to. "Any prompt" isn't a unit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the helper saves code, but nobody owns the things that matter.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let me put the two designs side by side.</p></div></div>
-</div>
+    <p>A generic <code>complete(prompt)</code> helper centralizes transport but leaves each caller owning its prompt, parser, versions and cost attribution. When several features use it, there may be no clear unit for evaluation or investigating an old result.</p>
+    <p>A named grading task instead records its model, prompt and rubric versions and has a specific evaluation set. That responsibility boundary is more useful than simply avoiding repeated SDK calls.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 436" role="img" aria-label="With one generic complete function, the prompt, schema, version, evaluation set and cost tag are each owned by every caller, or by nobody; with task ports, each of them is owned by the task.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">complete(prompt)</text>
@@ -457,35 +440,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Task-level ports</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do we do instead?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application layer declares a port per task. A port is an interface our code depends on, with no vendor in it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like the stores? The application asks for a learner's rounds, not for DynamoDB.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly the same idea, in the same layout as the rest of our code. The domain imports nothing, and the application declares ports.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the port names the task?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The task, not the vendor. Here's a simplified grading port. <code>GradeInput</code> holds the card, the expected answers and the learner's answer:</p><pre><code>interface GradeTask {
+    <p>The application owns a port per task, such as grade, explain or generate. A grading input contains the card, expected answers and learner response; its result is a Grade or a typed LLM error. A trusted request context identifies the learner for authorization and accounting.</p>
+    <pre><code>interface GradeTask {
   grade(
     ctx: RequestContext,
     input: GradeInput,
   ): Promise&lt;
     Result&lt;Grade, LlmError&gt;
   &gt;;
-}</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does it take a request context?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The context carries the learner, taken from the verified session. Cost records and the usage ledger use it to charge the right learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost tag comes with the task, so no caller can forget it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the caller never sees a prompt.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It passes typed input and gets a typed result, or an LLM error. Beside it sit an explain port and a generate port.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't <code>complete</code> just take a task name as a parameter? Then it's one function, with owners.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's a port with a string instead of a type. Nothing makes the grading caller pass grading input, or get a grade back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a typo in the name is a runtime error.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The interface makes the compiler check it for us.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what does each task own?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four things: its prompt, its output schema, its rubric version and its evaluation set.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The rubric version is the grading rules?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The written rules for what counts as correct or acceptable. When they change, the version changes, and every grade records which one it used.</p></div></div>
-</div>
+}</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="The grading port at the center owns four things above it: the prompt, the schema, the rubric version and the evaluation set; below it, three implementations: a fake, a recording and the Bedrock adapter.">
       <line x1="100" y1="112" x2="200" y2="176" class="ln"/>
@@ -505,64 +468,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>What the task owns sits above the port; what can stand in for the model sits below. Callers only ever see the port.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One Bedrock Converse adapter implements all the LLM tasks underneath. The model becomes a replaceable part.</p></div></div>
-</div>
+    <p>Each task owns its prompt, output schema, rubric and evaluation data. A shared Bedrock adapter can implement several tasks beneath those interfaces. Transport code can be reused without collapsing their different promises into one untyped string function.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Tests and swaps</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the three boxes at the bottom?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three ways to run the same code. A fake returns fixed answers, for unit tests.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a test can say "the grader returns incorrect" and check what the app does.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, with no network and no cost. It can also return an LLM error, to check that the answer stays ungraded instead of crashing. A recording is a real response saved once and replayed, for contract tests.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the real model?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For evaluation, where we measure quality on real calls.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does evaluation go through the same port?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, the same port and the same adapter. So what we measure is exactly what learners get, not a copy of the prompt in someone's test script.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed a recording is enough for everything. It's real output.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's real output from one day, with one prompt. It proves our code handles that response. It can't tell you whether today's prompt grades well.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And swapping a model?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model id and the prompt version are configuration. Changing either is a config change plus an evaluation run.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not a search through the code for every call site.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the evaluation has to approve it before it ships.</p></div></div>
-</div>
+    <p>A fixed fake exercises application behavior without a model call. A recorded real response tests parsing and integration against a known example. Live evaluations test current quality using the actual task port and adapter.</p>
+    <p>A recording proves that code handles that saved response, not that today's model is accurate. Changing a model or prompt needs a fresh evaluation. Provider replacement may also require capability or prompt changes, so the interface is a seam rather than a guarantee of interchangeable behavior.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When a port is too much</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't this a lot of code for a few prompts?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is more code, with some repetition. For a one-off script, a direct SDK call is fine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does the port pay?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Once there are several tasks, evaluations and questions about cost. That's when the owners in that table start to matter.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We have three: grade, explain and generate.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And adding a fourth means a port, a prompt, a schema and an evaluation set. That work is the point: it's the list of things someone must own.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything that gets worse?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Recordings become out of date when prompts change. We refresh them on purpose, not when a test happens to fail.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you refresh one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Run the task once against the real model, save the new response, and review the diff like any other change. A surprising diff is worth reading.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Have you seen the other way go wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, an internal assistant called the model SDK from about twenty places. Then the company changed model providers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How bad was it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They found three different JSON parsers. And when costs spiked, nobody could tell which feature caused it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what did they do?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Before migrating, they wrapped each use as a named task with its own evaluation. Then they switched providers one task at a time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And each switch had an evaluation to pass.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's what made the migration safe.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say it the way you'd put it in the review thread.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each LLM feature is a named task, with its own prompt, schema, rubric version and evaluation set. It's declared as a port, like any other dependency.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model sits behind one adapter. Tests use fakes and recordings.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Changing the model is configuration that the evaluation has to approve.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the helper?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fine for a one-off script. Not once we have several tasks to evaluate and pay for.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Name the upkeep in the thread too: recordings must be refreshed on purpose whenever a prompt changes.</p></div></div>
-</div>
+    <p>Task ports add files and ownership work. A one-off experiment may reasonably call the SDK directly. Once a feature needs production evaluation, cost questions and failure handling, an explicit task boundary is more valuable.</p>
+    <p>Refresh recordings deliberately and review their diffs. In a migration, wrap existing model uses as named tasks, establish their expected behavior, then change providers one task at a time. That makes regressions and costs easier to attribute.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -576,7 +492,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch04.html"><span>Previous</span><b>Can an LLM return a type instead of a paragraph?</b></a>
     <a class="next" href="ch06.html"><span>Next</span><b>Should the timed drill wait for the grader?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

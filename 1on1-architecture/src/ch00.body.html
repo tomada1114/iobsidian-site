@@ -1,16 +1,16 @@
-<!-- title: One-on-Ones: Architecture · Contents | accent: think -->
+<!-- title: Engineering Readers: Architecture · Contents | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Contents · 11 pages</span></p>
-  <h1>One-on-Ones: Architecture</h1>
-  <p class="lead">Eleven short conversations about what software architecture is for. After them you can explain dependency rules, ports and adapters, DDD and aggregates. You can also choose between styles and defend the choice in a review.</p>
-  <p class="meta"><span>11 pages</span><span>About 1.5 hours</span><span>English, B2 · dialogue</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Contents · 11 pages</span></p>
+  <h1>Engineering Readers: Architecture</h1>
+  <p class="lead">Eleven short chapters about what software architecture is for. After them you can explain dependency rules, ports and adapters, DDD and aggregates. You can also choose between styles and defend the choice in a review.</p>
+  <p class="meta"><span>11 pages</span><span>About 46 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 
 <div class="flow">
-  <section aria-labelledby="who">
-    <h2 id="who">Who's talking</h2>
-    <p><strong>Maya</strong> is a staff engineer and the tech lead of Quickturn's platform. <strong>Leo</strong> was recently promoted to mid-level. He builds features every day with Claude Code, and he wants to explain why the system is built the way it is. Each page is one of their one-on-ones.</p>
-    <p>Quickturn is a small company that makes a language-learning app. A card shows a sentence in your own language. You say it in the language you are learning before a timer runs out. Maya, Leo and Quickturn are fictional.</p>
+  <section aria-labelledby="case">
+    <h2 id="case">The example application</h2>
+    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
+    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
   </section>
 
   <section aria-labelledby="map">
@@ -43,7 +43,7 @@
     <ol>
       <li><a href="ch01.html">Isn't architecture just folders?</a> — Architecture decides what changes together and which way dependencies point.</li>
       <li><a href="ch02.html">If the rules can't touch the database, who saves?</a> — Dependency inversion lets the rules own the interface the database code implements.</li>
-      <li><a href="ch03.html">Should every dependency get a port?</a> — Add a port only at a seam with two real implementations.</li>
+      <li><a href="ch03.html">Should every dependency get a port?</a> — Use ports where a meaningful technology or testing seam needs protection.</li>
       <li><a href="ch04.html">Clean vs Hexagonal — what's actually different?</a> — Both keep technology outside; only clean also names the parts inside.</li>
       <li><a href="ch05.html">Isn't DDD just another architecture style?</a> — DDD draws boundaries and chooses words; clean decides which way the code depends.</li>
       <li><a href="ch06.html">Why not split it into microservices?</a> — Bounded contexts can live as modules in one deployable.</li>
@@ -57,7 +57,7 @@
 
   <div class="aside note">
     <p class="label">How to read this</p>
-    <p>Any page can be read on its own, in about 8 minutes. Maya is on the left, Leo on the right.</p>
+    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
   </div>
 
   <nav class="pager" aria-label="Page navigation">

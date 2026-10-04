@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Operations and Quality pages">
-  <h2><a href="ch00.html">One-on-Ones: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
+  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
@@ -395,10 +395,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 4 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 4 of 12</span></p>
   <h1>How reliable is reliable enough?</h1>
   <p class="lead">After this page you can explain what an SLI, an SLO and an SLA are. You can also show how an error budget turns reliability into something you spend. And you can say how to choose a target without guessing.</p>
-  <p class="meta"><span>About 8 min read</span><span>After the design review</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -410,29 +410,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does reliable mean for an AI agent?</li>
     </ul>
   </nav>
-  <p class="stage">After Tuesday's design review. Someone from product asked how reliable the app is, and nobody had a number.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Three terms from the ground up</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That question from product was awkward. I think we should just promise 99.99% uptime. Higher is better.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Promise it to whom?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>To learners, I suppose. Isn't that what an SLO is? A promise to customers?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not quite. Let's build the words from the bottom. Start with what you can measure.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Requests that worked, and requests that didn't.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. An SLI, a service level indicator, is a ratio: good events divided by all events.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as good?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You decide, and write it down. For example, API requests answered without a 5xx, in under a set number of milliseconds.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the SLI is just a measurement.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The SLO, the objective, is your target for that measurement over a window. Say, 99.5% over 28 days.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that our number?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, those numbers are only an example for today. The point is the shape: a ratio, a target, a window.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the SLA?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A service level agreement is a contract with a penalty. If you miss it, you owe someone money or credits.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my 99.99% was an SLO.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It's an internal goal, and nobody owes money for missing it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why would the SLA be different from the SLO at all?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's usually looser. You want to notice a problem, and fix it, before you owe anyone anything.</p></div></div>
-</div>
+    <p>An SLI defines the measured behavior, such as successful saves divided by eligible attempts. An SLO sets a target and observation window. An SLA is a contractual commitment with specified consequences. Those terms should not be treated as interchangeable.</p>
+    <p>The 99.5 percent over 28 days example illustrates the shape of an objective, not Quickturn's universal required target. Define what counts as good and which events enter the denominator before choosing a percentage.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the SLA, the outermost and loosest, is a contract; inside it the SLO, an internal target; inside that the SLI, the measurement you have to take first.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
@@ -450,18 +431,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The error budget</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Fine, but why set the target lower than 99.99%? Wouldn't a higher target make us try harder?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Turn it around. What is 100% minus the SLO?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With 99.5%, that's 0.5%. The failures we're allowed.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the error budget. It's how much failure you may spend in the window.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Spend on what? Failure isn't something you want.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On change. Every release, every migration, every risky experiment carries some chance of failure.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if there's budget left, we can take risks.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Ship faster, try the bigger change. If the budget is gone, you slow down and fix reliability first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And who decides that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A rule we agree on in advance. Then the number decides, and nobody has to argue about whether this week feels unstable.</p></div></div>
-</div>
+    <p>The error budget is the allowed fraction of unsuccessful events: 100 percent minus the objective. A team can agree in advance to reduce risky changes when that budget is depleted.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 236" role="img" aria-label="An example error budget over a 28-day window: 5,000 failed requests allowed; the first incident spent 2,000, the second spent 1,500, and 1,500 are left.">
       <text x="16" y="36" class="t-sm">Allowed</text>
@@ -479,22 +449,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Illustrative numbers, not Quickturn's. The last bar decides whether next week's risky change ships.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But still, why not aim for 100%?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two reasons. First, users can't tell 99.99% from 100%. Their own phone network fails more often than that.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a learner on a train sees failures we never caused.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Second, each extra nine costs far more work than the last one. More regions, more failover, slower releases.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the learner never notices the difference.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trade. You'd pay a lot for reliability nobody can see.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how do you pick the number?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Start from what users notice. For Quickturn, a card must appear, and an answer must save.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about speed? The drill has a timer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The timer runs on the client, so a slow API doesn't shorten a learner's time to answer. A failed save hurts far more than a slow one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the save matters most.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you measure first, before you set anything. You set the target near what you already achieve, and tighten it later.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not start ambitious?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A target you already miss leaves no budget at all. Then it stops steering anything.</p></div></div>
-</div>
+    <p>Higher reliability consumes engineering work, and users notice some failure modes more than others. Quickturn prioritizes answers being saved and cards being available. Its device-side timer does not make lost saves harmless.</p>
+    <p>Measure the baseline and user needs before selecting a target. A target should express the desired experience and guide improvement, rather than simply match whatever current performance makes easy.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="Pick what users notice, measure the SLI, set the SLO near today's level, alert when the budget burns fast, then tighten.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -519,71 +475,27 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What an SLO costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Writing "99.5%" in a document takes a minute. Where's the cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You're partly right. An SLO is cheap on paper. The expensive part is measuring it honestly and acting on it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Measuring honestly how?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Agreeing what "good" means is harder than it sounds. Is a 4xx a failure? Is a request that took eight seconds a success?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A 4xx is usually the client's mistake.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Usually. But if our own bug sends a 400 to every learner, the SLI must catch it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And acting on it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When the budget is gone, you slow releases. That's a real cost, and someone has to accept it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does Quickturn measure its SLOs?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In prod only, from the API's request outcomes. On dev, the only traffic is the team's own, so the ratio means nothing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Ten requests from me testing a broken branch.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That would burn the budget in an afternoon, for no learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And in prod, what happens when it burns?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An alert fires when the error budget burns fast. It watches a failure rate over a window, not single events.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So do we still need the symptom alarms and the dashboard?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. They catch sudden breakage. The SLO catches slow erosion, like a failure rate that creeps up over two weeks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the SLO buy us?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An agreed number for one hard question: is this bad enough to stop shipping?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the SLO the only reliability check in prod?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Restore drills run there too, so we know a backup really comes back.</p></div></div>
-</div>
+    <p>The cost is honest measurement and a response policy. A 4xx may be a legitimate refusal or a bug affecting all clients; a slow 200 may still be unusable. The SLI definition must consider those cases.</p>
+    <p>Use production learner traffic for the objective, with suitable safeguards for low volume. Budget-burn alerts detect a meaningful failure rate. The team must accept the operational consequences, including prioritizing reliability work when the budget policy requires it.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Reliability for an AI agent</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this work for an AI agent? It rarely answers with a 5xx.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. An agent can be available all day and still fail its users.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It answers, but it doesn't finish the task, and a person has to step in.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what would the SLI be?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The share of tasks completed without a human rescue. And the share of responses under a set number of seconds, end to end.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why stress end to end?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A task might take eight model calls. Each call can be fast, and the task can still take a minute.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a per-call latency SLO would look green while users wait.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Measure what the user waits for, not what's easy to count.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same rule as the alarms, then.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. Start from what the user notices, and work back to a number.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Product will ask again next Tuesday. What will you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An SLI is a good-events ratio. The SLO is our target for it, and an SLA is a contract with money attached.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The gap between the SLO and 100% is an error budget we can spend on change.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We measure our SLIs in prod, set the SLO near what we already achieve, and tighten from there.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Why not 99.99%?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Learners can't see the difference, and each nine costs far more.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Also tell them what "good" means in our SLI, in one sentence. That definition is where most arguments start.</p></div></div>
-</div>
+    <p>An agent can be available and still fail its task. Measure task completion under an explicit success rubric, escalation rate and end-to-end latency. Appropriate human escalation is not automatically a failure, so distinguish required escalation from an avoidable rescue.</p>
+    <p>Several individually fast calls can add up to a slow task. Service availability, task success and judged answer quality are complementary signals. Choose the measure that reflects what the user waits for and needs completed.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>An SLI is a measured ratio, an SLO is the target for it, and an SLA is a contract.</li>
       <li>100% minus the SLO is an error budget, spent on change and protected when it runs out.</li>
-      <li>Measure first, set the target near today's level, and tighten; for agents, measure whole tasks.</li>
+      <li>Measure the baseline, choose a target from user needs, and assess agents at the whole-task level.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="ch03.html"><span>Previous</span><b>What should wake someone up at night?</b></a>
     <a class="next" href="ch05.html"><span>Next</span><b>How do we see what a model call costs?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

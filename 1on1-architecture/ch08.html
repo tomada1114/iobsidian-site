@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Architecture pages">
-  <h2><a href="ch00.html">One-on-Ones: Architecture</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Architecture pages">
+  <h2><a href="ch00.html">Engineering Readers: Architecture</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Isn&#x27;t architecture just folders</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 8 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 8 of 11</span></p>
   <h1>Where does the logic go, if not in the handler?</h1>
   <p class="lead">After this page you can explain "functional core, imperative shell": load, decide, commit. You can say why expected failures are values, why time comes in as an argument, and what the pattern costs.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,19 +409,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does the pattern cost?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. A long test file fills the screen.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Load, decide, commit</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm adding a rule to starting a round. My test mocks the store, the clock and the catalog. It's sixty lines, and it broke twice when I renamed things.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What's the rule?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the learner already finished today's portion, the next round should be an "extra" round, not "today".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So it's one decision. How do the existing tests for starting a round work?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the thing. They have no mocks at all. I don't understand how they work without them.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where do you think the logic lives?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In the handler? That's where I put mine. The handler reads the store, checks the portion, picks the kind.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's why your test needs mocks. Starting a round is a command, one request that changes data. Let's look at how it's built: three steps.</p></div></div>
-    </div>
+    <p>Suppose the learner has already completed today's portion. Starting another round should create an “extra” round rather than another “today” round. That is a product decision, not an HTTP or database concern. Putting it inside the handler makes its test depend on mocked infrastructure.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 312" role="img" aria-label="A command loads data through ports, a pure decide function turns plain values into changes and an answer, and the command commits the changes in one conditional write, or returns an expected failure as a value.">
         <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
@@ -440,16 +430,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Every command runs the same three steps. Only the middle one holds decisions, and it touches no store, no clock and no network.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The command function loads what the rule needs through ports. A port is an interface the application defines, like "load a round". An adapter implements it for one technology, like DynamoDB.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it calls a pure decide function in the domain package, with plain values. Pure means it only computes from its inputs and touches nothing outside.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Including "now"?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Including "now". Decide returns either the changes and the answer, or an expected failure. Then the command commits the changes in one write.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the command is a thin shell around decide.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Gary Bernhardt called this "functional core, imperative shell". Decisions in pure code, and side effects, like reads and writes, around the edge.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And my rule is a decision. So it belongs in decide.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And its test needs no mocks at all.</p></div></div>
-    </div>
+    <p>Quickturn's command instead loads required values through application-owned ports, calls a pure domain decision function, and commits its changes. Time and IDs are supplied values. The decision returns either an expected failure or the changes and response.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 276" role="img" aria-label="Testing the rule through the handler needs a mock store, clock and catalog and many setup lines; testing decide takes plain input and checks plain output.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Via the handler</text>
@@ -466,40 +447,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Only the setup row differs, and it's most of the test. When the rule lives in decide, setup is a plain object.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my sixty lines become a few. "Portion finished, start a round, expect an extra round."</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the test. Your rename wouldn't break it either, because it doesn't check which calls were made.</p></div></div>
-    </div>
+    <p>This is a functional core with an imperative shell. Reads and writes stay around the edge; rules operate on ordinary inputs. A direct test can pass a completed portion and assert an extra round without specifying which storage calls occurred.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Two kinds of failure</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens when the rule says no? Like, the round doesn't exist.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's an expected failure. The round wasn't found, or it's closed, or there aren't enough cards. Those are values of a Result type.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So decide returns either "ok, here's the result" or "error, round closed".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. They're part of the function's signature, so a caller can't forget them. The API turns each one into a stable error code, like <code>ERR_ROUND_CLOSED</code>.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when do we throw?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only for bugs. A thrown error means something is broken, and there's nothing useful for a caller to do with it.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's cleaner than my old job. We threw for everything, and every caller had a try-catch that guessed.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now the second thing decide gets as an argument: time. Everything it needs from the world comes in. The time, generated ids, and the learner's own time zone and day-boundary hour.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why the learner's time zone? Can't the server just use its own?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Guess what time zone a Lambda function runs in by default.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>UTC?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>UTC. So if decide read the process clock's zone, a Japanese learner's practice day would move by nine hours.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Tokyo is UTC plus nine. Their new day would start in the early afternoon.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So each request carries the learner's time zone, and our day starts at 4 a.m. local time. Only the domain computes a practice day.</p></div></div>
-    </div>
+    <p>A missing round, closed round or shortage of cards is an expected outcome represented by a Result value. The API maps it to a stable error code such as <code>ERR_ROUND_CLOSED</code>. Unexpected bugs are treated separately. Infrastructure failures also need handling in the shell rather than pretending they are domain decisions.</p>
+    <p>Time is another explicit input. A practice day depends on the learner's time zone and day-boundary hour, not the Lambda process's default UTC zone. Quickturn starts a practice day at 4 a.m. local time. Supplying those values makes the rule both correct for the learner and repeatable in tests.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>One shape, many callers</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this shape matter outside tests?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A lot. A command is plain data, plus a context that says who is acting. So the same function runs from anywhere.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>From an HTTP request, obviously.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And from a queue worker that grades typed answers in the background. And from a tool the tutor agent calls on a learner's behalf.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The agent calls the same command as the web app?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same one. Let me draw it.</p></div></div>
-    </div>
+    <p>A command consists of validated data and a request context identifying the actor. The same command can be called from HTTP, a grading worker or an agent tool. The entry adapter changes, while the rule stays in the domain.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="One command sits in the center; an HTTP route, tests, a queue worker and an agent tool all call it: the same shape for every caller.">
         <line x1="160" y1="128" x2="96" y2="64" class="ln"/>
@@ -515,57 +472,19 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Four callers, one command. Because the command takes plain data and a context, none of them needs its own copy of the rules.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's in the context?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who is acting. There are three kinds of actor: a learner, a system job, and an agent with explicit grants. Grants are a list of what the agent may do.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One per kind of entry point.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. The authorization check reads the actor, so an agent can only do what it was granted.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if we add a new entry point next year, like a Slack bot for teachers, it's just a new adapter.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the payoff. The rules don't move.</p></div></div>
-    </div>
+    <p>Quickturn distinguishes a learner, a system job and an agent with explicit grants. Authorization examines that context before an operation proceeds. An agent's ability to reach a tool does not independently grant access to the learner's data. A future entry point can reuse the command only if it supplies a trusted actor context and satisfies the same checks.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What it costs</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This seems like it has no downside. What am I missing?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three costs. First, decide can't fetch more data halfway. The shell has to load everything up front.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Even data a path doesn't need?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sometimes. If one branch needs the catalog and another doesn't, we still load it. We pay a read to keep decide pure.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we pass decide a small "fetch" function? Then it loads only what the branch needs.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half right: it would save the extra read. But think about what decide becomes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A function that does I/O through a callback. So it isn't pure anymore.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Its tests need a fake fetch again, and it can fail halfway through, after deciding half the changes.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we'd be back to mocks, just hidden behind a nicer name.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Loading a bit too much is the cheaper mistake.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's usually cheap, though. One learner's data is small.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For us, yes. Second, splitting a feature into load and decide takes practice. Your first instinct was the handler.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Yes, I did that. And the third?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The shell still needs its own tests. Contract tests check that each adapter does what its port promises. And a few end-to-end tests run the whole thing.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "no mocks" means no mocks for the interesting logic, not no other tests.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And when the logic is trivial, like saving a display name, a load-decide-commit split only adds steps that give nothing back.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for plain CRUD, just write it directly.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Mark Seemann calls the same idea the "impureim sandwich": impure, pure, impure. It pays when there's something worth putting in the middle.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My rule is worth it. It's exactly the kind of thing the product team will change again.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then put it in the middle of the sandwich.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate writes a sixty-line mock test tomorrow. What do you tell them?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every decision goes into a pure decide function. The command is a thin shell: it loads, calls decide, and commits.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Expected failures come back as values, like "round closed". Bugs throw.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Time, ids and the learner's time zone are arguments. That's why a test can say "it's 3:59 a.m. in Tokyo".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why does the shape matter beyond tests?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The same command runs from HTTP, a queue worker or an agent tool. Only the actor in the context changes.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One piece is missing: what it costs. The shell loads everything up front, and it still needs its own tests.</p></div></div>
-    </div>
+    <p>A pure decision cannot fetch extra data halfway through. The shell must load its inputs first, sometimes including data that only one branch needs. Passing in a fetch callback would allow conditional reads, but it would also reintroduce I/O and failure into the core.</p>
+    <p>The separation takes practice, and it does not remove the need for integration tests. Store contracts check adapter behavior, and selected end-to-end tests exercise the whole path. For trivial CRUD, a separate decision function may add no value.</p>
+    <p>The related “impure–pure–impure sandwich” makes sense when the middle contains rules worth protecting. It is a way to locate complexity, not a requirement to split every function into three files.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Keep decisions in a pure decide function, and let a thin shell load and commit around it.</li>
-      <li>Return expected failures as values, throw only for bugs, and pass time and time zones in as arguments.</li>
+      <li>Return expected failures as values, handle unexpected faults separately, and supply time and time zones explicitly.</li>
       <li>One command shape serves HTTP, workers and agent tools; the cost is loading up front and testing the shell.</li>
     </ol>
   </section>
@@ -573,7 +492,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch07.html"><span>Previous</span><b>What is an aggregate, really?</b></a>
     <a class="next" href="ch09.html"><span>Next</span><b>Do we need event sourcing to keep the history?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

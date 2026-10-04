@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 13 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 13 of 13</span></p>
   <h1>Can a machine review the cards a machine wrote?</h1>
   <p class="lead">After this page you can explain how a pipeline replaces content work done by hand. You can also explain how an automated reviewer earns trust, and why the rejections it catches matter most.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,25 +411,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What does it cost, and where else does this apply?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. The card-review queue and the log of deleted cards are open.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Where it started</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Adding a hundred cards takes me an afternoon. Generate, read, fix, stamp. And more language pairs are coming.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What would you change?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let the model review the cards too, and skip the person. If a model can write a card, another model can check it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Maybe. First, let's look at how cards were made at the start.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>On someone's laptop, with AI help.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Then scripts checked them: a lint for format, and a near-duplicate check. A person reviewed each card and stamped it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And only stamped cards reach learners.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And a deleted card keeps the reason it was rejected, in an append-only log.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do the reasons look like?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>"Unnatural phrasing." "A second correct answer isn't listed." "Tests the same point as another card." Short, but specific.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what was wrong with that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It worked, but it was manual, and ran one batch at a time. And for a language pair nobody on the team can read, there was no reviewer at all.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the pipeline is about scale and about new pairs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both. Let me compare the two ways.</p></div></div>
-</div>
+    <p>Quickturn's early card process combined model generation, format and duplicate checks, human review and a publication stamp. Rejected cards retained specific reasons, such as unnatural phrasing or a missing valid alternative.</p>
+    <p>Those records provide evaluation material for a later automated reviewer. They do not establish that a second model must be capable of replacing the person who reviewed them.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 436" role="img" aria-label="On a person's machine, a person runs it, it handles one batch at a time, progress is visible only to them, retries are by hand, and only a person reviews; in the pipeline, a state machine runs it, bulk work goes to batch, every run is visible, each step retries on its own, and a machine reviews once trusted.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">A person's machine</text>
@@ -455,16 +440,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The pipeline</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the pipeline a cron job that calls the model in a loop?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual first version, and it breaks halfway with no record of where. We use Step Functions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A state machine service?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. You describe the steps, and AWS runs them, records each one, and retries a failed step on its own.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which kind of workflow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Standard. Each step runs exactly once, and a run can last up to a year. The other kind, Express, runs at least once and only up to five minutes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A batch can take hours, so Standard fits.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here are the steps.</p></div></div>
-</div>
+    <p>A state machine coordinates generation, deterministic checks, review and publication decisions. Step Functions Standard workflows retain execution history and support long-running orchestration. Explicit retries can execute tasks again, so downstream writes and publication steps still need idempotency.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="Plan, generate in batch, lint and deduplicate, automated review, then a supervised stamp or a trusted publish, and finally the catalog; the review gate sits just before the catalog.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -489,33 +465,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The fifth step is the review gate. Nothing reaches the catalog, and so no learner, without passing it.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the plan step decide?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Which grammar points need cards, and how many, from the gaps in the catalog. The model doesn't choose what to teach.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it call the model?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Single calls use Step Functions' built-in Bedrock integration. Bulk generation uses batch inference, at half the on-demand price, with results back in S3.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if one step fails at three in the morning?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That step retries on its own. A run is visible and can be resumed, so nobody reruns the whole batch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why a near-duplicate check at all? The model won't write the same card twice.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not the same card, but often the same sentence with one word changed. A learner who sees both learns nothing new from the second.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the pipeline cost much?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Standard workflows are priced per state transition, with a free monthly allowance. As checked in September 2026, that's 2.5 cents per thousand, after 4,000 free.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the model calls are still most of the cost.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>By far. Which is why bulk goes to batch.</p></div></div>
-</div>
+    <p>Code chooses catalog gaps and requested card counts. The model does not independently decide what the curriculum needs. Supported batch inference can process noninteractive work, and failed records are handled separately.</p>
+    <p>Near-duplicate detection catches cards that differ only superficially. Workflow and model pricing must be checked for the chosen Region; the dated examples show meters rather than permanent quotes.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Trusting the reviewer</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now the part I asked about. Can the automated review replace the person?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only after it proves it agrees with the person. We already have the evidence.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The stamped cards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>About a thousand stamped cards are accepts. And hundreds of deleted cards, each with a written reason, are rejects.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we run the reviewer on those and compare. If it agrees 95% of the time, we trust it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not yet. Most of the set is accepts. A reviewer that accepts everything would agree most of the time too.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the rejects are the smaller group.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So one cell of that comparison matters more than the others.</p></div></div>
-</div>
+    <p>Calibrate the reviewer on accepted cards and rejected cards with human reasons. A dataset dominated by accepts can make an always-accepting reviewer look strong, so false acceptance of known defects is a critical measure.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of the machine reviewer's decision against the team's past decision: machine and team both accept is agreement; machine rejects what the team accepted is extra work; machine and team both reject is agreement; machine accepts what the team rejected must be near zero before the reviewer is trusted.">
       <text x="44" y="18" class="t-sm">↑ Machine accepted</text>
@@ -533,59 +488,18 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>A good card held back costs a little work. A bad card let through reaches learners, so the top right decides whether the reviewer is trusted.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So catching the rejects matters most.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The deleted cards with reasons are the hardest test, because each one is a mistake a person already caught.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the reasons help too?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They let us check more than accept or reject. If the reviewer rejects for a different reason than the person did, it may be right by luck.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And once it agrees?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's trusted alone, but only for pairs no one on the team reads. A new pair reaches learners only after its review gate passes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Japanese-to-English?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A person can read it, so the person stays in the loop. The machine reviews, and a person supervises the stamp.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my afternoon gets shorter, but it doesn't disappear.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For that pair, right. You'll read what the reviewer flagged, not every card from scratch.</p></div></div>
-</div>
+    <p>Check reasons as well as labels. Agreement on Japanese-to-English data does not prove quality for a language pair the team cannot read. That pair needs qualified evidence and audit before autonomous publication. Where a person can supervise, the machine can prioritize their attention rather than remove the review gate.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Costs, and the same pattern elsewhere</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Building and running a state machine. Batch results arrive hours later, not in seconds.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the reviewer itself?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the subtle one. A reviewer from the same model family can share the writer's blind spots.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The same mistakes, approved by the same kind of mind.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So use a different prompt or a different model for review. Keep sampled human audits, and read what learners report.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Learners report cards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every card has a way to report a problem. Those reports feed the next audit, and sometimes a new reject reason.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Sampled audits even after it's trusted?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. Trust is measured, and a measurement can become out of date when a model changes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a model upgrade means measuring the reviewer again.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Against the same accepts and rejects, before it reviews anything alone.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this pattern exist outside language cards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Everywhere documents are processed: claims, invoices. An LLM extracts into a schema, and code validates it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the uncertain ones?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Low-confidence items go to a human queue. Teams raise the auto-approve threshold only after the machine matches past human decisions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same idea as our reviewer: earn trust from the record.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The record of past human decisions is the most valuable dataset those teams own.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So, can the model review the cards? Give me the full answer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Generation runs in a Step Functions pipeline, with batch inference for bulk work.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The automated reviewer earns trust by agreeing with the team's past stamps and rejections. Especially the rejections.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only then may it review alone, and only for pairs nobody on the team can read.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And for Japanese-to-English?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A person still supervises the stamp.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Careful with "alone", though. The blind-spot risk stays, so review with a different prompt or model, and never fully stop the human audits.</p></div></div>
-</div>
+    <p>The writer and reviewer may share blind spots, especially within the same model family. Different prompts or models help but do not guarantee independence. Sampled human audits and learner reports provide additional evidence.</p>
+    <p>Rerun evaluation when the reviewer changes and preserve new rejection reasons. Similar extraction workflows for invoices or claims can route uncertain items to a person. Historical human decisions become useful test data when their scope and quality are understood.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Move content generation into a pipeline that records, retries and resumes each step.</li>
-      <li>Let a machine reviewer work alone only after it agrees with past human decisions, above all the rejections.</li>
+      <li>Calibrate review for each language pair, prioritize known defects, and retain qualified audit evidence.</li>
       <li>Guard against shared blind spots with a different reviewer prompt or model and sampled human audits.</li>
     </ol>
   </section>
@@ -593,7 +507,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch12.html"><span>Previous</span><b>When an agent acts for a learner, whose rights does it use?</b></a>
     <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html">Step Functions execution guarantees</a>.</p>
 </div>
 </div>
 <script>

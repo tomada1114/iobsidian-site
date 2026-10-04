@@ -1,9 +1,9 @@
 <!-- title: API and TypeScript 09 · The same request twice | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 9 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 9 of 11</span></p>
   <h1>What if the same request arrives twice?</h1>
   <p class="lead">After this page you can explain why duplicate requests are normal. You can also make a write idempotent with client-made ids, conditional writes and stored first answers.</p>
-  <p class="meta"><span>About 8 min read</span><span>The morning after an alarm</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,40 +15,19 @@
       <li>What does it cost, and what changes with agents?</li>
     </ul>
   </nav>
-  <p class="stage">The morning after an alarm. Last night the API returned a short burst of 5xx errors, and web clients resent their answers.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Duplicates are normal</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I read the alarm notes. During the 5xx burst, the web app resent answers and some "finish round" calls. Do some learners now have answers counted twice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm worried they do. Maybe the fix is to stop retrying?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's think about what the client knew. A request timed out. Did the server do the work?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It… failed? It timed out.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. A timeout only tells the client that no answer came back. The server may have saved everything, and the reply got lost on the way.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the client can't know. If it doesn't retry, the answers might be lost. If it does, they might be saved twice.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And it's not only our retries. Mobile networks resend, SDKs resend, queues deliver a message again, and offline answers are replayed later.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So duplicates aren't a bug in the client. They're normal.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Networks deliver "at least once". "Exactly once" is not something you can buy. What you can build is an exactly-once effect.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From at-least-once delivery plus idempotency. Idempotent means doing it twice has the same effect as doing it once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like setting a value, instead of adding to it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. HTTP already says GET, PUT and DELETE are idempotent by definition. POST is not, unless you make it so. Our answers are POSTs.</p></div></div>
-</div>
+    <p>A timeout does not tell a client whether the server committed its request. The reply may have been lost after success. Retrying risks duplication; refusing to retry risks losing the action. Queues and retrying clients commonly produce repeated deliveries.</p>
+    <p>Idempotency makes repetition have the same intended effect as one action. HTTP defines safe reads and methods such as PUT and DELETE as idempotent in semantics; an application's POST needs its own design. Delivery guarantees vary, so the application should handle repeats where they are possible.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Client-made ids and conditional writes</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we make a POST idempotent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Give each thing an identity before it's sent. The client makes each answer's id, and each round's id, with a random UUID.</p><pre><code>POST /v1/rounds/7c1e…/answers
+    <p>Quickturn creates answer and round IDs on the device before sending. A repeated answer ID is skipped, and a repeated start returns the existing round. A batch containing only previously accepted answers can succeed without changing counters again.</p>
+    <pre><code>POST /v1/rounds/7c1e…/answers
 { "answers": [
   { "id": "a41f…", "cardId": "c-203", "grade": "got" },
   { "id": "b8d2…", "cardId": "c-118", "grade": "missed" }
-] }</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the server remembers which ids the round already holds?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A repeated id is skipped. If the whole batch is repeats, nothing changes and the answer is success, even after the round is finished.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a retried "start round" with the same round id?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It returns the round it already made. Here's what happened last night, for one learner.</p></div></div>
-</div>
+] }</code></pre>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The client sends answers, the response is lost, the client resends with the same ids, the server says they are already held and returns the same success, so the answers are counted once.">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
@@ -67,16 +46,7 @@
     </svg>
     <figcaption>The loop can go around as often as the network wants. Because the ids repeat, the effect happens only the first time.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So nobody was counted twice. But how does the server "skip" a repeat?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How would you do it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd check if the id exists. If not, write it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the second trap. Picture two copies of the same request, arriving a millisecond apart.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Both check. Both see "absent". Both write. Oh.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A duplicate, exactly the thing you were checking for. Reading first and writing later leaves a gap, and two requests fit into it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the check has to be inside the write.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The database write itself carries the condition: this item must not exist, or it must still be at the version I read. Let me compare.</p></div></div>
-</div>
+    <p>A separate “read absent, then write” sequence is unsafe: two requests can both observe absence. Put the condition in the write, using nonexistence or an expected version.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="With check-then-write, two requests both read absent and both write, making a duplicate; with a conditional write, the second write fails its condition and is retried as a repeat.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Check, then write</text>
@@ -93,26 +63,11 @@
     </svg>
     <figcaption>The difference is where the check lives. Inside the write, the database decides, so a lost race fails cleanly instead of making a copy.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens to the request that loses?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each commit is one transaction of conditional writes. A lost race is retried a few times, and then it gets a conflict code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the web client resend on a conflict?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. It's the one refusal the web client sends again; every other refusal is final.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And on the resend the server sees the answers already held, so the client gets the same success.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we just lock the round while one request writes? Then nobody races.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Locks across a network have their own problems. A Lambda that holds a lock can time out, and the lock stays until it expires.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And every other request waits behind it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A conditional write never waits. One request wins, the other fails at once and tries again. For short writes like ours, that's cheaper than a lock.</p></div></div>
-</div>
+    <p>The transaction atomically checks those conditions. A conflict causes a bounded reload and recomputation; a later retry can discover the already accepted answer. This avoids holding a distributed lock across a Lambda execution. The contract must also define what happens if the same ID is reused with different content.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Idempotency keys and first answers</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Answers have natural ids. What about a create that doesn't? Something with no obvious identity?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the client sends an <code>Idempotency-Key</code> header, a random value for that one intended action. Stripe made the pattern well known.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the header a web standard?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The IETF, the group that writes internet standards, had a draft for it, and the draft expired. The pattern is widely used anyway. Here's what the server does with the key.</p></div></div>
-</div>
+    <p>For an action without a natural stable ID, an idempotency key can identify one intended operation. Scope it to the authenticated caller and store the request identity and first result under an explicit retention policy.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A request with a key arrives, the server looks the key up, does the work and stores the response under the key when it is new, and when a repeat arrives it returns the stored response.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -134,43 +89,12 @@
     </svg>
     <figcaption>The work runs once. Every repeat gets the first response back, byte for byte, without doing the work again.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why "for this caller"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keys are scoped to the signed-in user. Otherwise one user could guess another's key and read their stored response.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else do you have to decide?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How long keys live. What a repeat with the same key but a different body gets; usually an error. And what happens while the first request is still running.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we store first outcomes anywhere else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where it matters. Finishing a round that's already finished returns the summary it kept, not a new one.</p></div></div>
-</div>
+    <p>A repeated key with a different request should be rejected. A repeat while the first action is running also needs defined behavior. Completing an already completed round returns its stored summary rather than recomputing a different outcome. HTTP API adoption of idempotency keys should be treated as a documented service contract, without depending on a particular standards-draft status.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Costs, and agents that retry</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This isn't free, though.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Keys and results take storage. You need an expiry policy. And non-deterministic work needs care.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Non-deterministic, like a model's grade?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Our grading of typed answers runs as a background job on a queue, and queues deliver at least once. Would the model give the same grade twice?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Not necessarily. So idempotent can't mean "same output".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. For a model, idempotent means: store the first grade, and return it on every repeat.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about agents? They call tools.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's where it gets serious. An agent retries a tool call that charges a card, or sends an email. Or the model simply calls the tool twice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tool needs a key. Can the model make one up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never. A model could make a new key on every call, and every call would look new. The key comes from the orchestration layer, the code that runs the agent.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One key per intended action.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And the payment API has to receive that key, or it protects nothing.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The on-call engineer asks you whether to turn off retries. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>No. Retries will happen anyway. A timeout doesn't say whether the work was done.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So every write that can be resent carries an id the client made. Answers and rounds have them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The database write is conditional on that id. So a duplicate is skipped, even if two arrive at the same moment.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what does the repeat get back?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The same answer as the first time. For creates with no natural id, an Idempotency-Key does the same job, with the first response stored.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With agents, one more rule: the key belongs to the intended action, made by the code that runs the agent. Never let the model make it up.</p></div></div>
-</div>
+    <p>Keys and saved results consume storage and require expiry rules. Nondeterministic work adds another issue: calling a model twice may produce two grades. Store and reuse the first accepted grade, while separately coordinating attempts to avoid unnecessary duplicate calls and cost.</p>
+    <p>Agent tools that send email or charge a card need the same protection. An orchestration layer supplies a stable key for one intended action and forwards it to the downstream service. A model inventing a new key on every retry would defeat deduplication.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -184,5 +108,5 @@
     <a class="prev" href="ch08.html"><span>Previous</span><b>How do you change an API without breaking old apps?</b></a>
     <a class="next" href="ch10.html"><span>Next</span><b>Can an app work offline if the server owns the rules?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

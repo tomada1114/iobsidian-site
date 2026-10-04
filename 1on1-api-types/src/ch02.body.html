@@ -1,9 +1,9 @@
 <!-- title: API and TypeScript 02 · Which compiler flags matter | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: API and TypeScript</b><span>Page 2 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 2 of 11</span></p>
   <h1>Which compiler flags change how I write code?</h1>
   <p class="lead">After this page you can explain what <code>strict</code> leaves out, and which extra flags catch real bugs. You can also say why a team keeps a gate closed when outside code can't pass it.</p>
-  <p class="meta"><span>About 8 min read</span><span>Video call, screen shared</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -14,21 +14,9 @@
       <li>What do the flags cost, and when do we keep them?</li>
     </ul>
   </nav>
-  <p class="stage">A video call. Maya is working from home; Leo shares his screen, where a red line sits under <code>cards[0].id</code>.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>What strict leaves out</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can you see my screen? I check <code>cards.length &gt; 0</code> on the line above. The compiler still says <code>cards[0]</code> is possibly undefined.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>I see it. That's the <code>noUncheckedIndexedAccess</code> flag.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can I just turn it off for my package? We already have <code>strict: true</code>. I thought that was every strict check.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's what most people think. What do you think <code>strict</code> turns on?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Null checks, for sure. No hidden <code>any</code>. And… everything else strict?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The first two are right. <code>strict</code> is a bundle of checks. It includes null checks and bans implicit <code>any</code>, where the compiler would silently guess <code>any</code> for a missing type.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the rest of the bundle?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A few more, like <code>unknown</code> for the error in a <code>catch</code> block. But some checks were never added to the bundle, because they would break too much old code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>strict</code> is more like a minimum.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A floor, yes. We add flags on top of it. Let me draw where they sit.</p></div></div>
-</div>
+    <p>The <code>strict</code> compiler option enables a family of checks, including strict null checks and restrictions on implicit any. It does not enable every additional safety option. Quickturn adds four options for indexing, optional fields, index signatures and import syntax.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="The team's compiler config contains the strict bundle, with its null checks, no implicit any and unknown in catch; four extra flags sit inside the team config but outside strict.">
       <rect x="8" y="8" width="384" height="340" rx="10" class="zone-soft"/>
@@ -47,71 +35,32 @@
     </svg>
     <figcaption>The four flags that change how we write code sit outside <code>strict</code>. Turning on <code>strict</code> alone never gives you them.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my error comes from a flag that <code>strict</code> doesn't even know about.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Here are the four, and the bug each one catches.</p></div></div>
-</div>
+    <p>These options address different failure modes. They make potentially missing values and erased type imports more explicit, rather than merely prescribe formatting.</p>
   <dl class="terms">
     <dt>noUncheckedIndexedAccess</dt><dd><code>arr[i]</code> may be <code>undefined</code>. Catches reading past the end.</dd>
     <dt>exactOptionalPropertyTypes</dt><dd>"Missing" and "<code>undefined</code>" differ. Catches clearing a field by accident.</dd>
     <dt>noPropertyAccessFromIndexSignature</dt><dd>Map lookups need brackets. Catches a lookup that looks like a field.</dd>
     <dt>verbatimModuleSyntax</dt><dd>Imports are emitted as written. Catches a module that runs by surprise.</dd>
   </dl>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>None of these are style rules. Each one stops a bug that only shows up while the program runs.</p></div></div>
-</div>
+    <p>A shared compiler configuration gives every package the same expectations. The following examples explain what those expectations change in everyday code.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One flag, one bug</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Start with mine. I checked the length. Why isn't that enough?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the compiler doesn't connect a length check to an index. It can narrow a variable, but <code>cards.length &gt; 0</code> says nothing it can use about <code>cards[0]</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it treats every index read as maybe missing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, every <code>arr[i]</code> and every <code>record[key]</code>. The fix is to take the element once and check the element itself.</p><pre><code>const first = cards[0];
+    <p>With <code>noUncheckedIndexedAccess</code>, an array or dictionary lookup may return undefined. A length test does not generally establish that a separately indexed expression is present. Read the element into a variable and narrow that value before using it.</p>
+    <p><code>exactOptionalPropertyTypes</code> distinguishes an absent optional field from explicitly assigning undefined unless the type includes it. This is useful for update objects, although JSON omits undefined values and an API must separately define how clearing a field works.</p>
+    <p><code>noPropertyAccessFromIndexSignature</code> requires bracket notation for fields supplied only by an index signature. <code>verbatimModuleSyntax</code> makes type-only imports explicit, avoiding guessed import removal and unexpected module side effects.</p>
+    <pre><code>const first = cards[0];
 if (first === undefined) return noCards();
 first.id; // first: Card
 
 type Settings = { sound?: boolean };
 const a: Settings = {};                 // ok: field absent
-const b: Settings = { sound: undefined }; // error</code></pre></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The top half makes sense. What's the bottom half?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's <code>exactOptionalPropertyTypes</code>. With it, <code>sound?: boolean</code> means "the field may be absent". It does not mean "the field may hold <code>undefined</code>".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a real difference? Both give you <code>undefined</code> when you read it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of a PATCH request, the kind that changes only some fields. What does a missing field mean there?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Don't touch it. Keep the old value."</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And a field set to <code>undefined</code>?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Oh. It could mean "clear it". Or a bug where some code forgot to fill it in.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Without the flag, both look the same to the compiler. A form sends <code>sound: undefined</code> by mistake, and a learner's setting gets wiped.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. The third one, the index signature flag?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say you have a map with string keys, like <code>Record&lt;string, number&gt;</code>. Without the flag you can write <code>counts.verbs</code>. It looks like a field the type promises.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But it's really a lookup that can miss.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the flag makes you write <code>counts["verbs"]</code>. The brackets tell the next reader, "this key may not be there".</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the last one? Imports?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When you import only a type, the import should vanish from the JavaScript. An unmarked import may stay, and then that module loads and runs its top-level code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the flag?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With <code>verbatimModuleSyntax</code>, the compiler makes you mark type-only imports. Nothing is removed or kept by guessing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I write <code>import type { Card }</code> when I only need the type.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The rule is simple: what you write is what comes out.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I see why each one exists. But my screen is full of red now.</p></div></div>
-</div>
+const b: Settings = { sound: undefined }; // error</code></pre>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What the flags cost, and the gate</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the cost, and it's real. Turning these on in an old codebase gives you many errors on day one. After that you write more <code>?? fallback</code> and more <code>undefined</code> checks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And some libraries weren't written for them.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Some weren't. So I wouldn't use them for a script I'll delete next week.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why here?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two reasons. Quickturn is code we'll live with for years. And a lot of it is written fast, some by AI agents. A compiler gate catches what a tired reviewer misses.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A gate meaning a check that has to pass before a merge?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Type checking is a required check in our CI. Every package extends one shared base config with these flags. Nobody gets a softer copy.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Even when a library can't pass?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We had exactly that case. Our OpenAPI generator can produce a ready-made client, a small SDK for calling our API. Its own source failed to compile under <code>exactOptionalPropertyTypes</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How badly?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>About a dozen errors. Nothing we could fix from our side.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have turned the flag off for the generated folder. It's generated code, nobody reads it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That was one option on the table. Let's put both side by side.</p></div></div>
-</div>
+    <p>Enabling these options in an existing codebase creates migration work: missing-value checks, fallbacks and library incompatibilities must be handled. Quickturn accepts that cost for long-lived code and requires type checking in CI.</p>
+    <p>A generated client once failed under exact optional-property checks. The choices were to relax the configuration for that output or change what was generated.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="Loosening the flag for generated code compiles but makes the gate weaker in one folder; generating only types and hand-writing the calls keeps the gate the same everywhere, at the cost of one small module.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Loosen the flag</text>
@@ -128,31 +77,8 @@ const b: Settings = { sound: undefined }; // error</code></pre></div></div>
     </svg>
     <figcaption>Both options compile, and in both a contract change still breaks the build. Only the right one keeps the gate the same for every file.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you generate only the types, and write the calls yourselves?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In one small module. Each call is plain <code>fetch</code>, and its request is checked with <code>satisfies</code> against the generated request type.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does <code>satisfies</code> do, exactly?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It checks that a value fits a type, without changing the value's own type. So if the contract changes, our request object stops fitting, and the build fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the row you colored. With the loose folder, the flag would stop protecting part of our code.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The hand-written module costs us some upkeep. We'll look again when a generator release compiles under the flag.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Still, one exception for generated code doesn't sound dangerous.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The first one never does. But a gate you loosen for one caller stops being a gate. The next person points at your exception.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And turning off my flag for my package is the same move.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the same move. Take the element once and check it, and the red line goes away.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate asks why their fresh package needs more than <code>strict</code>. What do you say?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>strict</code> is a floor, not the whole set. Some flags were never put in the bundle.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>noUncheckedIndexedAccess</code> makes an array or map read possibly undefined, so you check the element itself.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span><code>exactOptionalPropertyTypes</code> keeps "missing" apart from "<code>undefined</code>". That matters for a PATCH, where missing means keep the old value.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the other two?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Map lookups have to look like lookups, with brackets. And imports come out exactly as written, so a type-only import never runs a module.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They cost some friction, so they fit code we keep for years.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the hard case: code you don't control that can't pass. You change what you generate, or wrap it, like our hand-written calls. You never lower the gate for it.</p></div></div>
-</div>
+    <p>Quickturn generated types only and kept a small fetch module checked with <code>satisfies</code>. That operator tests compatibility without replacing the value's inferred type. The module needs maintenance, and a compatible generator release could make the choice worth revisiting.</p>
+    <p>A failing index read should normally be fixed by handling absence, rather than removing the check for an entire package. Exceptions require understanding which protection is being lost.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -166,5 +92,5 @@ const b: Settings = { sound: undefined }; // error</code></pre></div></div>
     <a class="prev" href="ch01.html"><span>Previous</span><b>If types vanish at runtime, what are they for?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>Why not just add another boolean flag?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

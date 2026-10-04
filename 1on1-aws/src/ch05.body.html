@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 05 · How DynamoDB finds data fast | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 5 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 5 of 14</span></p>
   <h1>How does DynamoDB find my data so fast?</h1>
   <p class="lead">After this page you can explain partition keys, sort keys and why a Query is fast and a Scan is not. You can also name the capacity, consistency and size choices a table needs.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,29 +15,9 @@
       <li>What does DynamoDB cost you in flexibility?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. A new query passes his local tests.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Items, keys and partitions</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can you approve this? I needed to list a learner's rounds.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Show me how.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I wrote a Scan with a filter on the learner id. It works fine locally.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How many items are in your local table?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>About twenty.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And in prod?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every learner's data. Hmm. More than twenty.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's see why that matters. How do you picture a DynamoDB table?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a SQL table, just without joins. And the filter narrows down what the database reads.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two parts of that don't hold here. Let's start with how DynamoDB stores things.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. What's inside a table?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Items. Each item is a set of attributes, with no fixed schema beyond its key.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the key is the primary key.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The primary key is either a partition key alone, or a partition key plus a sort key. We use both.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does the partition key do?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>DynamoDB hashes it, turns it into a number, and uses that to choose a partition. A partition is a slice of storage and throughput on AWS's side.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the partition key decides which slice an item lives in.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And inside a partition, items are kept in sort-key order. Let me draw our table.</p></div></div>
-</div>
+    <p>DynamoDB stores items with attributes and a primary key. Quickturn uses a partition key and sort key. The partition key selects a logical collection; DynamoDB distributes storage internally, and the sort key orders items for range access within that key.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="The learner table holds one partition key per learner; under one learner's key, items are kept in sort-key order: PROFILE, round and answer entries, SETTINGS and STATS.">
       <rect x="8" y="8" width="384" height="316" rx="10" class="zone-soft"/>
@@ -53,27 +33,11 @@
     </svg>
     <figcaption>Each learner has their own partition key, so their items are stored together. Inside, items sit in sort-key order, so "all of this learner's rounds" is one neat range.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the sort keys are strings like <code>SETTINGS</code> and <code>ROUND#</code> plus an id.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, and the partition key names the learner. Our key attributes are just called <code>PK</code> and <code>SK</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And to read one item?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A GetItem, with the full key: partition key and sort key. That's the fastest read there is.</p></div></div>
-</div>
+    <p>A full key allows GetItem to retrieve one item directly. Quickturn's partition key identifies the learner, while the sort key identifies settings, rounds, answers or other owned records. Logical learner partitions should not be confused with a permanent one-to-one mapping to physical storage partitions.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Query versus Scan</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what's wrong with my Scan? It finds the right rounds.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It finds them by reading every item in the table. A Scan reads the whole table, page by page.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But I have a filter on the learner id.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the second surprise. The filter is applied after the items are read. You pay for everything read, and it gets slower as the table grows.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So with twenty items it's instant, and with every learner's data…</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It reads every learner's data to return one learner's rounds. What would a Query do instead?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A Query names one partition key. So it goes straight to that learner's partition.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And you can add a condition on the sort key: equals, <code>begins_with</code>, or <code>between</code>.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>begins_with "ROUND#"</code> gets the rounds in one Query, plus their answers, since those sort under each round.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The reader keeps only the round items. That's the whole fix: one partition, one range. Let me put the two side by side.</p></div></div>
-</div>
+    <p>A Scan reads table items before applying a filter. Filtering for one learner therefore does not save the cost of reading other learners. Query instead selects a partition key and can restrict the sort-key range or prefix.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="A Query reads one partition's range while a Scan reads the whole table; with a Query you pay for what you get, with a Scan you pay for everything read; a Query stays fast as the table grows while a Scan slows down; Queries suit request paths and Scans suit rare offline jobs.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Query</text>
@@ -93,66 +57,18 @@
     </svg>
     <figcaption>Every other row follows from the first. Reading one range keeps a Query fast and cheap, however many learners there are.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does a Query return everything at once?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In pages of up to 1 MB. Our store follows the pages until it has them all.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if we needed a different question, like "all rounds from yesterday, for every learner"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you'd need a secondary index, a second copy of the data keyed another way. We have none.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>None? That surprises me.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every question our app asks fits inside one learner's partition. So the main key is enough. There's no Scan in any request path either.</p></div></div>
-</div>
+    <p>Quickturn maps request-path reads to those keys and follows pagination, whose response pages are bounded by size. It checks item kinds when a prefix returns both rounds and answers. A secondary index can support another key pattern, but it creates additional write, storage and consistency considerations.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Capacity, consistency and size</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else do I choose when I make a table?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three things. First, capacity mode. On-demand bills per request, with nothing to plan. Provisioned means you set read and write capacity ahead.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is cheaper?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Provisioned, at steady load, and it can scale automatically. On-demand wins when traffic is spiky or near zero, like ours. We use on-demand.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can we still hit limits?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Either way, a "hot" partition can throttle. That's one partition getting far more traffic than the rest. We have alarms on read and write throttles.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Second choice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Consistency. Reads are eventually consistent by default: right after a write, a read might still see the old value for a moment.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds bad for a drill. I answer a card and then see old data?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So we read everything strongly consistent. A strongly consistent read costs twice as much, and it isn't available on global secondary indexes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Another reason not to have one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It fits our design.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not always read eventually consistent and save the money?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a feed of news, I would. For a learner who just finished a round and opens the results, a stale read looks like lost answers.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Third: size. One item holds at most 400 KB. And writes across several items can be made atomic with transactions, all or nothing.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>400 KB is a lot for a round.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. But it's a hard limit, so we never let one item grow without end, like a list of every answer ever given.</p></div></div>
-</div>
+    <p>On-demand capacity suits irregular traffic; provisioned capacity can suit predictable load. Either can encounter throttling, including concentrated traffic on a hot key. Capacity choice does not remove the need for alarms.</p>
+    <p>DynamoDB reads are eventually consistent by default. Quickturn requests strong consistency where immediately reflecting an accepted answer matters. Strong reads consume more capacity and are not available on global secondary indexes.</p>
+    <p>An item is limited to 400 KB. Store an unbounded answer history as separate items rather than continually extending one record. Multi-item transactions can provide atomic changes within their limits.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What you give up</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what's the catch with DynamoDB overall?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What you get is predictable speed at any size. No servers, no connections to manage, and on-demand costs nothing when idle.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what you pay?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Flexibility. No joins. No ad hoc queries, the kind you type in to explore data. You decide the access patterns before the data exists.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if the PM wants a report, like "how many learners practiced yesterday"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not from the live table. We export the table to S3, and reports run on the export.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the live table only answers the app's questions.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. And that tells you when not to use it. If you can't list your questions yet, stay relational for now.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about backups? If everything is in one table, one bad write is scary.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prod has point-in-time recovery. We can restore a copy of the table as it was at any second in the last few weeks.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. I'll rewrite mine as a Query on the learner's partition, with <code>begins_with</code>.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And add a test with more than one learner in it. Your twenty items were all one learner, weren't they?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They were. So a Scan looked correct by accident.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A teammate writes the same Scan next month. What do you tell them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>DynamoDB hashes the partition key to find where the data lives. Inside a partition, items are kept in sort-key order.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the fast operations are a get by the full key, or a Query on one partition key with a sort-key condition.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A Scan reads the whole table, and a filter only trims the result afterwards. So it's out for request paths.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the table's other choices?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We use on-demand capacity and strongly consistent reads, and items stay well under 400 KB.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the cost of all this speed: we decide our questions before the table exists. When the questions aren't known yet, a relational database is the better start.</p></div></div>
-</div>
+    <p>DynamoDB offers managed key-based access but gives up ordinary relational joins and flexible exploration. Access patterns need planning. Quickturn uses exports for broader reporting instead of scanning live learner request paths.</p>
+    <p>If the required questions are still unknown or relationships and reporting dominate, a relational database may be easier to evolve. Point-in-time recovery protects production data by restoring another table; it still needs a tested procedure to put that restored data back into service.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -166,5 +82,5 @@
     <a class="prev" href="ch04.html"><span>Previous</span><b>Why doesn't Quickturn have a VPC?</b></a>
     <a class="next" href="ch06.html"><span>Next</span><b>Why DynamoDB and not PostgreSQL?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>

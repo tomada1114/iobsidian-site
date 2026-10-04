@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 3 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 3 of 13</span></p>
   <h1>Why does Bedrock want an inference profile, not a model?</h1>
   <p class="lead">After this page you can explain what Amazon Bedrock adds on top of a model, and what an inference profile decides. You can also say when batch inference beats calling a model on demand.</p>
-  <p class="meta"><span>About 8 min read</span><span>On a video call</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,40 +411,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What do we trade for keeping data in Japan?</li>
     </ul>
   </nav>
-  <p class="stage">A video call. Both are looking at the Bedrock console in the dev account.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>What Bedrock is</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I called a Claude model by its model id, and got an error. It told me to use an inference profile. Why does a model need a profile?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start one step back. What do you think Bedrock is?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model vendor's API, with an AWS bill. You call a model id in your region, and that's it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common picture, and it misses most of it. Bedrock is serverless access to models from several providers, inside your AWS account.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Inside the account, meaning what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>IAM controls who may call which model. The cost lands on your AWS bill. And invocation logging writes prompts and answers to logs in your own account.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that different from calling the vendor with an API key?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Quite different. You don't need a vendor's API key, and the same IAM roles and audit logs as the rest of AWS apply.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we can see every prompt we sent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If you turn it on. It's off by default, and it writes to CloudWatch Logs and S3 in the same account and region.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the request itself? Each provider has its own format.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's what the Converse API solves. One request shape across models: messages, a system prompt, inference settings, tools and an output format.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So switching models is mostly configuration.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For us, it's the model's profile id in one setting. The code that builds the request doesn't change.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only mostly?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The other call, InvokeModel, takes each provider's own body instead. We use Converse, through one adapter that serves every LLM task.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could I call any model right away?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The account must be allowed to use a model before the first call. How you enable that has changed over time, so check the console when you need it.</p></div></div>
-</div>
+    <p>Bedrock exposes several model providers through AWS authentication, billing and service APIs. Quickturn uses Converse behind an adapter for a common message interface, while recognizing that supported model capabilities still differ.</p>
+    <p>Optional invocation logging can retain prompts and outputs in configured destinations. Turning it on requires decisions about sensitive content, access and retention. Model availability and permission prerequisites must be checked for the intended account and Region.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Inference profiles</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now the profile. What is it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For newer Claude models, on-demand calls don't go to a single region. They go through a cross-region profile, which picks where the request runs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Picks from where?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two kinds. A geographic profile, like one starting with <code>jp.</code>, routes only between Tokyo and Osaka. A global profile can route anywhere, for more capacity.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So <code>jp.</code> keeps the text in Japan.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The processing stays in Japan. Our app runs in Tokyo, and the model may run in Tokyo or Osaka. Here's the path of one call.</p></div></div>
-</div>
+    <p>An inference profile selects a supported inference route. Some models require a profile for on-demand use. Geographic profiles restrict processing to their documented destination set, while global profiles allow a broader set.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="App code calls the Converse API, which goes through an application inference profile tagged per feature, then a jp. geographic profile, then reaches the model running inside Japan in Tokyo or Osaka.">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
@@ -460,14 +434,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The two profile layers do the deciding. One names the feature that pays; the other keeps processing inside Japan.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does a request sent to Osaka come back slower?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Sometimes a little. For a verdict of a few words, the time the model spends writing matters more than the distance.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Wait, two profiles?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The <code>jp.</code> one is AWS's. The other is an application inference profile: one you create yourself and tag.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why create one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So the bill can be split by feature. We make one per feature, each wrapping that feature's <code>jp.</code> profile.</p></div></div>
-</div>
+    <p>Quickturn's Japan-residency example uses a Japan geographic profile where the chosen model supports it. Confirm destination Regions for the exact profile before making a residency claim.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 344" role="img" aria-label="The jp. profiles at the center, with an application inference profile per feature around it: grading, explanations and card generation; each profile's tag lets Cost Explorer split spend by feature.">
       <line x1="100" y1="80" x2="200" y2="172" class="ln"/>
@@ -487,21 +454,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Every feature calls its model through its own tagged profile. Cost Explorer then shows what grading costs apart from the rest.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can answer "what does grading cost?" without guessing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. One catch: the tags take up to a day to appear, and they only count from when they're activated.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is why we create them before launch, not after.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And that error you saw? These models require a geographic or global profile for on-demand calls. A bare model id won't work.</p></div></div>
-</div>
+    <p>Application inference profiles wrap supported sources and provide feature-level tagging. Create and activate cost-allocation tags before relying on their billing reports. Delayed billing data is useful for attribution, not a real-time call budget.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>On demand or batch</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is every call on demand?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Some work can wait. Bedrock also has batch inference.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How is it different?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You put a file of requests in S3. Bedrock returns the results later, as another file.</p></div></div>
-</div>
+    <p>On-demand inference serves interactive work. Batch inference places requests and results in S3 for work that can wait, with availability and discounted pricing depending on the supported model and route.</p>
   <table>
     <thead><tr><th></th><th>On demand</th><th>Batch</th></tr></thead>
     <tbody>
@@ -511,29 +468,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <tr><td>Good for</td><td>grading an answer</td><td>cards overnight</td></tr>
     </tbody>
   </table>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Half price, just for waiting?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For supported models, batch costs half of on demand, as checked in September 2026.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which of ours go where?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Grading a learner's answer is on demand. The learner is waiting for the verdict.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And cards?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Generating a hundred cards overnight is batch. Nobody is waiting, so we take the lower price.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if one request in the file fails?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each result in the output file carries its own status. The pipeline sends only the failed ones again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one bad card doesn't fail the whole night's run.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The other ninety-nine are already done.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does structured output still work in batch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, and with cross-region profiles too. So the card pipeline gets the same typed results.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have put everything on demand, to keep it simple.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is simpler. But anything that can wait for hours is paying double for speed nobody needs.</p></div></div>
-</div>
+    <p>Card generation can wait; a requested explanation cannot. Track each batch result and retry failed records rather than regenerate successful cards. Confirm structured-output support for the selected batch path instead of assuming every Bedrock model has identical features.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Residency against model choice</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not use the global profile everywhere? More capacity sounds better.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the trade. Let me compare the two.</p></div></div>
-</div>
+    <p>Model choice and processing location must be evaluated together. A newer model with only a global route may not meet a Japan-only requirement. Quickturn's dated model examples illustrate that constraint; they are not a permanent availability list.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="A jp. profile may use Tokyo and Osaka, keeps processing in Japan, has less capacity and may get the newest models later; a global profile may use any region, gives no residency, has more capacity and gets the newest models first.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">jp. profile</text>
@@ -553,44 +492,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The residency row decides it for Quickturn. The last row is the price: a newer model may exist only on a global profile.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our learners are mostly in Japan, so residency, where the data is processed, matters.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Grading runs on Claude Haiku 4.5 through its <code>jp.</code> profile. Card generation uses a Sonnet-class model through a <code>jp.</code> profile, where one exists.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where one exists?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When we checked in September 2026, Sonnet 4.6 had a global profile, and no <code>jp.</code> profile was confirmed. So before moving past Sonnet 4.5, we check first.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And why Bedrock at all, instead of the vendor's own API?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>IAM, one bill, and logs in our own account. The cost is that new features sometimes arrive on Bedrock later.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Has residency ever blocked a launch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, an internal agent served staff in Europe. Legal review asked where the text was processed, and where the logs were.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What did they answer?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A geographic profile, and invocation logs in the same region. They settled it before launch, not after.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say how you'd explain that error to the next person who hits it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Bedrock gives one API shape for many models, inside our account, with IAM, one bill and our own logs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The inference profile decides where a request runs. Our <code>jp.</code> profile keeps processing in Japan, and our own tagged profile decides which feature pays.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything that can wait for hours goes to batch, at half price.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the catch with <code>jp.</code>?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A newer model may only have a global profile at first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add the practical step: create the tagged profiles before launch. Their cost data only starts from the day they're activated.</p></div></div>
-</div>
+    <p>Document both inference destinations and log storage. IAM integration and one bill are useful, but they do not by themselves establish data residency. Recheck support before each model or routing change.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Bedrock puts many models behind one API shape, inside your account, with IAM, billing and logs.</li>
       <li>An inference profile decides where a request runs; a tagged profile per feature splits the bill.</li>
-      <li>Work that can wait goes to batch at half price; residency can limit which new models you use.</li>
+      <li>Supported noninteractive work can use discounted batch inference; residency requirements constrain model and route choice.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
     <a class="prev" href="ch02.html"><span>Previous</span><b>What am I actually paying for in one LLM call?</b></a>
     <a class="next" href="ch04.html"><span>Next</span><b>Can an LLM return a type instead of a paragraph?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html">Geographic cross-Region inference</a>.</p>
 </div>
 </div>
 <script>

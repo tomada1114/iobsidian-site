@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Architecture pages">
-  <h2><a href="ch00.html">One-on-Ones: Architecture</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Architecture pages">
+  <h2><a href="ch00.html">Engineering Readers: Architecture</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Isn&#x27;t architecture just folders</span></a></li>
@@ -394,10 +394,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Architecture</b><span>Page 4 of 11</span></p>
+  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 4 of 11</span></p>
   <h1>Clean vs Hexagonal — what's actually different?</h1>
   <p class="lead">After this page you can answer "Clean or Hexagonal?" directly: the styles share one dependency rule, and Clean adds a prescribed inside. You can also say which parts a small team keeps and which it leaves out.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -409,23 +409,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>When is the full version worth it?</li>
     </ul>
   </nav>
-  <p class="stage">The kitchen. Leo is holding a coffee and his phone.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Three pictures, one rule</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I did a mock interview yesterday. They asked, "Clean or Hexagonal, which did you use, and what's the difference?" I couldn't answer.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did you want to say?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That we use Clean, I guess. But then I remembered we don't have "interactor" classes, one class per operation. So maybe we aren't clean at all?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's go one step at a time. First, what do you think Clean Architecture is?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A folder template. entities, usecases, interfaces, frameworks. And you pick it instead of hexagonal.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how it's often taught, and it hides the main point. Let's start with what the styles share.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Onion architecture, from Jeffrey Palermo: the domain model, the core business objects, sits in the middle. Around it come domain services, then application services. UI, infrastructure and tests sit in the outer ring.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the difference between domain and application services?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Domain services hold business rules that don't fit one object. Application services run a task step by step: load, decide, save.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Clean is Robert C. Martin's?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Entities, use cases, interface adapters, frameworks and drivers. And one rule he states plainly: source code dependencies point only inward. Let me draw his rings.</p></div></div>
-    </div>
+    <p>Onion architecture places a domain model at the center, with domain and application services around it and infrastructure outside. Domain services express rules that do not fit one object; application services coordinate tasks such as loading, deciding and saving. Clean Architecture describes entities, use cases, interface adapters, and frameworks or drivers, with source-code dependencies pointing inward.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="Clean architecture's rings: frameworks and drivers contain interface adapters, which contain use cases, which contain entities at the center; dependencies point inward.">
         <rect x="8" y="8" width="384" height="284" rx="10" class="zone-soft"/>
@@ -441,28 +427,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Clean architecture nests rings around the entities. Whatever the ring names, the one rule is that every dependency points toward the center.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the entities in the middle are like onion's domain model?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes: the core business objects and their rules. Use cases are the things the app does, like "finish a round".</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And hexagonal is inside versus outside, with ports between.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So look at all three. What do they agree on?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The core doesn't know the database or the web framework.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the shared rule. Three pictures of it.</p></div></div>
-    </div>
+    <p>Hexagonal architecture emphasizes the boundary between application and outside technologies. All three can protect business rules from storage and framework details. Their diagrams are useful when they explain actual dependencies rather than serve as mandatory folder layouts.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The difference is the inside</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what's the difference? The interviewer clearly expected one.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the direct answer. Hexagonal says nothing about how the inside is organized. It only defines the boundary.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And clean does say how?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Onion and clean both prescribe the inside: they say which parts go there. Separate rings for enterprise rules, true for the whole business, and application rules, true for this one app.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And clean names specific parts. A use case interactor is one class per operation, with input and output ports as the interfaces in and out of it.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what formats the result for the screen?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Presenters format the interactor's output. And data objects are mapped from one shape to another at each ring.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the short version is: clean is hexagonal plus a prescribed inside.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Let me draw the two boundaries.</p></div></div>
-    </div>
+    <p>Hexagonal architecture leaves the application's internal organization largely open. Onion and Clean offer more guidance about separating business rules from application workflows. A common Clean implementation uses interactors, input and output ports, and presenters, but the dependency rule does not require one class for every operation.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="Hexagonal draws a boundary with ports and leaves the inside blank; clean draws the same boundary but splits the inside into entities and use cases, plus presenters and output ports. The prescribed inside is the difference.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Hexagonal</text>
@@ -480,9 +449,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>Both styles keep technology outside a boundary. Only clean fills the inside with named parts, and that prescribed inside is the whole difference.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two short tables help here, because a comparison with many attributes doesn't fit in conversation. "Ceremony" in the second one means the extra code a style asks you to write.</p></div></div>
-    </div>
+    <p>The two approaches differ in how much internal structure they describe. The tables compare representative implementations; “ceremony” means the additional interfaces, mapping and wiring a team chooses to maintain.</p>
     <div class="tbl"><table>
       <thead><tr><th>Style</th><th>Its picture</th><th>What it prescribes inside</th></tr></thead>
       <tbody>
@@ -501,27 +468,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <tr><td class="key">Clean</td><td>the outer ring</td><td>high</td></tr>
       </tbody>
     </table></div>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So only layered puts the database at the center, where everything depends on it. The other three push it outward.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And the ceremony column is where teams actually differ in practice.</p></div></div>
-    </div>
+    <p>Conventional layering can leave policy dependent on data access. The inward styles move technology implementations outside the protected core. Teams should inspect their actual arrows, because the same style label can describe substantially different code.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What Quickturn took and left</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what are we, then?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We took the dependency rule. And we took a composition root for each deployable, each thing we deploy.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Composition root?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mark Seemann's term. It's the one place where the real parts get wired together. We have one entry file for a local run and one for Lambda.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each one passes in the stores, the catalog, the authenticator, the clock and the ids.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. Everything else takes what it's given.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the interactor classes?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Left out. A command is a plain async function. It takes its dependencies, a request context and the command data.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like <code>startRound(deps, context, command)</code>.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And no presenters or output ports: a command returns its view as a value, built by a plain function.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the data objects mapped at every ring?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Also left out. Domain types pass straight through the application. The one mapping is at the HTTP edge, where the contracts package defines the request and response shapes.</p></div></div>
-    </div>
+    <p>Quickturn adopts inward dependencies and a composition root for each executable entry point. A composition root wires the real store, catalog, authenticator, clock and ID generator together. Commands elsewhere receive those dependencies rather than locate them globally.</p>
+    <p>Commands are plain async functions such as <code>startRound(deps, context, command)</code>. They return values without separate presenter classes or output ports. Domain types pass through the application, and request and response shapes are mapped at the HTTP boundary.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 288" role="img" aria-label="What Quickturn took from clean architecture, the dependency rule and a composition root, next to what it left out: interactors, presenters, output ports and per-ring data mapping.">
         <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Took</text>
@@ -538,51 +490,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>The two columns are the same height on purpose. We took two things and left four, and the two we took carry most of the value.</figcaption>
     </figure>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why leave all that out, though? It's in the book.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because our domain is already plain functions over plain data. Extra rings would add translation code, and nothing needs a second translation.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Let me try it on a real case. Say we add a "hint" to each card. What changes?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Walk me through it.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The domain type gets a field. The decide function uses it. The contracts package adds it to the response schema. That's it?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's it. Three places, and each one has a reason to change.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>With full clean, I'd also touch a use case output object, a presenter, and a mapper between rings.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Each of those would copy the same field from one shape to another. Nothing would decide anything.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the ceremony isn't wrong. It's just paying for a problem we don't have.</p></div></div>
-    </div>
+    <p>Adding a card hint illustrates the trade. Its domain type gains a field, the decision function uses it, and the API contract exposes it. Extra output objects, presenters and ring-to-ring mappers would each copy the same field unless they had a distinct responsibility. Quickturn avoids those copies because it currently needs only one presentation shape.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When the full ceremony pays</h2>
-    <div class="dialog">
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the full version ever right? Or is it always too much?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It pays in some places. Large teams, where the structure keeps many people from breaking each other's work.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Several delivery mechanisms that need different presentation, like a web page, a report and a voice interface from one use case. Presenters are worth what they cost there.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a domain object model you need to protect from UI shapes?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Rich classes keep data and behavior together. If your domain has them, mapping at each ring stops a form field from leaking into an entity.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed the main cost is performance. All that mapping must be slow.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Almost never. Copying a few objects is cheap for a computer. The cost is for people: files to open, names to keep in sync, reviews that get longer.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the cost is time and attention, not milliseconds.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's the budget a small team runs out of first.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And for us?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For a small team, every mapping and interactor is paid on every change. A new field would touch six places instead of three.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my interview answer shouldn't be "we used Clean".</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Say "we used the dependency rule; here's what we left out, and why". That answer shows judgment, not just vocabulary.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if they push, "then you're not really clean"?</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then say which condition would change your mind. "If we added a second presentation for the same use case, we'd add presenters there."</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's much better than saying nothing.</p></div></div>
-    </div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-    <div class="dialog">
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Try it now. The interviewer asks again.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hexagonal, onion and clean all say the core doesn't depend on the database or the framework; classic layering is the exception. Hexagonal draws only the boundary.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Clean and onion also prescribe the inside. Clean adds use case interactors, presenters, output ports and mapped data at each ring.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And your team?</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We kept the dependency rule and one composition root per deployable. Commands are plain functions, views are values, and we map only at the HTTP edge.</p></div></div>
-      <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We skipped the rest because our domain is plain data and nothing needed a second translation.</p></div></div>
-      <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say when you'd change it: a second presentation, or a much bigger team. That line is what makes your answer sound like a decision.</p></div></div>
-    </div>
+    <p>More structure can pay for itself when several teams need explicit ownership, one use case supports several presentations, or an object model must be insulated from UI data. A report, web page and voice interface may each justify their own presenter.</p>
+    <p>The main cost is often developer attention: more files, names and mappings to update. For Quickturn's small team, a second presentation for the same use case would be a concrete reason to add a presenter. A review should state the adopted dependency rule, the omitted machinery and the condition that would justify adding it.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -596,7 +509,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch03.html"><span>Previous</span><b>Should every dependency get a port?</b></a>
     <a class="next" href="ch05.html"><span>Next</span><b>Isn't DDD just another architecture style?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

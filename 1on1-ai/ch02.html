@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: AI in Production pages">
-  <h2><a href="ch00.html">One-on-Ones: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
+  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
@@ -396,10 +396,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AI in Production</b><span>Page 2 of 13</span></p>
+  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 2 of 13</span></p>
   <h1>What am I actually paying for in one LLM call?</h1>
   <p class="lead">After this page you can explain tokens, the context window and why the same prompt can get a different answer. You can also estimate what a call costs and how long it takes, and when caching helps.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -411,23 +411,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>How did one support bot's bill keep growing?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. The Bedrock playground is open on the dev account.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Tokens and the context window</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I sent the same grading prompt twice. Same learner answer, same verdict, but two different explanations.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's normal. We'll get to why. What else did you notice?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The console shows input tokens and output tokens. I have no idea what they cost, or even what a token is.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A token is a piece of text. Often part of a word, sometimes a whole word, sometimes punctuation.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a hundred words is a hundred tokens?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No fixed ratio. It differs by language and by model. So measure it with real text, don't guess.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay. And why so many input tokens? My learner answer was one sentence.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the model remembers nothing between calls. Every call sends the whole context: system prompt, instructions, examples, then the input.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The playground felt like a conversation, though.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The playground resends the history each time. The model itself starts from zero on every call.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a limit on how much I can send?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The context window. It limits input and output together. Let me draw what fills it for grading.</p></div></div>
-</div>
+    <p>Tokens are model-specific pieces of text, not a fixed number of words or characters. A call's context includes the instructions, examples, input and any conversation history supplied by the application. Conversational memory is provided by that surrounding system.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="The context window holds the system prompt, the rubric, the examples and the learner's answer, with a slot reserved for the output; only the learner's answer changes from call to call.">
       <rect x="8" y="8" width="384" height="316" rx="10" class="zone-soft"/>
@@ -440,27 +426,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Only the learner's answer changes from call to call. Everything above it is the same each time, which is why it can be cached.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Who decides how much room the output gets?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We do. The caller sets a maximum output length, called max tokens. The model stops there, even mid-sentence.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So set it high, to be safe?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Too high, and a rambling answer costs more and takes longer. Too low, and a verdict gets cut off halfway. We set it just above the longest verdict we've seen.</p></div></div>
-</div>
+    <p>The context and output limits constrain the request. Set an output cap high enough for a complete verdict and low enough to bound cost and latency. Monitor truncation rather than infer that the longest previously observed answer is an absolute upper bound.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Why answers change, and what takes time</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why two explanations for the same input?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model writes one token at a time. For each one, it has a list of likely next tokens, each with a probability.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it doesn't always take the most likely one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not always. Sampling settings decide how adventurous that pick is. Temperature is the best known: lower means safer choices.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then I set the temperature to zero and get the same answer every time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common guess, and it's wrong. Even at a low temperature, providers don't promise identical output.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what do we do about it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Design for it. We store the first result, instead of expecting a repeat to agree. A retry must not grade the same answer twice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And speed? My second call was faster than the first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Latency has two parts you control little, and one you control a lot. Here's the shape of one call.</p></div></div>
-</div>
+    <p>Models generate tokens using learned probabilities and sampling controls. Lower temperature can reduce variation but does not guarantee identical results. Quickturn stores the first accepted grade instead of requiring a repeated call to reproduce it.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 236" role="img" aria-label="An illustrative latency waterfall for one call: a short bar for the network, a medium bar for time to the first token, and the longest bar for writing the output tokens.">
       <text x="16" y="28" class="t-sm">Network</text>
@@ -473,23 +443,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The shape is illustrative, not measured. Output is written one token at a time, so its length drives most of the wait.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a long explanation is slow even if the input is short.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Output length drives latency. That's one reason our grader returns a short, typed verdict, not an essay.</p></div></div>
-</div>
+    <p>Latency includes request and queue overhead, processing the input and generating output. Longer responses often take longer, which is one reason the grader returns a compact verdict rather than a full essay. Measure the actual endpoint instead of predicting latency solely from token count.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Price per call, and caching</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now the money. I assumed we pay per request, like an API gateway.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual guess. Two short calls can cost less than one long one. You pay for tokens, not requests.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How is a call priced, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Per million input tokens and per million output tokens. Output costs several times more than input.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can we put a number on a grading call?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An illustration, with assumed token counts. Say 1,500 tokens in and 200 out, on Claude Haiku 4.5.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the price?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One dollar per million input tokens, five per million output, as checked in September 2026. Let me draw it.</p></div></div>
-</div>
+    <p>A token-priced call depends on input and output volume, with distinct rates. A comparison needs the same model, endpoint, Region and date. Two small calls may cost less than one larger call.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 236" role="img" aria-label="An illustrative grading call with 1,500 input tokens and 200 output tokens at the September 2026 Haiku 4.5 price: input costs $0.0015, output $0.0010, and the total is $0.0025, about a quarter of a cent.">
       <text x="16" y="28" class="t-sm">Input, 1,500 tokens</text>
@@ -505,51 +463,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Token counts are assumed; prices are Claude Haiku 4.5 on Bedrock, checked 2026-09-23. Output is a small part of the tokens but 40% of the cost.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A quarter of a cent. That's nothing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At a hundred answers a day, it's about 25 cents. The shape matters more than the number: output is expensive, and input is sent every time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is that price the same in Tokyo?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We haven't verified the Tokyo price through the Japanese profiles. So I won't guess.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And caching? You said the top part can be cached.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Prompt caching. Put the stable part first, the instructions, rubric and examples. Put the changing part, the learner's answer, last.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the provider reuses the stable part?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A cache write costs more than normal input, and a cache read costs much less. The cache is short-lived.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it only helps if identical beginnings arrive close together.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That was our question too: grade each answer as it arrives, or a whole round at once?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Per answer means many calls with the same prefix, close together.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So we measured real latency and cost in a short experiment, a spike, before choosing. Every call records four counts: input, output, cache read and cache write.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And more examples in the prompt?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Higher quality, and a higher cost on every call. That's the trade you make on each example you add.</p></div></div>
-</div>
+    <p>The cost illustration uses 1,500 input and 200 output tokens at explicitly assumed rates. It is not a quote for every Tokyo inference profile. Prompt caching can discount a stable prefix, while cache writes and expiry have their own rules.</p>
+    <p>Quickturn keeps instructions and examples before the changing answer and records ordinary input, output, cache-read and cache-write usage separately. It measures per-answer versus per-round grading, including latency and failure behavior, before choosing. Extra examples earn their cost only if evaluation shows a useful improvement.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>A bill that grew every week</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does this go wrong in practice?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At my last company, a customer-support agent's bill grew every week. Traffic hardly changed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what grew?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each turn resent the whole history, plus the description of every tool. Long conversations cost far more than short ones.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the model remembers nothing, so you send it all again.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And they only charted requests, so the growth was invisible.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Invisible how? The bill showed it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The bill showed only the total, once a month. Nobody could see which conversations drove it, or when it started.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How did they fix it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four changes. Trim or summarize old turns. Cache the fixed prefix. Cap the output length.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the fourth?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Chart tokens per conversation, not just requests. That's why our grading calls record the model id, prompt version, all four token counts, latency and an estimated cost.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Someone asks why the playground gave two answers and what it cost. Your turn.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A call is billed and timed in tokens: everything I send each time, plus everything it writes back.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The output is the slow, expensive part. The model writes it one token at a time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model neither remembers nor repeats itself. So I send the full context with the stable part first, so it can be cached.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the two explanations?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We store the first answer instead of hoping for the same one twice.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out when caching pays: only when identical beginnings arrive close together. That's what decided per answer against per round.</p></div></div>
-</div>
+    <p>An agent's bill can grow without traffic growth if each turn resends a longer history and more tool definitions. Request counts alone conceal that change. Track tokens and cost per conversation, trim irrelevant history, use supported caching and bound the output.</p>
+    <p>Quickturn records model, prompt and rubric versions with latency and usage. That connects a cost increase to the particular task and configuration that produced it.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -563,7 +483,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch01.html"><span>Previous</span><b>Does every AI feature need to be an agent?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>Why does Bedrock want an inference profile, not a model?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

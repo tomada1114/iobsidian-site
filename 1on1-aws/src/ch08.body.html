@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 08 · A crash halfway through a write | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 8 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 8 of 14</span></p>
   <h1>What if the app crashes halfway through a write?</h1>
   <p class="lead">After this page you can explain why several related writes belong in one DynamoDB transaction. You can also explain version conditions, and how a transaction's limits shape commands.</p>
-  <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,23 +15,10 @@
       <li>How do the same conditions guard money?</li>
     </ul>
   </nav>
-  <p class="stage">Leo's desk. His feature writes an answer, then updates the learner's points.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Half-done writes</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Quick question about my code. It writes the answer, then in a second call adds to the learner's points. What if the function times out between the two?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think happens?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The answer is saved, but the points aren't. Then the client retries, and it's fine?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's follow the retry. The client resends the answer. What does your first call do with it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It writes it again. Oh. Two answers, and then the points are added once. Or twice, if the first attempt had got further.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A retry doesn't repair a half-done write. It can make it worse. Let's step back and look at what we store.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The answers, and the points.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The answers are an append-only log. We only ever add to it. The points are a projection: a summary derived from the log.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why store the summary at all? We could add up the log every time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because reads should stay point lookups, one key each. So we keep projections: the learner's points, each day's tally, and each card's memory state.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And those must always agree with the log.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the job. Two separate writes can leave them disagreeing, forever. Let me compare the two ways.</p></div></div>
-</div>
+    <p>Saving an answer and updating points in separate writes creates a partial-success problem. A crash between them leaves the log and derived totals disagreeing, and retrying can duplicate one side rather than repair it.</p>
+    <p>Quickturn treats the answer log as history and points, day counts and memory state as projections. The commit must include every change required for the accepted answer's meaning.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="With two separate writes, a crash after the first leaves the answer without points, a resent answer is counted twice, and two devices can overwrite each other; with one commit, a crash writes nothing, a resent answer fails harmlessly and a second device is detected by its version.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Two writes</text>
@@ -51,26 +38,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One commit with conditions</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how do we write both at once?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With TransactWriteItems. It applies up to 100 actions, all or nothing. One rule: no two actions may touch the same item.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And "all or nothing" solves the crash. What solves the resend?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Conditions. A new answer is a Put with the condition <code>attribute_not_exists</code>: only write it if no item has this key yet.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a resent answer fails its condition, and nothing is counted twice.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Our code reads again, sees the answer is already saved, and skips it. The client gets success, not an error.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the points?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two devices might add points at the same time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Last one wins, and one update is lost.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So each summary carries a version number. We read it with its version, and the Put says: only write if the version is still the one I read.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone else wrote first?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The condition fails, and the whole transaction fails with it. That's optimistic concurrency: no lock, just a check at the end.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about items we read but don't change? Like checking the round is still open?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those get a ConditionCheck, an action that writes nothing and only checks a condition. If the round closed meanwhile, the commit fails.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This sounds like a SQL transaction.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here's the big difference. In SQL you often open a transaction, run code, and commit.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And in DynamoDB?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nothing stays open while code runs. Let me draw the cycle.</p></div></div>
-</div>
+    <p>TransactWriteItems groups up to 100 actions with a 4 MB aggregate item limit. Actions cannot target the same item twice. A new answer carries a nonexistence condition; an updated aggregate carries its expected version. A condition check can guard a record that is not being changed.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The application reads items with their versions, decides in pure code and submits one commit to DynamoDB; if a condition fails, it reads again and decides again, up to three attempts, until the commit is accepted.">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
@@ -89,42 +57,17 @@
     </svg>
     <figcaption>No lock is held while the code thinks. The database only checks, at the end, that nothing changed since the read.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So: read with versions, decide in pure code, submit one commit.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And on a conflict, read again and decide again. We try at most three times in total. After that the client gets a conflict code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything the store refuses before sending?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. A commit over 100 items, one that names a key twice, or one that tries to change an existing answer. Answers are append-only, so updating one is always a bug.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And how do we know the in-memory store behaves the same?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same contract suite runs against the in-memory store and against DynamoDB running locally. Both must refuse and accept the same commits.</p></div></div>
-</div>
+    <p>The application loads, decides and sends a complete conditional commit rather than holding an open database transaction while running its rule. On conflict it reloads and recomputes, with a bounded three-attempt policy.</p>
+    <p>The in-memory store and local DynamoDB adapter run the same contract cases. Tests reject oversized commits, duplicate target keys and attempts to mutate append-only answers. The fake provides evidence about those tested semantics, not every cloud failure mode.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What transactions cost</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not put every write in a transaction, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Transactional writes cost twice the write capacity of plain writes. That's the first cost.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the 100-action limit?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It shapes how we cut commands. Answers are committed as they arrive, a batch at a time. Finishing a round commits only the aggregates, not every answer again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What if many answers arrive for the same learner at once?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They all update the learner's stats item. A busy shared item like that causes conflicts and retries. It's fine at our size, but it's the first thing I'd watch.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can the summaries still drift from the log?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, if a new code path forgets a projection. The transaction only protects what you put in it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what catches that?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two safety nets. A job that rebuilds the summaries from the log. And contract tests that check each command's commit contains every projection it should.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Are there cases where a transaction is too much?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When only one item changes, a single-item atomic update is enough, like adding to a counter. And when summaries can lag a little, a stream can update them asynchronously.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A stream meaning DynamoDB tells another function about each change?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The summary updates a moment later. That's fine for a weekly report, not for a points number the learner just earned.</p></div></div>
-</div>
+    <p>Transactional capacity costs more than ordinary writes and imposes limits on command size. A shared learner-totals item can also create contention if many writers update it. Count actual actions when chunking offline answers.</p>
+    <p>Atomicity covers only the submitted actions. A forgotten projection remains a logic bug, so command tests and rebuild tooling still matter. Single-item changes may need only an atomic update; asynchronous projections can suit reports whose readers accept lag.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Conditions that guard money</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where else does this pattern show up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anywhere money moves. Think of a usage ledger for paid AI calls. We have one per learner, for grading typed answers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it work?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Four steps. Let me draw them.</p></div></div>
-</div>
+    <p>Model-call accounting has a similar conditional boundary. Reserve a maximum affordable amount before starting, record the attempt under a stable job key, then settle the actual cost or reconcile a failed attempt.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Reserve the maximum cost only if the balance covers it, call the model, settle by refunding the unused part, and expire any reservation that never settles.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -143,26 +86,7 @@
     </svg>
     <figcaption>The reservation is a conditional update. It succeeds only when the balance can cover the worst case, so a learner can never spend past their budget.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why reserve the maximum, not the real cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We don't know the real cost until the model answers. Reserving the maximum means we never overspend, even if the answer is long.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the call is retried?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A job key makes a retried call charge once. It's the same idea as the answer ids: the condition guards the money.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So "attribute_not_exists" and version checks aren't just database details.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. They're how you make "this happens once" true, whether it's an answer or a charge.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So how would you explain your fix in the pull request?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One answer changes the log and three summaries. So all of them go in one transaction: everything is written, or nothing is.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Conditions do the real work. A new answer must not already exist, and a summary must still be at the version we read.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If someone else wrote first, we reload and decide again, instead of holding a lock.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the limits?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>100 actions, and one action per item. They decide how we cut commands, like committing answers as they arrive.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your fix still leans on a safety net: a transaction only covers what you put in it. The rebuild job and the contract tests catch a projection someone forgot.</p></div></div>
-</div>
+    <p>Conditions can prevent a repeated job from charging the learner twice. They do not themselves stop a provider call already in flight. Reservation expiry, attempt coordination and recovery must therefore be designed alongside the transaction.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -176,5 +100,5 @@
     <a class="prev" href="ch07.html"><span>Previous</span><b>List the questions first, then design the table</b></a>
     <a class="next" href="ch09.html"><span>Next</span><b>Why write infrastructure as code at all?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html">DynamoDB transactions</a>.</p>
 </div>

@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Operations and Quality pages">
-  <h2><a href="ch00.html">One-on-Ones: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
+  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html" aria-current="page"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
@@ -395,10 +395,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 1 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 1 of 12</span></p>
   <h1>Isn't observability just a fancy word for monitoring?</h1>
   <p class="lead">After this page you can explain how observability differs from monitoring. You can also say which question metrics, logs and traces each answer, and where a detail like a learner id belongs.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -410,29 +410,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>Where do traces earn their cost?</li>
     </ul>
   </nav>
-  <p class="stage">The kitchen, standing with coffee. Leo spent an hour guessing yesterday.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The problem with a dashboard</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A learner reported that one round took ages to load yesterday. I opened the dashboard, and p90 latency looked normal.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>p90 meaning?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Ninety percent of requests were faster than that number. So most learners were fine.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the one who wasn't?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's the thing. I had no idea how to find that one request. I spent an hour guessing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did you expect the dashboard to show?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Something red, I suppose. We have alarms and graphs, so I thought we had observability.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common view: observability means a dashboard and some alarms. If the graphs are green, the system is fine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Isn't it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A dashboard shows averages and percentiles over everyone. It can't tell you about one learner's request.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But one slow request should show up somewhere, shouldn't it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One slow request in a thousand doesn't move p90 at all. And even when a percentile moves, it can't tell you which request was slow.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it answers "are things broadly okay?"</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. That's monitoring: watching failure modes you knew about in advance. Is the error rate up? Is latency climbing?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And observability is something else?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Being able to ask a question you didn't plan for, without shipping new code. Like "what was different about this one request?"</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without new code. So the answer has to be in the data already.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Here's the difference in one picture.</p></div></div>
-</div>
+    <p>A normal p90 latency graph does not explain one learner's slow round. It means 90 percent of measured requests were at or below that value; a rare slow request may leave it unchanged. Monitoring exposes known failure signals, while observability supports investigating behavior that was not anticipated in a particular dashboard.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="Monitoring watches questions known in advance, needs new code to answer a new question, and typically uses dashboards and alarms; observability handles questions nobody planned, needs no new code for a new question, and typically uses rich logs and traces.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Monitoring</text>
@@ -449,25 +429,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The middle row is the real difference. With observability, a new question is a new query, not a new deploy.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we still need monitoring.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. It tells you something known broke. Observability helps you find out why.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an alarm fires, and then I go digging.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or a learner writes in, like yesterday, and no alarm fires at all. Then observability is all you have.</p></div></div>
-</div>
+    <p>Both are useful. An alarm can reveal widespread errors, and a request-level record can explain an isolated complaint even when no alarm fired. Begin with the question that needs answering rather than with whichever graph is easiest to open.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Three signals, three questions</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>People always say "metrics, logs and traces". Are those just three tools?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of them as three questions. Metrics are cheap numbers, collected over time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like requests per minute.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. They answer "how much, how often, and is it getting worse?"</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And logs?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One record per event, with details. They answer "what happened to this request?"</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And traces?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A tree of timed steps, called spans, across services for one request. They answer "where did the time go?"</p></div></div>
-</div>
+    <p>Metrics summarize frequency, volume and trends. Logs describe events with searchable fields. Traces connect timed steps across a request or job. Each signal serves a different investigative need.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="One slow request at the center, with three signals around it: metrics answer whether it is happening a lot, logs answer what happened to this one, and traces answer where the time went; for a one-function request at Quickturn, the log answers it.">
       <line x1="100" y1="80" x2="200" y2="156" class="ln"/>
@@ -487,35 +453,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>For yesterday's slow round, one Lambda and one table, the log line answers it. Metrics only say whether it happens often.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So for my slow round, the log.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Every API request writes one structured JSON log line: request id, operation, outcome, status and duration in milliseconds.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I search for that learner's rounds yesterday, and sort by duration.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you've found the request in a minute, not an hour. Then you read what else the line says.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why didn't I find it that way?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You started from the dashboard, which can only show everyone. Start from the question.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the line shows the request took five seconds, what then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then the metrics help again. Were DynamoDB reads throttled in that same minute? The log finds the one; the metrics say whether it was part of something wider.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the signals work together, not one instead of another.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Each one is cheap for a different kind of question.</p></div></div>
-</div>
+    <p>Quickturn logs request ID, operation, outcome, status and duration. Find the reported learner's request and time, then compare service metrics for that interval. A trace can locate the slow step if the request crosses several components.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Cardinality and cost</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we add a metric per learner? Then the dashboard would show each learner's latency.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. It needs one word: cardinality.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which means?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How many distinct values a field can take. Status code has a handful. Learner id has one per learner.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a metric with a learner id label?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each unique label combination is its own time series, and you pay for each one. With every learner, that explodes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But in a log line?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same learner id is just a field. It costs a few bytes, however many learners there are.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then logs are cheap. Why not log everything?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Volume costs too, both writing and storing. One line per request, with the fields you'd search by, goes a long way.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And nothing like the learner's answer text?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Ids and outcomes, not personal content.</p></div></div>
-</div>
+    <p>Cardinality is the number of distinct field values. A metric labeled with each learner can create a growing number of time series; combinations multiply that count. An internal learner ID in a log is instead a searchable field, though the bytes still add storage cost and privacy obligations.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of the cardinality of the detail against the cost per unit of data: metrics are low cardinality and cheap; logs are high cardinality at moderate cost, which is where a learner id belongs; traces are high cardinality at the highest cost; low cardinality at high cost is rarely what you want.">
       <text x="44" y="18" class="t-sm">↑ Cost per unit of data</text>
@@ -533,47 +475,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>High-cardinality detail belongs in log lines, not in metric labels. Metrics stay low-cardinality and cheap.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So counts go in metrics, and details go in logs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the rule. Our metrics come from API Gateway, Lambda and DynamoDB: traffic, errors, latency, throttles.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the alarms watch those.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Five alarms and one dashboard. They catch the known failures. The logs answer the rest.</p></div></div>
-</div>
+    <p>Quickturn keeps metric dimensions bounded and logs IDs and outcomes rather than answers or card text. A small, intentional alarm set covers known failures. Neither small logs nor an internal ID make data automatically anonymous.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Where traces earn their cost</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If the log line answered my question, why do we have traces at all?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tracing is extra instrumentation and extra cost. With one Lambda and one table, a request log with a duration answers most questions.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when does it pay?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When one request crosses several steps or processes. An answer handed to the grading queue, for example.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The API writes the answer, the queue delivers it, a worker grades it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three steps, three log lines, maybe minutes apart. A shared trace id ties them together.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor agent?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Even more. One learner message fans out: plan, call the model, call three tools, call the model again.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a log line per step doesn't show which tool call was slow?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not without a shared trace id. That's where traces earn their cost.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does a trace look like on screen?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A timeline of bars, one per step, nested under the request. The longest bar is usually your answer.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Can we add tracing later, when we need it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the usual pitfall. Teams add traces after the first incident, and discover their steps never passed the id along.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the id has to travel from the start.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. That's why our API, the grading worker and the tutor agent are traced now, not after an incident.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And model calls?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each one records its own telemetry: tokens, latency, estimated cost. The prompt version is recorded with them.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A learner reports a slow round tomorrow. Walk me through how you'd think about it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Monitoring tells me a known thing broke. Observability lets me ask about one request I didn't predict.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Metrics are cheap counts, logs are per-event detail, and traces show time across steps.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd put a high-cardinality thing like a learner id in logs, not in metric labels.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And traces?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They earn their cost where one request spans several steps or services, like our grading job or the tutor agent.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One practical point for tomorrow: start from the learner's log lines, sorted by duration. The dashboard is for "is it widespread?", after you've found the one.</p></div></div>
-</div>
+    <p>Tracing earns its cost when work crosses steps: an API accepts an answer, a queue delivers it and a worker calls a model. A propagated trace or job ID ties events together even when they occur minutes apart.</p>
+    <p>The tutor can add several model and tool calls to one user turn. Instrument those paths before incidents, while deciding which content must stay out of telemetry. A long span suggests where time was spent, but investigation still needs to distinguish waiting, processing and external delay.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -587,7 +494,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
     <a class="next" href="ch02.html"><span>Next</span><b>What makes a log line actually useful?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

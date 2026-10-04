@@ -365,8 +365,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="One-on-Ones: Operations and Quality pages">
-  <h2><a href="ch00.html">One-on-Ones: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
+  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
     <li><a href="ch01.html"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
@@ -395,10 +395,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: Operations and Quality</b><span>Page 3 of 12</span></p>
+  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 3 of 12</span></p>
   <h1>What should wake someone up at night?</h1>
   <p class="lead">After this page you can explain why alarms should watch what users feel, not every cause you can measure. You can also say how to prove an alarm works, and when one alarm per event becomes noise.</p>
-  <p class="meta"><span>About 8 min read</span><span>The morning after an alarm email</span></p>
+  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -410,35 +410,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <li>What belongs on the one dashboard?</li>
     </ul>
   </nav>
-  <p class="stage">Morning. Leo got his first alarm email overnight, and it turned out to be nothing.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Symptoms, not causes</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I got an alarm email at 2 a.m. The Lambda function was throttled. I checked, and everything was fine by then.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How did that feel?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Awful, then silly. So should we add more alarms, to be safe? Or remove this one?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What does "safe" mean to you here?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That we catch every problem. CPU, memory, every metric we have.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who feels high CPU?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Nobody, directly. A learner feels a slow page, or an error.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the key split. A symptom is what users feel. A cause is one of many reasons behind it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And causes are what we can measure most easily.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, which is why teams alarm on them. But a cause can spike while every learner is fine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like my throttle last night.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Possibly. We'll come back to that one.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not alarm on causes as well? More warning can't hurt.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can. Each cause alarm is another email that may mean nothing. And a symptom alarm already catches any cause that turns into errors for users.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a list of symptoms worth watching?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The Google SRE book names four golden signals: latency, traffic, errors and saturation. Saturation means how full something is.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Four sounds manageable.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tom Wilkie's RED method fits a request-driven service like our API: rate, errors and duration. Brendan Gregg's USE method fits resources, like a table or a queue: utilization, saturation and errors.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So RED for the API, USE for DynamoDB.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's how we use them. Now map our five alarms onto them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The API's 5xx alarm is errors, and it's the symptom a learner sees. Function errors are errors too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the other three?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Function throttles, and table read and write throttles. Those are saturation.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Let me draw where each one sits.</p></div></div>
-</div>
+    <p>Page people for actionable user impact. High CPU or one throttle is a possible cause; failed saves or sustained latency are symptoms learners feel. Cause metrics aid diagnosis, but paging on every spike creates noise.</p>
+    <p>Latency, traffic, errors and saturation describe service health. RED emphasizes rate, errors and duration for request services; USE emphasizes utilization, saturation and errors for resources. Use those questions to choose signals, not to create alarms mechanically.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 364" role="img" aria-label="Five layers from the learner down: the learner, where symptoms are felt; CloudFront; API Gateway with the 5xx alarm; Lambda with the errors and throttles alarms; DynamoDB with the read and write throttle alarms.">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node-soft"/>
@@ -457,16 +432,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>An alarm you never saw fire</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do we know these alarms work at all? Last night was the first email I ever got.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not from one email. An alarm you have never seen fire is only a hope.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So we break something on purpose?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On dev, yes. We set the API function's reserved concurrency to 0, so it could run no copies at all.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then every request fails.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We sent five requests, and all five answered 503. Within about two minutes, the 5xx alarm and the throttle alarm went into ALARM.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the emails arrived?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both of them. Then we removed the setting, and the API came back.</p></div></div>
-</div>
+    <p>An alarm path needs a controlled exercise. Quickturn throttles development requests, confirms the expected API failures, observes alarm state and checks that the notification reaches its destination. It then restores capacity.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="Set reserved concurrency to 0, send five requests, they answer 503, the API 5xx and throttle alarms go to ALARM within about two minutes, the emails arrive, and the setting is removed.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -491,41 +457,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>The accented step is the proof. The alarm changing state is not enough; the message has to reach a person.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why does the email matter so much? The alarm already changed state.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because an alarm nobody receives is silent. The topic's email address is passed in at deploy time.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if a deploy runs without it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The subscription is removed. The alarms still change state, but no email goes anywhere.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds easy to miss.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It was. So the deploy workflow prints a warning when the address is missing, rather than failing quietly.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the proof has two halves: the alarm fires, and the message reaches a person.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you repeat the test after anything that touches the path.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a change to the topic, or to the deploy workflow.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It takes five minutes, and it tells you the one thing you can't learn any other way.</p></div></div>
-</div>
+    <p>A missing notification subscription can leave an active alarm unheard. Deployment checks expose that missing destination, and a repeated exercise after relevant changes confirms the complete path. An observed test is stronger evidence than the presence of an alarm resource.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Sensitivity and fatigue</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to my 2 a.m. email. Why did one throttle wake me?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Look at the settings. Each alarm fires on a single event in one minute: threshold 1. Missing data counts as OK.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So one throttled call is enough.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On dev, with one user, that's right. Any 5xx there is worth a look.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But with thousands of learners?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One 5xx in a minute is noise. You'd get emails every night, and you'd learn to ignore them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then a real one gets ignored too.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's alarm fatigue. It's how real incidents get missed.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what changes at scale?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You alarm on rates or ratios over longer windows. Say, more than two percent of requests failing over ten minutes.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And in prod?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In prod, Quickturn alerts when the error budget burns fast against its reliability targets. Dev keeps the threshold-one alarms.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Different rules for different places.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the question is different. On dev, "did anything break?" In prod, "are learners hurting?"</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a quick test for whether something deserves an alarm at all?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two questions. Does a user feel it? And is there a clear first action?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the answer is no?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it shouldn't page anyone. It's a dashboard line, a runbook to write, or it gets deleted. Every alarm needs an owner and a first thing to do.</p></div></div>
-</div>
+    <p>Development's sparse test traffic can make a single error worth inspecting. Production needs windows, minimum traffic and rates that distinguish noise from meaningful impact. Sustained error-budget burn is more useful than a page for every isolated failure.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A two-by-two matrix: whether a user feels it across, whether there is a clear first action down. Only when a user feels it and there is a clear first action should someone be paged; with a first action but no user impact it is a dashboard line; with user impact but no first action, write the runbook first; with neither, delete it.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">user does not feel it</text>
@@ -543,43 +479,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Only one corner earns a page. Both questions have to be yes.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where does my throttle land?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>On dev, it's a useful early sign. In prod, one throttle is a dashboard line. The alarm there watches a sustained rate, because saturation turns into errors next.</p></div></div>
-</div>
+    <p>Every paging rule has an owner, first action and runbook. Signals without an actionable response belong on a dashboard until that gap is fixed. Thresholds and missing-data treatment must match the actual workload.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>One dashboard</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what goes on the dashboard?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>API requests, API errors with 5xx and 4xx, and API latency at p90. Then function errors and throttles, function duration at p90, and table throttles.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why p90 and not the average?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An average hides the slow tail. If one learner in five waits four seconds, the average can still look fine.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And p90 shows that one in five.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Ninety percent of requests were faster than that number.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does all of this cost money?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The whole set is sized to fit CloudWatch's free tier: ten alarm metrics and three dashboards, as of 23 September 2026.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if someone adds a sixth alarm without thinking?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A test pins the set at five alarms and one dashboard. Adding one means changing the test, so a reviewer asks why.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does this apply outside a web API? Say, an internal AI agent.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The idea does. There, a 5xx is rarely what the user feels.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do they feel, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>"The task didn't finish," or "it took far too long." So you alarm on the task failure rate and on step timeouts.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Same rule, different symptom.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Start from what the user would complain about, then find the metric.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So, add alarms or remove one? Answer your own question.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Alarm on what users feel: errors, latency and saturation. RED for the API, USE for resources like the table.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Force every alarm to fire once, so you know the path to your inbox works.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Threshold-one alarms are fine for one user on dev. At scale they cause fatigue, so switch to rates.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the rest?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If nobody would act on it, it shouldn't page anyone.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One more piece: check the email subscription after every deploy. A missing address turns every alarm silent.</p></div></div>
-</div>
+    <p>Quickturn's dashboard combines request rate, 4xx and 5xx outcomes, latency percentiles, function duration and errors, and database throttling. A percentile reveals the tail better than an average, but does not identify the specific affected request.</p>
+    <p>Keep the monitored set intentional and review additions. AI tasks need completion and end-to-end timeout signals, because fast successful HTTP responses can still hide a task that never finished. Start from the user's complaint and work backward to a metric.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -593,7 +498,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <a class="prev" href="ch02.html"><span>Previous</span><b>What makes a log line actually useful?</b></a>
     <a class="next" href="ch04.html"><span>Next</span><b>How reliable is reliable enough?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
 </div>
 <script>

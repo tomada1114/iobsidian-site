@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 11 · What happens at sign-in | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 11 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 11 of 14</span></p>
   <h1>What actually happens when a learner signs in?</h1>
   <p class="lead">After this page you can explain OAuth and OpenID Connect, and walk through the authorization code flow with PKCE. You can also say which token the API checks, and how.</p>
-  <p class="meta"><span>About 8 min read</span><span>At the whiteboard</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,32 +15,14 @@
       <li>What does a managed identity service cost us?</li>
     </ul>
   </nav>
-  <p class="stage">The whiteboard room. Leo is chasing a 401 error.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Who you are, what you may do</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I pasted an access token into a JWT decoder website. The user's id was right there in plain text, under <code>sub</code>.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What did you conclude?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That the API could just read <code>sub</code> and skip the verification library. It looks like a lot of machinery for reading one field.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Anyone can write a token that decodes. Decoding shows you what it claims, not whether it's true.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Hmm. Then what makes it true?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We'll get there. First, two words people mix up. Authentication answers "who is this?" Authorization answers "what may they do?"</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And OAuth is the login protocol.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common mix-up. OAuth 2.0 is about authorization: letting one program act for a user, with limits.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then where does login come from?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>OpenID Connect. It sits on top of OAuth and adds identity: a standard sign-in and an ID token.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Who are the players?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>OAuth names four roles. The resource owner is the learner. The client is our web backend.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the other two?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The authorization server is Cognito, which signs people in and issues tokens. The resource server is our API, which holds the data.</p></div></div>
-</div>
+    <p>Decoding a JWT reveals its claims but does not verify them. Anyone can construct token-shaped text with a desired subject. Authentication establishes the caller; authorization decides which operation and data that caller may access.</p>
+    <p>OpenID Connect adds identity to OAuth's authorization framework. In Quickturn, the learner is the resource owner, the web backend is the client, Cognito issues tokens, and the API serves protected resources.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The code flow with PKCE</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what happens when a learner clicks "Sign in"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The authorization code flow, with PKCE. Let me draw it.</p></div></div>
-</div>
+    <p>Quickturn uses authorization code flow with PKCE. The login endpoint creates state and a verifier, then sends the verifier's SHA-256 challenge to Cognito. The callback carries a short-lived code rather than the final tokens.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="The learner clicks sign in; the API makes a state and a verifier and redirects with the challenge; the learner signs in on the managed login page; Cognito redirects back with a code and the state; the backend sends the code, verifier and secret to the token endpoint; tokens are issued to the backend and never to page scripts.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -65,35 +47,11 @@
     </svg>
     <figcaption>The browser only ever carries a one-time code. The tokens are handed to our backend, never to scripts on the page.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Walk me through the second step.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Our login endpoint makes two random values. One is the state. The other is the verifier, which stays on our side.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what goes to Cognito?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A hash of the verifier, called the challenge. Cognito only supports the SHA-256 method, called S256.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the learner signs in on Cognito's page, not ours.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right, the managed login page. We never see a password. Afterwards Cognito sends the browser back with a one-time code.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not send the tokens straight back?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Because the browser's address bar leaks. A code in a URL can end up in history or logs.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the code is useless on its own?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nearly. Our backend exchanges it at the token endpoint. It sends the code, the original verifier, and the client secret.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have said the client secret is enough. The attacker doesn't have that either.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For our web backend, true. But the phone apps have no secret, and a leaked secret would open every code. The verifier is new for each sign-in.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a stolen code only works with the verifier from that one sign-in.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Exactly. That's what PKCE adds. And the state stops a forged callback: if it doesn't match what we made, we refuse it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about the phone apps? They can't keep a secret.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They use the same flow as public clients, with no secret, through the system browser. PKCE alone protects the code there.</p></div></div>
-</div>
+    <p>The backend verifies state and exchanges the code with the verifier and its client credentials. Native clients use the system browser and PKCE without a secret embedded in the app. State, redirect handling and verifier binding have distinct protections and must all be correct.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Three tokens</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what comes back?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Three tokens. The ID token says who signed in. The access token is for calling the API.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the third?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The refresh token. It lives long and gets new access tokens, so the learner doesn't sign in every hour.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'd have guessed the API checks the ID token. It's the one that says who you are.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trap. The ID token is meant for the client, to learn who signed in. The access token is meant for the API.</p></div></div>
-</div>
+    <p>The ID token describes authentication to the client, the access token authorizes API use, and the refresh token obtains new access tokens. Quickturn's web session keeps the tokens needed for API access and renewal, not a decoded ID token as authorization evidence.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 356" role="img" aria-label="The ID token is meant for the client, says who signed in, is not sent to the API and is short-lived; the access token is meant for the API, says what the caller may do, is sent to the API and is short-lived.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">ID token</text>
@@ -113,12 +71,7 @@
     </svg>
     <figcaption>Both tokens name the learner. Only the access token is meant to open the API.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do we keep the ID token?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. The web session stores only the access and refresh tokens. We don't need the ID token after sign-in.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Now back to my question. How does the API trust an access token?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Five checks, in order. Let me draw them.</p></div></div>
-</div>
+    <p>Verification checks the signature against trusted keys, expiration, issuer, token use and intended client or resource. Cognito access tokens include client_id; an aud claim can also appear when resource binding is requested.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="Check the signature against the pool's public keys, then the issuer, then that the token use is access, then the client id, then expiry; only after all five is the sub claim trusted.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
@@ -143,49 +96,12 @@
     </svg>
     <figcaption>Decoding skips every step above the last one. That's why a token that decodes proves nothing.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Where do the public keys come from?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The user pool publishes them, as a key set called JWKS. Only Cognito holds the private key, so only Cognito can sign.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why check the client id?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A token from another app in the same pool would pass the other checks. Cognito access tokens carry <code>client_id</code> instead of <code>aud</code>, so that's our audience check.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And our library does all five.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, with the token use and client id we require. In tests, we sign tokens with a local key, so the real checking code runs without calling Cognito.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a cookie from the web and a Bearer header from the phone?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One authenticator resolves both, then runs the same checks.</p></div></div>
-</div>
+    <p>Quickturn uses the same verifier with Cognito keys in production and controlled signing keys in tests. That permits negative tests for incorrect issuer, expiration or client identity without relying on a live sign-in service.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What a managed service costs</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why use Cognito at all, instead of our own login?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>At our size it's cheap, and it handles passwords, email checks and account recovery. Those are easy to get wrong.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the catch?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Some choices are fixed when the pool is created. The sign-in identifier and its case rules are two of them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What did we pick?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Email as the username, and case-insensitive. Otherwise "Leo@" and "leo@" could become two accounts.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And changing them means a new pool.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With new user ids. So we never use <code>sub</code> as our key directly. On first sign-in, we map it to our own learner id.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Anything we chose not to buy?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Advanced threat protection. It needs a more expensive plan. We'll switch it on if abuse appears.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why verify in our code, not at API Gateway? It has a JWT authorizer.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The gateway can't read cookies. Verifying in the app keeps one path for both cookies and Bearer headers.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So my 401 is probably a check failing, not a bug in the library.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Likely. Log which check failed, never the token itself.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why not the token? It would make debugging easier.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A logged access token works for anyone who reads the log, until it expires. The name of the failed check is enough.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A new teammate asks what happens when a learner signs in. Go.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>OAuth is about delegated access, and OpenID Connect adds who signed in.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We use the code flow with PKCE. The browser brings back a one-time code, and our backend swaps it for tokens with the verifier and the client secret.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The API trusts an access token only after checking its signature, issuer, token use and client id. Decoding alone proves nothing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And after that?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We read <code>sub</code> and look up our own learner id.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One word on expiry too: it's the last check, and the refresh token is what spares the learner from signing in again.</p></div></div>
-</div>
+    <p>Managed sign-in reduces password and recovery work but adds provider-specific settings, plan choices and migration concerns. Quickturn maps provider subjects to its own learner IDs so replacing a pool need not rename every owned record, although identity mappings still need migration.</p>
+    <p>Token verification belongs in a path shared by cookie and Bearer authentication. Logs identify which check failed without including the token. A readable token can be a usable credential until its effective expiry or revocation enforcement takes effect.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -199,5 +115,5 @@
     <a class="prev" href="ch10.html"><span>Previous</span><b>Split what breaks often from what must never be lost</b></a>
     <a class="next" href="ch12.html"><span>Next</span><b>Where should a web app keep its tokens?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html">Cognito token verification</a>.</p>
 </div>

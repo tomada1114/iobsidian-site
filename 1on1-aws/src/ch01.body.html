@@ -1,9 +1,9 @@
 <!-- title: AWS Foundation 01 · What am I responsible for on AWS | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>One-on-Ones: AWS Foundation</b><span>Page 1 of 14</span></p>
+  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 1 of 14</span></p>
   <h1>What am I actually responsible for on AWS?</h1>
   <p class="lead">After this page you can explain regions, accounts and the shared-responsibility line. You can also say why production gets its own account, and why pricing is part of the design.</p>
-  <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
+  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
@@ -15,23 +15,10 @@
       <li>Why does the way a service is priced matter?</li>
     </ul>
   </nav>
-  <p class="stage">The office kitchen, in the morning. Leo got his own sign-in to the dev account an hour ago.</p>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Regions and accounts</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I'm in the dev account now. Can I ask two basic questions?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Basic questions are the best ones. Go.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>First: we're "on AWS", so AWS takes care of security, right? Second: why do we have separate dev and prod accounts? One account would work fine.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both answers come from the same map. When you create something on AWS, where does it live?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In our account. And in Tokyo, I think.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both right. Tokyo is a region, a geographic area. Each region is made of several availability zones. Those are separate data centers, far enough apart that one fire or flood doesn't take down two.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when I create a Lambda function, it lives in one region.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, most services are regional. A few are global, like IAM, which controls who can do what, and CloudFront, the content delivery network. Everything of ours runs in the Tokyo region, because our first learners are in Japan.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the account? I thought it was just a login.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the common view. An account is a container. It holds resources, the permissions on those resources, and their bill.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A container for resources, permissions and money.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And damage, as we'll see. Let me draw how they fit.</p></div></div>
-</div>
+    <p>An AWS account contains resources, permissions and billing information. A Region is a geographic area containing several isolated Availability Zones. Many services are regional, while services such as IAM and CloudFront have global aspects.</p>
+    <p>Quickturn places its primary regional resources in Tokyo for its initial Japanese learners. Account boundaries and geographic placement solve different problems: one concerns ownership and access, the other latency, resilience and data-location requirements.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="Inside one organization, the dev account contains the Tokyo region, which contains availability zones holding Quickturn's resources; the prod account sits beside it as its own box, and a mistake cannot cross the account boundary.">
       <rect x="8" y="8" width="384" height="356" rx="10" class="zone-soft"/>
@@ -55,14 +42,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Shared responsibility</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Okay, then the first question. Security is AWS's job, isn't it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Half of it. AWS calls this the shared responsibility model. AWS secures the cloud itself: buildings, hardware, and the managed service. You secure what you put in it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What counts as "what I put in it"?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Identities and permissions, data, configuration, and code. If a Lambda function has a role that can read every table, AWS won't stop it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a bad permission is our bug, not AWS's.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And the line moves with how managed a service is. Let me draw it for two kinds of compute.</p></div></div>
-</div>
+    <p>Under shared responsibility, AWS secures the underlying infrastructure, while customers secure their data, code, identities and configuration. The exact division depends on the service.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="Layers from facilities and hardware at the bottom, through the operating system and runtime, to code and configuration, and data and IAM at the top; for a virtual machine the customer owns everything from the operating system up, for Lambda only code and above, and data and IAM are always the customer's.">
       <rect x="16" y="16" width="272" height="52" rx="6" class="node-acc"/>
@@ -83,50 +63,17 @@
     </svg>
     <figcaption>Everything above a dashed line is yours. The line sits lower on a virtual machine, but the top layer, data and IAM, is yours in every case.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So on a virtual machine I'd also patch the operating system.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. On Lambda and DynamoDB, AWS does the patching. But IAM and data are always yours. No service takes those away from you.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a relief and a worry at the same time.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Less to patch, yes. But the part that's left is the part attackers aim for.</p></div></div>
-</div>
+    <p>Managed Lambda and DynamoDB reduce operating-system and database maintenance. They do not decide whether an execution role should read every table, whether a token is trusted or whether one learner can access another's records. Those remain application and account responsibilities.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The account as a blast radius</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Back to the second question, then. Why two accounts?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of an account as a blast radius, the area a mistake can damage. What happens if someone deletes a table by accident in dev?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>We lose test data. Annoying, not serious.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And if dev and prod were one account, with one set of permissions?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the same mistake could hit learners' data. Or a leaked dev key could reach prod.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. A mistake, a leaked credential, or a runaway bill stays inside one account. So production usually gets its own.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the organization is the thing around both accounts?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. We use AWS Organizations. There's a management account that holds only billing and identity, plus dev and prod as member accounts.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Why keep workloads out of the management account?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The organization's guard policies, which limit what any account may do, don't apply to the management account. So we keep it nearly empty.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And how do people sign in?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Through IAM Identity Center, one sign-in for both accounts. Each account's root user, the all-powerful first user, has MFA and no access keys.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does all this cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Organizations and Identity Center have no extra charge. The real cost is setup and more to operate. And one surprise: creating an organization ends a new account's free-plan credits at once.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So you paid for it on day one.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We did, on purpose. Prod holds learners' data, and nothing done in dev can reach it. For a weekend project I'd skip it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't one account do the same job with careful IAM roles? A dev role that can't touch prod tables?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It can, if everything goes right. But every new resource needs the right tags and the right policy, and one missed line lets dev reach prod.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the separation depends on everyone getting every policy right.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. With two accounts, the separation is the default. A dev role simply has no way into prod, even if its policy is too wide.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the bill is split for free, too. I can see what dev costs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And when a budget alarm fires, you know which account to look at first.</p></div></div>
-</div>
+    <p>Separate development and production accounts reduce the reach of ordinary development mistakes. Quickturn uses AWS Organizations with a small management account and separate member accounts, plus IAM Identity Center for short-lived human access. Root users have MFA and no everyday access keys.</p>
+    <p>The management account deserves particular care because organization guard policies do not constrain it in the same way as member accounts. Cross-account trust must also be controlled: an account boundary is not protection if broad roles deliberately cross it.</p>
+    <p>Separation adds setup and operational work. Free-plan and organization eligibility rules should be checked before relying on credits; billing benefits are not the reason to place learner data behind a separate boundary.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Pricing is part of the design</h2>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>You said "runaway bill". How do bills run away?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It helps to know how each part is priced. Some things bill per hour, whether anyone uses them or not.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A virtual machine, a load balancer, a NAT gateway. Others bill per request or per gigabyte: Lambda, API Gateway, DynamoDB on-demand, S3.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we chose mostly the per-request kind.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mostly. Here's what that changes.</p></div></div>
-</div>
+    <p>Pricing has both fixed and usage-driven components. Instances, load balancers and NAT gateways can cost money while idle. Lambda invocations, DynamoDB on-demand operations and storage activity mostly follow usage, though retained data and logs still cost money.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 276" role="img" aria-label="A per-hour component costs money at zero traffic, grows in steps and needs capacity planning; a per-request component costs close to nothing at zero traffic, grows with use and needs little capacity planning.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Per hour</text>
@@ -143,27 +90,7 @@
     </svg>
     <figcaption>The top row is why a small app picks per-request parts: when nobody practices, almost nothing is billed.</figcaption>
   </figure>
-<div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So an idle Quickturn costs almost nothing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the goal. A dev account that sleeps at night should cost close to zero.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is per-request always cheaper, then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. At steady, high traffic, per-hour capacity can become cheaper and easier to predict. Per request, you pay a little on every call, forever.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the choice depends on the traffic shape, not on which is "modern".</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And it's a design choice, made early. For compute, moving from one to the other later usually means changing the architecture, not just a setting.</p></div></div>
-</div>
-  </section>
-  <section data-part="teach-back" aria-labelledby="s5">
-    <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
-<div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a new teammate gets their dev sign-in tomorrow. What do you tell them?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A region is where resources run; ours is Tokyo, with several availability zones inside it.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>An account is the box that holds resources, their permissions, their bill, and the damage a mistake can do.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AWS secures its side of the line. Our data, IAM and configuration are always ours.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the two accounts?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dev and prod are separate accounts in one organization, so nothing done in dev can reach learners' data.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we prefer per-request pricing, so an idle app costs almost nothing.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That choice has a limit. If traffic became high and steady, we'd look at per-hour capacity again.</p></div></div>
-</div>
+    <p>An idle development environment can be inexpensive with few fixed components. At sustained high load, provisioned or always-on capacity may be cheaper. Evaluate both zero traffic and realistic growth, rather than assume “serverless” means free.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
@@ -177,5 +104,5 @@
     <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
     <a class="next" href="ch02.html"><span>Next</span><b>Why does our deploy have no AWS keys?</b></a>
   </nav>
-  <p class="fine">Maya, Leo and Quickturn are fictional. Written in September 2026.</p>
+  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
 </div>
