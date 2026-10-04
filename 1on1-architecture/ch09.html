@@ -396,25 +396,25 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 9 of 11</span></p>
   <h1>Do we need event sourcing to keep the history?</h1>
-  <p class="lead">After this page you can place CQRS and event sourcing on a spectrum and explain an append-only log with projections. You can also decide whether a view should be stored, or derived when it's read.</p>
+  <p class="lead">Quickturn keeps every answer, but usually reads stored current state. Keeping a history and making that history the authoritative record are different choices.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is CQRS, and how deep can it go?</li>
-      <li>How is a log with projections different from event sourcing?</li>
-      <li>When should a view be stored, and when derived?</li>
-      <li>What do projections cost, and who needs full event sourcing?</li>
+      <li>Read models and storage choices</li>
+      <li>A log is not event sourcing</li>
+      <li>Store it or derive it?</li>
+      <li>What projections cost</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The CQRS spectrum</h2>
-    <p>Command-query separation distinguishes changing state from answering a question. CQRS extends that distinction to separate command and read models. It does not require two databases or event sourcing. A project can separate code paths, then add screen-shaped projections, without adopting every later step.</p>
+    <h2 id="s1"><span class="no">01</span>Read models and storage choices</h2>
+    <p>Command-query separation distinguishes changing state from answering a question. CQRS extends that distinction to separate command and read models. It does not require two databases or event sourcing. Separate functions alone express command-query separation. Separate read models, their storage location and event history are additional choices.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 312" role="img" aria-label="The CQRS spectrum in four steps: separate functions, projections in the same store, a separate read database, full event sourcing; Quickturn sits at projections in the same store.">
-        <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
+      <svg viewBox="0 0 400 312" role="img" aria-label="Different choices separate functions, shape read models, locate read storage and choose an authoritative history. Quickturn keeps projections in the same store.">
+        <!-- These choices are not stages of a required progression. -->
         <circle cx="30" cy="44" r="6" class="dot"/>
         <circle cx="30" cy="118" r="8" class="f-acc"/>
         <circle cx="30" cy="192" r="6" class="dot"/>
@@ -426,9 +426,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
         <text x="72" y="188">Separate read database</text><text x="72" y="209" class="t-sm">synced from the write side</text>
         <rect x="56" y="240" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="264">Full event sourcing</text><text x="72" y="285" class="t-sm">state rebuilt from events</text>
+        <text x="72" y="264">Authoritative event history</text><text x="72" y="285" class="t-sm">a separate record-keeping choice</text>
       </svg>
-      <figcaption>Each step down adds power and cost. Quickturn stops at the second step: read models kept in the same store as the writes.</figcaption>
+      <figcaption>Read models can share storage with writes or use a separate database. Making event history authoritative is another choice, rather than a required final stage.</figcaption>
     </figure>
     <p>Quickturn's commands load, decide and commit. Queries read projections such as card memory state and learner totals. A projection is data prepared for a read need. This makes ordinary screens simple without a separate read database or command bus.</p>
   </section>
@@ -436,55 +436,65 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>A log is not event sourcing</h2>
     <p>An append-only log is not automatically event sourcing. In an event-sourced model, the event history is the authoritative record from which state is reconstructed, sometimes with snapshots. Quickturn normally reads stored current state and projections rather than reconstructing a round on every request.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="Full event sourcing stores only events and reads state by replaying them; log plus projections appends events and updates projections in one commit, and reads state by lookup.">
+      <svg viewBox="0 0 400 276" role="img" aria-label="Event sourcing makes event history authoritative and can use snapshots and read models. Quickturn keeps stored current state and an answer log for specified history uses.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Event sourcing</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Log + projections</text>
-        <text x="16" y="56" class="t-sm">What is stored</text>
-        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">events only</text>
-        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle" class="t-sm">events + read models</text>
-        <text x="16" y="136" class="t-sm">A write</text>
-        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">append event</text>
-        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">append + update</text>
-        <text x="16" y="216" class="t-sm">How state is read</text>
-        <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">replay events</text>
-        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">key lookup</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Quickturn</text>
+        <text x="16" y="56" class="t-sm">Authoritative record</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="92" text-anchor="middle" class="t-sm">event history</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="92" text-anchor="middle" class="t-sm">stored current state</text>
+        <text x="16" y="136" class="t-sm">Other stored data</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="163" text-anchor="middle" class="t-sm">snapshots and</text>
+        <text x="104" y="181" text-anchor="middle" class="t-sm">read models possible</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="163" text-anchor="middle" class="t-sm">answer log and</text>
+        <text x="296" y="181" text-anchor="middle" class="t-sm">read projections</text>
+        <text x="16" y="216" class="t-sm">Reading current state</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="243" text-anchor="middle" class="t-sm">replay or use</text>
+        <text x="104" y="261" text-anchor="middle" class="t-sm">derived state</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/>
+        <text x="296" y="243" text-anchor="middle" class="t-sm">look up</text>
+        <text x="296" y="261" text-anchor="middle" class="t-sm">stored values</text>
       </svg>
-      <figcaption>Both keep every event. The difference is the last row: we read state by looking it up, not by replaying history on each request.</figcaption>
+      <figcaption>The distinction is the authoritative record. Event-sourced systems can also read derived state without replaying every event for every query.</figcaption>
     </figure>
     <p>Its review log records each answer and the card's before-and-after memory state. Related projections are updated in the same commit. The log supports rebuilding when a scheduler changes, tuning from past answers, and reproducing evaluations. Moving from Leitner boxes to FSRS can use that history without changing the system into a fully event-sourced one.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Store it or derive it?</h2>
-    <p>Current weak grammar points are derived from already-loaded card projections and catalog tags. Quickturn uses a smoothed miss rate, initially requiring three observed cards and a rate of 0.4 before ranking a point as weak. Those are tunable product values.</p>
-    <p>Storing the same result would add writes and backfills whenever the ranking rule changes, without saving a read if the underlying cards are already loaded.</p>
+    <p>Current weak grammar points are derived from already-loaded card projections and catalog tags. Quickturn uses a smoothed miss rate. Initially, ranking a point as weak requires three observed cards and a rate of 0.4. Those are tunable product values.</p>
+    <p>Storing the result would add writes and backfills whenever the ranking rule changes. It would not save a read when the cards are already loaded.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 244" role="img" aria-label="Derive a view when it's read if it needs only what we already load, like the weak grammar points; store a projection if it needs history we don't keep, like a weekly trend screen.">
+      <svg viewBox="0 0 400 244" role="img" aria-label="The current weak-point view uses loaded data. A possible weekly trend needs past results; retaining a projection is one option to assess.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Derive it</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Store it</text>
         <text x="16" y="54" class="t-sm">The view needs</text>
         <rect x="16" y="62" width="176" height="56" rx="6" class="node"/><text x="104" y="86" text-anchor="middle">what we</text><text x="104" y="107" text-anchor="middle">already load</text>
-        <rect x="208" y="62" width="176" height="56" rx="6" class="node"/><text x="296" y="86" text-anchor="middle">history we</text><text x="296" y="107" text-anchor="middle">don't keep</text>
-        <text x="16" y="144" class="t-sm">At Quickturn</text>
+        <rect x="208" y="62" width="176" height="56" rx="6" class="node"/><text x="296" y="86" text-anchor="middle">past results</text><text x="296" y="107" text-anchor="middle">not retained</text>
+        <text x="16" y="144" class="t-sm">Current view / possible feature</text>
         <rect x="16" y="152" width="176" height="56" rx="6" class="node"/><text x="104" y="176" text-anchor="middle">weak points</text><text x="104" y="197" text-anchor="middle" class="t-sm">computed per read</text>
-        <rect x="208" y="152" width="176" height="56" rx="6" class="node-acc"/><text x="296" y="176" text-anchor="middle" class="t-hd">weekly trend</text><text x="296" y="197" text-anchor="middle" class="t-sm">updated on commit</text>
+        <rect x="208" y="152" width="176" height="56" rx="6" class="node-acc"/><text x="296" y="176" text-anchor="middle" class="t-hd">weekly trend</text><text x="296" y="197" text-anchor="middle" class="t-sm">possible projection</text>
         <text x="200" y="234" text-anchor="middle" class="t-sm">One question decides: what does the view need?</text>
       </svg>
-      <figcaption>One question decides it: does the view need history we don't keep? If not, derive it when it's read. If it does, store a projection, like the trend screen.</figcaption>
+      <figcaption>The current view reuses loaded data. A trend over past results may justify a stored projection, depending on history access and update costs.</figcaption>
     </figure>
     <p>A weakness trend over time has a different need: today's projection does not retain last month's result. That feature can justify a weekly weakness projection, updated on commit. Evidence from another activity might justify one too. Neither requirement alone demands event sourcing.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What projections cost</h2>
-    <p>Projections duplicate information and can drift if a write path omits an update. Contract tests and rebuild tools help detect and repair that problem. Atomic updates prevent partial success within a commit, but do not repair incorrect application logic or guarantee strongly consistent reads when the database read mode is eventual.</p>
+    <p>Projections duplicate information and can drift if a write path omits an update. Contract tests and rebuild tools help detect and repair that problem. Atomic updates prevent partial success within a commit. They do not repair incorrect application logic or strengthen an eventual read into a strongly consistent one.</p>
     <p>Updating through a queue keeps writes smaller but creates lag, retry work and stuck-queue monitoring. Quickturn favors synchronous projection updates for small learner-owned records. A large fan-out feed could make the opposite trade.</p>
     <p>Full event sourcing adds long-lived event-schema compatibility, replay and snapshot management, and harder ad hoc queries. Audit-heavy systems may need those capabilities. Keep the log and projections that solve known problems before adding the rest.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>CQRS is a spectrum; most teams need separate reads from projections, not a second database.</li>
+      <li>Quickturn separates commands from read models while keeping both in the same store.</li>
       <li>An append-only log with projections updated in the same commit keeps history without replaying it on every read.</li>
-      <li>Derive a view from data you already load; store a projection when it needs history you don't keep.</li>
+      <li>Derive views when loaded data suffices; consider stored projections when repeated queries or past results justify their update costs.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

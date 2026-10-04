@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 5 of 11</span></p>
   <h1>Isn't DDD just another architecture style?</h1>
-  <p class="lead">After this page you can explain that domain-driven design answers "where are the boundaries and what do the words mean". Clean and hexagonal architecture answer "which way do dependencies point". You can also say how much of DDD a small team needs.</p>
+  <p class="lead">Product staff call a card round a session, while authentication code uses session for a login. Dependency rules alone cannot settle that disagreement.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are the two halves of DDD?</li>
-      <li>Why does a shared language matter so much?</li>
-      <li>How do DDD and clean architecture fit together?</li>
-      <li>How much tactical DDD does a small team need?</li>
+      <li>Two halves of DDD</li>
+      <li>One word everywhere</li>
+      <li>Two different questions</li>
+      <li>How much tactical DDD?</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -427,12 +427,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="208" y="248" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="276" text-anchor="middle">Event bus</text>
         <text x="104" y="236" text-anchor="middle" class="t-sm">solid = we use it</text><text x="104" y="256" text-anchor="middle" class="t-sm">faded = we skip it</text>
       </svg>
-      <figcaption>We use the whole strategic column and one thin slice of the tactical one. Most of DDD's value for a small team sits on the left.</figcaption>
+      <figcaption>Quickturn uses shared language and model boundaries alongside a small set of tactical patterns. Those choices address this application's current problems.</figcaption>
     </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One word everywhere</h2>
-    <p>A ubiquitous language is a vocabulary shared by product discussions, specifications and code. In Quickturn's practice context, a round is a short deck, a portion is the daily amount needed for a streak, and placement is the initial round that sets a level. The review log records answers, while an item's memory state determines when a card is due.</p>
+    <p>A ubiquitous language is a vocabulary shared by product discussions, specifications and code. In Quickturn's practice context, a round is a short deck. A portion is the daily amount needed for a streak. Placement is the initial round that sets a level. The review log records answers, while an item's memory state determines when a card is due.</p>
     <p>The practice context avoids “session” because it has competing meanings. A separate vocabulary activity may use that word within its own context. The boundary makes the meaning explicit.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="The word round sits in the center, linked to the PM's spec, the UI label, the API path, the domain type and the table key: one word everywhere.">
@@ -485,8 +485,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>DDD's strategic half decides boundaries and a shared language; its tactical half gives building blocks inside one boundary.</li>
-      <li>Clean and hexagonal answer a different question, which way code depends, so a system usually uses both.</li>
-      <li>A small team gets most of DDD's value from the strategic half and a thin tactical slice.</li>
+      <li>Dependency rules and shared model language answer different questions; neither replaces the other.</li>
+      <li>Quickturn selects tactical patterns when their responsibilities justify the additional structure.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

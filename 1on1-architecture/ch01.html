@@ -396,23 +396,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 1 of 11</span></p>
   <h1>Isn't architecture just folders?</h1>
-  <p class="lead">After this page you can explain architecture as two decisions: what changes together, and which way dependencies point. You can also say where structure is worth its cost and where it isn't.</p>
+  <p class="lead">Quickturn changes one missed-card rule, but eleven files need edits. The problem is where the rule lives and what depends on it.</p>
   <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why did a small rule change touch eleven files?</li>
-      <li>Which way should the arrows point?</li>
-      <li>Why are there named styles at all?</li>
-      <li>When is structure worth its cost?</li>
+      <li>Eleven files for one small rule</li>
+      <li>Draw the arrows</li>
+      <li>Why named styles exist</li>
+      <li>What structure costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Eleven files for one small rule</h2>
     <p>Quickturn is a language-learning app in which a learner answers a card before a timer ends. A product change says that flipping a card before answering counts as a miss, even while time remains. That small change touches eleven files because the UI, API handler and database statistics each contain their own version of the rule.</p>
-    <p>Moving the files into better folders would leave three copies to update. The useful questions concern <b>coupling</b>, how much one part must know about another, and <b>cohesion</b>, whether the things inside a part belong together. The UI changes for design reasons, storage code for database reasons, and the missed-card rule for product reasons. The rule therefore needs one home in the domain; the other parts display, carry or store its answer.</p>
+    <p>Moving the files into better folders would leave three copies to update. <b>Coupling</b> concerns how much one part must know about another. <b>Cohesion</b> concerns whether the things inside a part belong together. The UI changes for design reasons, storage code for database reasons, and the missed-card rule for product reasons. The rule therefore needs one home in the domain; the other parts display, carry or store its answer.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="Changing the missed-card rule in a tangled codebase touches the UI, the API handler and the database code; in a codebase split by reason to change, it touches only one domain module.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Tangled</text>
@@ -448,14 +448,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <text x="32" y="232" class="t-hd t-acc">Domain</text><text x="32" y="254" class="t-sm">the rules of the drill</text>
         <text x="368" y="244" text-anchor="end" class="t-sm">imports nothing</text>
       </svg>
-      <figcaption>Every arrow points toward the domain, the most stable part. The domain has no external imports, limiting direct coupling to frameworks and storage.</figcaption>
+      <figcaption>Source dependencies point toward the protected rules. The domain has no external imports, limiting direct coupling to frameworks and storage.</figcaption>
     </figure>
     <p>Quickturn makes that direction testable. The domain package imports no external package, including Node built-ins. Time arrives as an argument. A lint rule rejects forbidden imports, while a separate import-graph test also fails the build if a boundary is crossed.</p>
-    <p>The web, iOS and Android clients use the same API, so there is one server-side implementation of the rules. This is a deliberate boundary for this application, rather than a requirement that every domain package in every project have zero library dependencies.</p>
+    <p>The web, iOS and Android clients use the same API, so there is one server-side implementation of the rules. This boundary protects the rules shared by these clients. It does not require every project to exclude all libraries from its domain.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Why named styles exist</h2>
-    <p>Layered, hexagonal, onion and clean architecture provide vocabulary for organizing responsibilities and dependencies. Their prescriptions differ: conventional layering can make business logic depend on data access, whereas ports and adapters and the inward dependency rule protect the core from that direction.</p>
+    <p>Layered, hexagonal, onion and clean architecture provide vocabulary for organizing responsibilities and dependencies. Conventional layering can make business logic depend on data access. Ports and adapters and the inward dependency rule protect application policy from that direction.</p>
     <p>A style name helps a team communicate, but it does not replace inspecting the code. Ask what each boundary protects, where dependencies point, and how much extra wiring the style requires. Those questions reveal more than a familiar folder template.</p>
     <div class="aside note">
       <p class="label">Key point</p>
@@ -464,7 +464,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What structure costs</h2>
-    <p>Structure costs interfaces, wiring and indirection. A reader may need to follow a call through several files that a small script would keep together. That cost is justified where changes are frequent and expensive, or where a component already has alternatives, such as production and test stores.</p>
+    <p>Structure costs interfaces, wiring and indirection. A reader may need to follow a call through several files that a small script would keep together. Frequent, expensive changes can justify that cost. Known alternatives, such as production and test stores, can also give an interface a clear purpose.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of how often a part changes against how costly a change there is today; the high-change, high-cost quadrant is where to put structure, and the low-change quadrants are where to keep it simple.">
         <text x="44" y="18" class="t-sm">↑ Cost of a change today</text>
@@ -480,7 +480,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
         <text x="302" y="248" text-anchor="middle">Fine as it is</text><text x="302" y="272" text-anchor="middle" class="t-sm">cheap to change</text>
       </svg>
-      <figcaption>Structure pays in the top-right corner: parts that change often and are expensive to change today. Where change is rare, keep the code plain.</figcaption>
+      <figcaption>Frequent, expensive changes can justify structure in the top-right corner. Rare changes may favor plain code, unless known alternatives give an interface another purpose.</figcaption>
     </figure>
     <p>The missed-card rule is expensive to change because it has several copies. A rarely changed report script may gain little from additional layers. YAGNI, “you aren't gonna need it,” discourages paying for hypothetical variation: use change history and known requirements to identify the seams.</p>
     <p>An AI application can benefit from a provider adapter when models or vendors change. The adapter concentrates provider-specific calls, although differing model behavior may still require prompt and evaluation changes. Keep stable, simple code plain, and spend structure where evidence shows that it reduces work.</p>

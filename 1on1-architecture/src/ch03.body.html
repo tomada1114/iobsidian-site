@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 3 of 11</span></p>
   <h1>Should every dependency get a port?</h1>
-  <p class="lead">After this page you can explain ports and adapters, and tell driving ports from driven ones. You can also decide where a port belongs and where a plain function is enough.</p>
+  <p class="lead">Quickturn needs a store that production and tests can replace. Its deck composer also changes, but the two dependencies need different kinds of protection.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is hexagonal architecture actually saying?</li>
-      <li>What's the difference between driving and driven ports?</li>
-      <li>Where do we draw a port?</li>
-      <li>When is a port the wrong tool?</li>
+      <li>Inside and outside</li>
+      <li>Driving and driven</li>
+      <li>Where we draw a port</li>
+      <li>When ports go wrong</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -62,30 +62,41 @@
         <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">port</text>
         <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">plain function</text>
       </svg>
-      <figcaption>The same question gives two answers. Where technology varies, draw a port; where only the logic varies, keep a plain function.</figcaption>
+      <figcaption>Quickturn uses ports for technology that can vary, and plain functions for its present rules. Other projects may need different boundaries around changing policy.</figcaption>
     </figure>
-    <p>A <b>fake</b> is a small working implementation, such as an in-memory store. A <b>mock</b> checks interactions, such as whether commit was called once with particular arguments. Interaction tests can break after a harmless refactor, while a fake-based test can check the observable result: start a round, then read it back.</p>
+    <p>A <b>fake</b> is a small working implementation, such as an in-memory store. A <b>mock</b> checks interactions, such as whether commit was called once with particular arguments. Interaction tests can break after a harmless refactor. A fake-based test can check the observable result: start a round, then read it back.</p>
     <p>Quickturn uses ports at established technology or testing seams. That is a project choice, not a universal rule that a port must already have two implementations.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When ports go wrong</h2>
     <p>Unnecessary ports make readers jump between files for little benefit. A more subtle failure is shaping an interface around the first database. Quickturn's early store was synchronous and allowed an open transaction, matching a local SQL database. A remote DynamoDB adapter could not preserve that interaction model. The revised port uses async reads and one commit carrying the intended changes.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether code does I/O against how many real implementations it has; I/O with two or more implementations gets a port, and pure code with one implementation is just a function.">
-        <text x="44" y="18" class="t-sm">↑ Real implementations: 2+</text>
-        <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
-        <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-        <text x="390" y="356" text-anchor="end" class="t-sm">Does I/O →</text>
-        <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-        <text x="134" y="100" text-anchor="middle">Pick a function</text><text x="134" y="124" text-anchor="middle" class="t-sm">e.g. schedulers</text>
-        <rect x="222" y="36" width="160" height="140" rx="6" class="node-acc"/>
-        <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">Port</text><text x="302" y="124" text-anchor="middle" class="t-sm">store, sign-in</text>
-        <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="134" y="248" text-anchor="middle">Just a function</text><text x="134" y="272" text-anchor="middle" class="t-sm">deck composer</text>
-        <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="302" y="248" text-anchor="middle">Wait for a</text><text x="302" y="272" text-anchor="middle">second one</text>
+      <svg viewBox="0 0 400 276" role="img" aria-label="An interface shaped around synchronous SQL reads and open transactions cannot be preserved by the remote adapter. The revised application port uses async reads and one commit of intended changes.">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">SQL-shaped port</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Revised port</text>
+        <text x="16" y="56" class="t-sm">Read</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="83" text-anchor="middle" class="t-sm">synchronous</text>
+        <text x="104" y="101" text-anchor="middle" class="t-sm">database call</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="83" text-anchor="middle" class="t-sm">async read</text>
+        <text x="296" y="101" text-anchor="middle" class="t-sm">of domain values</text>
+        <text x="16" y="136" class="t-sm">Commit</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="163" text-anchor="middle" class="t-sm">hold an open</text>
+        <text x="104" y="181" text-anchor="middle" class="t-sm">SQL transaction</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="163" text-anchor="middle" class="t-sm">one commit</text>
+        <text x="296" y="181" text-anchor="middle" class="t-sm">of intended changes</text>
+        <text x="16" y="216" class="t-sm">Remote adapter</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="243" text-anchor="middle" class="t-sm">cannot preserve</text>
+        <text x="104" y="261" text-anchor="middle" class="t-sm">that interaction</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/>
+        <text x="296" y="243" text-anchor="middle" class="t-sm">implements the</text>
+        <text x="296" y="261" text-anchor="middle" class="t-sm">application contract</text>
       </svg>
-      <figcaption>A port is worth its cost in the top-right corner: code that does I/O and has two real implementations. Pure code stays a function, however many versions it has.</figcaption>
+      <figcaption>The adapter cannot fix a contract that assumes the first database interaction. The application must state the capability without requiring that interaction.</figcaption>
     </figure>
     <p>The same principle applies to AI capabilities. “Grade an answer” and “explain a mistake” have different output schemas and evaluations. Task-specific ports keep those promises close to the application. A generic “send a prompt” port would leave every caller responsible for interpreting the response and handling provider details.</p>
   </section>

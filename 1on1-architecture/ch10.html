@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 10 of 11</span></p>
   <h1>Who stops a bad import when nobody is watching?</h1>
-  <p class="lead">After this page you can explain how a monorepo with workspace packages turns architecture boundaries into checks a machine runs. You can also say why that matters more when AI coding agents write much of the code.</p>
+  <p class="lead">A command can gain a database import in one small edit. A boundary check must detect that dependency and explain how to repair it.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why one repository instead of several?</li>
-      <li>How do workspace packages make a surface explicit?</li>
-      <li>How are the edges enforced?</li>
-      <li>Is all this config worth it?</li>
+      <li>One repository or several</li>
+      <li>Packages with explicit surfaces</li>
+      <li>Edges enforced twice</li>
+      <li>Is it worth the config?</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -449,13 +449,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <text x="296" y="292" text-anchor="middle" class="t-sm">nothing below it</text>
         <rect x="208" y="140" width="176" height="56" rx="6" class="node"/><text x="296" y="164" text-anchor="middle">contracts</text><text x="296" y="184" text-anchor="middle" class="t-sm">zod only</text>
       </svg>
-      <figcaption>Imports run one way down to the domain, which imports nothing. Contracts sits beside the stack with one library, and the web app never imports a package at all.</figcaption>
+      <figcaption>The domain imports no external packages. Clients use HTTP contracts and generated types while server implementation packages stay behind the API boundary.</figcaption>
     </figure>
     <p>The domain has no adapter dependencies. Application code depends on the domain, adapters implement application interfaces, and HTTP contracts own boundary schemas. Web and native clients use HTTP contracts and generated client types rather than importing server internals.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Edges enforced twice</h2>
-    <p>Lint uses an allowed-edge table: domain imports no other workspace package, application imports domain, adapters import application and domain, and contracts use Zod. An independent test examines actual imports and manifests. Removing one check leaves the other enforcing the boundary.</p>
+    <p>Lint uses an allowed-edge table. Domain imports no other workspace package; application imports domain. Adapters import application and domain, and contracts use Zod. An independent test examines actual imports and manifests. Removing one check leaves the other enforcing the boundary.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 386" role="img" aria-label="The agent writes a bad import, the lint rule fails, the boundary test fails, CI blocks the merge, and the agent fixes it by going through the port: fixed before review.">
         <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
@@ -473,9 +473,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
         <text x="72" y="262">CI blocks the merge</text><text x="72" y="283" class="t-sm">required checks</text>
         <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="338" class="t-hd">Fixed before review</text><text x="72" y="359" class="t-sm">agent goes through the port</text>
+        <text x="72" y="338" class="t-hd">Repair before acceptance</text><text x="72" y="359" class="t-sm">agent goes through the port</text>
       </svg>
-      <figcaption>The wrong import never reached a person. Each check fails on its own, so the agent's easiest path is the right one: use the port.</figcaption>
+      <figcaption>In this illustrated change, both checks reject the forbidden import. Their errors point toward the port; review still examines the resulting design.</figcaption>
     </figure>
     <p>Manifests control package reachability, while boundary rules control permitted direction and file-level relationships. A useful error identifies the forbidden edge and points to the application-owned port. That helps both a developer and a coding agent repair the design.</p>
     <p>Nx offers boundary checks; Turborepo focuses on task orchestration and caching. Quickturn's short builds and source packages do not yet justify adding a task system solely for caching.</p>

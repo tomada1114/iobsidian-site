@@ -396,26 +396,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 6 of 11</span></p>
   <h1>Why not split it into microservices?</h1>
-  <p class="lead">After this page you can explain why a bounded context is not the same as a service. You can also say what a modular monolith gives a small team, and how to keep extracting a service later cheap.</p>
+  <p class="lead">Practice and learning records have different responsibilities. Separate services would also turn their local calls into network calls, with new failure and operating costs.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is a bounded context, and what are ours?</li>
-      <li>How do contexts live together in one deployable?</li>
-      <li>Why not microservices now?</li>
-      <li>What does the monolith cost?</li>
+      <li>Boundaries for a model</li>
+      <li>A context map in one codebase</li>
+      <li>Why not microservices now</li>
+      <li>What the monolith costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Boundaries for a model</h2>
     <p>A bounded context defines where a model and its vocabulary remain consistent; it does not specify a deployment unit. Quickturn has contexts for identity, catalog, practice, learning records, learner modeling, engagement, vocabulary, assessment and entitlements.</p>
-    <p>Identity holds learner settings, the catalog supplies reviewed cards, practice owns rounds and placement, and the learning record keeps answers and memory state. Other contexts own cross-activity goals, model grading or usage accounting. References across these boundaries use IDs rather than sharing another context's internal object structures.</p>
+    <p>Identity holds learner settings, and the catalog supplies reviewed cards. Practice owns rounds and placement; the learning record keeps answers and memory state. Other contexts own cross-activity goals, model grading or usage accounting. References across these boundaries use IDs rather than sharing another context's internal object structures.</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>A map, and one deployable</h2>
+    <h2 id="s2"><span class="no">02</span>A context map in one codebase</h2>
     <p>A context map shows the relationships among these models. Identity supplies information to the other contexts, and the catalog is read-only for consumers such as practice and learner modeling.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 300" role="img" aria-label="The learning record sits in the center; practice and vocabulary write to it, and the learner model and engagement read from it: one history, many readers.">
@@ -437,14 +437,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>Quickturn builds an API function and a background worker from one codebase. Calls between contexts are local function calls. This is a modular monolith: modules preserve conceptual ownership while the product remains one coordinated system.</p>
     <p>Machine-enforced boundaries currently separate domain, application, adapters and contracts. Within a layer, each context has a public entry surface, and stored keys identify the kind of record. Those conventions aid review but do not physically prevent every shortcut import.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 296" role="img" aria-label="One deployable contains the contexts; each context has a public surface and private files, and the public surface is the only door in.">
+      <svg viewBox="0 0 400 296" role="img" aria-label="One codebase contains the contexts and supports API and worker entry points. Public surfaces are intended entry points; review protects internal files.">
         <rect x="8" y="8" width="384" height="280" rx="10" class="zone-soft"/>
-        <text x="24" y="36" class="t-hd">One deployable</text>
+        <text x="24" y="36" class="t-hd">One codebase</text>
         <rect x="24" y="52" width="352" height="112" rx="8" class="node"/>
         <text x="40" y="78">Practice context</text>
         <rect x="40" y="92" width="152" height="56" rx="6" class="node-acc"/>
         <text x="116" y="118" text-anchor="middle" class="t-hd t-acc">Public surface</text>
-        <text x="116" y="138" text-anchor="middle" class="t-sm">the only door in</text>
+        <text x="116" y="138" text-anchor="middle" class="t-sm">intended entry</text>
         <rect x="208" y="92" width="152" height="56" rx="6" class="node-soft"/>
         <text x="284" y="126" text-anchor="middle" class="t-sm">private files</text>
         <rect x="24" y="176" width="352" height="96" rx="8" class="node-soft"/>
@@ -459,7 +459,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s3"><span class="no">03</span>Why not microservices now</h2>
     <p>Turning each context into a service replaces local calls with network calls. Latency is only one cost: failures, retries, versioning, monitoring, deployment and permissions must also be handled across each connection. Independent scaling or separate team ownership can justify that cost. Quickturn's small team and traffic do not yet require it.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="A cross-context call in a modular monolith is a function call with one deploy and one log stream; in microservices it is a network call with retries, versioning, and a deploy and alarms per service.">
+      <svg viewBox="0 0 400 300" role="img" aria-label="A cross-context call in a modular monolith is a local function call within one coordinated codebase; in microservices it is a network call with retries, versioning, and a deploy and alarms per service.">
         <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Modular monolith</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd">Microservices</text>
         <text x="16" y="54" class="t-sm">The call</text>
@@ -469,7 +469,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">an error value</text>
         <rect x="208" y="140" width="176" height="44" rx="6" class="node"/><text x="296" y="168" text-anchor="middle">retries, versions</text>
         <text x="16" y="210" class="t-sm">To run it</text>
-        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">one deploy</text>
+        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">shared codebase</text>
         <rect x="208" y="218" width="176" height="44" rx="6" class="node"/><text x="296" y="246" text-anchor="middle">alarms each</text>
         <text x="200" y="290" text-anchor="middle" class="t-sm">Every row differs; each costs people time</text>
       </svg>
@@ -487,8 +487,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>A bounded context is a boundary for a model and its words, not a deployment unit.</li>
-      <li>A modular monolith keeps contexts as modules with public surfaces in one deployable, so calls stay function calls.</li>
-      <li>Split into services when scaling or team ownership demands it, and fence a context once it has a second user.</li>
+      <li>Quickturn keeps contexts as modules in one codebase, with local calls and API and worker entry points.</li>
+      <li>Independent scaling or ownership can justify services; define boundaries from concrete responsibilities rather than an assumed future need.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

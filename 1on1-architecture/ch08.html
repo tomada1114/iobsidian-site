@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 8 of 11</span></p>
   <h1>Where does the logic go, if not in the handler?</h1>
-  <p class="lead">After this page you can explain "functional core, imperative shell": load, decide, commit. You can say why expected failures are values, why time comes in as an argument, and what the pattern costs.</p>
+  <p class="lead">A learner who has finished today's portion should receive an extra round. Testing that decision should not require an HTTP handler or a database.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>How can a rule be tested without any mocks?</li>
-      <li>How do we handle failures and time?</li>
-      <li>Why does one command shape serve every caller?</li>
-      <li>What does the pattern cost?</li>
+      <li>Load, decide, commit</li>
+      <li>Two kinds of failure</li>
+      <li>One shape, many callers</li>
+      <li>What it costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -445,7 +445,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">calls and result</text>
         <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">the result</text>
       </svg>
-      <figcaption>Only the setup row differs, and it's most of the test. When the rule lives in decide, setup is a plain object.</figcaption>
+      <figcaption>A pure decision takes plain input and returns a result the test can check directly. Database and handler setup belong to separate integration tests.</figcaption>
     </figure>
     <p>This is a functional core with an imperative shell. Reads and writes stay around the edge; rules operate on ordinary inputs. A direct test can pass a completed portion and assert an extra round without specifying which storage calls occurred.</p>
   </section>

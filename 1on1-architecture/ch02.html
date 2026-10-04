@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 2 of 11</span></p>
   <h1>If the rules can't touch the database, who saves?</h1>
-  <p class="lead">After this page you can explain how classic layering makes the rules depend on the database, and how dependency inversion flips it. You can also say when plain layering is the better choice.</p>
+  <p class="lead">The application still has to save a round, even when its rules cannot import the database client. Saving and source-code dependencies need different directions.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What goes wrong when the rules import the database code?</li>
-      <li>How does inverting the dependency fix it?</li>
-      <li>How do we make sure nobody breaks the rule?</li>
-      <li>When is plain layering simpler and good enough?</li>
+      <li>The layers everyone learns first</li>
+      <li>Flip one arrow</li>
+      <li>Enforced, not just drawn</li>
+      <li>When plain layering wins</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -426,7 +426,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       </svg>
       <figcaption>In classic layering every arrow points down. Follow them and everything, including the business rules, ends up depending on the database.</figcaption>
     </figure>
-    <p>That dependency affects both change and testing: exercising a rule may need a database or a substitute, and changing storage can reach the rules. Quickturn's early SQL prototype avoided this by keeping its drill rules as plain functions. Moving to DynamoDB changed the storage implementation while those functions stayed the same.</p>
+    <p>That dependency affects both change and testing. Exercising a rule may need a database or a substitute, and a storage change can reach the rules. Quickturn's early SQL prototype avoided this by keeping its drill rules as plain functions. Moving to DynamoDB changed the storage implementation while those functions stayed the same.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Flip one arrow</h2>
@@ -456,30 +456,40 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>A dependency diagram needs enforcement. Quickturn's domain accepts time, time zones and randomness as inputs instead of reading them through external libraries. A test can therefore exercise 3:59 a.m. directly.</p>
     <p>Lint checks forbidden imports, and an independent test scans the import graph and declared dependencies. Removing a lint rule does not remove the second check.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 290" role="img" aria-label="The same rule drawn twice: in classic layering business depends on data; in the inverted version business defines an interface and data implements it, so the arrow points inward.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Classic</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Inverted</text>
-        <rect x="16" y="40" width="176" height="44" rx="6" class="node"/><text x="104" y="68" text-anchor="middle">UI</text>
-        <line x1="104" y1="86" x2="104" y2="116" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="120" width="176" height="44" rx="6" class="node"/><text x="104" y="148" text-anchor="middle">Business</text>
-        <line x1="104" y1="166" x2="104" y2="196" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="200" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="228" text-anchor="middle">Data</text>
-        <rect x="208" y="40" width="176" height="44" rx="6" class="node"/><text x="296" y="68" text-anchor="middle">UI</text>
-        <line x1="296" y1="86" x2="296" y2="116" class="ln" marker-end="url(#arw)"/>
-        <rect x="208" y="120" width="176" height="44" rx="6" class="node"/><text x="296" y="140" text-anchor="middle">Business</text><text x="296" y="158" text-anchor="middle" class="t-sm">+ interface</text>
-        <line x1="296" y1="198" x2="296" y2="168" class="ln-acc" marker-end="url(#arw-acc)"/>
-        <rect x="208" y="200" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="228" text-anchor="middle" class="t-hd">Data</text>
-        <text x="200" y="278" text-anchor="middle" class="t-sm">Same boxes; the last arrow points up</text>
+      <svg viewBox="0 0 400 276" role="img" aria-label="A proposed domain-to-database import fails lint and an independent import-graph test. The storage adapter belongs outside the protected rules.">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">Proposed import</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Boundary checks</text>
+        <text x="16" y="56" class="t-sm">New dependency</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="83" text-anchor="middle" class="t-sm">domain imports</text>
+        <text x="104" y="101" text-anchor="middle" class="t-sm">database client</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="83" text-anchor="middle" class="t-sm">lint rejects</text>
+        <text x="296" y="101" text-anchor="middle" class="t-sm">the import</text>
+        <text x="16" y="136" class="t-sm">Independent check</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="163" text-anchor="middle" class="t-sm">declared package</text>
+        <text x="104" y="181" text-anchor="middle" class="t-sm">dependency</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/>
+        <text x="296" y="163" text-anchor="middle" class="t-sm">graph test checks</text>
+        <text x="296" y="181" text-anchor="middle" class="t-sm">the same edge</text>
+        <text x="16" y="216" class="t-sm">Repair</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/>
+        <text x="104" y="243" text-anchor="middle" class="t-sm">storage detail</text>
+        <text x="104" y="261" text-anchor="middle" class="t-sm">inside the rules</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/>
+        <text x="296" y="243" text-anchor="middle" class="t-sm">application port</text>
+        <text x="296" y="261" text-anchor="middle" class="t-sm">adapter outside</text>
       </svg>
-      <figcaption>The same three layers, drawn twice. Only the arrow between business and data differs, and in the inverted version it points toward the rules.</figcaption>
+      <figcaption>Lint and the graph test reject the same forbidden dependency independently. They enforce the chosen direction; they do not judge every design choice.</figcaption>
     </figure>
-    <p>The important arrow is the one between application policy and storage implementation. Making the adapter depend on an application-owned interface lets rules be tested alone and limits what a storage change must touch.</p>
+    <p>A failed check makes the forbidden dependency visible before the change is accepted. Review still decides whether the interface expresses the right application need. The checks protect a chosen boundary rather than choose it for the team.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When plain layering wins</h2>
     <p>Inversion adds an interface, startup wiring and a search for the implementation when reading code. Mapping every object into a new shape at every layer adds another cost. Quickturn avoids most of that copying by passing domain types through the application and mapping at the HTTP boundary.</p>
     <p>For a small admin tool whose behavior mostly follows its tables, conventional layering may be simpler. Strict layering allows calls only to the next layer; relaxed layering allows some layers to be skipped. Either needs an explicit dependency policy.</p>
-    <p>Protecting a core is particularly useful when its rules merit independent tests, storage has known alternatives, or several clients share the same behavior. Quickturn has all three. Adding an interface to every trivial operation can instead make each change larger without creating a useful boundary.</p>
+    <p>Independent rule tests, known storage alternatives and behavior shared by several clients each give the protected core a purpose. Quickturn has all three. Adding an interface to every trivial operation can instead make each change larger without creating a useful boundary.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>

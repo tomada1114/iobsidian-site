@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 4 of 11</span></p>
   <h1>Clean vs Hexagonal — what's actually different?</h1>
-  <p class="lead">After this page you can answer "Clean or Hexagonal?" directly: the styles share one dependency rule, and Clean adds a prescribed inside. You can also say which parts a small team keeps and which it leaves out.</p>
+  <p class="lead">Two teams can protect the same business rules while choosing different internal structures. Clean and hexagonal architecture explain parts of that choice.</p>
   <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What do onion, clean and hexagonal have in common?</li>
-      <li>So what is actually different between them?</li>
-      <li>What did we take, what did we leave, and why?</li>
-      <li>When is the full version worth it?</li>
+      <li>Three pictures, one rule</li>
+      <li>The difference is the inside</li>
+      <li>What Quickturn took and left</li>
+      <li>When the full ceremony pays</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -431,9 +431,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The difference is the inside</h2>
-    <p>Hexagonal architecture leaves the application's internal organization largely open. Onion and Clean offer more guidance about separating business rules from application workflows. A common Clean implementation uses interactors, input and output ports, and presenters, but the dependency rule does not require one class for every operation.</p>
+    <p>Hexagonal architecture leaves the application's internal organization largely open. Onion and Clean offer more guidance about separating business rules from application workflows. A common Clean implementation uses interactors, input and output ports, and presenters. The dependency rule does not require one class for every operation.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="Hexagonal draws a boundary with ports and leaves the inside blank; clean draws the same boundary but splits the inside into entities and use cases, plus presenters and output ports. The prescribed inside is the difference.">
+      <svg viewBox="0 0 400 300" role="img" aria-label="Hexagonal draws a boundary with ports and leaves the inside blank; clean draws the same boundary but splits the inside into entities and use cases, plus presenters and output ports. The internal roles are the difference shown here.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">Hexagonal</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Clean</text>
         <rect x="16" y="40" width="176" height="220" rx="10" class="node"/>
@@ -447,25 +447,25 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <text x="296" y="236" text-anchor="middle" class="t-sm">presenters sit</text><text x="296" y="251" text-anchor="middle" class="t-sm">on the ring</text>
         <text x="200" y="288" text-anchor="middle" class="t-sm">Same boundary; the inside is the difference</text>
       </svg>
-      <figcaption>Both styles keep technology outside a boundary. Only clean fills the inside with named parts, and that prescribed inside is the whole difference.</figcaption>
+      <figcaption>Both diagrams separate technology from application policy. The Clean example also names internal roles; teams still decide how to implement those roles.</figcaption>
     </figure>
     <p>The two approaches differ in how much internal structure they describe. The tables compare representative implementations; “ceremony” means the additional interfaces, mapping and wiring a team chooses to maintain.</p>
     <div class="tbl"><table>
       <thead><tr><th>Style</th><th>Its picture</th><th>What it prescribes inside</th></tr></thead>
       <tbody>
         <tr><td class="key">Layered</td><td>stacked layers</td><td>layers call downward</td></tr>
-        <tr><td class="key">Hexagonal</td><td>inside and outside</td><td>nothing; only the boundary</td></tr>
+        <tr><td class="key">Hexagonal</td><td>inside and outside</td><td>internal organization left open</td></tr>
         <tr><td class="key">Onion</td><td>rings around the domain</td><td>domain model, domain and application services</td></tr>
         <tr><td class="key">Clean</td><td>rings around entities</td><td>entities, use cases, ports; presenters in the ring</td></tr>
       </tbody>
     </table></div>
     <div class="tbl"><table>
-      <thead><tr><th>Style</th><th>Where the database goes</th><th>Typical ceremony</th></tr></thead>
+      <thead><tr><th>Style</th><th>Where the database goes</th><th>Example extra work</th></tr></thead>
       <tbody>
-        <tr><td class="key">Layered</td><td>the bottom layer</td><td>low</td></tr>
-        <tr><td class="key">Hexagonal</td><td>outside, behind a port</td><td>low to medium</td></tr>
-        <tr><td class="key">Onion</td><td>the outer ring</td><td>medium</td></tr>
-        <tr><td class="key">Clean</td><td>the outer ring</td><td>high</td></tr>
+        <tr><td class="key">Layered</td><td>the bottom layer</td><td>cross-layer calls</td></tr>
+        <tr><td class="key">Hexagonal</td><td>outside, behind a port</td><td>ports and adapter wiring</td></tr>
+        <tr><td class="key">Onion</td><td>the outer ring</td><td>domain and application services</td></tr>
+        <tr><td class="key">Clean</td><td>the outer ring</td><td>role interfaces and mapping</td></tr>
       </tbody>
     </table></div>
     <p>Conventional layering can leave policy dependent on data access. The inward styles move technology implementations outside the protected core. Teams should inspect their actual arrows, because the same style label can describe substantially different code.</p>
@@ -488,20 +488,20 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
         <rect x="208" y="212" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="242" text-anchor="middle">Per-ring mapping</text>
         <text x="200" y="282" text-anchor="middle" class="t-sm">Kept the rule, skipped the ceremony</text>
       </svg>
-      <figcaption>The two columns are the same height on purpose. We took two things and left four, and the two we took carry most of the value.</figcaption>
+      <figcaption>Quickturn wires dependencies at each executable entry point and keeps decisions separate from technology. Extra presentation objects need a distinct responsibility to justify their maintenance.</figcaption>
     </figure>
     <p>Adding a card hint illustrates the trade. Its domain type gains a field, the decision function uses it, and the API contract exposes it. Extra output objects, presenters and ring-to-ring mappers would each copy the same field unless they had a distinct responsibility. Quickturn avoids those copies because it currently needs only one presentation shape.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When the full ceremony pays</h2>
-    <p>More structure can pay for itself when several teams need explicit ownership, one use case supports several presentations, or an object model must be insulated from UI data. A report, web page and voice interface may each justify their own presenter.</p>
+    <p>More structure can clarify ownership across teams or support several presentations of one use case. It can also protect an object model from UI data. A report, web page and voice interface may each justify their own presenter.</p>
     <p>The main cost is often developer attention: more files, names and mappings to update. For Quickturn's small team, a second presentation for the same use case would be a concrete reason to add a presenter. A review should state the adopted dependency rule, the omitted machinery and the condition that would justify adding it.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Hexagonal, onion and clean share one rule, the core doesn't depend on technology; classic layering points at the database.</li>
-      <li>Hexagonal defines only the boundary; clean also prescribes the inside with use cases, presenters and mapping.</li>
+      <li>Hexagonal emphasizes the application boundary; Clean also describes internal roles such as entities, use cases and interface adapters.</li>
       <li>A team can adopt the rule without the ceremony, and should say what it left out and why.</li>
     </ol>
   </section>

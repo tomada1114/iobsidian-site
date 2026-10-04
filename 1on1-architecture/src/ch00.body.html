@@ -2,7 +2,7 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Contents · 11 pages</span></p>
   <h1>Engineering Readers: Architecture</h1>
-  <p class="lead">Eleven short chapters about what software architecture is for. After them you can explain dependency rules, ports and adapters, DDD and aggregates. You can also choose between styles and defend the choice in a review.</p>
+  <p class="lead">A small rule change can spread across an application. Which boundaries keep that change local, and when is their added structure worth maintaining? These eleven chapters follow that question through dependencies, models, history and design reviews.</p>
   <p class="meta"><span>11 pages</span><span>About 46 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 
@@ -44,9 +44,9 @@
       <li><a href="ch01.html">Isn't architecture just folders?</a> — Architecture decides what changes together and which way dependencies point.</li>
       <li><a href="ch02.html">If the rules can't touch the database, who saves?</a> — Dependency inversion lets the rules own the interface the database code implements.</li>
       <li><a href="ch03.html">Should every dependency get a port?</a> — Use ports where a meaningful technology or testing seam needs protection.</li>
-      <li><a href="ch04.html">Clean vs Hexagonal — what's actually different?</a> — Both keep technology outside; only clean also names the parts inside.</li>
+      <li><a href="ch04.html">Clean vs Hexagonal — what's actually different?</a> — Both separate technology from application policy; Clean also describes internal roles.</li>
       <li><a href="ch05.html">Isn't DDD just another architecture style?</a> — DDD draws boundaries and chooses words; clean decides which way the code depends.</li>
-      <li><a href="ch06.html">Why not split it into microservices?</a> — Bounded contexts can live as modules in one deployable.</li>
+      <li><a href="ch06.html">Why not split it into microservices?</a> — Model boundaries can remain modules in one codebase, with local calls.</li>
       <li><a href="ch07.html">What is an aggregate, really?</a> — A consistency boundary that decides what one commit protects.</li>
       <li><a href="ch08.html">Where does the logic go, if not in the handler?</a> — Load, decide in a pure function, commit.</li>
       <li><a href="ch09.html">Do we need event sourcing to keep the history?</a> — An append-only log with projections, and when to derive instead.</li>

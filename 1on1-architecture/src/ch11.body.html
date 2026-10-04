@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 11 of 11</span></p>
   <h1>How do I defend a design decision in a review?</h1>
-  <p class="lead">After this page you can write an architecture decision record that answers a reviewer before they ask. You can also keep it current as things change, and match a decision's effort to how hard it is to reverse.</p>
+  <p class="lead">A reviewer asks why the application needs a cache. A useful answer compares real alternatives and states what evidence would change the choice.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What goes into a decision record, and which part matters most?</li>
-      <li>How does a record change over time?</li>
-      <li>How much effort should a decision get?</li>
-      <li>How do I present a decision in a review?</li>
+      <li>The record, and its best part</li>
+      <li>Status and change</li>
+      <li>Effort matches reversibility</li>
+      <li>Presenting a decision</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -22,7 +22,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Status and change</h2>
-    <p>A proposed record states a recommendation; an accepted record is a basis for implementation; a superseded record points to the decision that replaced it.</p>
+    <p>A proposed record states a recommendation; an accepted record is a basis for implementation. A superseded record points to its replacement.</p>
     <figure class="fig">
       <svg viewBox="0 0 400 312" role="img" aria-label="A decision record moves from Proposed to Accepted, may be amended in place with a date, and is finally Superseded by a later record; Accepted is where work builds on it.">
         <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
@@ -39,16 +39,16 @@
         <rect x="56" y="240" width="328" height="56" rx="6" class="node-soft"/>
         <text x="72" y="264">Superseded</text><text x="72" y="285" class="t-sm">replaced whole by a later record</text>
       </svg>
-      <figcaption>Most of a record's life is spent Accepted, where work builds on it. Small changes amend it in place; only a full replacement supersedes it.</figcaption>
+      <figcaption>In Quickturn's policy, accepted records support implementation and receive dated amendments. A replaced decision is marked superseded.</figcaption>
     </figure>
     <p>Many teams preserve accepted records unchanged and write a replacement when the decision evolves. Quickturn instead amends an accepted record in place, adding a dated explanation, and reserves superseding for a replaced decision. Git retains the historical versions.</p>
-    <p>The trade is readability versus historical browsing: the file states the current choice, while a reader must inspect diffs to reconstruct its development. Partial acceptance or replacement must identify exactly which part still applies.</p>
+    <p>The file states the current choice, making it easy to read. Reconstructing how that choice developed requires browsing the diffs. Partial acceptance or replacement must identify exactly which part still applies.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Effort matches reversibility</h2>
     <p>Decision effort should match the cost of reversal. A formatting library or dashboard arrangement may be easy to replace. A learner-isolation scheme or data model can require a migration of every record.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of cost to reverse later against cost to build now; high cost to reverse with low cost now means build it early, such as learner isolation and data shape; low cost to reverse means decide fast and change later, such as a firewall and restore drills.">
+      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of cost to reverse later against cost to build now; high cost to reverse with low cost now means build it early, such as learner isolation and data shape; low reversal cost supports revising modest choices later, such as dashboard layout. Current safeguards follow exposure and requirements.">
         <text x="44" y="18" class="t-sm">↑ Cost to reverse later</text>
         <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
         <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
@@ -59,21 +59,21 @@
         <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
         <text x="302" y="100" text-anchor="middle">Decide with</text><text x="302" y="124" text-anchor="middle">care</text>
         <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="134" y="232" text-anchor="middle">Decide fast,</text><text x="134" y="256" text-anchor="middle">change later</text>
-        <text x="302" y="302" text-anchor="middle" class="t-sm">firewall, drills</text>
+        <text x="134" y="232" text-anchor="middle">Modest choice,</text><text x="134" y="256" text-anchor="middle">revise later</text>
         <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="302" y="248" text-anchor="middle">Decide fast,</text><text x="302" y="272" text-anchor="middle">change later</text>
+        <text x="302" y="248" text-anchor="middle">Modest choice,</text><text x="302" y="272" text-anchor="middle">revise later</text>
+        <text x="302" y="302" text-anchor="middle" class="t-sm">dashboard layout</text>
       </svg>
-      <figcaption>The top-left corner is where to act first: cheap now, expensive to add later. Anything in the bottom row can wait for a later phase.</figcaption>
+      <figcaption>Hard-to-reverse foundations deserve early attention. Reversibility shapes design effort, while current exposure and requirements determine when a safeguard is needed.</figcaption>
     </figure>
     <p>Quickturn therefore establishes hard-to-add foundations early and introduces some operational guards later. “Later” is appropriate only while their absence fits the current exposure and requirements. The useful distinction is whether adding a component later forces a redesign, not whether the component itself is effortless.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Presenting a decision</h2>
-    <p>Present a decision by stating its drivers, alternatives, consequences and a condition that would change it. A cache proposal should identify an observed performance problem and compare an in-process cache, a cache service and leaving the current design alone.</p>
+    <p>Present a decision by stating its drivers, alternatives, consequences and a condition that would change it. A cache proposal should identify an observed performance problem. Compare an in-process cache, a cache service and leaving the current design alone.</p>
     <p>Quickturn's catalog is already a fixed snapshot built with the app. Before adding a cache, measure whether reading it is costly. A measurable trigger for revisiting the decision is stronger than a claim that caching must be faster.</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="A weak review answer says only 'it is faster'; a supported answer states drivers, options considered and why each lost, and what would change his mind. The options-considered row is the difference.">
+      <svg viewBox="0 0 400 276" role="img" aria-label="A weak review answer says only 'it is faster'; a supported answer states drivers, options considered and why each lost, and what would change his mind. Drivers, alternatives and a revisit condition make the answer reviewable.">
         <text x="104" y="24" text-anchor="middle" class="t-hd">First answer</text>
         <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Reshaped</text>
         <text x="16" y="56" class="t-sm">Drivers</text>
@@ -86,15 +86,15 @@
         <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">nothing said</text>
         <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">a read threshold</text>
       </svg>
-      <figcaption>The same proposal, answered twice. The middle row, the options considered and why each lost, is what turns an opinion into a decision a reviewer can check.</figcaption>
+      <figcaption>The revised answer identifies drivers to measure, rejected alternatives and a condition for reconsidering the choice. Together they let a reviewer examine the proposed decision.</figcaption>
     </figure>
-    <p>Rejected alternatives make assumptions reviewable. A reviewer can challenge why an option lost, and the team can change course while that is cheap. ADRs themselves take time and become stale, so use them for choices a reasonable reviewer could dispute, rather than documenting every minor preference.</p>
+    <p>Rejected alternatives make assumptions reviewable. A reviewer can challenge why an option lost, and the team can change course while that is cheap. ADRs themselves take time and become stale. Use them for choices a reasonable reviewer could dispute; minor preferences rarely need a full record.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>A decision record states the context, the options rejected and why, and the consequences accepted.</li>
-      <li>Keep accepted records current with dated amendments, and supersede them only when the decision is replaced.</li>
+      <li>Quickturn keeps dated amendments in accepted records and marks replaced decisions as superseded; other teams may use immutable replacements.</li>
       <li>Spend decision effort in proportion to the cost of reversing, and lead a review with drivers and rejected options.</li>
     </ol>
   </section>
