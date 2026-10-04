@@ -39,7 +39,7 @@
   <dl class="terms">
     <dt>noUncheckedIndexedAccess</dt><dd><code>arr[i]</code> may be <code>undefined</code>. Catches reading past the end.</dd>
     <dt>exactOptionalPropertyTypes</dt><dd>"Missing" and "<code>undefined</code>" differ. Catches clearing a field by accident.</dd>
-    <dt>noPropertyAccessFromIndexSignature</dt><dd>Map lookups need brackets. Catches a lookup that looks like a field.</dd>
+    <dt>noPropertyAccess<wbr>FromIndexSignature</dt><dd>Map lookups need brackets. Catches a lookup that looks like a field.</dd>
     <dt>verbatimModuleSyntax</dt><dd>Imports are emitted as written. Catches a module that runs by surprise.</dd>
   </dl>
     <p>A shared compiler configuration gives every package the same expectations. The following examples explain what those expectations change in everyday code.</p>
@@ -84,7 +84,7 @@ const b: Settings = { sound: undefined }; // error</code></pre>
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li><code>strict</code> is a floor; flags like <code>noUncheckedIndexedAccess</code> and <code>exactOptionalPropertyTypes</code> are separate opt-ins.</li>
-      <li>Each extra flag turns a runtime surprise into a compile error, at the cost of more checks in everyday code.</li>
+      <li>Each extra flag catches a class of mistakes before runtime, at the cost of more checks in everyday code.</li>
       <li>When outside code can't pass a gate, change what you generate or wrap it; don't loosen the gate.</li>
     </ol>
   </section>
