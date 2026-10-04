@@ -2,24 +2,24 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 1 of 12</span></p>
   <h1>Isn't observability just a fancy word for monitoring?</h1>
-  <p class="lead">After this page you can explain how observability differs from monitoring. You can also say which question metrics, logs and traces each answer, and where a detail like a learner id belongs.</p>
+  <p class="lead">One learner’s round was slow while the latency dashboard looked normal. Request-level evidence can expose details that a summary graph does not retain.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why can't a dashboard find one slow request?</li>
-      <li>Which question does each signal answer?</li>
-      <li>Where does a detail like a learner id belong?</li>
-      <li>Where do traces earn their cost?</li>
+      <li>The problem with a dashboard</li>
+      <li>Three signals, three questions</li>
+      <li>Cardinality and cost</li>
+      <li>Where traces earn their cost</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The problem with a dashboard</h2>
     <p>A normal p90 latency graph does not explain one learner's slow round. It means 90 percent of measured requests were at or below that value; a rare slow request may leave it unchanged. Monitoring exposes known failure signals, while observability supports investigating behavior that was not anticipated in a particular dashboard.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Monitoring watches questions known in advance, needs new code to answer a new question, and typically uses dashboards and alarms; observability handles questions nobody planned, needs no new code for a new question, and typically uses rich logs and traces.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Monitoring watches questions known in advance, needs new code to answer a new question, and typically uses dashboards and alarms; observability handles questions nobody planned, can answer new questions from already collected fields, and typically uses rich logs and traces.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Monitoring</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Observability</text>
       <text x="16" y="56" class="t-sm">Question known in advance?</text>
@@ -27,12 +27,12 @@
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">not needed</text>
       <text x="16" y="136" class="t-sm">New question needs new code?</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">often</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd t-acc">no</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd t-acc">if missing</text>
       <text x="16" y="216" class="t-sm">Typical tool</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">dashboard, alarm</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">rich logs, traces</text>
     </svg>
-    <figcaption>The middle row is the real difference. With observability, a new question is a new query, not a new deploy.</figcaption>
+    <figcaption>A new query can answer a question when the required evidence was already collected. Missing fields or spans still need instrumentation and another deployment.</figcaption>
   </figure>
     <p>Both are useful. An alarm can reveal widespread errors, and a request-level record can explain an isolated complaint even when no alarm fired. Begin with the question that needs answering rather than with whichever graph is easiest to open.</p>
   </section>
@@ -40,7 +40,7 @@
     <h2 id="s2"><span class="no">02</span>Three signals, three questions</h2>
     <p>Metrics summarize frequency, volume and trends. Logs describe events with searchable fields. Traces connect timed steps across a request or job. Each signal serves a different investigative need.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="One slow request at the center, with three signals around it: metrics answer whether it is happening a lot, logs answer what happened to this one, and traces answer where the time went; for a one-function request at Quickturn, the log answers it.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="One slow request at the center, with three signals around it: metrics answer whether it is happening a lot, logs answer what happened to this one, and traces answer where the time went; for a one-function request at Quickturn, the log helps identify the request, while further evidence may be needed to locate its slow step.">
       <line x1="100" y1="80" x2="200" y2="156" class="ln"/>
       <line x1="300" y1="80" x2="200" y2="156" class="ln"/>
       <line x1="200" y1="252" x2="200" y2="216" class="ln"/>
@@ -56,7 +56,7 @@
       <text x="200" y="280" text-anchor="middle" class="t-hd">Logs</text>
       <text x="200" y="302" text-anchor="middle" class="t-sm">what happened to it?</text>
     </svg>
-    <figcaption>For yesterday's slow round, one Lambda and one table, the log line answers it. Metrics only say whether it happens often.</figcaption>
+    <figcaption>The completion log identifies the slow request and its outcome. Metrics show the surrounding pattern; step-level timing may still be needed to locate the delay.</figcaption>
   </figure>
     <p>Quickturn logs request ID, operation, outcome, status and duration. Find the reported learner's request and time, then compare service metrics for that interval. A trace can locate the slow step if the request crosses several components.</p>
   </section>
@@ -64,7 +64,7 @@
     <h2 id="s3"><span class="no">03</span>Cardinality and cost</h2>
     <p>Cardinality is the number of distinct field values. A metric labeled with each learner can create a growing number of time series; combinations multiply that count. An internal learner ID in a log is instead a searchable field, though the bytes still add storage cost and privacy obligations.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of the cardinality of the detail against the cost per unit of data: metrics are low cardinality and cheap; logs are high cardinality at moderate cost, which is where a learner id belongs; traces are high cardinality at the highest cost; low cardinality at high cost is rarely what you want.">
+    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of the cardinality of the detail against the cost per unit of data: this illustration uses bounded metric dimensions and richer event or trace detail; actual cost depends on volume, sampling and the chosen service; low cardinality at high cost is rarely what you want.">
       <text x="44" y="18" class="t-sm">↑ Cost per unit of data</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
@@ -78,19 +78,19 @@
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
       <text x="302" y="236" text-anchor="middle" class="t-hd t-acc">Logs</text><text x="302" y="262" text-anchor="middle" class="t-sm">learner id</text><text x="302" y="284" text-anchor="middle" class="t-sm">goes here</text>
     </svg>
-    <figcaption>High-cardinality detail belongs in log lines, not in metric labels. Metrics stay low-cardinality and cheap.</figcaption>
+    <figcaption>High-cardinality detail belongs in log lines, not in metric labels. Bounded metric labels avoid multiplying time series; log and trace volume still require cost and retention decisions.</figcaption>
   </figure>
     <p>Quickturn keeps metric dimensions bounded and logs IDs and outcomes rather than answers or card text. A small, intentional alarm set covers known failures. Neither small logs nor an internal ID make data automatically anonymous.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Where traces earn their cost</h2>
-    <p>Tracing earns its cost when work crosses steps: an API accepts an answer, a queue delivers it and a worker calls a model. A propagated trace or job ID ties events together even when they occur minutes apart.</p>
+    <p>Tracing can help when work crosses several steps. For example, an API accepts an answer, a queue delivers it and a worker calls a model. A propagated trace or job ID ties events together even when they occur minutes apart.</p>
     <p>The tutor can add several model and tool calls to one user turn. Instrument those paths before incidents, while deciding which content must stay out of telemetry. A long span suggests where time was spent, but investigation still needs to distinguish waiting, processing and external delay.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Monitoring watches known failures; observability lets you answer new questions without new code.</li>
+      <li>Monitoring watches known signals; observability supports new questions when the necessary evidence has been collected.</li>
       <li>Metrics count, logs describe one event, and traces show where the time went across steps.</li>
       <li>Keep high-cardinality detail in logs, and add traces where requests cross steps or services.</li>
     </ol>

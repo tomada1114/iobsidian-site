@@ -397,17 +397,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 5 of 12</span></p>
   <h1>How do we see what a model call costs?</h1>
-  <p class="lead">After this page you can explain why a single model call is the unit to observe, and which fields its record needs. You can also say what the bill, the provider's logs and your own record each can and can't tell you.</p>
+  <p class="lead">A model bill rises after a prompt change. Call records can connect versions and usage, while the monthly bill confirms a different view of spending.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why isn't the bill enough?</li>
-      <li>Where does each piece of the record come from?</li>
-      <li>What do these records cost, and where do they mislead?</li>
-      <li>What changes when an agent makes many calls?</li>
+      <li>What the bill can&#x27;t say</li>
+      <li>Where each piece comes from</li>
+      <li>What the records cost</li>
+      <li>Many calls, one task</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -442,7 +442,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="132" y="138" width="136" height="56" rx="8" class="node-acc"/>
       <text x="200" y="172" text-anchor="middle" class="t-hd t-acc">one call</text>
     </svg>
-    <figcaption>The call in the middle is what a cost spike or a worse grade is traced back to. Each part around it answers one question.</figcaption>
+    <figcaption>Call records let an investigator compare usage and outcomes across configurations. Each part around it answers one question.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -459,7 +459,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="232" width="368" height="56" rx="6" class="node"/>
       <text x="32" y="266">Cost Explorer · dashboard</text>
     </svg>
-    <figcaption>Only the top layer knows the prompt version. The others know the model, the text or the money.</figcaption>
+    <figcaption>Quickturn’s application record explicitly includes the prompt version. Billing tags, optional raw logs and usage totals provide complementary evidence.</figcaption>
   </figure>
     <p>Standard telemetry conventions can make tooling interoperable, but evolving GenAI names should be adopted under a pinned version. Agent session traces connect calls and tools. Application records remain necessary where only the application knows the feature and prompt version.</p>
   </section>
@@ -469,7 +469,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <dl class="terms">
   <dt>Which feature?</dt><dd>The bill: only with tags. The call record: always.</dd>
   <dt>Which prompt version?</dt><dd>The bill: never. The call record: always.</dd>
-  <dt>Which change caused it?</dt><dd>The bill: no. The call record: yes, by version and time.</dd>
+  <dt>Compare changes?</dt><dd>The bill: no. The call record: compare versions and times, then investigate the cause.</dd>
   <dt>Per learner?</dt><dd>The bill: no. The usage ledger: yes.</dd>
 </dl>
     <p>Raw prompts require separate access and retention decisions. Task ports and a shared adapter make the telemetry less dependent on callers remembering fields. Usage reservations and account budget controls act on spending; telemetry exposes what actually happened.</p>
@@ -483,7 +483,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Record every model call with its model, prompt version, feature, tokens, latency and cost.</li>
-      <li>The bill, invocation logs and tags help, but only your record knows the prompt version.</li>
+      <li>Include prompt versions explicitly in application records; billing reports and provider logs answer complementary questions.</li>
       <li>Prompts may contain personal data; shared task IDs connect agent calls for investigation.</li>
     </ol>
   </section>

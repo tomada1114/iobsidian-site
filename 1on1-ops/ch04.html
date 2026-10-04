@@ -397,17 +397,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 4 of 12</span></p>
   <h1>How reliable is reliable enough?</h1>
-  <p class="lead">After this page you can explain what an SLI, an SLO and an SLA are. You can also show how an error budget turns reliability into something you spend. And you can say how to choose a target without guessing.</p>
+  <p class="lead">Saved answers matter more to learners than a convenient reliability percentage. Define eligible events, user needs and a response policy before adopting the target.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are an SLI, an SLO and an SLA?</li>
-      <li>Why not aim for 100%?</li>
-      <li>What does an SLO cost, and what does it buy?</li>
-      <li>What does reliable mean for an AI agent?</li>
+      <li>Three terms from the ground up</li>
+      <li>The error budget</li>
+      <li>What an SLO costs</li>
+      <li>Reliability for an AI agent</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -415,10 +415,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>An SLI defines the measured behavior, such as successful saves divided by eligible attempts. An SLO sets a target and observation window. An SLA is a contractual commitment with specified consequences. Those terms should not be treated as interchangeable.</p>
     <p>The 99.5 percent over 28 days example illustrates the shape of an objective, not Quickturn's universal required target. Define what counts as good and which events enter the denominator before choosing a percentage.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the SLA, the outermost and loosest, is a contract; inside it the SLO, an internal target; inside that the SLI, the measurement you have to take first.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The boxes connect an external contractual commitment, an internal objective and the measured signal. Their specific thresholds depend on the chosen objective and contract.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">SLA · a contract</text>
-      <text x="24" y="58" class="t-sm">loosest, with a penalty</text>
+      <text x="24" y="58" class="t-sm">contractual commitment</text>
       <rect x="40" y="76" width="320" height="200" rx="10" class="node"/>
       <text x="56" y="104" class="t-hd">SLO · our target</text>
       <text x="56" y="126" class="t-sm">internal, over a window</text>
@@ -426,12 +426,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="200" y="196" text-anchor="middle" class="t-hd t-acc">SLI · the measurement</text>
       <text x="200" y="222" text-anchor="middle" class="t-sm">good events ÷ all events</text>
     </svg>
-    <figcaption>Everything rests on the inner box. Without an honest measurement, the target and the contract are only words.</figcaption>
+    <figcaption>The boxes show related roles, without requiring their percentages to follow a fixed order. Define eligible events before using the measurement to assess a target.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The error budget</h2>
-    <p>The error budget is the allowed fraction of unsuccessful events: 100 percent minus the objective. A team can agree in advance to reduce risky changes when that budget is depleted.</p>
+    <p>The error budget is the allowed fraction of unsuccessful events: 100 percent minus the objective. A team can agree in advance to reduce risky changes when that budget is depleted. With one million eligible requests and a 99.5% objective, the allowed unsuccessful count is 5,000.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 236" role="img" aria-label="An example error budget over a 28-day window: 5,000 failed requests allowed; the first incident spent 2,000, the second spent 1,500, and 1,500 are left.">
       <text x="16" y="36" class="t-sm">Allowed</text>
@@ -447,12 +447,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="120" y="188" width="79" height="28" rx="4" class="node-acc"/>
       <text x="209" y="208" class="t-hd t-acc">1,500</text>
     </svg>
-    <figcaption>Illustrative numbers, not Quickturn's. The last bar decides whether next week's risky change ships.</figcaption>
+    <figcaption>These counts illustrate the defined objective and denominator. The remaining budget informs the agreed release policy alongside incident impact and recovery needs.</figcaption>
   </figure>
     <p>Higher reliability consumes engineering work, and users notice some failure modes more than others. Quickturn prioritizes answers being saved and cards being available. Its device-side timer does not make lost saves harmless.</p>
     <p>Measure the baseline and user needs before selecting a target. A target should express the desired experience and guide improvement, rather than simply match whatever current performance makes easy.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Pick what users notice, measure the SLI, set the SLO near today's level, alert when the budget burns fast, then tighten.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Pick what users notice, measure the SLI, choose a target using measured behavior and user needs, alert when the budget burns fast, then tighten.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="7" class="f-acc"/>
@@ -464,7 +464,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="88" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="118" class="t-hd">Measure the SLI</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Set the SLO near today</text>
+      <text x="64" y="190">Choose target from needs</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="262">Alert on fast burn</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
@@ -486,8 +486,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>An SLI is a measured ratio, an SLO is the target for it, and an SLA is a contract.</li>
-      <li>100% minus the SLO is an error budget, spent on change and protected when it runs out.</li>
+      <li>An SLI measures chosen behavior, an SLO sets its target, and an SLA states contractual commitments.</li>
+      <li>For this event ratio, the budget is 100% minus the objective. Failures consume it and influence release decisions.</li>
       <li>Measure the baseline, choose a target from user needs, and assess agents at the whole-task level.</li>
     </ol>
   </section>

@@ -397,25 +397,25 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 6 of 12</span></p>
   <h1>Is a testing strategy just 'write more unit tests'?</h1>
-  <p class="lead">After this page you can explain what each kind of test buys, and at what price. You can also say why fakes usually beat mocks, and how to test a feature whose output isn't fixed.</p>
+  <p class="lead">A save test passes against a mock while the real adapter rejects its commit. Different test boundaries provide different evidence about that failure.</p>
   <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What does each kind of test buy?</li>
-      <li>Pyramid or trophy?</li>
-      <li>Mocks, fakes or recordings?</li>
-      <li>How do you test output that isn't fixed?</li>
+      <li>What each test buys</li>
+      <li>Pyramid or trophy</li>
+      <li>Mocks, fakes and recordings</li>
+      <li>When the output isn&#x27;t fixed</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>What each test buys</h2>
-    <p>Line coverage reports execution, not whether an assertion would detect a broken save. Different tests protect different properties: unit tests check rules, adapter contracts check integration promises, component tests check screen behavior, and smoke tests check a built path.</p>
+    <p>Line coverage reports execution, not whether an assertion would detect a broken save. Different tests protect different properties. Unit tests check rules, adapter contracts check integration promises, and component tests check screen behavior. Smoke tests check a built path.</p>
     <p>Quickturn's pure domain makes unit tests cheap and repeatable. Tests at the seams add confidence that those rules are wired to the actual storage and HTTP behavior.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of speed across and confidence about real behavior down. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake proven by contract tests. Slow with low confidence: flaky tests. Slow with high confidence: the smoke test.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Illustrative test placements for speed and confidence about the described behavior. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake checked for the covered contract cases. Slow with low confidence: flaky tests. Slow with high confidence: the smoke test.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">slow</text>
       <text x="309" y="24" text-anchor="middle" class="t-sm">fast</text>
       <text x="8" y="80" class="t-sm">low</text>
@@ -427,9 +427,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="151" y="208" text-anchor="middle">smoke test</text>
       <rect x="234" y="152" width="150" height="100" rx="6" class="node-acc"/>
-      <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">proven fake</text>
+      <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">tested fake</text>
     </svg>
-    <figcaption>Down is confidence about real behavior. The accented corner is where most tests should live: fast, and still close to the real thing.</figcaption>
+    <figcaption>Down is confidence about real behavior. The accented corner shows useful fast tests whose fake matches covered contract cases. Meaningful assertions and other integration evidence remain necessary.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">

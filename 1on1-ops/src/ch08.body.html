@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 8 of 12</span></p>
   <h1>How do you test things that aren't plain code?</h1>
-  <p class="lead">After this page you can explain how generated files, infrastructure templates, types and import rules each get their own cheap check. You can also say what only a smoke test sees, and what no automated check sees.</p>
+  <p class="lead">A handler test passes, but the committed API document is stale. Generated files, templates and dependency rules need checks aimed at those specific artifacts.</p>
   <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why does a JSON file have a test?</li>
-      <li>How do you test infrastructure?</li>
-      <li>How do you test types and import rules?</li>
-      <li>What does only the smoke test see?</li>
+      <li>Drift in generated files</li>
+      <li>Infrastructure as testable code</li>
+      <li>Types and boundaries</li>
+      <li>The smoke test</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -40,14 +40,14 @@
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="406" class="t-hd">Commit both</text>
     </svg>
-    <figcaption>The schema and the document move together. The contract that clients read can't silently disagree with the server.</figcaption>
+    <figcaption>The schema and the document move together. The generated definitions are checked for drift; route implementation and response behavior still need their own tests.</figcaption>
   </figure>
     <p>The author regenerates locally and reviews the external contract diff before committing. The same comparison approach can protect other intentionally synchronized files. The failing check identifies a forgotten generation step rather than a broken handler.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Infrastructure as testable code</h2>
     <p>Infrastructure code can synthesize a template for focused assertions: key schema, billing mode, retention, production protection, role trust and permitted resource types. Offline checks require avoiding live lookups in that test path.</p>
-    <p>An allowlist makes an unexpected resource type a reviewable choice. Property assertions expose the specific protected behavior more clearly than an enormous template snapshot, while still requiring review of properties that have not been asserted.</p>
+    <p>An allowlist makes an unexpected resource type a reviewable choice. Focused property assertions expose protected behavior more clearly than an enormous template snapshot. Unasserted properties still require review.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Types and boundaries</h2>
@@ -68,7 +68,7 @@
       <rect x="16" y="356" width="368" height="56" rx="6" class="node-soft"/>
       <text x="32" y="390">Deployed dev · by hand</text>
     </svg>
-    <figcaption>The accented layer is the only automated check that crosses process seams. The last one is done by a person.</figcaption>
+    <figcaption>The built-system smoke test crosses process seams in this strategy. Post-deploy reads then check the live environment, with automation or a person reviewing the result.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
@@ -81,7 +81,7 @@
     <ol>
       <li>Generated files get drift tests: regenerate, compare, fail in CI, rewrite by one command.</li>
       <li>Infrastructure, types and import rules each get a narrow check of the properties that matter.</li>
-      <li>Only the smoke test crosses process seams; the deployed URL is still read back by hand.</li>
+      <li>The built smoke test exercises processes over HTTP; post-deploy checks still confirm live settings and reachable content.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

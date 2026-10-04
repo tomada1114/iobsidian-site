@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 10 of 12</span></p>
   <h1>Should every merge go straight to production?</h1>
-  <p class="lead">After this page you can explain the difference between continuous delivery and continuous deployment. You can also describe a safe deploy pipeline, and say why data changes are the hard part of going back.</p>
+  <p class="lead">A release changes application code and a data shape. Approval and recovery need to account for their different consequences, even when both pass CI.</p>
   <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Delivery or deployment?</li>
-      <li>What happens after a merge?</li>
-      <li>Why does prod wait, and how do you go back?</li>
-      <li>How do you ship a prompt change?</li>
+      <li>Delivery and deployment</li>
+      <li>The pipeline</li>
+      <li>Why prod waits</li>
+      <li>Shipping a prompt change</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -75,7 +75,7 @@
     <h2 id="s3"><span class="no">03</span>Why prod waits</h2>
     <p>Production approval adds a check and audit trail before touching learner data. The IAM trust and protected environment must express the intended approval boundary rather than merely accept any main-branch job.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of reversibility across and blast radius down. A code-only change with a small blast radius is safe to deploy automatically. A code-only change with a large blast radius should roll out gradually. A data change with a small blast radius needs a careful review. A data change with a large blast radius should slow down, in a separate stack.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of reversibility across and blast radius down. A code-only change with a small blast radius may suit automatic deployment when validation and recovery are adequate. A code-only change with a large blast radius should roll out gradually. A data change with a small blast radius needs a careful review. A data change with a large blast radius should slow down, in a separate stack.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">data change</text>
       <text x="309" y="24" text-anchor="middle" class="t-sm">code only</text>
       <text x="8" y="80" class="t-sm">small</text>
@@ -103,7 +103,7 @@
     <ol>
       <li>Delivery keeps every commit releasable; deployment releases it automatically. Both are CD.</li>
       <li>Dev deploys on merge with short-lived credentials; prod waits for an approval with an audit trail.</li>
-      <li>Roll code forward by revert and merge; data can't be rolled back, so the stateful stack stays separate.</li>
+      <li>A revert can restore code; data migrations need their own recovery plan, and separate lifecycles limit deployment coupling.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">

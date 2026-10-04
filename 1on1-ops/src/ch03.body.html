@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 3 of 12</span></p>
   <h1>What should wake someone up at night?</h1>
-  <p class="lead">After this page you can explain why alarms should watch what users feel, not every cause you can measure. You can also say how to prove an alarm works, and when one alarm per event becomes noise.</p>
+  <p class="lead">An alarm resource exists, but nobody knows whether its message reaches the responder. A controlled exercise must check that complete path before an incident.</p>
   <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Should alarms watch symptoms or causes?</li>
-      <li>How do we know an alarm really fires?</li>
-      <li>When does a sensitive alarm become noise?</li>
-      <li>What belongs on the one dashboard?</li>
+      <li>Symptoms, not causes</li>
+      <li>An alarm you never saw fire</li>
+      <li>Sensitivity and fatigue</li>
+      <li>One dashboard</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -32,14 +32,14 @@
       <rect x="16" y="288" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="320">DynamoDB · read, write throttles</text>
     </svg>
-    <figcaption>The 5xx alarm sits closest to the learner. When it fires, someone really got an error.</figcaption>
+    <figcaption>An API failure is closer to the request outcome than a resource spike. Its user impact still depends on the affected traffic and operation.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>An alarm you never saw fire</h2>
     <p>An alarm path needs a controlled exercise. Quickturn throttles development requests, confirms the expected API failures, observes alarm state and checks that the notification reaches its destination. It then restores capacity.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="Set reserved concurrency to 0, send five requests, they answer 503, the API 5xx and throttle alarms go to ALARM within about two minutes, the emails arrive, and the setting is removed.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="The planned development exercise sets reserved concurrency to zero, sends five requests and records their errors. It checks alarm state, notification delivery and restored capacity.">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -52,15 +52,15 @@
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="118">Send five requests</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">All five answer 503</text>
+      <text x="64" y="190">Check returned errors</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Two alarms in ALARM</text>
+      <text x="64" y="262">Check alarm states</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Emails arrive</text>
+      <text x="64" y="334" class="t-hd">Confirm delivery</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="406">Remove the setting</text>
     </svg>
-    <figcaption>The accented step is the proof. The alarm changing state is not enough; the message has to reach a person.</figcaption>
+    <figcaption>The notification step checks delivery beyond the alarm resource. Record the observed state, destination and timing instead of assuming that configuration proves the path works.</figcaption>
   </figure>
     <p>A missing notification subscription can leave an active alarm unheard. Deployment checks expose that missing destination, and a repeated exercise after relevant changes confirms the complete path. An observed test is stronger evidence than the presence of an alarm resource.</p>
   </section>
@@ -95,7 +95,7 @@
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Alarm on symptoms users feel, using RED for services and USE for resources.</li>
-      <li>Force each alarm to fire once, and confirm the message reaches a person.</li>
+      <li>Exercise each alarm in a controlled environment, confirm notification delivery and restore the changed settings.</li>
       <li>Single-event alarms suit dev; at scale use rates, and page only when there's a clear first action.</li>
     </ol>
   </section>

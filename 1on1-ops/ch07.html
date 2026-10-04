@@ -397,17 +397,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 7 of 12</span></p>
   <h1>How do we know the fake database behaves like the real one?</h1>
-  <p class="lead">After this page you can explain what a contract suite is, and why it makes a fake worth trusting. You can also say how the same idea proves one learner can't see another's data.</p>
+  <p class="lead">The in-memory store accepts a stale update that production rejects. A shared contract makes both adapters answer the same cases and exposes that disagreement.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>When does a fake lie?</li>
-      <li>What is a contract suite?</li>
-      <li>How does it prove isolation?</li>
-      <li>What does it still not prove?</li>
+      <li>When a fake lies</li>
+      <li>The contract suite</li>
+      <li>Isolation as a contract</li>
+      <li>What it still doesn&#x27;t prove</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -442,13 +442,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <dl class="terms">
   <dt>Accepts a 101-item commit?</dt><dd>Without a contract: maybe. With one: refused, like DynamoDB.</dd>
   <dt>Accepts a stale update?</dt><dd>Without a contract: maybe. With one: refused.</dd>
-  <dt>Lets B read A's data?</dt><dd>Without a contract: nobody checked. With one: proven empty.</dd>
+  <dt>Lets B read A's data?</dt><dd>Without a contract: nobody checked. With one: tested empty for the covered reads.</dd>
 </dl>
     <p>The in-memory suite runs quickly; the DynamoDB suite runs against a pinned local service in CI. A future adapter invokes the same test function rather than copy-pasting a weaker suite. New failure cases improve both implementations.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Isolation as a contract</h2>
-    <p>Isolation cases write as learner A, try each read as B, then let B use the same record IDs without changing A's data. Compile-time coverage of the method list helps ensure that a new method cannot silently escape the suite.</p>
+    <p>Isolation cases write as learner A and try each read as B. Then B uses the same record IDs without changing A’s data. Compile-time coverage of the method list helps ensure that a new method cannot silently escape the suite.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of the caller down and whose data across. Learner A reading A's data finds it; learner B reading B's data finds it; learner A reading B's data, and learner B reading A's data, find nothing.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">A's data</text>
@@ -464,9 +464,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="208" text-anchor="middle">found</text>
     </svg>
-    <figcaption>The accented cells are what the isolation cases prove empty, for every store and every read.</figcaption>
+    <figcaption>The isolation cases expect these cross-learner reads to return nothing. The method list ensures each adapter’s exposed reads participate in that check.</figcaption>
   </figure>
-    <p>This makes ownership a tested store property as well as a review concern. It remains evidence for the covered methods and cases, not a mathematical proof that no production configuration or future code can leak data.</p>
+    <p>This makes ownership a tested store property as well as a review concern. The results provide evidence for covered methods and cases. Production configuration and future code still need checks for possible data leaks.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What it still doesn't prove</h2>
@@ -477,7 +477,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>A contract suite writes a port's promises once and runs them against every implementation.</li>
-      <li>A fake that passes the same cases as the real adapter makes every fast test meaningful.</li>
+      <li>Shared contract cases support confidence in a fake’s covered behavior; each application test still needs meaningful assertions.</li>
       <li>Isolation is a contract case, and DynamoDB local is still not the real service.</li>
     </ol>
   </section>

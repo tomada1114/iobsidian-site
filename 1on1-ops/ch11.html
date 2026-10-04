@@ -397,17 +397,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 11 of 12</span></p>
   <h1>What happens to a learner's data when things go wrong?</h1>
-  <p class="lead">After this page you can name the guards against different kinds of data loss, and say which failure each one covers. You can also explain why deleting and exporting an account are features, not scripts.</p>
+  <p class="lead">A bad write, a table deletion and a learner’s account deletion are different events. Each needs its own protection or repeatable recovery path.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Doesn't AWS back up the table for us?</li>
-      <li>Which guards does each stage get?</li>
-      <li>What did the team accept, and what does recovery cost?</li>
-      <li>How do deletion and export work?</li>
+      <li>Different failures, different guards</li>
+      <li>Choices per stage</li>
+      <li>The accepted risk</li>
+      <li>Deletion and export as features</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -451,7 +451,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The accepted risk</h2>
     <p>Development accepts losing the team's test history; that is a stated risk rather than an omitted setting. Production recovery retains recoverable copies for a configured period, so deletion and privacy descriptions must include that lifecycle.</p>
-    <p>A restore drill creates a protected replacement table, checks counts and representative records, measures time and tests the planned cutover or repair process. Restore access must remain controlled because the new copy contains production information.</p>
+    <p>A restore drill creates a protected replacement table and checks counts and representative records. It measures time and tests the planned cutover or repair process. Restore access must remain controlled because the new copy contains production information.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Deletion and export as features</h2>
@@ -468,7 +468,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="200" y="202" text-anchor="middle" class="t-sm">reviews, records, the</text>
       <text x="200" y="224" text-anchor="middle" class="t-sm">learner model</text>
     </svg>
-    <figcaption>Because one learner's data sits in one place, removing or exporting it doesn't need a search across the database.</figcaption>
+    <figcaption>The learner key targets primary owned records without scanning unrelated learners. The operation also follows identity mappings and the inventory of derived copies.</figcaption>
   </figure>
     <p>Derived copies include exports, logs, embeddings and conversation memory. Maintain an inventory and an explicit retention or deletion policy for each. Restoring a backup must also respect deletions made after its recovery point. Keeping progress in the main record makes that inventory smaller without removing responsibility for the remaining copies.</p>
   </section>

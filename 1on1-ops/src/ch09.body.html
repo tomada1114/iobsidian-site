@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 9 of 12</span></p>
   <h1>What actually stops a bad change from merging?</h1>
-  <p class="lead">After this page you can explain the layers of checks a change passes before it merges. You can also say why they all run the same scripts. And you can say why a red gate is fixed in the code, not in the gate.</p>
+  <p class="lead">A change passes a quick hook but fails an adapter contract in CI. Shared scripts give each gate a clear role without treating green checks as complete correctness.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Which checks run, and when?</li>
-      <li>How should coverage floors work?</li>
-      <li>How strong should a gate be?</li>
-      <li>Why do gates matter more for AI agents?</li>
+      <li>The layers</li>
+      <li>Coverage floors</li>
+      <li>Strength and friction</li>
+      <li>Gates and AI agents</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -43,7 +43,7 @@
       <rect x="48" y="448" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="478" class="t-hd">Merge</text>
     </svg>
-    <figcaption>Each step adds something the one before couldn't see. Merge is reached only when all of them agree.</figcaption>
+    <figcaption>Each step adds something the one before couldn't see. Required checks enforce the protected merge path; passing them establishes the properties they actually test.</figcaption>
   </figure>
     <p>The fast hook checks staged changes and types; the full gate adds builds, smoke, database contracts and coverage. Required branch rules enforce the expected remote checks. A comparison test can detect drift between the declared local and CI lists.</p>
   </section>
@@ -53,7 +53,7 @@
 <dl class="terms">
   <dt>Does the PR go green?</dt><dd>Lowering the floor: yes. Covering the branch: yes.</dd>
   <dt>Is protection left for the next change?</dt><dd>Lowering the floor: less, for everyone. Covering the branch: the same, plus one test.</dd>
-  <dt>Does a reviewer have to argue?</dt><dd>Lowering the floor: yes. Covering the branch: no.</dd>
+  <dt>Does a reviewer have to argue?</dt><dd>Lowering the floor: yes. Covering the branch: review the behavior and assertion.</dd>
 </dl>
     <p>An uncovered bad-JSON branch deserves a behavior test: the expected error, safe response and absence of side effects. Removing the branch from coverage or reducing a threshold would make the number green without checking the behavior.</p>
   </section>
@@ -88,7 +88,7 @@
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Hook, everyday gate, full gate and required CI checks all run the same scripts.</li>
-      <li>Coverage floors are per area, set from measurements, and only ever raised.</li>
+      <li>Quickturn records area-specific coverage floors and raises them with evidence; gate changes require their own review.</li>
       <li>A red gate is fixed in the code; changing a gate is its own reviewed change, for people and agents.</li>
     </ol>
   </section>

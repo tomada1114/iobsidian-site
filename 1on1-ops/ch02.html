@@ -397,17 +397,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 2 of 12</span></p>
   <h1>What makes a log line actually useful?</h1>
-  <p class="lead">After this page you can explain why logs should be structured, one line per request, with fixed fields. You can also say which fields to write, and what must never go into a log.</p>
+  <p class="lead">A failed save must be findable without copying the learner’s answer into logs. Structured fields and a deliberate payload policy solve different parts of that problem.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why do free-text logs fail?</li>
-      <li>Which fields does a line need, and why?</li>
-      <li>What stays out of the log?</li>
-      <li>What goes wrong with prompts in logs?</li>
+      <li>Why free text fails</li>
+      <li>The fields</li>
+      <li>What stays out</li>
+      <li>Prompts are payloads too</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -415,7 +415,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>Free-text messages such as “saving answers for…” are difficult to filter consistently. Structured logs make operation, outcome and duration explicit, allowing a query for failed answer saves over 500 milliseconds.</p>
     <p>Quickturn writes one completion record per request with a stable field set. A nullable field distinguishes missing information from a schema that changes unpredictably. Additional lifecycle records may still be needed for crashes that prevent normal completion.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="A free-text log line cannot be filtered by operation, cannot be counted by outcome, makes one request hard to find, and leaks the request body; a structured JSON line can be filtered and counted, finds one request by its id, and carries no body.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="The illustrated debug message lacks stable fields and includes a body. Quickturn’s structured completion record has searchable fields and deliberately excludes sensitive payloads.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Free text</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Structured JSON</text>
       <text x="16" y="56" class="t-sm">Filter by operation?</text>
@@ -427,11 +427,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="16" y="216" class="t-sm">Find one request?</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">hard</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">by request id</text>
-      <text x="16" y="296" class="t-sm">Leaks the body?</text>
+      <text x="16" y="296" class="t-sm">Body in this example?</text>
       <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">yes</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">no</text>
     </svg>
-    <figcaption>The last row matters most. A raw debug line can copy a learner's answers into the logs.</figcaption>
+    <figcaption>The last row reflects the logging policy, rather than JSON itself. Structured logs can also leak answers if their fields include the request body.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -462,7 +462,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="262" class="t-hd">One line, with durationMs</text>
     </svg>
-    <figcaption>The line is written once, at the end, when the outcome and the duration are known.</figcaption>
+    <figcaption>Normal completion writes this record when outcome and duration are known. A crash before that point needs lifecycle evidence or another signal.</figcaption>
   </figure>
     <p>Duration covers the request's measured path. An unexpected fault records its safe class or category instead of its arbitrary message. This wide completion record avoids joining many lines for ordinary questions. Traces provide deeper ordering when it matters.</p>
   </section>
@@ -494,7 +494,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Write one structured JSON line per request, with fixed fields that are always present.</li>
+      <li>Write a structured completion record with stable fields; use additional lifecycle signals for requests that never complete.</li>
       <li>A server-made request id, the operation, a stable outcome code and the duration make lines findable and countable.</li>
       <li>Never log bodies, answers, tokens, error messages or prompt text; add a specific safe field instead.</li>
     </ol>
