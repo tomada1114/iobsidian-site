@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 6 of 13</span></p>
   <h1>How can an agent remember anything?</h1>
-  <p class="lead">After this page you can explain why an LLM remembers nothing, and how short-term and long-term memory fill that gap. You can also say what the context window limits, and why memory must always belong to one owner.</p>
+  <p class="lead">A learner returns after yesterday’s conversation and changes their study goal. Stored context can help, provided retrieval respects access and the latest request.</p>
   <p class="meta"><span>About 8 min read</span><span>A video call</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Does the model remember last week?</li>
-      <li>What do short-term and long-term memory keep?</li>
-      <li>How does memory come back into a conversation?</li>
-      <li>Whose memory is it?</li>
+      <li>The model remembers nothing</li>
+      <li>Short-term and long-term</li>
+      <li>Bringing memory back</li>
+      <li>Whose memory it is</li>
     </ul>
   </nav>
   <p class="stage">A video call. Leo has been chatting with the tutor on the test site all morning.</p>
@@ -22,12 +22,12 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The tutor remembered something I told it last week. So the model keeps a memory of each learner, right?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>What do you think happens when you write "as I mentioned before"?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It looks back at what I said.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It looks like that. In fact, the whole conversation history is sent again with every message. The LLM itself has no way to remember.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Every message? That sounds expensive.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It is. The container that carries the history is called the context window, and it has a limit.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application supplies context for each call. It may select recent turns and retrieved records; the model does not independently reload last week’s conversation.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the supplied history still uses tokens?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. The context window carries input for a call and has a size limit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens as it fills up?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You send more tokens, the small pieces of text the model reads. The answer gets slower and the cost goes up.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But at least it has everything.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A larger input uses more tokens. Latency and usage charges depend on the model and provider, while irrelevant context can reduce usefulness.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But more history means more useful context?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Too much hurts too. The LLM can have trouble finding the part it really needs, so the answer can get worse.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then use a model with a bigger window.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That doesn't solve it. Keep sending every unrelated message, and it can still lose track of the instructions that matter.</p></div></div>
@@ -39,17 +39,17 @@
     <h2 id="s2"><span class="no">02</span>Short-term and long-term</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does Memory keep first?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Short-term memory. It saves every message in a session as an event, without changing it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application writes conversation turns as short-term events. Memory stores those supplied events; recording every turn requires that integration.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it tell sessions apart?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each event has an actor ID, who is talking, and a session ID, which conversation it belongs to. So one user's several sessions don't mix.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Actor and session IDs organize the events. The application must derive trusted IDs and enforce which records each caller may access.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when the Runtime session ends and its microVM is thrown away?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The record stays in Memory. When the session starts again, the conversation continues by loading it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But keeping every message forever won't fit in the window.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So Memory pulls out the key points from the saved events and stores them separately, as long-term memory.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While the learner waits?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. It runs in the background, asynchronously. The reply is never slowed down by it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Extraction runs asynchronously after events are stored. The reply need not wait for it, while event writes and retrieval still affect the application path.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a slow strategy is fine?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Because the user isn't waiting, you can choose one that takes some time. It only changes when the memory is ready, not how fast the tutor answers.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A slower strategy delays availability of extracted records. Choose whether the next reply can proceed without them and measure writes and retrieval separately.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Pulls out what, exactly?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You choose a strategy. Semantic memory collects facts. A summary sums up the whole conversation.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And others?</p></div></div>
@@ -58,8 +58,8 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, it can combine them. And the extracted memories go into separate namespaces, like separate shelves.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One shelf for this user's preferences, another for a case history.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Separate shelves help avoid mixing up whose memory is whose.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a search on one shelf never reads another?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the idea. You choose the shelf when you store and when you search.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the shelf names organize records; what prevents access to someone else’s shelf?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Derive the namespace from trusted identity and enforce access permissions. A caller-selected shelf name alone is not an authorization boundary.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A chat turn is saved as-is in short-term memory; an extraction strategy runs in the background; the key points settle in long-term memory, by namespace; and when the next chat starts, retrieval searches by meaning and adds them into the prompt.">
@@ -87,13 +87,13 @@
     <h2 id="s3"><span class="no">03</span>Bringing memory back</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So how did the tutor know what I said last week?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When a new conversation starts, Memory searches long-term memory for entries close in meaning to the question. It adds them into the prompt.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application queries permitted long-term records and adds selected results to the model’s context. A framework integration can perform these steps when configured.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Close in meaning, not the same words?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. It searches by meaning, so it finds a related memory even when the wording differs.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if I said "I keep mixing up past tenses" last week, and today I ask about "yesterday's grammar"…</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The search can still find it. The words differ, but the meaning is close.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do I write that search myself?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Barely at all. Point your calls to Memory, and the conversation starts with likely relevant memories already added.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A configured integration can help. The team still chooses the query, authorized namespace and retrieved records to include, then tests their relevance.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a simple way to picture this?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Think of a new employee. Short-term memory is the employee's note from today's meeting, written down as it happened. Long-term memory is a customer chart, with only the key points copied over.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the charts sit on shelves until that customer comes up again.</p></div></div>
@@ -122,8 +122,8 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In Strands, the conversation manager. It replaces old messages with a summary, or removes the oldest parts past a certain size.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is the default good enough?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It depends on what matters most for the agent. Deciding whether to keep the default or adjust it is a real design choice.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For a tutor, the last few turns matter most. An old greeting could be dropped first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Maybe. But the learner's goal from the first message may matter more than anything since. Test it before you decide.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Last week the learner wanted exam practice; today they want conversation for work. Which goal should the summary keep?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep the new goal explicit and treat the older one as history. Test whether retrieval preserves that change rather than overriding it.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -132,7 +132,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What worries companies most about long-term memory?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mixing up whose memory it is. A poor namespace design can leak one customer's preferences into another's data.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How do you design it well?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For example, build namespaces around individual people rather than departments. Then when staff change, memories don't get mixed up.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For this tutor, scope records to the authenticated learner. Shared organizational context may use another permitted audience, with explicit access rules.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What else comes up in production?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Questions you barely think about alone. Can you delete one user's memory when they ask? How long is memory kept?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is it fine to keep personal data in it as it is?</p></div></div>
@@ -147,20 +147,20 @@
     <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now explain how the tutor "remembered" last week.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model remembers nothing. Short-term memory keeps each session's turns, as they were said.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model receives selected context. Short-term Memory keeps the conversation events the application recorded.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Long-term memory keeps facts extracted in the background, on separate shelves.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Retrieval brings them back into the next prompt, by meaning, inside a window with a limit.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Whose shelf is it?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Mostly one user's. That's the safest default.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For the tutor, the authenticated learner’s permitted records. Shared memory would need its own audience and authorization rule.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add where the line is for us: the tutor's Memory keeps conversation, and the learner's record stays in our database.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>The LLM remembers nothing; the context window carries the history and has a limit.</li>
-      <li>Short-term memory keeps whole conversations; long-term memory stores extracted key points by namespace.</li>
-      <li>Retrieval adds memories back by meaning, and every shelf belongs to one owner.</li>
+      <li>The model receives selected context; the window is limited and stored history must be supplied by the application.</li>
+      <li>Short-term memory keeps recorded events; long-term strategies extract selected context organized by namespace.</li>
+      <li>Retrieval selects related records within an authorized namespace; names alone do not enforce access.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Official Workshop Phase 1: the Memory lab</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Memory chapter</li><li><span class="tag">3-5</span> Deep Dive: Manage context of your agent</li></ul></div>

@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 10 of 13</span></p>
   <h1>How do you know an agent is doing a good job?</h1>
-  <p class="lead">After this page you can explain why an agent's behavior must be recorded as traces and spans. You can say how evaluations turn quality into a score. And you can describe the loop of observe, evaluate and fix.</p>
+  <p class="lead">The tutor gives a wrong explanation without calling its grammar tool. Recorded steps and a reviewed quality standard help the team investigate a specific cause.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why can't you just rerun it?</li>
-      <li>What do traces and spans record?</li>
-      <li>How is quality turned into a score?</li>
-      <li>How do observing and evaluating lead to a fix?</li>
+      <li>The path changes every time</li>
+      <li>Traces and spans</li>
+      <li>Quality as a score</li>
+      <li>Observe, evaluate, fix</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -35,7 +35,7 @@
       <rect x="152" y="184" width="224" height="36" rx="4" class="node-acc"/><text x="164" y="208" class="t-hd t-acc">Tool B · slow</text>
       <rect x="296" y="228" width="80" height="36" rx="4" class="node"/><text x="306" y="252" class="t-sm">LLM 3</text>
     </svg>
-    <figcaption>Each bar is a span, and its length is how long it took. The accented span is where this request waited, and where to look first.</figcaption>
+    <figcaption>This illustrative timeline identifies a slow tool span. Actual instrumentation must retain the arguments, result and timing needed to investigate a request.</figcaption>
   </figure>
 <p>In the timeline, a long tool span points to the part of this request that consumed time. Read its arguments and result before changing the prompt. If the agent skipped a tool entirely, the missing span may be more informative than any slow bar.</p>
 <p>OpenTelemetry also makes integration with other monitoring systems possible where the exporter and destination support it. An existing platform may use Langfuse or Datadog alongside its infrastructure monitoring.</p>
@@ -67,17 +67,17 @@
       <line x1="208" y1="180" x2="192" y2="180" class="ln"/>
       <line x1="104" y1="140" x2="104" y2="96" class="ln"/>
     </svg>
-    <figcaption>The loop turns clockwise. The accented step turns a guess into a measured result.</figcaption>
+    <figcaption>The cycle compares a change against the same cases and a wider dataset. A better score supports the tested hypothesis without establishing every future outcome.</figcaption>
   </figure>
 <p>Evaluation consumes time and judge-model calls. Traces may contain learner text or other personal information. Decide what to record, how to redact sensitive fields, who may read the records and how long to retain them. Debugging value and privacy requirements both belong in that decision.</p>
-<p>The official evaluation lab and the “Observe, evaluate, optimize” study module provide practice for this cycle. The practical goal is evidence for a release decision: whether a new model, prompt or tool behaves better on the tasks the application serves.</p>
+<p>The official evaluation lab and the “Observe, evaluate, optimize” module provide practice for this cycle. The practical goal is evidence for a release decision. Compare how a changed model, prompt or tool performs on the application’s tasks.</p>
 <p>When a production question exposes a new failure, add a suitable version to the regression dataset. That converts one incident into a repeatable check. Observability supplies the work record; evaluation turns it into evidence the team can use.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>An agent's path changes every run, so traces and spans record what happened.</li>
-      <li>Evaluations turn responses into scores, online in production and in CI before release.</li>
+      <li>An agent’s path can vary; configured traces and spans record the observable steps.</li>
+      <li>Evaluations score cases against a rubric; human checks and release rules determine how those scores are used.</li>
       <li>The design of the test set and standard matters most; keep looping observe, evaluate, fix.</li>
     </ol>
   </section>

@@ -398,22 +398,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 9 of 13</span></p>
   <h1>Why isn't 'please don't' enough?</h1>
-  <p class="lead">After this page you can explain why a rule in the prompt is only a request. You can say how Policy enforces rules outside the model. And you can say how Policy differs from Guardrails, and when a person should approve an action.</p>
+  <p class="lead">A refund request exceeds the permitted amount even though its wording looks harmless. The tool boundary must reject the operation independently of the model.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why is a prompt only a request?</li>
-      <li>How does Policy check a call before it runs?</li>
-      <li>How do Policy and Guardrails differ?</li>
-      <li>When should a person approve?</li>
+      <li>A prompt only asks</li>
+      <li>Check before running</li>
+      <li>Policy and Guardrails</li>
+      <li>A person&#x27;s approval</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>A prompt only asks</h2>
-<p>Adding “Never delete data” to a system prompt can guide an agent, but it does not remove the delete operation. The model may overlook a condition, misunderstand a request, or respond to an instruction hidden in a user's text or a tool result. A prompt describes desired behavior; an authorization control decides whether an operation can run.</p>
+<p>Adding “Never delete data” to a system prompt can guide an agent, but it does not remove the delete operation. The model may overlook a condition or misunderstand a request. It may also follow hidden instructions in user text or a tool result. A prompt describes desired behavior; an authorization control decides whether an operation can run.</p>
 <p>Consider a refund limit of 10,000 yen. If the model produces a tool call for 15,000 yen, the tool boundary must reject it. The rule needs to hold even when the model's reasoning is mistaken. The same principle applies to restricted documents and destructive actions.</p>
 <p>Prompt injection is an attempt to make the model treat untrusted content as an instruction. Keeping business rules outside the model limits what such an attempt can achieve. The prompt remains useful, but the permitted actions must also be defined and checked by the surrounding system.</p>
   </section>
@@ -446,17 +446,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <dt>resource · on what</dt><dd>The target tool or data, such as the refund process.</dd>
   <dt>context · under what conditions</dt><dd>Extra details, such as an amount of 10,000 yen or less.</dd>
 </dl>
-<p>For example, “Only the HR role may use the HR search tool” names the role as the principal, the tool invocation as the action, and the HR tool as the resource. A refund rule adds an amount condition. The four terms provide a vocabulary for checking whether a rule is complete.</p>
+<p>Consider “Only the HR role may use the HR search tool.” The role identifies the principal, the attempted invocation identifies the action, and the HR tool identifies the resource. A refund rule adds an amount condition. These terms help the team check whether the intended authorization rule is complete.</p>
 <p>AgentCore can generate candidate policies from a plain-language description. Review and test the generated policy against the tool schema, including both allowed and denied cases. A convenient authoring method still needs a clear statement of the intended permission.</p>
 <p>Policies live in a policy engine attached to a Gateway. A shared engine can apply consistent rules across agents using that boundary. For Quickturn's tutor, the engine should allow only the tools and parameter ranges required for tutoring.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Policy and Guardrails</h2>
 <p>Bedrock Guardrails and AgentCore Policy inspect different parts of a request. Guardrails examines content, such as harmful language, sensitive information, disallowed topics or possible prompt attacks. Depending on the configured feature, it can block content or mask sensitive text.</p>
-<p>Policy evaluates whether an action is authorized. It can reject a refund above the permitted amount even if the accompanying text looks harmless. A content filter alone does not establish that a tool call is allowed, and an authorization rule alone does not judge whether a reply is appropriate.</p>
+<p>Policy evaluates whether an action is authorized. It can reject a refund above the permitted amount even if the accompanying text looks harmless. A content filter alone does not authorize that call. An authorization rule alone does not judge whether a reply is appropriate.</p>
 <p>Use the layers together when the application needs both controls. Their integrations may evolve, but the distinction remains useful: inspect the content being exchanged and authorize the operation being attempted. Avoid treating either layer as a guarantee against every kind of attack.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 292" role="img" aria-label="Four layers of control: the prompt, which only asks; Guardrails, which filters the content of input and output; Policy, which enforces rules on actions; and human approval, for actions that can't be undone.">
+    <svg viewBox="0 0 400 292" role="img" aria-label="Four layers of control: the prompt, which only asks; Guardrails, which filters the content of input and output; Policy, which enforces rules on actions; and human approval for selected high-impact operations.">
       <rect x="16" y="16" width="368" height="56" rx="6" class="node-soft"/>
       <text x="32" y="50">Prompt · only asks</text>
       <rect x="16" y="84" width="368" height="56" rx="6" class="node"/>
@@ -464,7 +464,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="152" width="368" height="56" rx="6" class="node-acc"/>
       <text x="32" y="186" class="t-hd t-acc">Policy · enforces actions</text>
       <rect x="16" y="220" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="254">Human · approves the rest</text>
+      <text x="32" y="254">Human · chosen actions</text>
     </svg>
     <figcaption>Each layer does a different job. The accented layer authorizes tool calls at the Gateway boundary.</figcaption>
   </figure>
@@ -474,14 +474,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <p>Some authorized actions still deserve human approval. A large payment, account deletion or other difficult-to-reverse action can pause until an authorized person reviews the proposed operation. This pattern is called human-in-the-loop.</p>
 <p>An application can use an agent framework's hooks or an explicit workflow to pause before execution. The approval screen should show the exact action, target and important parameters. When execution resumes, it must use the approved operation; a changed amount or target needs another decision.</p>
 <p>Approval adds delay because it depends on a person's availability. Reserve it for actions whose consequences justify that delay, and decide what happens when an approval times out. Routine, reversible actions can often rely on narrow automated rules.</p>
-<p>Before production, check whether the system can explain why a call was allowed, whether administrators can update rules separately from agent code, and whether all relevant agents receive those rules. Keep the prompt instruction as guidance, while enforcing the action boundary and approval process independently.</p>
+<p>Before production, check whether records explain why a call was allowed. Confirm that administrators can update rules separately from agent code. Test whether the relevant agents receive those rules and whether alternate routes bypass them. Keep prompt guidance while enforcing action boundaries and approval independently.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>A rule in the prompt is only a request; Policy enforces rules outside the model.</li>
-      <li>Policy checks each tool call at Gateway before it runs, using Cedar rules in four parts.</li>
-      <li>Guardrails filters content, Policy stops actions, and a person approves what can't be undone.</li>
+      <li>Prompts guide the model; attached Policy authorizes covered tool calls independently at Gateway.</li>
+      <li>Policy evaluates covered Gateway tool calls using Cedar rules about principal, action, resource and context.</li>
+      <li>Guardrails inspects configured content; Policy authorizes covered actions, while selected operations pause for exact human approval.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Phase 1, the Policy lab: write a Cedar rule and apply it to Gateway</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Policy chapter</li><li><span class="tag">3-8</span> Deep Dive: Centralize and govern your AI infrastructure</li></ul></div>

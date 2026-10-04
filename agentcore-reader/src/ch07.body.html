@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 7 of 13</span></p>
   <h1>How does an agent get the right tools?</h1>
-  <p class="lead">After this page you can explain how Gateway turns existing APIs into MCP tools behind one endpoint. You can say why it checks identity in two directions. And you can say why fewer, clearer tools make an agent more accurate.</p>
+  <p class="lead">Leo lists every internal API as a possible tutor tool. A shared endpoint helps connect them, but useful discovery and limited access need deliberate design.</p>
   <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why does every team rebuild the same connections?</li>
-      <li>What are targets, and who is checked where?</li>
-      <li>Why do more tools make an agent worse?</li>
-      <li>What are Code Interpreter and Browser for?</li>
+      <li>Too many toolboxes</li>
+      <li>Checks in two directions</li>
+      <li>Fewer, clearer tools</li>
+      <li>Isolated workspaces</li>
     </ul>
   </nav>
   <p class="stage">The whiteboard room. Leo has listed every API Quickturn has, and it fills the board.</p>
@@ -24,7 +24,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Dozens of APIs.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And each one is a possible tool. If every team writes its own connection code, the same login check gets rewritten again and again.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the checks won't match.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They rarely do. One team checks every caller carefully. Another lets everything through with a single API key.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Independent integrations can apply different checks. A shared entry point makes that difference easier to inspect, provided targets also enforce appropriate access.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And it gets worse with each new agent.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Gateway solves "how do we expose these tools" once, and many agents reuse it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does it work?</p></div></div>
@@ -58,11 +58,11 @@
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So when a new internal API appears?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add it as a target. Existing agents can use it right away, without a code change.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Register a supported target and configure discovery and permissions. Test whether the existing agent can find and correctly use the new tool.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent never has to know where each tool lives.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Think of the agent as a new employee. Gateway is the toolbox front desk. The employee says "I want to do this," and the desk finds the right tool.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And checks an ID first.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Always. And it records who received which tool.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Configure the entry check and usage records for the application. The target also needs suitable permissions and an owner.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s2">
@@ -73,15 +73,15 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the second?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Gateway calls the target. That uses IAM, OAuth or an API key, depending on the target. It decides which rights to use on the target side.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent holds all those keys?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never. The agent doesn't handle credentials, the login secrets, at all. Storing them is Identity's job.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keep credentials out of the model’s prompt and tool results. Gateway and Identity support credential handling, but application integrations may still receive tokens.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if the agent's prompt leaked, no password would leak with it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's one reason for the split. What the model never sees, it can't repeat.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Keeping secrets outside model context reduces that exposure. Returned credentials still need protection from application logs and careless tool results.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then Gateway only picks the method.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The method lives in Gateway, and the secrets live in Identity.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Gateway specifies the target authorization method. Identity handles OAuth and API-key credentials. Where supported, IAM access uses configured service or caller roles.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything between the two checks?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Inside Gateway, each call passes through four steps in order.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which four?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The entry check, a tool search, a Policy check, and then the exit check.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Discovery and invocation have different paths. The caller is authenticated; an attached policy evaluates covered tool calls before target access.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which checks does one invocation need?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Search helps discover relevant tools. A chosen call then needs policy authorization and suitable target credentials; search is not repeated for every invocation.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">
@@ -94,18 +94,18 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So more tools can make the agent worse.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Gateway can search by meaning, called semantic search, to find only the tools that match a request.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the agent sees a short list.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the choice doesn't get harder as the total grows. Register hundreds of tools, and each request still sees only a short list.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>With search configured, the agent can request a smaller candidate set. Relevant tools must still be discoverable, and overlapping descriptions can cause confusion.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the search keeps the choice small, even when the shelf is big.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say a department has 100 tools, and only a few fit this request. Gateway pulls out those few, and the LLM picks without confusion.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Search may return relevant candidates from a large collection. Test whether the needed tool appears and whether the model selects and uses it correctly.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the tool's shape matter too?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A lot. If one tool matches a single API call, it can be too small, and the agent needs many calls.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if one tool does everything?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then it's hard to reuse in other situations. Part of designing Gateway is shaping tools to a size that's easy to use.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the description?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It decides how often a tool gets picked. A clear note about when to use it improves both the search and the LLM's choice.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A description influences discovery and selection. State the purpose, required arguments and limits, then evaluate representative requests.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="A few focused tools compared with many vague ones. What the LLM reads: a short list, versus hundreds of descriptions. Room left in the context: plenty, versus little. Wrong picks: rare, versus more likely.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A few focused tools compared with many vague ones. What the LLM reads: a short list, versus hundreds of descriptions. Room left in the context: plenty, versus little. Wrong picks: evaluate both designs on representative requests; the diagram does not provide measured error rates.">
       <rect x="8" y="36" width="192" height="236" rx="10" class="node-acc"/>
       <text x="104" y="24" text-anchor="middle" class="t-hd">Few, focused</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Many, vague</text>
@@ -116,16 +116,16 @@
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">plenty</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">little</text>
       <text x="16" y="216" class="t-sm">Wrong picks</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">rare</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">more likely</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">test it</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">test it too</text>
     </svg>
-    <figcaption>A qualitative picture, not measured numbers. The accented column is where accuracy comes from.</figcaption>
+    <figcaption>This illustrates context and selection tradeoffs, without measured error rates. A short, clear list still needs evaluation on the actual tasks.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So what does the tutor get?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A small, curated set of the app's commands and queries. And no tool takes a learner id.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the model shouldn't choose whose data it reads.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The tool design is also what Policy checks when it decides whether to allow a call.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application supplies the authenticated learner’s identity outside model-written arguments and enforces access in the data layer. Policy additionally checks covered tool calls.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -136,11 +136,11 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Browser?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The agent controls a browser running in an isolated space in the cloud. It can work with internal systems that only have a screen and no API.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds risky.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A person can watch the actions live, or keep a record. A normal API call can't offer that.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Browser sessions can be observed or recorded. API tools can also record actions, while either path needs privacy and access controls.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if it goes wrong?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Both run separately from production. No real data goes in; only results come out.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Their execution environments are isolated. Data and network exposure still depend on what the application supplies and which destinations their permissions allow.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do security reviews usually flag?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every new tool gets slightly more access than it needs. Before long, every agent has admin-level rights.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An access review should check whether accumulated permissions exceed the task. Tool availability does not itself justify broad production rights.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the other worry?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Indirect prompt injection: a tool follows hidden instructions inside an outside web page or file. Tools like Browser need even stronger isolation from production.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So every tool is a trade.</p></div></div>
@@ -153,10 +153,10 @@
     <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Look at your list on the board again. What would you register?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only a few focused tools, with clear notes on when to use each one. More tools means more wrong picks.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Only tools needed for the task, with clear purposes and bounded permissions. Test discovery and selection rather than assuming fewer tools guarantee accuracy.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>They go behind one gateway, as targets, and agents reach them through one MCP endpoint.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And who checks whom?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Authentication runs both ways: the caller at the entry, the right credentials at the exit. The credentials themselves are stored in Identity.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Gateway checks callers and authenticates target access. Identity handles OAuth and API-key credentials; IAM uses configured roles.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Circle the learner id on your list. Whatever else you register, that argument never becomes something the model writes.</p></div></div>
 </div>
   </section>
@@ -164,8 +164,8 @@
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Gateway registers existing APIs, functions and MCP servers as targets behind one MCP endpoint.</li>
-      <li>Authentication runs in two directions, and Identity stores the credentials.</li>
-      <li>Semantic search, tool size and clear descriptions decide how accurately tools are chosen.</li>
+      <li>Gateway checks callers and authenticates target access. Identity handles OAuth and API-key credentials; IAM uses configured roles.</li>
+      <li>Semantic search and focused descriptions shape the candidate list; evaluation checks actual tool selection and use.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Phase 1, the Gateway lab: register targets and try tool search</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Gateway chapter</li><li><span class="tag">2-4</span> The same book, Part 3, second half: the built-in tools chapter</li><li><span class="tag">3-4</span> Deep Dive: Connect your agent to anything</li></ul></div>

@@ -2,24 +2,24 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 8 of 13</span></p>
   <h1>Whose permission is the agent using?</h1>
-  <p class="lead">After this page you can separate the two questions Identity answers: who may call the agent, and whose rights it uses outside. You can also choose between the user's rights and the agent's own, and explain the confused deputy.</p>
+  <p class="lead">A signed-in learner asks the tutor for another learner’s records. The caller’s identity, outbound credentials and final data permission must agree before access.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are the entry and exit questions?</li>
-      <li>How is the caller checked, and where do keys live?</li>
-      <li>Whose rights go out: the user's or the agent's?</li>
-      <li>What is a confused deputy?</li>
+      <li>Entry and exit</li>
+      <li>Who comes in, and where keys live</li>
+      <li>The user&#x27;s rights or the agent&#x27;s</li>
+      <li>The confused deputy</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Entry and exit</h2>
 <p>A tutor agent needs access to a learner's records, but an administrator key gives it access to far more. That shortcut creates a difficult question: when the agent performs an action, whose permission makes the action possible? A user who can see only their own records must not gain access to everyone else's records by asking the agent.</p>
 <p>Separate the design into two directions. Inbound authentication checks who is calling the agent. Outbound authentication supplies the credentials the agent needs when it calls another service. A successful sign-in answers the first question; it does not automatically answer the second.</p>
-<p>Amazon Bedrock AgentCore Identity manages workload identities and credentials for agents. In the fictional Quickturn language-learning app, the tutor must know which learner started the session and use appropriately limited access when it reads that learner's data. Designing both directions makes that requirement explicit.</p>
+<p>Amazon Bedrock AgentCore Identity manages workload identities and credentials for agents. Quickturn’s tutor must identify the learner who started the session. It then needs appropriately limited access to that learner’s data. Entry authentication and outbound permission make separate parts of that requirement explicit.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="A user signs in; the entry check verifies the caller; the agent runs on Runtime; on the exit side it chooses a credential from Identity's token vault; and it reaches the outside service with those rights.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -44,9 +44,9 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Who comes in, and where keys live</h2>
-<p>For inbound access, an AWS caller can use IAM credentials and a SigV4 signature. SigV4 is AWS's method of signing requests so the receiving service can verify the caller. A user-facing application may instead present a JWT, a signed token issued by an identity system such as Cognito, Microsoft Entra ID or Okta. The configured authorizer validates the token before the request reaches the agent.</p>
+<p>An AWS caller can use IAM credentials and a SigV4 signature for inbound access. The service verifies the caller using that signed request. A user-facing application may instead present a JWT from an identity system such as Cognito, Microsoft Entra ID or Okta. A JWT is a signed token. The configured authorizer validates it before the request reaches the agent.</p>
 <p>The agent also has a workload identity of its own. That identity makes agent activity traceable: an operations team can distinguish the tutor from a finance agent or an overnight reporting job. Identifying an agent is different from giving it permission to read every user's data.</p>
-<p>For outbound calls, register a credential provider for the target service. A provider may use OAuth or an API key. Identity's token vault manages the relevant credentials so developers can avoid embedding long-lived secrets in source files or copying them into application configuration.</p>
+<p>Register an outbound credential provider for the target service, using a supported OAuth flow or an API key. Identity’s token vault manages relevant credentials. This reduces the need to embed long-lived secrets in source files or copy them into application configuration.</p>
 <p>The application requests the credential it needs for a particular provider. Depending on the integration, a token may still be returned to application code and used in a request. The vault reduces secret handling; it does not make careless logging harmless. Protect returned credentials, request only necessary scopes, and plan rotation and revocation.</p>
 <p>Think of the two directions as a building pass and a key safe. The pass identifies the visitor entering the building. The key safe supplies access for a specific job. Checking the pass does not justify handing over a master key.</p>
   </section>
@@ -55,22 +55,22 @@
 <p>There are two common ways to obtain outbound permission. In a user-delegated flow, the user authorizes access to their account. Three-legged OAuth, often shortened to 3LO, connects the user, the application and the authorization service. The granted scopes limit what the application can request, while the target service must still enforce its resource permissions.</p>
 <p>A system-to-system flow uses the application's own credentials. This is commonly called two-legged OAuth, or 2LO, and often uses the client credentials grant. It fits work that does not belong to one signed-in user, such as a nightly inventory report.</p>
 <p>Choose by asking in whose name the action should happen. A Slack integration that acts for one user should use a suitable delegated flow and the scopes needed for that action. An organization-wide batch report needs a separate service identity with narrow reporting rights. Neither case justifies using an unrestricted administrator credential.</p>
-<p>For the tutor, user-specific access is the starting point. If a later feature needs a batch process across learners, treat it as a separate workload with its own purpose, permissions and audit record.</p>
+<p>For the tutor, enforce access to the current learner’s permitted records. A later batch feature across learners needs a separate workload. Give it its own purpose, permissions and audit record.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Acting on behalf of the user, 3LO, compared with the agent's own rights, 2LO. Whose rights: the consenting user, versus the agent itself. Consent: a consent screen, versus client credentials. Good for: acting for one user, versus batch work across users.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Acting on behalf of the user, 3LO, compared with the agent's own rights, 2LO. Whose rights: delegated user permission, versus a service identity. Setup: user authorization, versus a configured service credential. Good for: acting for one user, versus batch work across users.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">For the user</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Agent's own</text>
       <text x="16" y="56" class="t-sm">Whose rights</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">the user's</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">the agent's</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">service identity</text>
       <text x="16" y="136" class="t-sm">Consent</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">consent screen</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">not needed</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">service setup</text>
       <text x="16" y="216" class="t-sm">Good for</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">one user's data</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">batch jobs</text>
     </svg>
-    <figcaption>Left is 3LO, right is 2LO. For anything touching one user's data, the accented cell is the default.</figcaption>
+    <figcaption>The comparison illustrates delegated and service credentials. Choose according to the target’s authorization model and the purpose of the actual operation.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
@@ -78,14 +78,14 @@
 <p>A confused deputy is a service that uses its stronger permissions to perform an action for a caller who lacks those permissions. The service may be trying to help, yet it becomes a route around the original access rules.</p>
 <p>Suppose a learner asks the tutor to show another learner's mistakes. With an administrator key, the agent may be able to fetch those records. A prompt telling it to respect privacy does not remove that ability. The data service must reject a request that is outside the current learner's permitted scope.</p>
 <p>Carry the authenticated user's identity through the request and enforce it where the data is accessed. Check both the action and the target record. A valid token proves identity; the authorization check decides whether this person may read this particular record.</p>
-<p>An access review should be able to answer three questions: whose permissions are used, where credentials are stored, and how access is revoked when a user leaves. Disabling an account may prevent new sign-ins, but existing sessions and tokens also need a defined revocation or expiry process. Record that process rather than assuming account removal ends every active connection immediately.</p>
+<p>An access review should name whose permissions are used, where credentials are stored and how access is revoked. Disabling an account may prevent new sign-ins. Existing sessions and tokens also need a defined revocation or expiry process. Record that process rather than assuming account removal immediately ends every active connection.</p>
 <p>A useful access plan names the inbound authorizer, the outbound provider, the allowed scopes and resources, and the revocation path. Those details let a reviewer follow the permissions from the learner's request to the final data access.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Identity answers two separate questions: who calls the agent, and whose rights it uses outside.</li>
-      <li>Use the user's rights (3LO) for their data and the agent's own (2LO) for batch work; keep tokens in the vault.</li>
+      <li>Design entry authentication and outbound permission separately; Identity supplies workload identities and credential services.</li>
+      <li>Use delegated rights where appropriate; a service identity still needs narrow permissions and resource checks.</li>
       <li>Give each workload only the permissions it needs, and enforce user access on user-specific requests.</li>
     </ol>
   </section>

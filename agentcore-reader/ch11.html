@@ -398,23 +398,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 11 of 13</span></p>
   <h1>What worries a company when every team builds agents?</h1>
-  <p class="lead">After this page you can explain why many teams' agents need one shared entry point and one set of rules. You can also say how to control cost across teams, and how three capabilities can combine to expose private data.</p>
+  <p class="lead">Sales, HR and finance each connect an agent to internal tools. Shared controls need an inventory and a path that the relevant requests actually follow.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What goes wrong when each team builds alone?</li>
-      <li>How does cost grow across teams?</li>
-      <li>Which three conditions make a leak possible?</li>
-      <li>What does central control cost?</li>
+      <li>One shared entry point</li>
+      <li>Cost across teams</li>
+      <li>When three things come together</li>
+      <li>Central control, and its cost</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>One shared entry point</h2>
-<p>Imagine sales, HR and finance each building an agent. Every team wraps internal APIs, chooses models and manages credentials. Local progress is quick, but the company soon has several copies of the same integration and an incomplete picture of who can access which tool.</p>
-<p>A shared tool entry point provides a place to apply authorization rules and record usage. AgentCore Gateway can serve that role. Company policy should also define approved models and data handling; model access may require its own controls rather than being governed entirely by the tool Gateway.</p>
+<p>Imagine sales, HR and finance each building an agent. Every team wraps internal APIs, chooses models and manages credentials. Local progress can be quick while integration work is duplicated. The company may still lack a clear inventory of who can access each tool.</p>
+<p>A shared tool entry point provides a place to apply authorization rules and record usage. AgentCore Gateway can serve that role. Company policy should define approved models and data handling too. Model access needs appropriate controls; the tool Gateway does not automatically govern every model call.</p>
 <p>Maintain an inventory that connects each agent to its owner, tools, permissions and models. If a tool has a vulnerability, that record identifies the affected workloads. Without it, an incident response depends on asking every team and hoping nobody forgets an older agent.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="The sales, HR and finance agents all reach internal APIs and tools through one shared Gateway in the middle, which also keeps the shared policy and the log of who uses what.">
@@ -431,7 +431,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="64" y="236" width="272" height="48" rx="6" class="node"/>
       <text x="200" y="266" text-anchor="middle">Internal APIs and tools</text>
     </svg>
-    <figcaption>Three teams, one way in. The accented box is where the rules and the record live for everyone.</figcaption>
+    <figcaption>The shared entry point applies its configured rules to routed tool traffic. Model access and other routes need their own controls and records.</figcaption>
   </figure>
 <p>The “Centralize and govern your AI infrastructure” study module develops this platform perspective. The useful question is which controls are shared and where every relevant request passes through them.</p>
   </section>
@@ -445,10 +445,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>When three things come together</h2>
 <p>Indirect prompt injection arrives through content the agent reads, such as a document, webpage or email. An attacker may include text asking the agent to ignore its instructions and send private information to an outside address. The content is supposed to be data, but the model may treat it as a command.</p>
-<p>One useful risk model combines three capabilities: access to confidential information, exposure to untrusted content, and a way to transmit information outside the permitted audience. Together, these capabilities create a path for an attacker to redirect private data.</p>
+<p>A risk model combines access to confidential information, exposure to untrusted content and a way to transmit information outside the permitted audience. Together, these capabilities create a route for an attacker to redirect private data.</p>
 <p>Use that model to examine the design, rather than assuming that web access alone explains every risk. Separate workloads or restrict permissions so that a task cannot combine unnecessary access with an unrestricted route out.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Three conditions around a center: the agent touches internal data, reads outside content, and can send data out. Data can leak only in the center, where all three hold at once.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Three conditions around a center: the agent touches internal data, reads outside content, and can send data out. Their combination illustrates one data-exfiltration route; ordinary responses and logs are also output routes to review.">
       <line x1="104" y1="60" x2="200" y2="150" class="ln"/>
       <line x1="296" y1="60" x2="200" y2="150" class="ln"/>
       <line x1="200" y1="244" x2="200" y2="178" class="ln"/>
@@ -465,18 +465,18 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </figure>
 <p>For a tutor, learner records are sensitive and learner messages are untrusted input. Adding an email-sending tool creates another possible route out. Review the destination, parameters and permissions before making that tool available.</p>
 <p>Removing an unnecessary sending tool reduces this risk, but it is not proof that every leak is impossible. Ordinary responses, logs and other network paths can also disclose information. Check what counts as an allowed audience and cover every output route that matters.</p>
-<p>The OWASP Top 10 for LLM Applications describes a broader set of threats. Use it alongside permission checks and the three-capability model, and repeat the review when a new tool changes what an agent can read or send.</p>
+<p>The OWASP Top 10 for LLM Applications describes a broader set of threats. Use it alongside permission checks and the three-capability model. Repeat the review when a new tool changes what an agent can read or send.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Central control, and its cost</h2>
-<p>A shared platform adds coordination. Teams need a supported way to register tools, request permissions and understand a denied call. That work costs time, but it also reduces duplicated integrations and gives incident responders one place to find the relevant rules and records.</p>
-<p>Make the approved path easy to use: provide clear tool contracts, examples, ownership and a predictable review process. If a team cannot obtain a needed capability through the platform, investigate the gap before it builds an untracked route around the controls.</p>
+<p>A shared platform adds coordination. Teams need a supported way to register tools, request permissions and understand denied calls. That work costs time and can reduce duplicated integration work. Incident responders also need a reliable place to find the relevant rules and records.</p>
+<p>Make the approved path easy to use, with tool contracts, examples, ownership and a predictable review process. If the platform lacks a needed capability, investigate that gap. Otherwise a team may create an untracked route around the controls.</p>
 <p>A production review should identify the agent owner, spending controls, defenses against untrusted instructions and the way document permissions are enforced. For Quickturn's tutor, document which learner data it may read, which tools it may invoke and which output destinations are allowed. Keep those decisions visible as the application grows.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Many teams' agents need one shared Gateway, one policy and one log of who uses what.</li>
+      <li>A shared Gateway can centralize routed tool access; keep owners, permissions and alternative paths visible.</li>
       <li>Cost grows across teams; choose models per task, cache, and watch usage by department.</li>
       <li>Restrict the combination of sensitive data, untrusted content and external output, and review all routes out.</li>
     </ol>

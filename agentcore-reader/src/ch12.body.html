@@ -2,22 +2,22 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 12 of 13</span></p>
   <h1>How do you design an agent you can defend?</h1>
-  <p class="lead">After this page you can explain how document search can leak what a user shouldn't see. You can say what an agent needs before it touches money. And you can use the Generative AI Lens as a checklist, and defend choosing no agent.</p>
+  <p class="lead">A useful answer may quote a restricted document or trigger a payment. A defensible design connects those consequences to permissions, approval, retries and evidence.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>How can document search leak?</li>
-      <li>What must be true before an agent pays?</li>
-      <li>What does the Generative AI Lens ask?</li>
-      <li>When is "no agent" the right answer?</li>
+      <li>Permissions in search</li>
+      <li>When an agent pays</li>
+      <li>A checklist and real code</li>
+      <li>Choosing no agent</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Permissions in search</h2>
-<p>A search index can accidentally lose the access rules of the documents it contains. Suppose an HR folder is available only to managers. If its contents enter an index without useful permission metadata, a search request from another employee may retrieve a passage from that folder.</p>
+<p>A search index can lose the access rules of its documents. Suppose an HR folder is available only to managers. Without reliable permission metadata, the index may return a restricted passage to another employee.</p>
 <p>The generated answer can look perfectly normal, so a well-written prompt will not reveal the mistake. Authorization must happen before restricted passages become part of the model's input.</p>
 <p>Attach trusted metadata describing the permitted audience, then apply a retrieval filter derived from the authenticated caller's access. Maintain those permissions as documents move or users change roles. A filter is useful only when the underlying metadata and the caller's identity are reliable.</p>
   <figure class="fig">
@@ -42,7 +42,7 @@
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>When an agent pays</h2>
-<p>An agent that buys a course upgrade needs controls beyond a payment tool. Define a spending budget, require approval for operations above a chosen threshold, and record what was purchased, for whom and at what price.</p>
+<p>An agent that buys a course upgrade needs controls beyond a payment tool. Define a spending budget and an approval threshold. Record what was purchased, for whom and at what price.</p>
 <p>An approval should identify the precise operation. Preserve the decision and the resulting transaction record so that a reviewer can connect the two. Also consider failures and retries: a timeout must not cause a second charge without a reliable way to identify the original operation.</p>
 <p>If those controls are missing, keep the payment outside the agent's autonomous scope. The design can still propose an upgrade and send the user through a normal purchase flow. Add payment authority only when the team can explain its limits and recover from a partial failure.</p>
   </section>
@@ -59,7 +59,7 @@
 <p>Agent autonomy adds operational work. A model that chooses its next action needs tools, permissions, monitoring and a way to judge the outcome. When the steps are fixed, an explicit workflow or ordinary code can be easier to test and operate.</p>
 <p>In the language-learning example, grading a typed answer can follow a known sequence. A tutor responding to open-ended questions may need flexible tool selection. Evaluate each task separately instead of turning the entire application into one agent.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of how open-ended the task is across and how risky it is down. Fixed steps and low risk: a workflow. Open-ended and low risk: an agent. Fixed steps and high risk: plain code with no LLM. Open-ended and high risk: a narrow agent with approvals.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of how open-ended the task is across and how risky it is down. Fixed steps and low risk: a workflow. Open-ended and low risk: an agent. Fixed steps and high risk: plain code is one option. Open-ended and high risk: a narrow agent with approvals.">
       <text x="151" y="24" text-anchor="middle" class="t-sm">fixed steps</text>
       <text x="309" y="24" text-anchor="middle" class="t-sm">open-ended</text>
       <text x="8" y="80" class="t-sm">low</text>
@@ -75,17 +75,17 @@
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="208" text-anchor="middle">narrow agent</text>
     </svg>
-    <figcaption>Most tasks land in the accented corner. An agent is worth its cost only where the steps can't be written down.</figcaption>
+    <figcaption>The matrix illustrates possible designs, rather than measured task frequencies. Choose autonomy and controls using the actual task, its fixed steps and failure cost.</figcaption>
   </figure>
 <p>For a fixed, high-impact operation, code can enforce the required sequence directly. For an open-ended task with low impact, a limited agent may be reasonable. An open-ended, high-impact task requires especially narrow tools, permissions and approval points.</p>
 <p>Using ordinary code removes model-driven instruction following from that operation, but ordinary software still needs secure access checks and reliable error handling. The choice should follow the actual task and its failure cost.</p>
-<p>A defensible design names what the agent can read, what it can change, how it is evaluated, what happens on failure and who owns the remaining risks. Record the weakest area and a concrete plan to address it. That gives reviewers something they can inspect before the system reaches production.</p>
+<p>A defensible design names what the agent can read and change. It records evaluation, failure handling and ownership of remaining risks. Identify the weakest area and a concrete plan to address it. Reviewers can then inspect the proposed boundaries and supporting evidence before production.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Search must filter by the asker's permissions, or documents leak into answers.</li>
-      <li>Before an agent pays, it needs a budget limit, human approval and a record.</li>
+      <li>Payment authority needs bounded spending, appropriate approval, transaction identity and a record that supports recovery.</li>
       <li>Use the Generative AI Lens as a checklist, and choose no agent when steps are fixed.</li>
     </ol>
   </section>

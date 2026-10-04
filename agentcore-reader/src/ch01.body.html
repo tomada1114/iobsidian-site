@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 1 of 13</span></p>
   <h1>When is it really an agent?</h1>
-  <p class="lead">After this page you can place any LLM feature on one of three levels. You can explain the loop that makes something an agent. And you can name the common workflow patterns that often do the job more cheaply.</p>
+  <p class="lead">A grading call follows known steps, while a tutor chooses what to investigate. The difference lies in who selects the next action and who limits it.</p>
   <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are the three levels?</li>
-      <li>What happens inside the agent loop?</li>
-      <li>Which workflow patterns come first?</li>
-      <li>What does autonomy cost?</li>
+      <li>Three levels</li>
+      <li>Inside the agent loop</li>
+      <li>Workflow patterns first</li>
+      <li>What autonomy costs</li>
     </ul>
   </nav>
   <p class="stage">The whiteboard room. Leo has just joined the team that owns Quickturn's tutor agent.</p>
@@ -24,9 +24,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It sends the learner's answer and a rubric to the model. The model returns a grade.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Who decides what happens next?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our code. It stores the grade and moves on.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then let's sort LLM features into three levels. At each level, the LLM controls more of the decisions.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Consider three designs with different amounts of model control. They are alternatives for a task, rather than stages every feature must pass through.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the first level?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Call it once. You send "Summarize this text," and you show the answer. That's enough for translation or classification.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Call it once for a bounded task, such as classifying this question. The surrounding code still checks and uses the result.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One input, one output.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The second level calls the LLM several times, in steps a person designed. That's a workflow.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
@@ -36,7 +36,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's a tool, exactly?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An action the agent can call, like a search or a database lookup. The LLM chooses what to do next, each time.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>"Search for the customer first. Not enough, so check the orders too. Now I can answer."</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the shape. There's no fixed number of steps. It keeps going until the LLM decides it has reached the goal.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model chooses the next action rather than following a fixed sequence. The harness also needs stopping limits for time, turns and spending.</p></div></div>
 </div>
   <figure class="fig">
     <svg viewBox="0 0 400 244" role="img" aria-label="Three levels, each giving the LLM more control over the steps: call it once, with one fixed step; arrange it as a workflow, with steps set by your code; let it decide as an agent, with steps chosen by the LLM.">
@@ -57,7 +57,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So grading is the first level: one call, inside steps our code fixes.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Close to it. Our code runs the same steps every time, so it's certainly not an agent. The tutor is an agent. It decides whether to look up the learner's weak points, explain, or ask a question.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then going down the ladder is better, isn't it? More intelligent.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Turn a fixed task into an agent, and it only gets slower, more expensive and less predictable.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Extra model choices can add calls and variable paths to a fixed task. Compare that cost with a workflow before adding autonomy.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the skill is choosing the level.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Deciding what to fix in code and what to leave to the LLM is the real skill in good design.</p></div></div>
 </div>
@@ -70,14 +70,14 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the LLM answers.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or it asks to call a tool with certain arguments. If it asks, the program runs that tool.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The result is added to the conversation and sent back to the LLM. That repeats, and it stops when the LLM chooses to answer.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The harness adds the result to the conversation and sends it back. It stops on an answer, a failure or a configured limit.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the LLM calls the API itself?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Never. It only writes a text request that asks for a tool call. The program that receives it calls the API.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model proposes a tool call with arguments. The receiving program decides whether to execute it and calls the API.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What do you call that program?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A harness, like the straps and gear you put on a horse. It runs the loop, calls the tools and keeps the conversation history.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The agent loop: the model decides the next move and asks for a tool; the harness runs the tool and returns the result to the model; this repeats until the stop condition, when the model chooses to answer.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The agent loop: the model decides the next move and asks for a tool; the harness runs the tool and returns the result to the model; the harness also stops on failure or configured limits, while an answer still needs an outcome check.">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">The harness</text>
       <rect x="32" y="60" width="152" height="64" rx="8" class="node"/>
@@ -88,10 +88,10 @@
       <line x1="216" y1="104" x2="184" y2="104" class="ln"/>
       <line x1="108" y1="124" x2="108" y2="196" class="ln"/>
       <rect x="32" y="196" width="336" height="72" rx="8" class="node-acc"/>
-      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">Stop: the model answers</text>
-      <text x="200" y="250" text-anchor="middle" class="t-sm">the goal is met</text>
+      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">Answer or stop limit</text>
+      <text x="200" y="250" text-anchor="middle" class="t-sm">check the outcome</text>
     </svg>
-    <figcaption>The model and the tool trade turns inside the harness. The accented box is the only way out of the loop.</figcaption>
+    <figcaption>The accented box shows an ordinary answer. The harness must also handle failure and stop when its execution limits are reached.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does the harness only run the loop?</p></div></div>
@@ -120,9 +120,9 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That sounds almost like an agent already.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's the first step into multi-agent systems. The parent calls child agents the way it would call tools.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there one more?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Evaluator and optimizer. One role creates, another scores, and you redo it until it passes. Write code, score it with tests, fix it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Evaluator and optimizer: one role creates and another scores. Retry within an attempt limit, then report failure if the result still does not pass.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So grading could use that one, to check its own grades.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It could. The point is that each pattern keeps the order in your code, where you can test it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Choose which decisions remain fixed in code. An orchestrator can still generate a variable plan, so its workers and limits need controls.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s4">
@@ -133,7 +133,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the steps can't be written in advance.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's when autonomy pays. It buys flexibility.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And what does it cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Predictability, latency and money. Each loop turn is another model call, and you can't know how many turns there will be.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Predictability, latency and money. Each turn can add a model call; limits bound the run without guaranteeing a successful answer.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While grading always takes one call.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. So grading stays in fixed steps, and the tutor is an agent.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And if the tutor's answers start to vary too much?</p></div></div>

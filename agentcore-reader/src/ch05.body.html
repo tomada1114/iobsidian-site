@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 5 of 13</span></p>
   <h1>Where does an agent actually run?</h1>
-  <p class="lead">After this page you can explain what AgentCore Runtime takes over, and why each session gets its own private room. You can also describe the one rule an agent must follow, and how versions and endpoints keep production stable.</p>
+  <p class="lead">Two learners may talk to the tutor at once. Runtime separates their execution sessions; the application must also check who owns each session.</p>
   <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why not run the agent on Lambda?</li>
-      <li>What is a private room per session?</li>
-      <li>What must an agent offer, and how long can it run?</li>
-      <li>How are versions deployed and rolled back?</li>
+      <li>Why not Lambda</li>
+      <li>A private room per session</li>
+      <li>Long runs and one rule</li>
+      <li>Versions and cost</li>
     </ul>
   </nav>
   <p class="stage">The whiteboard room. Leo has drawn the API's Lambda functions, and the tutor is in a separate box.</p>
@@ -25,11 +25,11 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And what is Lambda built for?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Short tasks that finish quickly. Each call has a time limit.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So a long conversation can run past that limit. That's the first problem.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why not a container, on ECS? No time limit there.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>True. But now you design your own isolation and scaling. Keeping each user's conversation separate, and removing servers when nobody needs them.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Lambda has a time limit, and on ECS we build everything ourselves.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then why not a container on ECS for longer work?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That can fit. Tasks and their entry points still need timeouts, scaling choices and isolation suited to the workload.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Lambda has invocation limits, while an ECS design gives us more operating choices to own.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the gap. Runtime takes over three jobs: keeping the agent running, keeping sessions isolated, and scaling up or down.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we only write the agent's own code.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And we still configure access and session ownership around our code?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. The tutor runs on Runtime, and the rest of the API stays on Lambda. Each fits its job.</p></div></div>
 </div>
   <figure class="fig">
@@ -47,7 +47,7 @@
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">automatic</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">automatic</text>
     </svg>
-    <figcaption>Scaling is a tie. The accented column wins on the two rows an agent needs most: long runs and separate sessions.</figcaption>
+    <figcaption>This tutor design benefits from long runs and separate execution sessions. Other workloads may suit Lambda; all still need application-level access checks.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -56,13 +56,13 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does "isolated" mean in practice?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>When Runtime receives a request, it sets up a microVM, a small virtual machine, just for that session. The agent runs inside it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>One per user?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One per session. Each user's session gets its own microVM, so conversations never mix.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>One per runtime session in this microVM design. The application must also bind the session ID to its authorized learner.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And when the session ends?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Its microVM is thrown away, like cleaning up a room after the work is done.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The environment is removed after its configured lifecycle ends. Ending a chat screen is not itself a durable-state or deletion guarantee.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how does a learner come back to the same conversation?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They send a request with the same session ID, and Runtime shows them back to the same room.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same ID reuses a live environment. After its termination, Runtime creates another environment; durable conversation state needs a separate store.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Runtime remembers the conversation.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No, that's Memory's job. Runtime's job is only to set up an isolated place to run the agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A live Runtime environment can retain local state temporarily. Memory provides durable conversation context that the application can retrieve after that environment ends.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So Runtime gives the room, and Memory brings back the notebook.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Keep them apart in your head, because they fail in different ways.</p></div></div>
 </div>
@@ -78,7 +78,7 @@
       <rect x="104" y="172" width="192" height="68" rx="8" class="node"/>
       <text x="200" y="212" text-anchor="middle">agent code</text>
     </svg>
-    <figcaption>The accented box is the private room. Another session never shares it, and it's cleaned away when the session ends.</figcaption>
+    <figcaption>The microVM separates execution resources for this session. Check session ownership and downstream permissions too; environment isolation does not authorize data access.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What happens without that, in a prototype?</p></div></div>
@@ -93,7 +93,7 @@
     <h2 id="s3"><span class="no">03</span>Long runs and one rule</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long can a session run?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>As of May 2026, Runtime supports runs of up to 8 hours. You can hand off long tasks, like research or data analysis, and let them keep going.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The microVM example supports up to 8 hours, subject to lifecycle settings. Long work still needs status, stopping limits and durable results.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>But a learner won't wait in silence for eight hours.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So Runtime supports both asynchronous processing and streaming. Streaming sends small pieces of the answer as soon as they're ready.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Long tasks in the background, short answers streamed to the screen.</p></div></div>
@@ -101,11 +101,11 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And a research task suits the background.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You start it, go to lunch, and read the result later.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does Runtime care that we use Strands?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Not at all, or which LLM we call. There's one rule: the agent must offer two HTTP endpoints.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The framework and model are flexible, but deployment must meet a protocol contract. For our HTTP container, that includes two endpoints.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which two?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span><code>/invocations</code> for calls, and <code>/ping</code> to check that it's alive. Follow that, and Strands, LangGraph or CrewAI agents are hosted the same way.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For HTTP, <code>/invocations</code> receives calls and <code>/ping</code> reports health. The application must also meet container, authentication and deployment requirements.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That's a small contract.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And it isn't HTTP only. On the same Runtime, an agent can be an MCP server that offers tools.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime also supports other protocol contracts. An MCP deployment exposes tools through its MCP endpoint rather than using the HTTP path unchanged.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Or an A2A server?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, one that talks to other agents.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What about voice?</p></div></div>
@@ -118,18 +118,18 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does the code get onto Runtime?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Two main ways. Build a container image and place it in ECR, or pass your code directly.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Lots of settings, I suppose.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many small ones. But the AgentCore CLI handles everything from building to deploying, so you don't redo the steps each time.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The CLI automates common build and deployment steps. The team still owns settings, permissions and checks that the deployed agent meets its contract.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And every deploy replaces the old one?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Every deploy adds a new version. Requests are received by an endpoint, and the endpoint decides which version gets the traffic.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So production can stay on a version we tested.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>While a staging endpoint tries the newest. And if something goes wrong, you point the production endpoint back to an older version.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Rollback without a new build.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point of keeping versions. The old code is still there, tested, and one change away.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A retained version supports code recovery without a rebuild. Test the endpoint change; it does not reverse data writes or memory changes.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like a Lambda alias pointing at a version?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The same idea, yes. On Runtime it's built into how every deploy works.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now, who calls Runtime? It accepts AWS IAM with SigV4 signing, or JWT with OAuth. Which one depends on who's calling.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the cost?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You pay only for what you use. The design idea is that cost goes down when the agent isn't really working, like while it waits for the LLM.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Waiting can reduce active CPU work, while memory and other component charges may continue. Measure the complete workload rather than assuming waiting is free.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the numbers?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They change often, so I'll leave them out. What matters is the trade.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which trade?</p></div></div>
@@ -137,27 +137,27 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Two ways to ship code instead of one.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And two sets of limits to learn, and two places to look when something breaks.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the second path has to be worth what it costs.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. For the tutor, it's worth it. For a request that ends in a second, Lambda is still the better home.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For this tutor design, separate sessions and longer work justify testing Runtime. A short request may remain simpler on Lambda.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
     <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Put my answer to your first question into your own words. Why isn't the tutor on Lambda?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Runtime gives one isolated microVM per session, and throws it away when the session ends.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>It supports long runs, up to 8 hours, with streaming or background work.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Any framework works, as long as the agent offers <code>/invocations</code> and <code>/ping</code>.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Runtime isolates each session in a microVM. It discards that environment when its configured runtime lifecycle ends.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This microVM design supports runs up to 8 hours, subject to lifecycle settings, with streaming or background work.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Our HTTP deployment uses <code>/invocations</code> and <code>/ping</code>, plus the remaining service contract. MCP and A2A deployments follow their own contracts.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>How do we ship a change safely?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each deploy is a version, and endpoints choose which version gets traffic.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Remember what Runtime doesn't do, too. It hosts the session; remembering the conversation belongs to Memory.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime’s local state lasts only as long as its environment. The application retrieves durable conversation records from Memory when needed.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>Runtime takes over keeping agents running, isolating sessions, and scaling.</li>
-      <li>Each session gets its own microVM; the only rule is to offer /invocations and /ping.</li>
-      <li>Versions and endpoints let you test new code and roll back while production stays stable.</li>
+      <li>The microVM example isolates runtime sessions; applications must authorize session ownership and meet their chosen protocol contract.</li>
+      <li>Versions and endpoints support tested code recovery; data changes and active work need separate recovery plans.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">2-2</span> Official Workshop Phase 1: the lab that deploys to Runtime</li><li><span class="tag">2-3</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 3, first half (in Japanese): the Runtime chapter</li><li><span class="tag">3-3</span> Deep Dive Track 1: Host your agent</li></ul></div>

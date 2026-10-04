@@ -2,24 +2,24 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 13 of 13</span></p>
   <h1>What's left before the certification?</h1>
-  <p class="lead">After this page you can describe the AIP-C01 exam and map this reader's topics onto it. You can also name what the exam covers beyond this reader, and plan the last stage of the roadmap.</p>
+  <p class="lead">AgentCore explains one part of production generative AI work. Exam preparation starts by comparing concrete tasks you can explain with the current official objectives.</p>
   <p class="meta"><span>About 6 min read</span><span>Production design</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What is AIP-C01?</li>
-      <li>How do these topics map to the exam?</li>
-      <li>What does the exam add?</li>
-      <li>How should stage S5 go?</li>
+      <li>The exam</li>
+      <li>Mapping what you know</li>
+      <li>What the exam adds</li>
+      <li>Working through S5</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The exam</h2>
 <p>AWS Certified Generative AI Developer – Professional, exam code AIP-C01, assesses production use of foundation models and generative AI on AWS. AgentCore knowledge helps with agent applications, but the certification covers a wider set of implementation and operating decisions.</p>
-<p>The official exam information checked on October 3, 2026 lists 75 questions and 180 minutes, with a price of 300 USD before applicable local pricing details. Japanese is an available exam language. The guide identifies 65 scored questions, 10 unscored questions and a minimum passing scaled score of 750.</p>
-<p>AWS describes a target candidate with at least two years of production application experience on AWS or with open-source technologies, and one year of hands-on generative AI implementation. Use that description to judge preparation needs, rather than treating it as a requirement to hold another certification.</p>
+<p>Official information checked on October 3, 2026 lists 75 questions, 180 minutes and a 300 USD price before local pricing details. Japanese is an available exam language. The guide identifies 65 scored questions, 10 unscored questions and a minimum passing scaled score of 750.</p>
+<p>AWS describes a candidate with at least two years of production application experience on AWS or with open-source technologies. It also describes one year of hands-on generative AI implementation. Use that profile to judge preparation needs; it does not require another certification.</p>
 <p>Read the current official guide before scheduling. Product coverage and exam details can change. This reader is a foundation for the agent-related work, and the guide is the authority for the exam's current scope.</p>
   </section>
   <section aria-labelledby="s2">
@@ -33,7 +33,7 @@
 <p>Several areas need study beyond an introduction to agents. Retrieval-augmented generation, or RAG, supplies relevant source material to a model. Understand how documents are prepared, split into chunks, converted into embeddings and retrieved. An embedding is a numerical representation used to find related content.</p>
 <p>Compare vector-store options such as OpenSearch Serverless, Aurora with pgvector and S3 Vectors in terms of the workload's retrieval and operating requirements. Also examine Bedrock inference options: on-demand calls, provisioned throughput, cross-region routing and batch processing. Their availability and billing depend on the model and region.</p>
 <p>Prompt management covers storing, versioning and comparing prompts. Model evaluation compares candidate models or configurations against a defined standard. Agent evaluation additionally considers the behavior of a system that selects tools and performs several steps.</p>
-<p>Review model customization and relevant SageMaker services where the guide includes them. Using managed customization is different from developing or training a model from scratch; the guide explicitly places model development and training outside the target role's scope. Let its objectives determine the depth of study rather than expanding into every machine-learning topic.</p>
+<p>Review model customization and relevant SageMaker services where the guide includes them. Managed customization differs from developing or training a model from scratch. The guide places model development and training outside the target role’s scope. Use its objectives to determine the study depth.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="The exam's scope as an outer box. Inside it, this reader covers the agent side. Also inside it, and accented, is the gap to study: SageMaker, model customization, data preparation, RAG details, inference modes, prompt management and model evaluation.">
       <rect x="8" y="8" width="384" height="316" rx="12" class="zone-soft"/>
@@ -55,7 +55,7 @@
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Working through S5</h2>
 <p>Begin the final study stage, S5, by reading the guide and marking objectives supported by completed hands-on work. Use a course or documentation to fill the unmarked areas, then take a practice assessment to expose misunderstandings.</p>
-<p>For each wrong answer, identify the requirement or tradeoff that the question tests. Connect it to a system you have built or inspected. If there is no such example, perform a small task that demonstrates the concept, then explain why the other choices would not satisfy the requirement.</p>
+<p>For each wrong answer, identify the requirement or tradeoff being tested. Connect it to a system you have built or inspected. Without such an example, perform a small task demonstrating the concept. Then explain why the other choices would not satisfy the requirement.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="The S5 plan: read the exam guide, mark what stages S2 to S4 already covered, fill only the unmarked parts with the Udemy course, take the practice exam and trace each wrong answer to hands-on work, then take the exam.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -75,17 +75,17 @@
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="334" class="t-hd">Take the exam</text>
     </svg>
-    <figcaption>Each step shrinks what's left to learn. The exam comes last, when most of it is already familiar.</figcaption>
+    <figcaption>Guide objectives and practice errors identify work still needed. Schedule the exam after reviewing that evidence, rather than assuming every study step succeeds.</figcaption>
   </figure>
 <p>An application project often needs depth in a few services; an exam requires breadth across its scope. Plan time for services and options that your current tutor project does not use. A practice score helps direct that work, but the goal is being able to explain the design decision behind each answer.</p>
-<p>The agent's complete design connects the parts. Identity checks the caller and supplies suitable credentials. Runtime hosts the execution. A framework such as Strands coordinates model and tool calls. Memory stores and retrieves permitted information. Gateway and Policy control tool access, while observability and evaluation provide evidence about behavior.</p>
+<p>The complete design connects the parts. Entry authentication verifies callers; Identity supplies workload identities and credentials. Runtime hosts execution, and Strands coordinates model and tool calls. Memory retrieves authorized context; Gateway and Policy control covered tools. Observability and evaluation provide evidence about behavior.</p>
 <p>A certification can communicate knowledge, and a concrete design explanation shows how that knowledge is applied. Keep examples of the tradeoffs you tested: permission boundaries, failure handling, cost and quality. They are useful for both the exam and a real design review.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>AIP-C01 assesses production generative AI work on AWS, and its scope is broader than AgentCore.</li>
-      <li>This reader covers the agent side; RAG details, inference modes and model evaluation are outside it.</li>
+      <li>This reader introduces agent systems; use the guide to locate deeper RAG, inference and model-evaluation work.</li>
       <li>In S5, mark what you've done, fill the gaps, and trace each wrong answer to hands-on work.</li>
     </ol>
   </section>

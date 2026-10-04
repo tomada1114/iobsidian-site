@@ -398,17 +398,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 3 of 13</span></p>
   <h1>What does AgentCore actually give you?</h1>
-  <p class="lead">After this page you can name AgentCore's parts and say what each one does for an agent. You can also explain the order in which a project usually adds them, and how they're priced.</p>
+  <p class="lead">The tutor needs somewhere to run, permitted context and tools it can use. AgentCore provides components, while the application connects them into enforceable boundaries.</p>
   <p class="meta"><span>About 8 min read</span><span>The whiteboard room</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Is AgentCore a framework?</li>
-      <li>What are the parts, and how do they fit?</li>
-      <li>In what order are they added?</li>
-      <li>What does each part cost?</li>
+      <li>Parts, not the agent</li>
+      <li>The parts</li>
+      <li>The order of adding parts</li>
+      <li>Paying per part</li>
     </ul>
   </nav>
   <p class="stage">The whiteboard room. Leo has the AgentCore console open on his laptop.</p>
@@ -418,11 +418,11 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I thought AgentCore would be where I write the agent. Like a framework, with classes for the loop. But I can't find any.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Where does the agent's loop live, in our tutor?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>In our code. We use Strands.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You write the agent itself in code: the harness that runs the loop, and the model it uses. AgentCore doesn't build that.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>In this example, Strands runs the code-defined loop. AgentCore services provide hosting and other operating components around it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then what does it do?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It gives you the support you need to run the agent in production. Authentication, memory, monitoring and so on.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So it's a service around the agent, not the agent.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. And each part is a separate AWS feature. You can call it from an agent built with Strands, LangGraph or CrewAI, with any model.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Components can support different frameworks and model providers. Check the selected service contract and integration rather than assuming every combination works.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Do I have to use all of them together?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. Only the parts you need. Some teams use Memory without Runtime, or add Gateway first, before anything else.</p></div></div>
 </div>
@@ -443,9 +443,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then the badge.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Identity holds the agent's ID and the login details for outside services. An ID badge and a spare key.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And rules?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Policy decides to allow or block a tool call, before it runs. Company rules.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Attached Policy authorizes covered tool calls at Gateway before execution. Direct calls still need controls at their own boundaries.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>That leaves monitoring.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Observability records what the agent does as a trace: a record of every step in one request. A daily work report.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Configured instrumentation sends records of model and tool operations. Those observable spans help investigate a request; they do not expose private model reasoning.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Evaluations is the performance review.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It scores the quality of the agent's answers and behavior.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So none of them is the brain. The brain is still the model, and the plan is still our code.</p></div></div>
@@ -472,15 +472,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="256" width="176" height="44" rx="6" class="node"/><text x="104" y="284" text-anchor="middle">Observability</text>
       <rect x="208" y="256" width="176" height="44" rx="6" class="node"/><text x="296" y="284" text-anchor="middle">Evaluations</text>
     </svg>
-    <figcaption>The code in the middle is yours. Each part around it handles one concern, and none of them overlap.</figcaption>
+    <figcaption>The components divide responsibilities, but their boundaries interact. Hosting, identity, tool permissions and stored context must work together.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does a request move through them?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The user's request goes through Identity first, which checks who the user is. Then it reaches the agent inside Runtime.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The configured entry authorizer checks the caller before Runtime runs the agent. Identity supplies workload identities and outbound credential services.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the agent thinks with Memory.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Going back and forth with it. When it wants to act outside, it first needs approval from Policy. Then it calls internal APIs or SaaS through Gateway.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The application retrieves authorized context from Memory. Calls through Gateway then meet its configured policy before reaching the target.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And Code Interpreter and Browser?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Tools the agent uses directly, inside an isolated space. Observability and Evaluations cover the whole process.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those tools work inside isolated spaces. Observability shows configured records, while Evaluations assess selected runs or samples.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What does our tutor use?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime, Memory, Gateway, Identity and Policy run it, and Observability and Evaluations watch it. The learner's record stays in Quickturn's own database.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there anything else I'll see in the courses?</p></div></div>
@@ -502,7 +502,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add a way to evaluate it, then a frontend. Control it with policy, adjust the harness, and finally optimize it.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 656" role="img" aria-label="The official Phase 1 workshop adds parts in nine steps: build locally, add memory, add Gateway, deploy to Runtime, add evaluation, add a frontend, add policy, adjust the harness, and optimize, which is where the agent is ready for production.">
+    <svg viewBox="0 0 400 656" role="img" aria-label="The official Phase 1 workshop adds parts in nine steps: build locally, add memory, add Gateway, deploy to Runtime, add evaluation, add a frontend, add policy, adjust the harness, and optimize. The nine-step workshop sequence connects components for learning; production readiness requires application-specific evidence.">
       <line x1="28" y1="40" x2="28" y2="616" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -532,13 +532,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="592" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="622" class="t-hd">9 Optimize</text>
     </svg>
-    <figcaption>The last step is where the support agent is ready for production. Each step before it adds one part to something that already runs.</figcaption>
+    <figcaption>The labs show how components connect. Production still needs application-specific permission tests, failure handling, privacy decisions and operating evidence.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How long does it take?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Nine labs, about three and a half hours. It's also available in Japanese.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the workshop order is also the path from a proof of concept to production.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Start with something that runs, then strengthen it with memory, tools, authentication, evaluation and control.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So that is a study sequence, rather than a production checklist?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. Practice can add components one at a time. Before exposing real data or actions, put the required boundaries and operating checks in place.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Is there a second phase?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Phase 2, "Diving Deep," has eight modules you can study in any order, working together with Claude Code.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I can go deep into whatever part I need first.</p></div></div>
@@ -549,17 +549,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s4"><span class="no">04</span>Paying per part</h2>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How is all this priced?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Pay per use. Runtime, Memory and Gateway are each billed separately, and a part you don't use costs nothing.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Runtime, Memory and Gateway have separate usage charges. Include active compute, retained data and connected services when estimating the application’s cost.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What are the prices?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They change often, so I won't give numbers. Just remember the idea.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then how do we estimate a bill?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>From usage. Count how many sessions and tool calls you expect, then check the current price page for each part you use.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So early on, we'd skip the parts we don't need yet.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. Add a part when the project needs it, in the order the workshop shows.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Add needed capabilities, using the workshop as a learning sequence. Required identity and permission controls must precede real exposure, regardless of lab order.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't a company build these parts itself?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Separating each session's environment, storing login details safely, and collecting traces of every call would each take weeks.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>They could. Each component brings configuration, access rules and operating decisions. Reusing a service reduces implementation work without removing those responsibilities.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So teams stop at the proof of concept.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Many do. Not because the agent isn't smart enough, but because they can't build all of this support. AgentCore has the parts ready.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A prototype may lack those operating controls even when its demo succeeds. Managed components help, but the team still needs tests and operating evidence.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
@@ -569,7 +569,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>AgentCore isn't a framework. Our Strands code is the agent, and AgentCore is separate parts around it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Each part does one job, like a private room, a notebook, a toolbox desk, a badge, rules and a daily report.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the order?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Something that runs first, then memory, tools, deploy, evaluation and policy. We pay only for the parts we use.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The workshop gives a learning sequence. For our application, required boundaries come before exposure, and costs include retained resources as well as calls.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out our own case: the tutor uses those parts, but the learner's record isn't in any of them. It stays in our database.</p></div></div>
 </div>
   </section>
@@ -578,7 +578,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ol>
       <li>AgentCore is a set of parts that handle production needs, not the agent itself.</li>
       <li>Each part can be used alone or together, and is billed separately.</li>
-      <li>The official workshop's order is also the path from proof of concept to production.</li>
+      <li>Use the workshop to learn components; establish application-specific controls and evidence before production.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">1-2</span> Amazon Bedrock AgentCore Getting Started (Skill Builder): what each part handles</li><li><span class="tag">2-2</span> Official Workshop Phase 1: the order of adding parts, hands-on</li></ul></div>

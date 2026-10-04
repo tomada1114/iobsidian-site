@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 2 of 13</span></p>
   <h1>What changes when an agent goes to work at a company?</h1>
-  <p class="lead">After this page you can explain what MCP and A2A each connect. You can also say how AgentCore differs from the older Bedrock Agents, and what a company needs that a laptop project doesn't.</p>
+  <p class="lead">Leo’s laptop agent shares one history and one API key. Company use needs separate conversations, authorized access and evidence when an answer goes wrong.</p>
   <p class="meta"><span>About 8 min read</span><span>Coffee in the kitchen</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What do MCP and A2A connect?</li>
-      <li>What happened to Bedrock Agents?</li>
-      <li>What does a company add?</li>
-      <li>What does a platform cost?</li>
+      <li>MCP and A2A</li>
+      <li>Bedrock Agents and AgentCore</li>
+      <li>The wall</li>
+      <li>What a platform costs</li>
     </ul>
   </nav>
   <p class="stage">Coffee in the kitchen. Leo spent the weekend building an agent of his own.</p>
@@ -23,16 +23,16 @@
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Let's start with the tools. What does MCP give you?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A way to plug tools in. I found servers for search and for my notes.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. MCP, the Model Context Protocol, is a standard for describing tools and calling them in one common way.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the tool doesn't care which agent calls it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the point of it. Wrap an internal API as an MCP server once.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So different agents can share its interface?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, when their MCP capabilities are compatible. Each server still needs authentication and permissions for the caller.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And then?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Then you can use it the same way from Strands, from Claude Code, or from any other framework.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Compatible MCP clients can use that interface, including Strands and Claude Code. Support and authorization still need checking.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like every plug fitting the same USB port.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes, one shape for every tool. In AgentCore, the Gateway handles this job.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It reduces connection differences rather than making every tool interchangeable. Gateway exposes supported targets through MCP.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And A2A? I've seen it next to MCP everywhere.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A2A, Agent2Agent, connects something different. It lets one agent ask another agent to do a job.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Without knowing how the other one is built?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You don't need its framework or its model. You send "please do this job," and you get back "it's done."</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. You use its A2A interface, rather than its internal framework. Responses can show completion, failure, rejection or a need for more input.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the other agent is a closed box to us.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. MCP connects an agent to tools and data. A2A connects agents to agents.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So they compete? I'd pick one?</p></div></div>
@@ -70,13 +70,13 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Could you bring your own framework?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No. An agent built with something like LangGraph couldn't come in. And it used Bedrock models only.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So AgentCore replaced it?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AWS changed direction. AgentCore isn't a service for building the agent itself. It's a set of parts for running an agent built with any framework in production.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Here we use AgentCore components around code-defined agents. That lets the team choose its framework while following the hosting and tool contracts.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Then where does the agent come from?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You write it in code. AWS recommends Strands Agents, an open-source SDK, but Strands, LangGraph and CrewAI all work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And models outside Bedrock?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those work too. The loop comes from your framework, and you fully control it.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Those can work through the chosen framework and provider. The team controls its loop within the service’s contracts and limits.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Should I still learn Bedrock Agents?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>No new use is allowed after 1 August 2026. If a course focuses on "Action Group" or "Supervisor Agent," it's teaching the old way.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AWS closed Bedrock Agents Classic to new customers on 30 July 2026. Existing customers can continue; current account eligibility needs checking.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Which is why my roadmap only covers AgentCore and Strands.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the reason.</p></div></div>
 </div>
@@ -119,11 +119,11 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">seems to work</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">scores, traces</text>
     </svg>
-    <figcaption>Every row differs, and none of them is about how smart the model is. The accented column is what a company needs, and what AgentCore's parts provide.</figcaption>
+    <figcaption>The accented column names operating requirements. AgentCore components help implement them; configuration and application checks still determine whether they hold.</figcaption>
   </figure>
 <div class="dialog">
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So why do so many proofs of concept never reach production?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's usually not because the LLM isn't smart enough. The missing pieces are authentication, permissions, monitoring, evaluation and cost control.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What could stop my prototype from reaching company use?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Your shared history and unrestricted key already reveal two gaps. Authentication, resource permissions, evaluation, records and spending controls need explicit designs.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The things any new hire gets on day one.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right: a badge, a desk, rules to follow. AgentCore provides those as ready-made parts.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the weekend agent isn't wasted. It's the brain, without the badge and the desk.</p></div></div>
@@ -136,13 +136,13 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does our tutor use those parts?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Only the company-side ones. Sign-in, and limits on which learner's data it can reach. Our cost limits sit beside it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Couldn't we build those ourselves?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We could. But none of it makes Quickturn different from anyone else. It's work every company repeats.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>We could build them. Managed components may save operating work, but the team still configures permissions and tests the boundaries. The tutor’s teaching behavior remains our own work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the tutor itself is what makes us different.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>So that's where our time should go: the prompts, the tools and the tests of the tutor.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the platform takes that work away.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It does, and that's the benefit. The cost is a dependency on AWS, and a price per use.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the platform takes over some operating work?</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Yes. We still configure and test the boundaries. The tradeoff includes an AWS dependency, component usage charges and retained resources.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So if AgentCore changes, we change with it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the trade. For a small team, it's usually worth it. Just be clear that you're making that choice.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For this design, compare saved operating work with service limits and cost. A small team still needs evidence for that choice.</p></div></div>
 </div>
   </section>
   <section data-part="teach-back" aria-labelledby="s5">
@@ -152,7 +152,7 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>MCP connects it to tools, and A2A lets it ask other agents for work.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The loop is the easy part. A company adds identity, rules for every action, memory kept apart per user, and monitoring.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And why a platform, rather than our own code?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because the company parts are the same work at every company. AgentCore gives them as parts, and Bedrock Agents is the old way.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because managed components can reduce repeated operating work. We still own their configuration, and Classic remains available to existing customers.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Mind the price of that choice as well: a dependency and a cost per use, in exchange for work we don't repeat.</p></div></div>
 </div>
   </section>
@@ -160,7 +160,7 @@
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>MCP connects an agent to tools and data; A2A lets agents ask each other for work.</li>
-      <li>AgentCore runs agents built with any framework; Bedrock Agents is the older, closed way.</li>
+      <li>AgentCore can host code-defined agents that meet its contracts; Classic remains a separate managed service.</li>
       <li>The hard part is the company side: identity, rules, memory and monitoring.</li>
     </ol>
   </section>
@@ -169,5 +169,5 @@
     <a class="prev" href="ch01.html"><span>Previous</span><b>When is it really an agent?</b></a>
     <a class="next" href="ch03.html"><span>Next</span><b>What does AgentCore actually give you?</b></a>
   </nav>
-  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional.</p>
+  <p class="fine">Based on knowledge up to May 2026 and research notes from 2026-09-17. AgentCore adds features almost every month; check the developer guide for details. Maya, Leo and Quickturn are fictional. The customer restriction was checked on October 3, 2026 against the <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html">official maintenance-mode guide</a>.</p>
 </div>

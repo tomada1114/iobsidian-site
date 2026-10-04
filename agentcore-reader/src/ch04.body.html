@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>AgentCore Reader</b><span>Page 4 of 13</span></p>
   <h1>Why let the model run the loop?</h1>
-  <p class="lead">After this page you can explain what model-driven means in Strands Agents, and name the six layers of its harness. You can also say how agents are combined, and how Strands differs from a graph-based framework.</p>
+  <p class="lead">Leo cannot find the tutor’s next step in its code. The model can choose actions, but the harness still executes them and applies controls.</p>
   <p class="meta"><span>About 8 min read</span><span>Pairing at Leo's desk</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What does model-driven mean?</li>
-      <li>What are the six layers of the harness?</li>
-      <li>How are agents combined?</li>
-      <li>How is this different from LangGraph?</li>
+      <li>Model-driven</li>
+      <li>Six layers of control</li>
+      <li>Combining agents</li>
+      <li>Model-driven or graph-driven</li>
     </ul>
   </nav>
   <p class="stage">Leo's desk. A minimal agent is open on his screen, and it looks far too short.</p>
@@ -22,8 +22,8 @@
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>This is the whole agent? I'm used to writing every step myself: call A, check a condition, then call B.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And here?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Here I can't find the steps at all.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>There aren't any. Strands Agents is model-driven. You give the model a system prompt and a list of tools, and the model decides what to do next.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the model runs the loop itself. That's what makes it an agent.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The model selects its next action from the prompt and tools. The harness runs that choice; code still defines tools, checks and limits.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the model selects the next step, and the harness runs the loop?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. AWS recommends Strands and maintains two versions, Python and TypeScript. Here's the minimal example, in Python:</p><pre><code>from strands import Agent, tool
 
 @tool
@@ -44,9 +44,9 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>How does the model know what the tool does?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The function name, the argument types and the docstring become its instructions. You don't write a separate spec file.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the docstring actually matters.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>More than most comments you'll ever write. The model reads it every time.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>The description helps the model choose a tool. A clear purpose and argument meaning matter more than clever wording.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So a vague docstring means the model guesses when to call the tool.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or calls the wrong one. "Return the weather for the given city" tells it exactly when this tool helps.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>A vague description can lead to a wrong choice. This one states its purpose, but representative requests still need testing.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Does it only work with Bedrock?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Bedrock is the default model provider. You can also choose Anthropic, OpenAI, Ollama or LiteLLM.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the MCP tools from my weekend agent?</p></div></div>
@@ -91,7 +91,7 @@ agent("Weather in Tokyo?")</code></pre></div></div>
       <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">Loop</text>
       <text x="200" y="252" text-anchor="middle" class="t-sm">LLM and tools</text>
     </svg>
-    <figcaption>The loop sits at the core. Each layer further out controls a wider range, from one tool call to the whole conversation.</figcaption>
+    <figcaption>This is a responsibility map rather than a guaranteed order of enforcement. Choose the control that covers the action and test its boundary.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the inner layers deal with one tool call, and the outer ones with the whole run.</p></div></div>
@@ -99,14 +99,14 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Like what?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Say "don't handle personal data." Written in the system prompt, it's only a request.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the model might misread it.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Or a clever input pushes it past the rule. For rules you truly need to enforce, use the harness side: a hook, or the Policy part. Those stop the action in code.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For an enforceable rule, check the actual access path. Hooks cover configured events; attached Policy covers tool calls through Gateway.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So control means choosing the layer, not writing every step.</p></div></div>
 </div>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>Combining agents</h2>
 <div class="dialog">
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Now, one agent is rarely the end. Strands gives three ways to combine them.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>If one agent needs help, Strands provides several ways to combine agents. Each adds coordination to the design.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>What's the simplest?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Calling an agent as a tool. From the parent's view, the child looks like a single function call.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>And the others?</p></div></div>
@@ -116,7 +116,7 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>For when I want to fix the order myself.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Right. And when agents talk across systems or teams, Strands supports A2A. Another team's agent can call one built inside your company.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So the three forms plus A2A for crossing team lines.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And the first form is usually enough. Try an agent as a tool before you use a Swarm.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>For one clearly bounded specialist task, try an agent as a tool. Use a Swarm when its flexible hand-offs justify the extra coordination.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Because a Swarm is harder to follow?</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>Each hand-off is another decision the model makes. It's harder to predict who ends up answering.</p></div></div>
 </div>
@@ -126,17 +126,17 @@ agent("Weather in Tokyo?")</code></pre></div></div>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You mentioned graphs earlier. That's LangGraph's design.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>I've used it. You write state changes as an explicit graph.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And you decide in code which node comes after which. That makes behavior easier to predict, even with complex branches.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An explicit graph constrains transitions between nodes. A node or conditional route may still use a model, so predictability depends on the design.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>While Strands lets the model make that decision.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>That's the main difference. Here it is side by side.</p></div></div>
 </div>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Model-driven Strands compared with graph-driven LangGraph. Who picks the next step: the model, versus your code. How you write it: tools and a prompt, versus nodes and edges. Where it runs: both on AgentCore Runtime.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="Model-driven Strands compared with graph-driven LangGraph. The model can select tools in Strands; an explicit graph constrains transitions, including nodes that may use a model. How you write it: tools and a prompt, versus nodes and edges. Where it runs: both on AgentCore Runtime.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Model-driven</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Graph-driven</text>
       <text x="16" y="56" class="t-sm">Who picks the next step</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">the model</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">your code</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">graph rules</text>
       <text x="16" y="136" class="t-sm">How you write it</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">tools, a prompt</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">nodes, edges</text>
@@ -144,11 +144,11 @@ agent("Weather in Tokyo?")</code></pre></div></div>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">yes</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">yes</text>
     </svg>
-    <figcaption>The accented row is the real choice. The last row shows it doesn't limit where the agent can run.</figcaption>
+    <figcaption>The comparison emphasizes explicit transitions versus model-selected tool use. Both can run on Runtime when their deployment meets the chosen protocol contract.</figcaption>
   </figure>
 <div class="dialog">
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So which one should I pick?</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>It's a choice between two design styles. AgentCore doesn't require a framework, so either runs the same way on Runtime.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>AgentCore does not require this framework choice. Either design still needs a compatible deployment, authorized tools and execution limits.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>If predictability matters most, a graph. If the path can't be known in advance, model-driven.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And inside Strands, a Graph gives you fixed order where you need it.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>So I don't have to choose one style for the whole system.</p></div></div>
@@ -159,12 +159,12 @@ agent("Weather in Tokyo?")</code></pre></div></div>
     <h2 id="s5"><span class="no">05</span>Leo explains it back</h2>
 <div class="dialog">
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You started by asking where the steps were. Where are they?</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>There are none to write. The model plans the steps, from the tools and the system prompt.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>The model can select actions from the tools and prompt. Code still defines the tool behavior, checks and stopping limits.</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>My control comes from the harness layers: loop, tools, hooks, skills, steering and session.</p></div></div>
-<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A rule that must hold goes in a hook or in Policy, not in the prompt.</p></div></div>
+<div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>A required rule needs a tested control on its actual access path. Hooks and Gateway Policy cover different boundaries.</p></div></div>
 <div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>And when one agent isn't enough?</p></div></div>
 <div class="line learner"><span class="who" aria-hidden="true">L</span><div class="say"><p><span class="vh">Leo: </span>Agents combine as tools, as a Swarm or as a Graph, and A2A crosses team lines.</p></div></div>
-<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>You left out the choice against a graph. LangGraph is easier to predict, and model-driven handles paths you can't write in advance; both run on Runtime.</p></div></div>
+<div class="line mentor"><span class="who" aria-hidden="true">M</span><div class="say"><p><span class="vh">Maya: </span>An explicit graph makes allowed transitions visible. Model-driven steps suit variable paths; either design still needs tests and hosting contracts.</p></div></div>
 </div>
   </section>
   <section class="summary" aria-labelledby="sum">
@@ -172,7 +172,7 @@ agent("Weather in Tokyo?")</code></pre></div></div>
     <ol>
       <li>Strands Agents is model-driven: the model decides the steps from tools and a system prompt.</li>
       <li>The harness has six layers: loop, tools, hooks, skills, steering and session.</li>
-      <li>Agents combine as tools, a Swarm or a Graph; Runtime runs any framework the same way.</li>
+      <li>Agents combine as tools, a Swarm or a Graph; Runtime deployments must meet their protocol contract.</li>
     </ol>
   </section>
   <div class="aside aside-quiet"><p class="label">On your roadmap</p><ul><li><span class="tag">1-4</span> <span lang="ja">Amazon Bedrock AgentCore 実践入門</span>, Part 2 (in Japanese): the Strands Agents section</li><li><span class="tag">2-1</span> Strands Agents Hands-On Workshop: modules 1 to 5 are the core; 6 and 7 are optional</li></ul></div>
