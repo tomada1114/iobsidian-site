@@ -310,6 +310,20 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .shelf-head h1{font-size:clamp(32px,4vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
 .shelf-head .lead{font-size:16px;line-height:1.6;margin-top:12px;color:var(--text-muted);max-width:55ch}
 .library-stats{margin-top:12px;font-size:13px;color:var(--text-subtle)}
+.shelf-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin:16px 0 20px}
+.library-action,.book-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.library-action:hover,.book-action:hover,.restore-book:hover{background:var(--nav-hover)}
+.library-feedback{margin:0;font-size:12px;line-height:1.5;color:var(--nav-muted)}
+.hidden-books{margin:0 0 32px;padding:16px 0 0;border-top:1px solid var(--nav-line)}
+.hidden-books h2{font-size:16px;color:var(--nav-text)}
+.hidden-empty{margin-top:8px;font-size:13px;color:var(--text-muted)}
+.hidden-list{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--nav-line)}
+.hidden-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--nav-line)}
+.hidden-book-copy{display:grid;gap:3px;min-width:0}
+.hidden-book-title{color:var(--nav-text);font-size:15px;font-weight:600;line-height:1.5;text-decoration:none}
+.hidden-book-title:hover{text-decoration:underline;text-underline-offset:3px}
+.hidden-book-category{font-size:12px;color:var(--nav-muted)}
+.restore-book{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:transparent;color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
 .shelf-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nav-accent)}
 .category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
 .category-list,.book-list,.recent ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
@@ -337,8 +351,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
 .recent .when{white-space:nowrap}
 .library-main{min-width:0;scroll-margin-top:88px}
-.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
+.book-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;color:var(--text);text-decoration:none}
 .book-row:hover .book-title,.category-row:hover .category-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.book-action{padding:0 10px}
 .book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono)}
 .book-copy{min-width:0}
 .book-title{display:block;font-size:17px;font-weight:600;line-height:1.5;letter-spacing:-.012em;text-wrap:balance;color:var(--nav-text)}
@@ -346,6 +362,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .book-series{font-weight:400;font-size:12px;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
 .book-blurb{display:block;margin-top:6px;font-size:14px;color:var(--text-muted);line-height:1.6;text-wrap:pretty}
 .book-blurb:lang(ja){line-height:1.75}
+.empty-collection{margin-top:16px;color:var(--text-muted);font-size:14px}
 .book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
 .book-facts .reading-time{color:var(--text-muted)}
 .shelf .offline{margin:0;max-width:320px;gap:8px}
@@ -370,7 +387,12 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
  .category-row .row-arrow{grid-column:3;grid-row:1}
  .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
  .category-nav a{padding:8px 10px}
+ .shelf-tools{margin:12px 0 18px}
+ .hidden-list li{grid-template-columns:minmax(0,1fr);gap:4px;padding:12px 4px}
+ .restore-book{justify-self:start}
  .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 0}
+ .book-item{gap:4px}
+ .book-action{padding:0 8px}
  .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
  .book-row .row-arrow{grid-column:3;grid-row:1}
  .book-title{font-size:16px}
@@ -447,47 +469,98 @@ window.addEventListener("pageshow",function(){
 <section class="recent" data-category="relationships" aria-labelledby="recent-title" hidden>
   <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
 </section>
-<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories"><a href="english.html">English Reading</a><a href="aws.html">AWS</a><a href="engineering.html">Engineering</a><a href="work.html">Work &amp; Careers</a><a href="relationships.html" aria-current="page">Communication &amp; Relationships</a><a href="money.html">Money</a><a href="learning.html">Learning &amp; Language</a><a href="thinking.html">Thinking &amp; Society</a><a href="life.html">Life &amp; Wellbeing</a></nav></details><ul class="book-list"><li><a class="book-row" href="book-pause-before-speaking/ch00.html">
+<div class="shelf-tools">
+  <button class="library-action" type="button" aria-controls="hidden-books" aria-expanded="false">Hidden books (<span data-hidden-count>0</span>)</button>
+  <p class="library-feedback" aria-live="polite"></p>
+</div>
+<section class="hidden-books" id="hidden-books" aria-labelledby="hidden-title" hidden>
+  <h2 id="hidden-title">Hidden books</h2>
+  <p class="hidden-empty">No books are hidden.</p>
+  <ul class="hidden-list"></ul>
+</section>
+<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories"><a href="english.html">English Reading</a><a href="aws.html">AWS</a><a href="engineering.html">Engineering</a><a href="work.html">Work &amp; Careers</a><a href="relationships.html" aria-current="page">Communication &amp; Relationships</a><a href="money.html">Money</a><a href="learning.html">Learning &amp; Language</a><a href="thinking.html">Thinking &amp; Society</a><a href="life.html">Life &amp; Wellbeing</a></nav></details><ul class="book-list"><li class="book-item" data-book-slug="book-pause-before-speaking"><a class="book-row" href="book-pause-before-speaking/ch00.html">
   <span class="book-number" aria-hidden="true">01</span>
   <span class="book-copy"><span class="book-title" lang="ja">一拍おいて話す</span><span class="book-blurb" lang="ja">口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。</span></span>
   <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a></li>
-<li><a class="book-row" href="book-being-heard/ch00.html">
+  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-hide-book="book-pause-before-speaking" aria-label="Hide 一拍おいて話す">Hide</button></li>
+<li class="book-item" data-book-slug="book-being-heard"><a class="book-row" href="book-being-heard/ch00.html">
   <span class="book-number" aria-hidden="true">02</span>
   <span class="book-copy"><span class="book-title" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span><span class="book-blurb" lang="ja">カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。</span></span>
   <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a></li>
-<li><a class="book-row" href="book-adler-relationships/ch00.html">
+  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-hide-book="book-being-heard" aria-label="Hide 話を聞いてもらうと、なぜ人は変わるのか">Hide</button></li>
+<li class="book-item" data-book-slug="book-adler-relationships"><a class="book-row" href="book-adler-relationships/ch00.html">
   <span class="book-number" aria-hidden="true">03</span>
   <span class="book-copy"><span class="book-title" lang="ja">アドラー心理学で人間関係をほどく</span><span class="book-blurb" lang="ja">過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。</span></span>
   <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a></li></ul>
+  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-hide-book="book-adler-relationships" aria-label="Hide アドラー心理学で人間関係をほどく">Hide</button></li></ul><p class="empty-collection" hidden>All books in this collection are hidden. Use Hidden books above to return them.</p>
 </main>
 <footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div><div class="offline" hidden>
   <button class="save-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg><span class="save-label">Save all for offline</span></button>
   <p class="save-note" aria-live="polite"></p>
 </div></footer>
-<script id="shelf-catalog" type="application/json">{"pages": ["index.html", "english.html", "aws.html", "engineering.html", "work.html", "relationships.html", "money.html", "learning.html", "thinking.html", "life.html"], "readers": [{"slug": "easy-reads", "href": "easy-reads/index.html", "category": "english", "title": "Easy Reads", "lang": "en"}, {"slug": "1on1-architecture", "href": "1on1-architecture/ch00.html", "category": "software", "title": "Architecture", "lang": "en"}, {"slug": "1on1-api-types", "href": "1on1-api-types/ch00.html", "category": "software", "title": "API and TypeScript", "lang": "en"}, {"slug": "1on1-aws", "href": "1on1-aws/ch00.html", "category": "cloud-ai", "title": "AWS Foundation", "lang": "en"}, {"slug": "1on1-ai", "href": "1on1-ai/ch00.html", "category": "software", "title": "AI in Production", "lang": "en"}, {"slug": "1on1-ops", "href": "1on1-ops/ch00.html", "category": "software", "title": "Operations and Quality", "lang": "en"}, {"slug": "agentcore-reader", "href": "agentcore-reader/ch00.html", "category": "cloud-ai", "title": "AgentCore Reader", "lang": "en"}, {"slug": "book-pause-before-speaking", "href": "book-pause-before-speaking/ch00.html", "category": "relationships", "title": "一拍おいて話す", "lang": "ja"}, {"slug": "book-career-transitions", "href": "book-career-transitions/ch00.html", "category": "work", "title": "キャリアの移り目", "lang": "ja"}, {"slug": "book-spend-by-design", "href": "book-spend-by-design/ch00.html", "category": "money", "title": "貯めるより、使いきる設計", "lang": "ja"}, {"slug": "book-world-by-data", "href": "book-world-by-data/ch00.html", "category": "thinking", "title": "思い込みを外して、世界をデータで見る", "lang": "ja"}, {"slug": "book-information-networks", "href": "book-information-networks/ch00.html", "category": "thinking", "title": "情報は人をつなぎ、分断する", "lang": "ja"}, {"slug": "book-tidy-then-change", "href": "book-tidy-then-change/ch00.html", "category": "software", "title": "整えてから変えるか、変えてから整えるか", "lang": "ja"}, {"slug": "book-money-anxiety", "href": "book-money-anxiety/ch00.html", "category": "money", "title": "その不安は、お金で消えるのか", "lang": "ja"}, {"slug": "book-what-follows", "href": "book-what-follows/ch00.html", "category": "thinking", "title": "その文から何が言えるか", "lang": "ja"}, {"slug": "book-not-all-in", "href": "book-not-all-in/ch00.html", "category": "work", "title": "全身全霊で働かないという選択", "lang": "ja"}, {"slug": "book-loose-steady", "href": "book-loose-steady/ch00.html", "category": "life", "title": "ゆるく、でも毎日積み上げる", "lang": "ja"}, {"slug": "book-choose-the-question", "href": "book-choose-the-question/ch00.html", "category": "work", "title": "答えを出す前に、問いを選ぶ", "lang": "ja"}, {"slug": "book-keep-skills-current", "href": "book-keep-skills-current/ch00.html", "category": "work", "title": "技能を更新しつづける", "lang": "ja"}, {"slug": "book-uncertainty-teams", "href": "book-uncertainty-teams/ch00.html", "category": "work", "title": "不確実性から考えるチームと組織", "lang": "ja"}, {"slug": "book-being-heard", "href": "book-being-heard/ch00.html", "category": "relationships", "title": "話を聞いてもらうと、なぜ人は変わるのか", "lang": "ja"}, {"slug": "book-job-membership", "href": "book-job-membership/ch00.html", "category": "work", "title": "ジョブ型とメンバーシップ型で読む働き方", "lang": "ja"}, {"slug": "book-team-english", "href": "book-team-english/ch00.html", "category": "learning", "title": "英語でチームを回す仕事の型", "lang": "ja"}, {"slug": "book-plan-and-dialogue", "href": "book-plan-and-dialogue/ch00.html", "category": "work", "title": "計画と対話を行き来する", "lang": "ja"}, {"slug": "book-wealth-mindset", "href": "book-wealth-mindset/ch00.html", "category": "money", "title": "富を積み上げる人の考え方", "lang": "ja"}, {"slug": "book-beyond-command", "href": "book-beyond-command/ch00.html", "category": "work", "title": "命令の組織から、探検の組織へ", "lang": "ja"}, {"slug": "book-adler-relationships", "href": "book-adler-relationships/ch00.html", "category": "relationships", "title": "アドラー心理学で人間関係をほどく", "lang": "ja"}, {"slug": "book-where-gains-went", "href": "book-where-gains-went/ch00.html", "category": "thinking", "title": "稼いだ分は、どこへ行ったのか", "lang": "ja"}, {"slug": "book-walk-and-think", "href": "book-walk-and-think/ch00.html", "category": "life", "title": "歩くと、頭と体に何が起きるか", "lang": "ja"}, {"slug": "book-life-not-a-story", "href": "book-life-not-a-story/ch00.html", "category": "life", "title": "人生を物語にしない生き方", "lang": "ja"}, {"slug": "book-growing-sense", "href": "book-growing-sense/ch00.html", "category": "thinking", "title": "AIの時代に、センスはどう育つか", "lang": "ja"}, {"slug": "book-faith-divides-america", "href": "book-faith-divides-america/ch00.html", "category": "thinking", "title": "アメリカを割る信仰", "lang": "ja"}, {"slug": "book-job-yardstick", "href": "book-job-yardstick/ch00.html", "category": "work", "title": "仕事選びのものさしを科学で直す", "lang": "ja"}, {"slug": "book-recall-to-learn", "href": "book-recall-to-learn/ch00.html", "category": "learning", "title": "思い出して覚える、勉強の組み立て方", "lang": "ja"}, {"slug": "book-english-gaps", "href": "book-english-gaps/ch00.html", "category": "learning", "title": "大人の英語は、ずれに気づいて身につける", "lang": "ja"}, {"slug": "book-grounded-words", "href": "book-grounded-words/ch00.html", "category": "learning", "title": "ことばは体から育つ", "lang": "ja"}, {"slug": "book-many-logics", "href": "book-many-logics/ch00.html", "category": "thinking", "title": "論理はひとつではない", "lang": "ja"}, {"slug": "book-lasting-craft", "href": "book-lasting-craft/ch00.html", "category": "software", "title": "流行に左右されない作り手の心得", "lang": "ja"}, {"slug": "book-finite-time", "href": "book-finite-time/ch00.html", "category": "life", "title": "全部はできない前提で、時間を使う", "lang": "ja"}]}</script>
+<script id="shelf-catalog" type="application/json">{"pages": ["index.html", "english.html", "aws.html", "engineering.html", "work.html", "relationships.html", "money.html", "learning.html", "thinking.html", "life.html"], "categories": [{"key": "english", "name": "English Reading"}, {"key": "cloud-ai", "name": "AWS"}, {"key": "software", "name": "Engineering"}, {"key": "work", "name": "Work & Careers"}, {"key": "relationships", "name": "Communication & Relationships"}, {"key": "money", "name": "Money"}, {"key": "learning", "name": "Learning & Language"}, {"key": "thinking", "name": "Thinking & Society"}, {"key": "life", "name": "Life & Wellbeing"}], "readers": [{"slug": "easy-reads", "href": "easy-reads/index.html", "category": "english", "categoryName": "English Reading", "title": "Easy Reads", "lang": "en"}, {"slug": "1on1-architecture", "href": "1on1-architecture/ch00.html", "category": "software", "categoryName": "Engineering", "title": "Architecture", "lang": "en"}, {"slug": "1on1-api-types", "href": "1on1-api-types/ch00.html", "category": "software", "categoryName": "Engineering", "title": "API and TypeScript", "lang": "en"}, {"slug": "1on1-aws", "href": "1on1-aws/ch00.html", "category": "cloud-ai", "categoryName": "AWS", "title": "AWS Foundation", "lang": "en"}, {"slug": "1on1-ai", "href": "1on1-ai/ch00.html", "category": "software", "categoryName": "Engineering", "title": "AI in Production", "lang": "en"}, {"slug": "1on1-ops", "href": "1on1-ops/ch00.html", "category": "software", "categoryName": "Engineering", "title": "Operations and Quality", "lang": "en"}, {"slug": "agentcore-reader", "href": "agentcore-reader/ch00.html", "category": "cloud-ai", "categoryName": "AWS", "title": "AgentCore Reader", "lang": "en"}, {"slug": "book-pause-before-speaking", "href": "book-pause-before-speaking/ch00.html", "category": "relationships", "categoryName": "Communication & Relationships", "title": "一拍おいて話す", "lang": "ja"}, {"slug": "book-career-transitions", "href": "book-career-transitions/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "キャリアの移り目", "lang": "ja"}, {"slug": "book-spend-by-design", "href": "book-spend-by-design/ch00.html", "category": "money", "categoryName": "Money", "title": "貯めるより、使いきる設計", "lang": "ja"}, {"slug": "book-world-by-data", "href": "book-world-by-data/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "思い込みを外して、世界をデータで見る", "lang": "ja"}, {"slug": "book-information-networks", "href": "book-information-networks/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "情報は人をつなぎ、分断する", "lang": "ja"}, {"slug": "book-tidy-then-change", "href": "book-tidy-then-change/ch00.html", "category": "software", "categoryName": "Engineering", "title": "整えてから変えるか、変えてから整えるか", "lang": "ja"}, {"slug": "book-money-anxiety", "href": "book-money-anxiety/ch00.html", "category": "money", "categoryName": "Money", "title": "その不安は、お金で消えるのか", "lang": "ja"}, {"slug": "book-what-follows", "href": "book-what-follows/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "その文から何が言えるか", "lang": "ja"}, {"slug": "book-not-all-in", "href": "book-not-all-in/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "全身全霊で働かないという選択", "lang": "ja"}, {"slug": "book-loose-steady", "href": "book-loose-steady/ch00.html", "category": "life", "categoryName": "Life & Wellbeing", "title": "ゆるく、でも毎日積み上げる", "lang": "ja"}, {"slug": "book-choose-the-question", "href": "book-choose-the-question/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "答えを出す前に、問いを選ぶ", "lang": "ja"}, {"slug": "book-keep-skills-current", "href": "book-keep-skills-current/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "技能を更新しつづける", "lang": "ja"}, {"slug": "book-uncertainty-teams", "href": "book-uncertainty-teams/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "不確実性から考えるチームと組織", "lang": "ja"}, {"slug": "book-being-heard", "href": "book-being-heard/ch00.html", "category": "relationships", "categoryName": "Communication & Relationships", "title": "話を聞いてもらうと、なぜ人は変わるのか", "lang": "ja"}, {"slug": "book-job-membership", "href": "book-job-membership/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "ジョブ型とメンバーシップ型で読む働き方", "lang": "ja"}, {"slug": "book-team-english", "href": "book-team-english/ch00.html", "category": "learning", "categoryName": "Learning & Language", "title": "英語でチームを回す仕事の型", "lang": "ja"}, {"slug": "book-plan-and-dialogue", "href": "book-plan-and-dialogue/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "計画と対話を行き来する", "lang": "ja"}, {"slug": "book-wealth-mindset", "href": "book-wealth-mindset/ch00.html", "category": "money", "categoryName": "Money", "title": "富を積み上げる人の考え方", "lang": "ja"}, {"slug": "book-beyond-command", "href": "book-beyond-command/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "命令の組織から、探検の組織へ", "lang": "ja"}, {"slug": "book-adler-relationships", "href": "book-adler-relationships/ch00.html", "category": "relationships", "categoryName": "Communication & Relationships", "title": "アドラー心理学で人間関係をほどく", "lang": "ja"}, {"slug": "book-where-gains-went", "href": "book-where-gains-went/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "稼いだ分は、どこへ行ったのか", "lang": "ja"}, {"slug": "book-walk-and-think", "href": "book-walk-and-think/ch00.html", "category": "life", "categoryName": "Life & Wellbeing", "title": "歩くと、頭と体に何が起きるか", "lang": "ja"}, {"slug": "book-life-not-a-story", "href": "book-life-not-a-story/ch00.html", "category": "life", "categoryName": "Life & Wellbeing", "title": "人生を物語にしない生き方", "lang": "ja"}, {"slug": "book-growing-sense", "href": "book-growing-sense/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "AIの時代に、センスはどう育つか", "lang": "ja"}, {"slug": "book-faith-divides-america", "href": "book-faith-divides-america/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "アメリカを割る信仰", "lang": "ja"}, {"slug": "book-job-yardstick", "href": "book-job-yardstick/ch00.html", "category": "work", "categoryName": "Work & Careers", "title": "仕事選びのものさしを科学で直す", "lang": "ja"}, {"slug": "book-recall-to-learn", "href": "book-recall-to-learn/ch00.html", "category": "learning", "categoryName": "Learning & Language", "title": "思い出して覚える、勉強の組み立て方", "lang": "ja"}, {"slug": "book-english-gaps", "href": "book-english-gaps/ch00.html", "category": "learning", "categoryName": "Learning & Language", "title": "大人の英語は、ずれに気づいて身につける", "lang": "ja"}, {"slug": "book-grounded-words", "href": "book-grounded-words/ch00.html", "category": "learning", "categoryName": "Learning & Language", "title": "ことばは体から育つ", "lang": "ja"}, {"slug": "book-many-logics", "href": "book-many-logics/ch00.html", "category": "thinking", "categoryName": "Thinking & Society", "title": "論理はひとつではない", "lang": "ja"}, {"slug": "book-lasting-craft", "href": "book-lasting-craft/ch00.html", "category": "software", "categoryName": "Engineering", "title": "流行に左右されない作り手の心得", "lang": "ja"}, {"slug": "book-finite-time", "href": "book-finite-time/ch00.html", "category": "life", "categoryName": "Life & Wellbeing", "title": "全部はできない前提で、時間を使う", "lang": "ja"}]}</script>
 <script>
 (function(){
-var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
-var box=document.querySelector(".recent"),catalog=new Map(),source=document.getElementById("shelf-catalog");
+var HIDDEN_KEY="bookshelf:hidden-books",RECENT_KEY="bookshelf:recent";
+var box=document.querySelector(".recent"),source=document.getElementById("shelf-catalog");
 if(!box||!source)return;
-JSON.parse(source.textContent).readers.forEach(function(book){catalog.set(book.slug,book)});
+var catalog=JSON.parse(source.textContent),books=new Map(),valid=new Set();
+catalog.readers.forEach(function(book){books.set(book.slug,book);valid.add(book.slug)});
 var category=box.dataset.category;
 var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
 function ago(t){if(!fmt)return "Recently";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
-var shown=0;
-r.forEach(function(e){if(!e||shown>=1||!catalog.has(e.s)||!Number.isFinite(e.at))return;
-  var book=catalog.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
-  var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
-  var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
-  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
-  title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
-  when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
-  copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);box.querySelector("ol").appendChild(li);shown++;
+var recentEntries=[];try{var recent=JSON.parse(localStorage.getItem(RECENT_KEY)||"[]");if(Array.isArray(recent))recentEntries=recent}catch(e){}
+function readHidden(){try{var value=JSON.parse(localStorage.getItem(HIDDEN_KEY)||"[]");return Array.isArray(value)?Array.from(new Set(value.filter(function(slug){return valid.has(slug)}))):[]}catch(e){return []}}
+function saveHidden(value){try{localStorage.setItem(HIDDEN_KEY,JSON.stringify(value));return true}catch(e){return false}}
+var hidden=readHidden(),hiddenToggle=document.querySelector(".library-action"),hiddenPanel=document.querySelector(".hidden-books"),hiddenList=document.querySelector(".hidden-list"),emptyHidden=document.querySelector(".hidden-empty"),feedback=document.querySelector(".library-feedback");
+function renderRecent(){
+  var list=box.querySelector("ol");list.replaceChildren();var shown=0;
+  recentEntries.forEach(function(e){if(!e||shown>=1||!books.has(e.s)||!Number.isFinite(e.at)||hidden.indexOf(e.s)>=0)return;
+    var book=books.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
+    var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
+    var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
+    li.dataset.bookSlug=book.slug;a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
+    title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
+    when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
+    copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);list.appendChild(li);shown++;
+  });
+  box.hidden=!shown;
+}
+function updateCounts(){
+  var countByCategory=new Map(),visible=catalog.readers.length-hidden.length;
+  catalog.readers.forEach(function(book){if(hidden.indexOf(book.slug)<0)countByCategory.set(book.category,(countByCategory.get(book.category)||0)+1)});
+  document.querySelectorAll("[data-category-count]").forEach(function(el){var n=countByCategory.get(el.dataset.categoryCount)||0;el.textContent=n+" reader"+(n===1?"":"s")});
+  var stats=document.querySelector(".library-stats");
+  if(stats){if(category){var n=countByCategory.get(category)||0;stats.textContent=n+" reader"+(n===1?"":"s")}else stats.textContent=catalog.categories.length+" collections · "+visible+" readers"}
+  var count=hiddenToggle&&hiddenToggle.querySelector("[data-hidden-count]");if(count)count.textContent=hidden.length;
+}
+function renderHidden(){
+  if(!hiddenList)return;
+  hiddenList.replaceChildren();
+  hidden.forEach(function(slug){var book=books.get(slug);if(!book)return;
+    var li=document.createElement("li"),copy=document.createElement("div"),link=document.createElement("a"),group=document.createElement("span"),button=document.createElement("button");
+    copy.className="hidden-book-copy";link.className="hidden-book-title";link.href=book.href;link.textContent=book.title;link.lang=book.lang;group.className="hidden-book-category";group.textContent=book.categoryName;
+    button.className="restore-book";button.type="button";button.dataset.restoreBook=slug;button.textContent="Return to shelf";button.setAttribute("aria-label","Return "+book.title+" to the shelf");
+    copy.append(link,group);li.append(copy,button);hiddenList.appendChild(li);
+  });
+  if(emptyHidden)emptyHidden.hidden=hidden.length>0;
+}
+function applyHidden(){
+  document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){row.hidden=hidden.indexOf(row.dataset.bookSlug)>=0});
+  var number=0;document.querySelectorAll(".book-item:not([hidden]) .book-number").forEach(function(el){el.textContent=String(++number).padStart(2,"0")});
+  var emptyCollection=document.querySelector(".empty-collection");if(emptyCollection)emptyCollection.hidden=number>0;
+  updateCounts();renderHidden();renderRecent();
+}
+if(hiddenToggle&&hiddenPanel)hiddenToggle.addEventListener("click",function(){var open=hiddenPanel.hidden;hiddenPanel.hidden=!open;hiddenToggle.setAttribute("aria-expanded",String(open))});
+document.addEventListener("click",function(event){
+  var target=event.target;if(!target||!target.closest)return;
+  var hide=target.closest("[data-hide-book]"),restore=target.closest("[data-restore-book]");
+  if(hide){var slug=hide.dataset.hideBook;if(hidden.indexOf(slug)>=0)return;var title=books.get(slug).title,next=[slug].concat(hidden);if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Hidden: "+title;hiddenToggle.focus()}
+  if(restore){var restored=restore.dataset.restoreBook,title=books.get(restored).title,next=hidden.filter(function(slug){return slug!==restored});if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Returned to the shelf: "+title;var action=null;document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){if(row.dataset.bookSlug===restored)action=row.querySelector(".book-row")});(action||hiddenToggle).focus()}
 });
-box.hidden=!shown;
+window.addEventListener("storage",function(event){if(event.key===HIDDEN_KEY||event.key===null){hidden=readHidden();applyHidden()}});
+window.addEventListener("pageshow",function(){hidden=readHidden();applyHidden()});
+applyHidden();
 })();
 </script>
 </div>

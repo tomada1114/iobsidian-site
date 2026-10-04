@@ -405,6 +405,20 @@ SHELF_CSS = """
 .shelf-head h1{font-size:clamp(32px,4vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
 .shelf-head .lead{font-size:16px;line-height:1.6;margin-top:12px;color:var(--text-muted);max-width:55ch}
 .library-stats{margin-top:12px;font-size:13px;color:var(--text-subtle)}
+.shelf-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin:16px 0 20px}
+.library-action,.book-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.library-action:hover,.book-action:hover,.restore-book:hover{background:var(--nav-hover)}
+.library-feedback{margin:0;font-size:12px;line-height:1.5;color:var(--nav-muted)}
+.hidden-books{margin:0 0 32px;padding:16px 0 0;border-top:1px solid var(--nav-line)}
+.hidden-books h2{font-size:16px;color:var(--nav-text)}
+.hidden-empty{margin-top:8px;font-size:13px;color:var(--text-muted)}
+.hidden-list{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--nav-line)}
+.hidden-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--nav-line)}
+.hidden-book-copy{display:grid;gap:3px;min-width:0}
+.hidden-book-title{color:var(--nav-text);font-size:15px;font-weight:600;line-height:1.5;text-decoration:none}
+.hidden-book-title:hover{text-decoration:underline;text-underline-offset:3px}
+.hidden-book-category{font-size:12px;color:var(--nav-muted)}
+.restore-book{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:transparent;color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
 .shelf-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nav-accent)}
 .category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
 .category-list,.book-list,.recent ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
@@ -432,8 +446,10 @@ SHELF_CSS = """
 .resume-copy span,.recent .when{font-size:12px;color:var(--nav-muted)}
 .recent .when{white-space:nowrap}
 .library-main{min-width:0;scroll-margin-top:88px}
-.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;border-bottom:1px solid var(--line);color:var(--text);text-decoration:none}
+.book-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+.book-row{display:grid;grid-template-columns:28px minmax(0,1fr) 138px 16px;gap:16px;align-items:start;padding:24px 0;color:var(--text);text-decoration:none}
 .book-row:hover .book-title,.category-row:hover .category-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.book-action{padding:0 10px}
 .book-number{display:flex;align-items:center;justify-content:center;min-height:28px;background:var(--nav-surface);border-radius:4px;color:var(--nav-accent);font:500 12px/1.5 var(--font-mono)}
 .book-copy{min-width:0}
 .book-title{display:block;font-size:17px;font-weight:600;line-height:1.5;letter-spacing:-.012em;text-wrap:balance;color:var(--nav-text)}
@@ -441,6 +457,7 @@ SHELF_CSS = """
 .book-series{font-weight:400;font-size:12px;color:var(--text-subtle);margin-left:10px;white-space:nowrap}
 .book-blurb{display:block;margin-top:6px;font-size:14px;color:var(--text-muted);line-height:1.6;text-wrap:pretty}
 .book-blurb:lang(ja){line-height:1.75}
+.empty-collection{margin-top:16px;color:var(--text-muted);font-size:14px}
 .book-facts{display:flex;flex-direction:column;gap:4px;padding-top:3px;font-size:12px;line-height:1.5;color:var(--text-subtle);text-align:right;font-variant-numeric:tabular-nums}
 .book-facts .reading-time{color:var(--text-muted)}
 .shelf .offline{margin:0;max-width:320px;gap:8px}
@@ -465,7 +482,12 @@ SHELF_CSS = """
  .category-row .row-arrow{grid-column:3;grid-row:1}
  .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
  .category-nav a{padding:8px 10px}
+ .shelf-tools{margin:12px 0 18px}
+ .hidden-list li{grid-template-columns:minmax(0,1fr);gap:4px;padding:12px 4px}
+ .restore-book{justify-self:start}
  .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 0}
+ .book-item{gap:4px}
+ .book-action{padding:0 8px}
  .book-facts{grid-column:2;grid-row:2;flex-direction:row;flex-wrap:wrap;text-align:left;padding-top:0;gap:4px 12px;margin-top:-4px}
  .book-row .row-arrow{grid-column:3;grid-row:1}
  .book-title{font-size:16px}
@@ -481,24 +503,66 @@ SHELF_CSS = """
 
 SHELF_JS = r"""<script>
 (function(){
-var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
-var box=document.querySelector(".recent"),catalog=new Map(),source=document.getElementById("shelf-catalog");
+var HIDDEN_KEY="bookshelf:hidden-books",RECENT_KEY="bookshelf:recent";
+var box=document.querySelector(".recent"),source=document.getElementById("shelf-catalog");
 if(!box||!source)return;
-JSON.parse(source.textContent).readers.forEach(function(book){catalog.set(book.slug,book)});
+var catalog=JSON.parse(source.textContent),books=new Map(),valid=new Set();
+catalog.readers.forEach(function(book){books.set(book.slug,book);valid.add(book.slug)});
 var category=box.dataset.category;
 var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
 function ago(t){if(!fmt)return "Recently";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
-var shown=0;
-r.forEach(function(e){if(!e||shown>=1||!catalog.has(e.s)||!Number.isFinite(e.at))return;
-  var book=catalog.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
-  var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
-  var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
-  a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
-  title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
-  when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
-  copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);box.querySelector("ol").appendChild(li);shown++;
+var recentEntries=[];try{var recent=JSON.parse(localStorage.getItem(RECENT_KEY)||"[]");if(Array.isArray(recent))recentEntries=recent}catch(e){}
+function readHidden(){try{var value=JSON.parse(localStorage.getItem(HIDDEN_KEY)||"[]");return Array.isArray(value)?Array.from(new Set(value.filter(function(slug){return valid.has(slug)}))):[]}catch(e){return []}}
+function saveHidden(value){try{localStorage.setItem(HIDDEN_KEY,JSON.stringify(value));return true}catch(e){return false}}
+var hidden=readHidden(),hiddenToggle=document.querySelector(".library-action"),hiddenPanel=document.querySelector(".hidden-books"),hiddenList=document.querySelector(".hidden-list"),emptyHidden=document.querySelector(".hidden-empty"),feedback=document.querySelector(".library-feedback");
+function renderRecent(){
+  var list=box.querySelector("ol");list.replaceChildren();var shown=0;
+  recentEntries.forEach(function(e){if(!e||shown>=1||!books.has(e.s)||!Number.isFinite(e.at)||hidden.indexOf(e.s)>=0)return;
+    var book=books.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
+    var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
+    var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
+    li.dataset.bookSlug=book.slug;a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
+    title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";
+    when.className="when";when.dateTime=new Date(e.at).toISOString();when.textContent=ago(e.at);arrow.className="row-arrow";arrow.textContent="→";arrow.setAttribute("aria-hidden","true");
+    copy.append(title,page);a.append(copy,when,arrow);li.appendChild(a);list.appendChild(li);shown++;
+  });
+  box.hidden=!shown;
+}
+function updateCounts(){
+  var countByCategory=new Map(),visible=catalog.readers.length-hidden.length;
+  catalog.readers.forEach(function(book){if(hidden.indexOf(book.slug)<0)countByCategory.set(book.category,(countByCategory.get(book.category)||0)+1)});
+  document.querySelectorAll("[data-category-count]").forEach(function(el){var n=countByCategory.get(el.dataset.categoryCount)||0;el.textContent=n+" reader"+(n===1?"":"s")});
+  var stats=document.querySelector(".library-stats");
+  if(stats){if(category){var n=countByCategory.get(category)||0;stats.textContent=n+" reader"+(n===1?"":"s")}else stats.textContent=catalog.categories.length+" collections · "+visible+" readers"}
+  var count=hiddenToggle&&hiddenToggle.querySelector("[data-hidden-count]");if(count)count.textContent=hidden.length;
+}
+function renderHidden(){
+  if(!hiddenList)return;
+  hiddenList.replaceChildren();
+  hidden.forEach(function(slug){var book=books.get(slug);if(!book)return;
+    var li=document.createElement("li"),copy=document.createElement("div"),link=document.createElement("a"),group=document.createElement("span"),button=document.createElement("button");
+    copy.className="hidden-book-copy";link.className="hidden-book-title";link.href=book.href;link.textContent=book.title;link.lang=book.lang;group.className="hidden-book-category";group.textContent=book.categoryName;
+    button.className="restore-book";button.type="button";button.dataset.restoreBook=slug;button.textContent="Return to shelf";button.setAttribute("aria-label","Return "+book.title+" to the shelf");
+    copy.append(link,group);li.append(copy,button);hiddenList.appendChild(li);
+  });
+  if(emptyHidden)emptyHidden.hidden=hidden.length>0;
+}
+function applyHidden(){
+  document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){row.hidden=hidden.indexOf(row.dataset.bookSlug)>=0});
+  var number=0;document.querySelectorAll(".book-item:not([hidden]) .book-number").forEach(function(el){el.textContent=String(++number).padStart(2,"0")});
+  var emptyCollection=document.querySelector(".empty-collection");if(emptyCollection)emptyCollection.hidden=number>0;
+  updateCounts();renderHidden();renderRecent();
+}
+if(hiddenToggle&&hiddenPanel)hiddenToggle.addEventListener("click",function(){var open=hiddenPanel.hidden;hiddenPanel.hidden=!open;hiddenToggle.setAttribute("aria-expanded",String(open))});
+document.addEventListener("click",function(event){
+  var target=event.target;if(!target||!target.closest)return;
+  var hide=target.closest("[data-hide-book]"),restore=target.closest("[data-restore-book]");
+  if(hide){var slug=hide.dataset.hideBook;if(hidden.indexOf(slug)>=0)return;var title=books.get(slug).title,next=[slug].concat(hidden);if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Hidden: "+title;hiddenToggle.focus()}
+  if(restore){var restored=restore.dataset.restoreBook,title=books.get(restored).title,next=hidden.filter(function(slug){return slug!==restored});if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Returned to the shelf: "+title;var action=null;document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){if(row.dataset.bookSlug===restored)action=row.querySelector(".book-row")});(action||hiddenToggle).focus()}
 });
-box.hidden=!shown;
+window.addEventListener("storage",function(event){if(event.key===HIDDEN_KEY||event.key===null){hidden=readHidden();applyHidden()}});
+window.addEventListener("pageshow",function(){hidden=readHidden();applyHidden()});
+applyHidden();
 })();
 </script>"""
 
@@ -513,9 +577,11 @@ def page_count(slug):
 
 def catalogue():
     """All readers, independent of which category is currently displayed."""
-    data = {"pages": ["index.html", *CATEGORY_PAGES.values()], "readers": [
+    category_names = {key: name for key, name, *_ in CATEGORIES}
+    data = {"pages": ["index.html", *CATEGORY_PAGES.values()],
+        "categories": [{"key": key, "name": name} for key, name, *_ in CATEGORIES], "readers": [
         {"slug": slug, "href": f"{slug}/{entry}", "category": BOOKS[slug][0],
-         "title": BOOKS[slug][2], "lang": BOOKS[slug][6]}
+         "categoryName": category_names[BOOKS[slug][0]], "title": BOOKS[slug][2], "lang": BOOKS[slug][6]}
         for slug, _, entry in READERS]}
     return '<script id="shelf-catalog" type="application/json">' + json.dumps(data, ensure_ascii=False).replace("<", "\\u003c") + '</script>'
 
@@ -531,11 +597,11 @@ def book_rows(category):
         lt = lang_attr(slug)
         series_label = f' <span class="book-series"{lt}>{html.escape(series)}</span>' if series else ""
         facts = [time, f"{n} {unit if n != 1 else unit[:-1]}", f"{language} · {level}" if level else language]
-        rows.append(f"""<li><a class="book-row" href="{slug}/{entry}">
+        rows.append(f"""<li class="book-item" data-book-slug="{html.escape(slug, quote=True)}"><a class="book-row" href="{slug}/{entry}">
   <span class="book-number" aria-hidden="true">{len(rows)+1:02d}</span>
   <span class="book-copy"><span class="book-title"{lt}>{html.escape(title)}{series_label}</span><span class="book-blurb"{lt}>{html.escape(blurb)}</span></span>
   <span class="book-facts">{''.join(f'<span>{html.escape(f)}</span>' for f in facts)}</span>
-  <span class="row-arrow" aria-hidden="true">→</span></a></li>""")
+  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-hide-book="{html.escape(slug, quote=True)}" aria-label="Hide {html.escape(title, quote=True)}">Hide</button></li>""")
     return '<ul class="book-list">' + "\n".join(rows) + '</ul>'
 
 
@@ -547,17 +613,17 @@ def shelf(category=None):
         breadcrumb = '<a class="breadcrumb" href="index.html">← Bookshelf</a>'
         stats = f'{count} reader' + ('s' if count != 1 else '')
         nav_links = ''.join(f'<a href="{CATEGORY_PAGES[key]}"{CUR if key == category else ""}>{html.escape(name)}</a>' for key, name, *_ in CATEGORIES)
-        content = f'<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories">{nav_links}</nav></details>' + book_rows(category)
+        content = f'<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories">{nav_links}</nav></details>' + book_rows(category) + '<p class="empty-collection" hidden>All books in this collection are hidden. Use Hidden books above to return them.</p>'
     else:
         title, note, breadcrumb = "Bookshelf", "Readers for daily practice, technical study and new ideas.", ""
         stats = f'{len(CATEGORIES)} collections · {len(BOOKS)} readers'
         rows = []
         for key, name, description, _ in CATEGORIES:
             count = sum(b[0] == key for b in BOOKS.values())
-            rows.append(f"""<li><a class="category-row" href="{CATEGORY_PAGES[key]}">
+            rows.append(f"""<li><a class="category-row" data-category="{key}" href="{CATEGORY_PAGES[key]}">
   <span class="category-number" aria-hidden="true">{len(rows)+1:02d}</span>
   <span><span class="category-title">{html.escape(name)}</span><span class="category-note">{html.escape(description)}</span></span>
-  <span class="category-count">{count} reader{'s' if count != 1 else ''}</span><span class="row-arrow" aria-hidden="true">→</span></a></li>""")
+  <span class="category-count" data-category-count="{key}">{count} reader{'s' if count != 1 else ''}</span><span class="row-arrow" aria-hidden="true">→</span></a></li>""")
         content = '<h2 class="shelf-label" id="collections-title">Browse collections</h2><ul class="category-list">' + "\n".join(rows) + '</ul>'
     return f"""<main class="library-main" id="library" tabindex="-1" aria-labelledby="shelf-title">
 <header class="shelf-head" id="shelf-top">{breadcrumb}
@@ -565,6 +631,15 @@ def shelf(category=None):
 </header>
 <section class="recent" data-category="{category or ''}" aria-labelledby="recent-title" hidden>
   <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
+</section>
+<div class="shelf-tools">
+  <button class="library-action" type="button" aria-controls="hidden-books" aria-expanded="false">Hidden books (<span data-hidden-count>0</span>)</button>
+  <p class="library-feedback" aria-live="polite"></p>
+</div>
+<section class="hidden-books" id="hidden-books" aria-labelledby="hidden-title" hidden>
+  <h2 id="hidden-title">Hidden books</h2>
+  <p class="hidden-empty">No books are hidden.</p>
+  <ul class="hidden-list"></ul>
 </section>
 {content}
 </main>
