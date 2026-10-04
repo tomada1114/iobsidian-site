@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 3 of 11</span></p>
   <h1>Why not just add another boolean flag?</h1>
-  <p class="lead">After this page you can model cases that exclude each other as a discriminated union. You can also explain why the compiler then finds every place a new case must be handled.</p>
+  <p class="lead">A system flag can appear without a job name, or beside an unrelated learner ID. Optional fields allow combinations that the actor model needs to rule out.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What's wrong with a few optional fields?</li>
-      <li>What does a discriminated union look like?</li>
-      <li>How does the compiler find every switch, and why no enums?</li>
-      <li>When is a union the wrong shape?</li>
+      <li>A bag of flags</li>
+      <li>One tag, exact fields</li>
+      <li>Exhaustive, and no enums</li>
+      <li>When a union is the wrong shape</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -26,15 +26,15 @@
   onBehalfOf?: string;
 };</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Four optional flags allow sixteen combinations, of which thirteen are nonsense; a union allows exactly three rows, learner, system and agent, each with its own fields.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Optional fields allow combinations that do not describe a valid actor. The union requires the fields for its learner, system or agent alternative.">
       <text x="96" y="24" text-anchor="middle" class="t-hd">Flag bag</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Union</text>
       <rect x="16" y="40" width="36" height="36" rx="4" class="node"/><rect x="58" y="40" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="40" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="40" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="82" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="82" width="36" height="36" rx="4" class="node"/><rect x="100" y="82" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="82" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="124" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="124" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="124" width="36" height="36" rx="4" class="node"/><rect x="142" y="124" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="166" width="36" height="36" rx="4" class="node-soft"/>
-      <text x="96" y="232" text-anchor="middle" class="t-sm">16 combinations</text>
-      <text x="96" y="254" text-anchor="middle" class="t-sm">13 are nonsense</text>
+      <text x="96" y="232" text-anchor="middle" class="t-sm">many combinations</text>
+      <text x="96" y="254" text-anchor="middle" class="t-sm">roles may conflict</text>
       <rect x="200" y="40" width="192" height="162" rx="8" class="node-acc"/>
       <text x="216" y="72" class="t-hd">learner</text>
       <text x="216" y="92" class="t-sm">learnerId</text>
@@ -43,15 +43,15 @@
       <text x="216" y="176" class="t-hd">agent</text>
       <text x="216" y="194" class="t-sm">onBehalfOf, grants</text>
       <text x="296" y="232" text-anchor="middle" class="t-sm">3 shapes</text>
-      <text x="296" y="254" text-anchor="middle" class="t-sm">nothing else fits</text>
+      <text x="296" y="254" text-anchor="middle" class="t-sm">required fields</text>
     </svg>
-    <figcaption>The flag bag lets you write sixteen shapes and hopes nobody writes the bad ones. The union has only the three that make sense.</figcaption>
+    <figcaption>The flag bag does not encode which fields belong together. The union describes three valid actor alternatives, each with its required fields.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One tag, exact fields</h2>
     <p>Quickturn's actor is a discriminated union. Its <code>kind</code> identifies a learner, a system job or an agent, and each member requires the fields appropriate to that case. Checking the tag narrows the available fields.</p>
-    <p>An agent actor names one learner and carries operation grants. The operation-name union can be derived from an <code>as const</code> list with <code>(typeof LIST)[number]</code>, keeping runtime names and the static type aligned. The type describes the grants; authorization must still enforce them.</p>
+    <p>An agent actor names one learner and carries operation grants. An <code>as const</code> list supplies runtime operation names. Its indexed access type, <code>(typeof LIST)[number]</code>, gives the corresponding static union. The type describes the grants; authorization must still enforce them.</p>
     <pre><code>type Actor =
   | { kind: "learner"; learnerId: LearnerId }
   | { kind: "system"; job: SystemJob;
@@ -92,7 +92,7 @@
   }
 }</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Someone adds a member to the union, the compiler or lint marks every switch that lacks it, each switch is handled, and the change ships with no switch missed.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="Adding a union member exposes missing cases in switches checked for exhaustiveness. Those errors identify code that must handle the new alternative.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -101,13 +101,13 @@
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="46">Add a member to the union</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Every switch missing it is marked</text>
+      <text x="64" y="118">Checked switches show gaps</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="190">Each switch handles the new case</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Ships: no switch was missed</text>
+      <text x="64" y="262" class="t-hd">Exhaustive checks pass</text>
     </svg>
-    <figcaption>The compiler turns "find every place that reads actors" into a list of errors. The change can't ship until the list is empty.</figcaption>
+    <figcaption>Exhaustive checks report missing cases at participating switches. Other code paths and the intended behavior still need review and tests.</figcaption>
   </figure>
     <p>A catch-all default inside controlled code can conceal missing behavior. Across a public API, however, an installed client may receive an alternative added after it shipped, so a safe fallback is necessary.</p>
     <p>Quickturn uses string unions instead of enums because its runtime relies on erasable TypeScript syntax. Enums can require JavaScript output that a type-stripping runtime does not provide. Exact strings also map directly to JSON.</p>
@@ -120,8 +120,8 @@
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>A discriminated union with a literal <code>kind</code> makes nonsense combinations impossible to write.</li>
-      <li>Exhaustive switches let the compiler list every place a new case must be handled; a default branch hides them.</li>
+      <li>A discriminated union requires the fields for each alternative inside checked code; external input still needs parsing.</li>
+      <li>Exhaustive checks expose missing switch cases; a catch-all branch can conceal behavior that still needs to be added.</li>
       <li>Inside your code stay exhaustive, but clients of a public API keep a default branch for new cases.</li>
     </ol>
   </section>

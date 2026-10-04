@@ -396,17 +396,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 10 of 11</span></p>
   <h1>Can an app work offline if the server owns the rules?</h1>
-  <p class="lead">After this page you can explain offline support where the client records facts and the server applies the rules. You can also say how to replay those facts safely and which times to trust.</p>
+  <p class="lead">A learner loses connectivity while answering a fetched deck. The device can retain those answers even when scheduling and streak rules remain on the server.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Does offline mean running the rules on the phone?</li>
-      <li>How are queued answers replayed safely?</li>
-      <li>Which time do we believe?</li>
-      <li>What does this design give up?</li>
+      <li>Two ways to be offline</li>
+      <li>The queue and the replay</li>
+      <li>Time you can't trust</li>
+      <li>What this design gives up</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -432,7 +432,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The queue and the replay</h2>
-    <p>Each answer receives a device-generated ID and enters an ordered queue. The web queue uses session storage, which survives a tab reload but is not guaranteed to survive closing the tab or clearing storage. Native clients need an appropriate durable device store.</p>
+    <p>Each answer receives a device-generated ID and enters an ordered queue. The web queue uses session storage, which survives a tab reload. Closing the tab or clearing storage can remove the queue. Native clients need an appropriate durable device store.</p>
     <p>A failed send stays at the queue head. Retries reuse its ID, allowing the server to skip an answer whose original response was lost.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="An answer is given on the device with an id and a time, it is queued, a failed send stays at the head, the answer is resent with the same id when the signal returns, and the server clamps the time and records it once on the right day.">
@@ -453,7 +453,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="334" class="t-hd">Once, on the right day</text>
     </svg>
-    <figcaption>Every step either keeps the answer or repeats it harmlessly. The server makes all the decisions at the end.</figcaption>
+    <figcaption>While the queue is retained, retries reuse the answer ID. The server applies the rules after receiving the facts; storage loss still needs consideration.</figcaption>
   </figure>
     <p>Online and replayed answers use the same batch endpoint. The server orders a batch by time and then ID, and a resume endpoint returns the answers already held. Resuming therefore depends on acknowledged server state as well as the local queue.</p>
   </section>
@@ -477,7 +477,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <line x1="354" y1="120" x2="332" y2="120" class="ln" marker-end="url(#arw)"/>
       <text x="200" y="214" text-anchor="middle" class="t-sm">times outside are pulled to the edge</text>
     </svg>
-    <figcaption>Every reported time ends up inside the window. A wrong clock can move an answer a little, but never before its round began or into the future.</figcaption>
+    <figcaption>Clamping keeps accepted times inside the stated window. It cannot establish the actual practice time or the amount of clock error.</figcaption>
   </figure>
     <p>A late answer belongs to its original round's practice day. It can be logged without rewinding a card schedule already updated by a newer answer. For example, Monday's offline answer arriving after Wednesday's online answer should remain in history while Wednesday's scheduling state remains effective.</p>
     <p>The rules also allow an abandoned round to receive practiced answers. Product meaning, timestamp handling and scheduling order need explicit tests.</p>

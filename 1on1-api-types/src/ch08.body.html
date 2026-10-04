@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 8 of 11</span></p>
   <h1>How do you change an API without breaking old apps?</h1>
-  <p class="lead">After this page you can tell a safe API change from a breaking one. You can also explain error codes, additive changes and deprecation as promises to apps you can't update.</p>
+  <p class="lead">The server removes a response field that the current web app no longer reads. An installed phone app may still depend on it.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What should a client branch on when a call fails?</li>
-      <li>Which changes are safe inside one version?</li>
-      <li>How do you remove something for real?</li>
-      <li>What does this discipline cost?</li>
+      <li>Codes, not messages</li>
+      <li>Additive only inside /v1</li>
+      <li>Deprecate, then version</li>
+      <li>What the discipline costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -33,7 +33,7 @@ switch (error.code) {
     <h2 id="s2"><span class="no">02</span>Additive only inside /v1</h2>
     <p>Quickturn uses additive changes within <code>/v1</code>. A tolerant reader ignores response fields it does not need, so adding one is often compatible. Renaming or removing an existing field changes what an old client can read.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="An additive change adds a new response field, the old app ignores it and keeps working; a breaking change renames a field, the old app reads nothing and fails.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A tolerant old client accepts an extra response field. Renaming a field removes data the client still expects.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Additive</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Breaking</text>
       <text x="16" y="56" class="t-sm">The change</text>
@@ -46,15 +46,15 @@ switch (error.code) {
       <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">keeps working</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">fails</text>
     </svg>
-    <figcaption>Both changes look small in the server code. Only the one on the left leaves installed apps working.</figcaption>
+    <figcaption>In this example, the tolerant client accepts the extra field. Renaming the field removes data it still expects.</figcaption>
   </figure>
     <p>The compatibility table distinguishes changes that only appear additive from those existing clients can actually accept.</p>
   <div class="tbl"><table>
     <thead><tr><th>Change</th><th>Safe in /v1?</th><th>Why</th></tr></thead>
     <tbody>
-      <tr><td class="key">New endpoint</td><td>Yes</td><td>Old apps never call it</td></tr>
-      <tr><td class="key">New optional request field</td><td>Yes</td><td>Old apps just don't send it</td></tr>
-      <tr><td class="key">New response field</td><td>Yes</td><td>Old apps ignore it</td></tr>
+      <tr><td class="key">New endpoint</td><td>Usually</td><td>Old apps do not call it</td></tr>
+      <tr><td class="key">New optional request field</td><td>Usually</td><td>Existing request behavior remains accepted</td></tr>
+      <tr><td class="key">New response field</td><td>If tolerant</td><td>Old apps must accept unknown fields</td></tr>
       <tr><td class="key">Remove or rename a field</td><td>No</td><td>Old apps read nothing</td></tr>
       <tr><td class="key">Change what a field means</td><td>No</td><td>Old apps read it wrongly</td></tr>
       <tr><td class="key">Make an optional field required</td><td>No</td><td>Old requests are refused</td></tr>
@@ -97,8 +97,8 @@ switch (error.code) {
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Failures carry a stable code for programs and a fixed message for people; clients always keep a default branch.</li>
-      <li>Inside one version, only add things; renaming, removing or tightening anything breaks installed apps.</li>
+      <li>Failures carry stable codes for programs and readable messages for people; independently updated clients need a safe fallback.</li>
+      <li>Additive changes still need compatible consumers; removing fields, changing their meaning or tightening input can break installed apps.</li>
       <li>Mark a field deprecated first, ship breaking changes as a new version, and retire the old one after a window.</li>
     </ol>
   </section>

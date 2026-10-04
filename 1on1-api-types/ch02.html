@@ -396,16 +396,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 2 of 11</span></p>
   <h1>Which compiler flags change how I write code?</h1>
-  <p class="lead">After this page you can explain what <code>strict</code> leaves out, and which extra flags catch real bugs. You can also say why a team keeps a gate closed when outside code can't pass it.</p>
+  <p class="lead">An array lookup may have no value, even when its element type looks precise. Compiler options determine which missing cases the code must handle.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Doesn't <code>strict</code> already turn everything on?</li>
-      <li>What bug does each extra flag catch?</li>
-      <li>What do the flags cost, and when do we keep them?</li>
+      <li>What strict leaves out</li>
+      <li>One flag, one bug</li>
+      <li>What the flags cost, and the gate</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -442,7 +442,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>One flag, one bug</h2>
     <p>With <code>noUncheckedIndexedAccess</code>, an array or dictionary lookup may return undefined. A length test does not generally establish that a separately indexed expression is present. Read the element into a variable and narrow that value before using it.</p>
     <p><code>exactOptionalPropertyTypes</code> distinguishes an absent optional field from explicitly assigning undefined unless the type includes it. This is useful for update objects, although JSON omits undefined values and an API must separately define how clearing a field works.</p>
-    <p><code>noPropertyAccessFromIndexSignature</code> requires bracket notation for fields supplied only by an index signature. <code>verbatimModuleSyntax</code> makes type-only imports explicit, avoiding guessed import removal and unexpected module side effects.</p>
+    <p>The <code>noPropertyAccessFromIndexSignature</code> flag requires bracket notation for fields supplied only by an index signature. The <code>verbatimModuleSyntax</code> flag makes type-only imports explicit, avoiding guessed import removal and unexpected module side effects.</p>
     <pre><code>const first = cards[0];
 if (first === undefined) return noCards();
 first.id; // first: Card
@@ -469,7 +469,7 @@ const b: Settings = { sound: undefined }; // error</code></pre>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">a weaker gate</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one small module</text>
     </svg>
-    <figcaption>Both options compile, and in both a contract change still breaks the build. Only the right one keeps the gate the same for every file.</figcaption>
+    <figcaption>Both options retain type checking that can detect incompatible uses of changed contracts. The right option also keeps the configured gate consistent across files.</figcaption>
   </figure>
     <p>Quickturn generated types only and kept a small fetch module checked with <code>satisfies</code>. That operator tests compatibility without replacing the value's inferred type. The module needs maintenance, and a compatible generator release could make the choice worth revisiting.</p>
     <p>A failing index read should normally be fixed by handling absence, rather than removing the check for an entire package. Exceptions require understanding which protection is being lost.</p>
@@ -479,7 +479,7 @@ const b: Settings = { sound: undefined }; // error</code></pre>
     <ol>
       <li><code>strict</code> is a floor; flags like <code>noUncheckedIndexedAccess</code> and <code>exactOptionalPropertyTypes</code> are separate opt-ins.</li>
       <li>Each extra flag catches a class of mistakes before runtime, at the cost of more checks in everyday code.</li>
-      <li>When outside code can't pass a gate, change what you generate or wrap it; don't loosen the gate.</li>
+      <li>Quickturn retains its checks by generating types and maintaining a small fetch module; a compatible generator could change that trade.</li>
     </ol>
   </section>
   <nav class="pager" aria-label="Page navigation">
