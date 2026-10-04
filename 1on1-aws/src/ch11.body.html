@@ -2,23 +2,23 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 11 of 14</span></p>
   <h1>What actually happens when a learner signs in?</h1>
-  <p class="lead">After this page you can explain OAuth and OpenID Connect, and walk through the authorization code flow with PKCE. You can also say which token the API checks, and how.</p>
+  <p class="lead">A token names a learner, but readable claims alone do not establish identity. The sign-in flow and API verification supply different parts of that trust.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What are OAuth and OpenID Connect for?</li>
-      <li>How does the code flow with PKCE work?</li>
-      <li>Which token does the API check, and how?</li>
-      <li>What does a managed identity service cost us?</li>
+      <li>Who you are, what you may do</li>
+      <li>The code flow with PKCE</li>
+      <li>Three tokens</li>
+      <li>What a managed service costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Who you are, what you may do</h2>
     <p>Decoding a JWT reveals its claims but does not verify them. Anyone can construct token-shaped text with a desired subject. Authentication establishes the caller; authorization decides which operation and data that caller may access.</p>
-    <p>OpenID Connect adds identity to OAuth's authorization framework. In Quickturn, the learner is the resource owner, the web backend is the client, Cognito issues tokens, and the API serves protected resources.</p>
+    <p>OpenID Connect adds identity to OAuth's authorization framework. In Quickturn, the learner is the resource owner and the web backend is the client. Cognito issues tokens, while the API serves protected resources.</p>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>The code flow with PKCE</h2>
@@ -45,7 +45,7 @@
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="406" class="t-hd">Tokens go to the backend</text>
     </svg>
-    <figcaption>The browser only ever carries a one-time code. The tokens are handed to our backend, never to scripts on the page.</figcaption>
+    <figcaption>The web backend exchanges the callback code for tokens. It keeps token values from page scripts; the browser later carries protected session cookies.</figcaption>
   </figure>
     <p>The backend verifies state and exchanges the code with the verifier and its client credentials. Native clients use the system browser and PKCE without a secret embedded in the app. State, redirect handling and verifier binding have distinct protections and must all be correct.</p>
   </section>
@@ -100,14 +100,14 @@
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What a managed service costs</h2>
-    <p>Managed sign-in reduces password and recovery work but adds provider-specific settings, plan choices and migration concerns. Quickturn maps provider subjects to its own learner IDs so replacing a pool need not rename every owned record, although identity mappings still need migration.</p>
+    <p>Managed sign-in reduces password and recovery work but adds provider-specific settings, plan choices and migration concerns. Quickturn maps provider subjects to its own learner IDs. Replacing a pool need not rename owned records, although identity mappings still need migration.</p>
     <p>Token verification belongs in a path shared by cookie and Bearer authentication. Logs identify which check failed without including the token. A readable token can be a usable credential until its effective expiry or revocation enforcement takes effect.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>OAuth handles delegated access; OpenID Connect adds a standard sign-in and an ID token.</li>
-      <li>The code flow with PKCE turns a one-time code into tokens on the backend, never in the browser.</li>
+      <li>Quickturn’s web backend exchanges the code using PKCE; native clients instead manage their own protected tokens.</li>
       <li>Verify the access token's signature, issuer, token use, client and expiry before trusting its user id.</li>
     </ol>
   </section>

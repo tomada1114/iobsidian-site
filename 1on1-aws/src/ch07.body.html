@@ -2,25 +2,25 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 7 of 14</span></p>
   <h1>List the questions first, then design the table</h1>
-  <p class="lead">After this page you can design a DynamoDB table from its access patterns. You can also explain single-table design with prefixed sort keys, and when separate tables are better.</p>
+  <p class="lead">Fetching a round, its answers and thirty days of totals involves different questions. Key design starts with those reads and their ownership boundary.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why start from questions instead of entities?</li>
-      <li>How does one table hold every kind of item?</li>
-      <li>What does one partition per learner give us?</li>
-      <li>When is single-table design the wrong choice?</li>
+      <li>Access patterns first</li>
+      <li>One table, overloaded keys</li>
+      <li>One partition per learner</li>
+      <li>When single-table is wrong</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Access patterns first</h2>
-    <p>Start DynamoDB design with access patterns: get a learner's settings, retrieve a round and its answers, read card memory state, show day tallies in a range, and export or delete an account. Entity names alone do not say how those reads will run.</p>
+    <p>Start with the questions: get learner settings, retrieve a round and its answers, or read card memory state. Add date-range tallies and account export or deletion to that list. Entity names alone do not say how those reads will run.</p>
     <p>Quickturn aims to make each ordinary read a GetItem or a bounded Query. A pattern that cannot fit the keys signals a missing design decision, not a reason to add a filtered Scan silently.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Write the question, name the items it returns, choose the partition key for whose data it is, choose the sort-key shape such as a prefix or a date, and arrive at one operation, a GetItem or a Query.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Write the question, name the items it returns, choose the partition key for whose data it is, choose the sort-key shape such as a prefix or a date, and choose GetItem or Query, including any result pages.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -36,9 +36,9 @@
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="262">Sort key: a prefix or a date</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">One GetItem or one Query</text>
+      <text x="64" y="334" class="t-hd">GetItem or a paged Query</text>
     </svg>
-    <figcaption>Every question ends in exactly one operation. If a question needs two, go back to the keys.</figcaption>
+    <figcaption>This is the target for ordinary reads. Pagination can require several requests, and a new question may justify another index or operation.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -46,7 +46,7 @@
     <p>Learner-owned items share a <code>LEARNER#</code> partition key. Sort-key prefixes distinguish singleton settings, rounds, answers, day tallies and item memory state. ISO dates make chronological ranges possible in a fixed date format.</p>
     <p>A round prefix groups its header and answers, while an item discriminator identifies which records were returned. IDs are encoded before joining separators so an ID containing <code>#</code> cannot masquerade as part of the key structure.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="One learner's partition holds the singletons PROFILE, SETTINGS and STATS, a round with its answer items, day items in date order and item states; the identity mapping item sits outside in its own partition; deleting or exporting a learner is one key.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="One learner's partition holds the singletons PROFILE, SETTINGS and STATS, a round with its answer items, day items in date order and item states; the identity mapping item sits outside in its own partition; learner-owned items can be selected by one partition key, then processed across pages.">
       <rect x="8" y="8" width="384" height="284" rx="10" class="node-acc"/>
       <text x="24" y="36" class="t-hd t-acc">One learner's partition</text>
       <rect x="24" y="52" width="352" height="36" rx="6" class="node"/><text x="40" y="76" class="t-sm">PROFILE · SETTINGS · STATS</text>
@@ -66,36 +66,36 @@
     <h2 id="s3"><span class="no">03</span>One partition per learner</h2>
     <p>A verified provider identity maps to an internal learner ID. Keeping that mapping separate makes replacing the identity provider possible without renaming all owned records. A learner-bound store inserts the partition key into every read and write.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="With one table per entity, a round with its answers needs two reads, the last thirty days needs a filter, deleting a learner means searching every table, and the schema is easy to read; with a single table and one partition per learner, each of the first three is one Query and deleting a learner is one key, but the schema is harder to read.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="This comparison uses separate entity reads on the left and learner-key ranges on the right. Ranges may need pages; deletion needs write batches and identity-map cleanup.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Table per entity</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Single table</text>
       <text x="16" y="56" class="t-sm">A round with its answers</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">two reads</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">one Query</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">paged Query</text>
       <text x="16" y="136" class="t-sm">Last 30 days</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">an index needed</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">one BETWEEN</text>
       <text x="16" y="216" class="t-sm">Delete a learner</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">search every table</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">one key</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">visit each table</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">paged batches</text>
       <text x="16" y="296" class="t-sm">Reading the schema</text>
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">easy</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">needs the list</text>
     </svg>
-    <figcaption>The row to notice is deletion. With one partition per learner, removing everything a learner owns is a single key, not a search.</figcaption>
+    <figcaption>A learner key selects the owned records without scanning unrelated learners. Deletion then follows every page and write batch, including the separate identity mapping.</figcaption>
   </figure>
     <p>Account export or deletion can query the learner partition and remove its identity mapping, following all pages and handling batch limits. A shared table need not have secondary indexes if current access patterns already fit the primary key. That choice depends on actual learner data volume and request requirements.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>When single-table is wrong</h2>
     <p>The access-pattern list is part of the schema documentation. A new question may need another key, index or migration. Backfilling means rewriting existing data into the new shape.</p>
-    <p>A cross-learner leaderboard has a different workload. Quickturn can build a periodic result from an export rather than force every live write into a heavily shared date key. Different owners, retention or backup needs can justify separate tables. Single-table design is useful when data and access lifecycles align; it is not a requirement to keep every kind of record together forever.</p>
+    <p>A cross-learner leaderboard has a different workload. Quickturn can build a periodic result from an export rather than force every live write into a heavily shared date key. Different owners, retention or backup needs can justify separate tables. Single-table design is useful when data and access lifecycles align. Different lifecycles can justify moving records into separate tables.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>List every access pattern first, and shape the keys so each is one GetItem or one Query.</li>
-      <li>One partition per learner with prefixed sort keys makes isolation, deletion and export each one key.</li>
+      <li>List access patterns first, and target ordinary reads with GetItem or Query, including the pages each result may need.</li>
+      <li>Learner keys and bound stores support isolation; export and deletion follow the selected items across pages and batches.</li>
       <li>The access-pattern list is part of the schema; use separate tables when lifecycles or owners diverge.</li>
     </ol>
   </section>

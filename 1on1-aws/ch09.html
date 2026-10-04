@@ -399,17 +399,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 9 of 14</span></p>
   <h1>Why write infrastructure as code at all?</h1>
-  <p class="lead">After this page you can explain what infrastructure as code gives you and how CDK becomes a CloudFormation stack. You can also compare the main tools, and say how to test what they produce.</p>
+  <p class="lead">A console change makes the API faster, but the next deployment may overwrite it. Reviewed infrastructure code must capture both the setting and its reason.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What's wrong with changing things in the console?</li>
-      <li>How does CDK code become real resources?</li>
-      <li>How do the tools differ?</li>
-      <li>What does infrastructure as code cost, and how do we test it?</li>
+      <li>Why not the console</li>
+      <li>How CDK works</li>
+      <li>The tools</li>
+      <li>What it costs, and how we test it</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -439,7 +439,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="334" class="t-hd">Stack updated, or rolled back</text>
     </svg>
-    <figcaption>CDK's job ends at the template. From the change set on, CloudFormation does the work and decides whether the update stands.</figcaption>
+    <figcaption>CDK synthesizes the template and prepares deployment assets. CloudFormation applies the resource changes; the deployment result and live settings still need checking.</figcaption>
   </figure>
     <p>Bootstrapping creates deployment resources and roles for an account and Region. Quickturn uses foundation, deployment-access, application and agent stacks, with an explicit deployment order. Development deploys can be automatic while production waits for approval.</p>
   </section>
@@ -461,7 +461,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
       <text x="302" y="248" text-anchor="middle" class="t-hd t-acc">CDK</text><text x="302" y="272" text-anchor="middle" class="t-sm">Quickturn</text>
     </svg>
-    <figcaption>Moving right gives you a real language; moving up gives you a state store to run. CDK takes the language and leaves the state to AWS.</figcaption>
+    <figcaption>Moving right uses a programming language; moving up gives the team a separate state-management responsibility. CDK takes the language and leaves the state to AWS.</figcaption>
   </figure>
     <p>Quickturn chooses TypeScript CDK for a shared language and tests across infrastructure involving CloudFront, WAF, Cognito and functions. It does not expect CDK to make CloudFormation deployments instant. A smaller function-focused system could reasonably choose SAM.</p>
   </section>
@@ -469,7 +469,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s4"><span class="no">04</span>What it costs, and how we test it</h2>
     <p>Infrastructure abstractions can generate permissions and resources the author did not explicitly write. Test the synthesized result, especially key schemas, retention, billing mode and OIDC trust, rather than rely only on the construct's name.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="Checks from fastest to slowest: the type check, assertions on the synthesized template, a bundling test, the deploy, and finally reading the live resource back, which is the only check of the real account.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="Type checks, template assertions, bundling and deployment answer different questions. Reading live resources then confirms requested settings in the actual account.">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="48">Type check</text>
       <rect x="16" y="76" width="368" height="52" rx="6" class="node"/>
@@ -481,10 +481,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="264" width="368" height="52" rx="6" class="node-acc"/>
       <text x="32" y="296" class="t-hd t-acc">Read the live resource back</text>
     </svg>
-    <figcaption>Each step is slower than the one above it. Only the last step checks the account that learners actually use.</figcaption>
+    <figcaption>These checks answer different questions, from code validity to packaging and live settings. A successful deploy alone does not confirm every requested setting.</figcaption>
   </figure>
     <p>Focused assertions and resource allowlists make important changes visible. Full-template snapshots can bury them in large diffs. Bundling tests catch deploy-time packaging mistakes; post-deploy reads confirm live settings.</p>
-    <p>Offline synthesis works when constructs do not require live lookups. A green synthesis or template test is not evidence that the account accepted the deployment or that the running service has the requested configuration.</p>
+    <p>Offline synthesis works when constructs do not require live lookups. Passing synthesis and template tests does not confirm an accepted deployment. The running service’s requested configuration needs a live check.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>

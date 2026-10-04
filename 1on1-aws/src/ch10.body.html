@@ -2,24 +2,24 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 10 of 14</span></p>
   <h1>Split what breaks often from what must never be lost</h1>
-  <p class="lead">After this page you can explain why data lives in its own stack with retain policies. You can also explain how stacks find each other without locking, and where configuration and secrets belong.</p>
+  <p class="lead">The API can be rebuilt; learner records cannot be recreated from its code. Separate lifecycles make deployment and recovery decisions clearer.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why keep the data in a separate stack?</li>
-      <li>How do two stacks find each other?</li>
-      <li>How do dev and prod differ, and where do secrets go?</li>
-      <li>What does the split cost?</li>
+      <li>Stateful versus rebuilt often</li>
+      <li>Loose coupling</li>
+      <li>Stages, config and secrets</li>
+      <li>What the split costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Stateful versus rebuilt often</h2>
     <p>Split stacks by lifecycle. Quickturn's foundation owns the learner table and identity pool, while the application stack owns frequently rebuilt compute, static delivery and alarms. Durable data should not be casually coupled to every app release.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The foundation stack holds the table and the user pool, changes rarely, keeps its resources when the stack is deleted, and is untouched by a failed app deploy; the app stack holds the API, the web app and alarms, changes on every merge, is rebuilt from code when deleted, and rolls back on a failed deploy.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="The foundation stack holds the table and the user pool, changes rarely, keeps its resources when the stack is deleted, and is untouched by a failed app deploy; the app stack holds the API, the web app and alarms, changes on every merge, is rebuilt from code when deleted, and attempts rollback on a failed deploy. A failed rollback needs inspection and a recovery procedure.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Foundation</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">App</text>
       <text x="16" y="56" class="t-sm">Holds</text>
@@ -33,9 +33,9 @@
       <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">rebuilt from code</text>
       <text x="16" y="296" class="t-sm">On a failed deploy</text>
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">not involved</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">rolled back</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">rollback attempted</text>
     </svg>
-    <figcaption>The third row is the point. Even deleting the foundation stack leaves the table and the user pool in place.</figcaption>
+    <figcaption>Retention protects the foundation resources during stack deletion. Application rollback is attempted after a failed deploy; a failed rollback needs state inspection and recovery.</figcaption>
   </figure>
     <p>DeletionPolicy and UpdateReplacePolicy retention protect existing resources during stack removal or replacement. A new identity pool changes provider identities; the application must preserve or migrate their mapping to internal learners. Retaining an old pool does not automatically make a replacement usable.</p>
     <p>Deletion protection and production point-in-time recovery add further safeguards. They reduce accidents but still require recovery and migration procedures.</p>
@@ -44,7 +44,7 @@
     <h2 id="s2"><span class="no">02</span>Loose coupling</h2>
     <p>CloudFormation exports provide checked cross-stack references, but imported exports cannot be freely removed or changed. Quickturn instead publishes foundation identifiers under stage-specific Parameter Store names.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The foundation stack deploys, writes its identifiers under a stage path in Parameter Store, the app stack deploys and reads those names, and after that either stack can update without the other.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The foundation stack deploys, writes its identifiers under a stage path in Parameter Store, the app stack deploys and reads those names, and the stacks avoid a CloudFormation export lock but still share an identifier contract.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -57,7 +57,7 @@
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="190">App deploys, reads the names</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Either stack updates alone</text>
+      <text x="64" y="262" class="t-hd">Updates share a name contract</text>
     </svg>
     <figcaption>The dependency points one way. The foundation never learns that the app stack exists.</figcaption>
   </figure>
@@ -68,7 +68,7 @@
     <p>One infrastructure program produces development and production from a validated stage setting. Differences such as recovery, deletion protection, sign-up policy and approval are kept explicit and small.</p>
     <p>Ordinary settings are parsed at startup. Secrets need restricted retrieval and appropriate rotation rather than appearing in readable templates or function settings.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="A SecureString parameter has no extra charge for standard parameters and no built-in rotation, and is the default for secrets; Secrets Manager has a small monthly charge per secret and built-in rotation, and is used for secrets that must rotate, such as payment keys.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="A SecureString parameter has no extra charge for standard parameters and no built-in rotation, and suits Quickturn’s rarely changed client secret; Secrets Manager has a small monthly charge per secret and built-in rotation, and is used for secrets that must rotate, such as rotated secrets.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">SecureString</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Secrets Manager</text>
       <text x="16" y="56" class="t-sm">Price</text>
@@ -78,10 +78,10 @@
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">none built in</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">built in</text>
       <text x="16" y="216" class="t-sm">Use it for</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">most secrets</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">payment keys</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">rarely changed</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">rotated secrets</text>
     </svg>
-    <figcaption>Plain settings go in ordinary String parameters. For a secret, the only question left is whether it must rotate.</figcaption>
+    <figcaption>Plain settings use ordinary String parameters. Secret storage also depends on access, retrieval cost and lifecycle; rotation is one important part of that choice.</figcaption>
   </figure>
     <p>Parameter Store and Secrets Manager serve different lifecycle needs and pricing models. Quickturn uses a secure parameter for a rarely changed client secret and retrieves it through a cache. Cache lifetime affects rotation visibility; a nominal TTL is not proof that every environment has already refreshed.</p>
     <p>Custom deployment code that copies a secret also needs narrow permissions and logs that omit secret values.</p>

@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 8 of 14</span></p>
   <h1>What if the app crashes halfway through a write?</h1>
-  <p class="lead">After this page you can explain why several related writes belong in one DynamoDB transaction. You can also explain version conditions, and how a transaction's limits shape commands.</p>
+  <p class="lead">An accepted answer changes both history and points. If only one write succeeds, later reads disagree about what the learner did.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What goes wrong with two writes in a row?</li>
-      <li>How does one commit with conditions fix it?</li>
-      <li>What do transactions cost, and what are the alternatives?</li>
-      <li>How do the same conditions guard money?</li>
+      <li>Half-done writes</li>
+      <li>One commit with conditions</li>
+      <li>What transactions cost</li>
+      <li>Conditions that guard money</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -20,12 +20,12 @@
     <p>Saving an answer and updating points in separate writes creates a partial-success problem. A crash between them leaves the log and derived totals disagreeing, and retrying can duplicate one side rather than repair it.</p>
     <p>Quickturn treats the answer log as history and points, day counts and memory state as projections. The commit must include every change required for the accepted answer's meaning.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="With two separate writes, a crash after the first leaves the answer without points, a resent answer is counted twice, and two devices can overwrite each other; with one commit, a crash writes nothing, a resent answer fails harmlessly and a second device is detected by its version.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="With two separate writes, a crash after the first leaves the answer without points, a resent answer is counted twice, and two devices can overwrite each other; with one commit, the submitted writes apply together or not at all, a repeated answer is detected by its condition and a second device is detected by its version.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">Two writes</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">One commit</text>
       <text x="16" y="56" class="t-sm">Crash after the first</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">log and points split</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">nothing written</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">all or none</text>
       <text x="16" y="136" class="t-sm">Answer resent</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">counted twice</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">fails harmlessly</text>
@@ -33,14 +33,14 @@
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">last write wins</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">version conflict</text>
     </svg>
-    <figcaption>The first row is the one to remember. With one commit, a crash can't leave the log and its summaries out of step.</figcaption>
+    <figcaption>The first row is the one to remember. One transaction prevents partial application of its submitted changes. A lost response can still leave the client uncertain whether all of them committed.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>One commit with conditions</h2>
     <p>TransactWriteItems groups up to 100 actions with a 4 MB aggregate item limit. Actions cannot target the same item twice. A new answer carries a nonexistence condition; an updated aggregate carries its expected version. A condition check can guard a record that is not being changed.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The application reads items with their versions, decides in pure code and submits one commit to DynamoDB; if a condition fails, it reads again and decides again, up to three attempts, until the commit is accepted.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The application reads items with their versions, decides in pure code and submits one commit to DynamoDB; if a condition fails, it reads again and decides again, up to three attempts; an exhausted retry returns a conflict instead of promising success.">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
       <text x="96" y="82" text-anchor="middle" class="t-hd">Application</text>
       <text x="96" y="104" text-anchor="middle" class="t-sm">read, decide</text>
@@ -67,7 +67,7 @@
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Conditions that guard money</h2>
-    <p>Model-call accounting has a similar conditional boundary. Reserve a maximum affordable amount before starting, record the attempt under a stable job key, then settle the actual cost or reconcile a failed attempt.</p>
+    <p>Model-call accounting has a similar conditional boundary. Reserve the maximum affordable amount before starting and record the attempt under a stable job key. Then settle actual cost or reconcile a failed attempt.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 300" role="img" aria-label="Reserve the maximum cost only if the balance covers it, call the model, settle by refunding the unused part, and expire any reservation that never settles.">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
@@ -84,7 +84,7 @@
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="262">Expire reservations never settled</text>
     </svg>
-    <figcaption>The reservation is a conditional update. It succeeds only when the balance can cover the worst case, so a learner can never spend past their budget.</figcaption>
+    <figcaption>The conditional reservation checks the balance against the planned maximum. Attempt coordination, settlement and recovery must preserve that accounting when provider work or retries fail.</figcaption>
   </figure>
     <p>Conditions can prevent a repeated job from charging the learner twice. They do not themselves stop a provider call already in flight. Reservation expiry, attempt coordination and recovery must therefore be designed alongside the transaction.</p>
   </section>

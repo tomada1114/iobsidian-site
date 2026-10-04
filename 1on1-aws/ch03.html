@@ -399,17 +399,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 3 of 14</span></p>
   <h1>What do we give up by running the API on Lambda?</h1>
-  <p class="lead">After this page you can explain how Lambda runs requests and what a cold start is. You can also say when serverless fits, and when containers or a queue are the better choice.</p>
+  <p class="lead">A learner starts practice after the API returns a deck. Lambda can suit that short request while longer grading work needs another execution path.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Why is the first request of the morning slower?</li>
-      <li>What sits in front of the function, and why?</li>
-      <li>What does serverless give up, and when is it wrong?</li>
-      <li>How do long AI jobs fit?</li>
+      <li>How Lambda runs a request</li>
+      <li>The front door</li>
+      <li>What serverless gives up</li>
+      <li>Long AI jobs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -448,7 +448,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>A standard Lambda invocation has a time limit and account-level concurrency constraints. Memory may survive in a warm environment but is never a durable session store. Cost scales with requests and execution duration. These statements concern the default model; Managed Instances and durable workflows have different characteristics.</p>
     <p>Quickturn monitors errors and throttles and exercises alarms in development with controlled throttling.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="Lambda with an HTTP API costs close to nothing when idle, scales per request, allows up to fifteen minutes per request, pays a cold start on some first requests and needs little operations work; containers behind a load balancer bill by the hour when idle, scale by adding tasks, allow long requests, have no cold start per request and need more operations work.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="Lambda with an HTTP API costs close to nothing when idle, scales per request, uses a thirty-second HTTP API integration limit, may incur initialization on new environments and needs little operations work; containers behind a load balancer bill by the hour when idle, scale by adding tasks, allow long requests, may reuse already running tasks and need more operations work.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Lambda + HTTP API</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Containers + LB</text>
       <text x="16" y="56" class="t-sm">Cost when idle</text>
@@ -459,10 +459,10 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">add tasks</text>
       <text x="16" y="216" class="t-sm">Longest request</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">30 s, gateway</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">no hard limit</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">front-door limits</text>
       <text x="16" y="296" class="t-sm">First-request wait</text>
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">cold starts</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">always warm</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">running tasks</text>
       <text x="16" y="376" class="t-sm">Operations work</text>
       <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">little</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">more</text>
@@ -485,7 +485,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
       <text x="302" y="248" text-anchor="middle">Containers</text><text x="302" y="272" text-anchor="middle" class="t-sm">always busy</text>
     </svg>
-    <figcaption>Short jobs with spiky or low traffic are where functions fit best. Move right and hourly capacity pays off; move up and you need something that runs longer.</figcaption>
+    <figcaption>The matrix identifies candidates to compare, rather than a fixed winner. Measure request length, traffic and operating costs before choosing capacity or a workflow.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
@@ -496,8 +496,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
-      <li>Lambda creates environments on demand, so the first request after idle pays a cold start and later ones don't.</li>
-      <li>Serverless gives up long requests, in-memory state and flat costs, in exchange for no servers and no idle bill.</li>
+      <li>New Lambda environments incur initialization; warm reuse can avoid it, but later requests may also need new environments.</li>
+      <li>Default Lambda gives up durable process memory and unlimited request duration. Request charges vary with use, while retained resources can still cost money.</li>
       <li>Pick by the shape of the work: short and spiky suits functions, steady or long suits containers, queues or agent runtimes.</li>
     </ol>
   </section>

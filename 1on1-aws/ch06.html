@@ -399,22 +399,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 6 of 14</span></p>
   <h1>Why DynamoDB and not PostgreSQL?</h1>
-  <p class="lead">After this page you can choose a database from decision drivers instead of habit. You can also say what DynamoDB costs, and when a relational database is the better pick.</p>
+  <p class="lead">Quickturn must isolate, export and delete learner-owned records while spending little when idle. Those needs guide its database comparison before product preferences.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What should a database choice start from?</li>
-      <li>How did the options compare?</li>
-      <li>What does DynamoDB cost, and when does relational win?</li>
-      <li>How do you defend the choice in a review?</li>
+      <li>Drivers before products</li>
+      <li>The options side by side</li>
+      <li>What DynamoDB costs</li>
+      <li>Both, and how to defend it</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Drivers before products</h2>
-    <p>Quickturn lists decision drivers before comparing database products: structural learner isolation, straightforward export and deletion, low idle cost, manageable Lambda access, conditional writes and sufficient history to rebuild derived state.</p>
+    <p>Quickturn lists its drivers before comparing products: learner isolation, straightforward export and deletion, and low idle cost. It also needs manageable Lambda access, conditional writes and enough history to rebuild derived state.</p>
     <p>These are application needs rather than a preference for SQL or NoSQL. The comparison is useful only if each candidate is judged against the same needs and operational assumptions.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="List the drivers, list the options, judge each option on each driver, choose, and write down what would make you revisit the choice.">
@@ -442,16 +442,16 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>The options side by side</h2>
     <p>The candidates include DynamoDB on-demand, Aurora DSQL, Aurora Serverless v2 and RDS PostgreSQL. They differ in idle behavior, network and connection requirements, transaction semantics and local testing options.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="DynamoDB and Aurora DSQL both cost nothing when idle and are reachable from Lambda without a VPC; DynamoDB isolates one learner with one partition key while DSQL needs a filter in every query; DSQL has transaction limits and a different local engine.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="DynamoDB and Aurora DSQL avoid always-on instance charges in this comparison and are reachable from Lambda without a VPC; this comparison uses a learner-key store for DynamoDB and learner predicates for DSQL; DSQL has transaction limits and a different local engine.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">DynamoDB</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Aurora DSQL</text>
       <text x="16" y="56" class="t-sm">Cost when idle</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">zero</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">zero</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no instance bill</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">no instance bill</text>
       <text x="16" y="136" class="t-sm">Reached from Lambda</text>
       <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">no VPC</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">no VPC</text>
-      <text x="16" y="216" class="t-sm">Isolating one learner</text>
+      <text x="16" y="216" class="t-sm">Learner selection</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">one partition key</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">a filter per query</text>
       <text x="16" y="296" class="t-sm">Transactions</text>
@@ -461,14 +461,14 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">same model</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">another engine</text>
     </svg>
-    <figcaption>The first two rows tie. The middle row decided it: in DynamoDB, one learner's data is separate by structure, and deleting or exporting it is one key.</figcaption>
+    <figcaption>The learner-key model supports Quickturn’s bound-store design. Export and deletion still require paged reads, writes and authorization; the key alone does not enforce ownership.</figcaption>
   </figure>
-    <p>A PostgreSQL-compatible service is not necessarily identical to PostgreSQL in every transaction or supported feature. A decision must check the actual engine, version, limits and required network path. Quickturn prefers DynamoDB's learner-key model and its tested conditional commit contract for this workload; that is not a general verdict against relational serverless services.</p>
+    <p>A PostgreSQL-compatible service is not necessarily identical to PostgreSQL in every transaction or supported feature. A decision must check the actual engine, version, limits and required network path. Quickturn prefers DynamoDB’s learner-key model and its tested conditional commit contract for this workload. Other workloads can favor relational serverless services.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>What DynamoDB costs</h2>
     <p>DynamoDB requires a key design for each live read, exports for ad hoc reporting and maintenance of derived projections. A complete answer log helps repair projections, but a missed update can still cause drift.</p>
-    <p>Relational storage can be a faster starting point when access patterns are uncertain, many-to-many relationships need constraints, or a SQL-fluent team depends on exploratory reports. Quickturn's early local prototype used SQL; multi-learner operation introduced a different set of drivers.</p>
+    <p>Relational storage can be a faster starting point when access patterns are uncertain or many-to-many relationships need constraints. A SQL-fluent team’s exploratory reporting needs can also favor it. Quickturn's early local prototype used SQL; multi-learner operation introduced a different set of drivers.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether access patterns are known up front against whether you need joins and ad hoc queries: known patterns with few joins suit a key-value store; known patterns with joins can go either way; unknown patterns with few joins suit relational to start and learn; unknown patterns with joins suit relational.">
       <text x="44" y="18" class="t-sm">↑ Access patterns: known up front</text>
@@ -489,7 +489,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Both, and how to defend it</h2>
-    <p>Using both a relational and key-value database can serve different workloads, but creates two systems to run and sometimes two copies to synchronize. Add the second store for an observed requirement.</p>
+    <p>Relational and key-value databases can serve different workloads. Running both adds a second operational system and may require synchronizing two copies. Add the second store for an observed requirement.</p>
     <p>Defend the chosen database by stating drivers, rejected alternatives and a revisit condition. For Quickturn, a history lifecycle or reporting need that diverges from learner records could justify a separate log table. Reopen the decision when a driver changes, rather than whenever a new product appears.</p>
   </section>
   <section class="summary" aria-labelledby="sum">

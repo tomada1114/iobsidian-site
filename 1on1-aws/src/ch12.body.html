@@ -2,24 +2,24 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 12 of 14</span></p>
   <h1>Where should a web app keep its tokens?</h1>
-  <p class="lead">After this page you can explain why tokens stay out of page JavaScript, and what each cookie attribute protects. You can also explain how CSRF defenses and refresh-token rotation fit in.</p>
+  <p class="lead">An injected script can steal a token from browser storage. HttpOnly cookies reduce direct token theft while leaving authenticated requests and CSRF to protect.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What's the risk of keeping tokens in localStorage?</li>
-      <li>What do the backend and its cookies do?</li>
-      <li>Why do cookies need CSRF defenses?</li>
-      <li>What does this design cost?</li>
+      <li>The risk in localStorage</li>
+      <li>The backend and its cookies</li>
+      <li>Forged requests</li>
+      <li>What it costs</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>The risk in localStorage</h2>
     <p>JavaScript on a page can read localStorage, including injected scripts or compromised dependencies. Persisting a refresh token there can turn a browser compromise into continued access after the page closes.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="A token in localStorage can be read by page scripts, is attached by the app's code, can be stolen by an XSS bug, and needs no CSRF defense; a token in an HttpOnly cookie cannot be read by scripts, is attached by the browser, can only be used while the page is open during an XSS bug, and does need a CSRF defense.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="A token in localStorage can be read by page scripts, is attached by the app's code, can be stolen by an XSS bug, and has different CSRF risks when sent explicitly as a Bearer token; a token in an HttpOnly cookie cannot be read by scripts, is attached by the browser, can still authorize requests made by injected code, and does need a CSRF defense.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">localStorage</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">HttpOnly cookie</text>
       <text x="16" y="56" class="t-sm">Can page scripts read it?</text>
@@ -30,12 +30,12 @@
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the browser</text>
       <text x="16" y="216" class="t-sm">After an XSS bug</text>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">token stolen</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">used while open</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">requests abused</text>
       <text x="16" y="296" class="t-sm">Needs CSRF defense?</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">no</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">depends on use</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">yes</text>
     </svg>
-    <figcaption>The first row decides the rest. A cookie trades a stolen token for a new job: defending against forged requests.</figcaption>
+    <figcaption>HttpOnly blocks direct cookie reads by scripts. Authenticated request abuse remains possible, and automatic cookie delivery introduces a separate CSRF responsibility.</figcaption>
   </figure>
     <p>An HttpOnly cookie prevents direct script reads of that cookie value. It does not make XSS harmless: injected code can still issue authenticated requests, read permitted responses and exfiltrate data. Use cookie protection together with injection defenses and appropriately scoped sessions.</p>
   </section>
@@ -63,7 +63,7 @@
       <text x="300" y="302" text-anchor="middle" class="t-hd">No Domain</text>
       <text x="300" y="326" text-anchor="middle" class="t-sm">no sibling hosts</text>
     </svg>
-    <figcaption>Each attribute closes one door. The prefix in the name makes the browser enforce two of them.</figcaption>
+    <figcaption>Each attribute addresses a particular risk. The __Host- prefix makes supporting browsers enforce Secure, Path=/ and the absence of a Domain attribute.</figcaption>
   </figure>
     <p>A <code>__Host-</code> cookie requires Secure, Path=/ and no Domain attribute, reducing cookie injection from sibling subdomains. Refresh rotation and a short concurrency grace period help manage renewal, but access-token revocation behavior must be evaluated separately.</p>
   <figure class="fig">

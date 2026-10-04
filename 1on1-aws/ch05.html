@@ -399,22 +399,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 5 of 14</span></p>
   <h1>How does DynamoDB find my data so fast?</h1>
-  <p class="lead">After this page you can explain partition keys, sort keys and why a Query is fast and a Scan is not. You can also name the capacity, consistency and size choices a table needs.</p>
+  <p class="lead">The API needs one learner’s rounds, not every learner’s records. A partition key and sort-key range let DynamoDB target that question.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>How does DynamoDB decide where an item lives?</li>
-      <li>Why is a Scan with a filter a problem?</li>
-      <li>What else do you choose for a table?</li>
-      <li>What does DynamoDB cost you in flexibility?</li>
+      <li>Items, keys and partitions</li>
+      <li>Query versus Scan</li>
+      <li>Capacity, consistency and size</li>
+      <li>What you give up</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
     <h2 id="s1"><span class="no">01</span>Items, keys and partitions</h2>
-    <p>DynamoDB stores items with attributes and a primary key. Quickturn uses a partition key and sort key. The partition key selects a logical collection; DynamoDB distributes storage internally, and the sort key orders items for range access within that key.</p>
+    <p>DynamoDB stores items with attributes and a primary key. Quickturn uses a partition key and sort key. The partition key selects a logical collection, while DynamoDB distributes storage internally. The sort key orders items for range access within that key.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 332" role="img" aria-label="The learner table holds one partition key per learner; under one learner's key, items are kept in sort-key order: PROFILE, round and answer entries, SETTINGS and STATS.">
       <rect x="8" y="8" width="384" height="316" rx="10" class="zone-soft"/>
@@ -428,7 +428,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="24" y="268" width="170" height="40" rx="6" class="node"/><text x="109" y="293" text-anchor="middle" class="t-sm">another learner</text>
       <rect x="206" y="268" width="170" height="40" rx="6" class="node"/><text x="291" y="293" text-anchor="middle" class="t-sm">another learner</text>
     </svg>
-    <figcaption>Each learner has their own partition key, so their items are stored together. Inside, items sit in sort-key order, so "all of this learner's rounds" is one neat range.</figcaption>
+    <figcaption>Each learner has their own partition key, so their items are stored together. Inside, items sit in sort-key order, so a round-prefix query can target their rounds and related answer records.</figcaption>
   </figure>
     <p>A full key allows GetItem to retrieve one item directly. Quickturn's partition key identifies the learner, while the sort key identifies settings, rounds, answers or other owned records. Logical learner partitions should not be confused with a permanent one-to-one mapping to physical storage partitions.</p>
   </section>
@@ -436,23 +436,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s2"><span class="no">02</span>Query versus Scan</h2>
     <p>A Scan reads table items before applying a filter. Filtering for one learner therefore does not save the cost of reading other learners. Query instead selects a partition key and can restrict the sort-key range or prefix.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="A Query reads one partition's range while a Scan reads the whole table; with a Query you pay for what you get, with a Scan you pay for everything read; a Query stays fast as the table grows while a Scan slows down; Queries suit request paths and Scans suit rare offline jobs.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="A Query reads one partition's range while a Scan reads the whole table; with a Query you pay for items read before filtering, with a Scan you pay for everything read; a targeted Query avoids reading unrelated keys, while a full Scan follows the table; Queries suit request paths and Scans suit rare offline jobs.">
       <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Query</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Scan</text>
       <text x="16" y="56" class="t-sm">What it reads</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">one range</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="92" text-anchor="middle">the whole table</text>
       <text x="16" y="136" class="t-sm">What you pay for</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">what you get</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">items read</text>
       <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">everything read</text>
       <text x="16" y="216" class="t-sm">As the table grows</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">stays fast</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">slows down</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">targets a range</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">reads more items</text>
       <text x="16" y="296" class="t-sm">When to use</text>
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">request paths</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">rare offline jobs</text>
     </svg>
-    <figcaption>Every other row follows from the first. Reading one range keeps a Query fast and cheap, however many learners there are.</figcaption>
+    <figcaption>A narrow key range avoids reading unrelated learners. Query cost still depends on items read, consistency and pagination, and a hot key can throttle.</figcaption>
   </figure>
     <p>Quickturn maps request-path reads to those keys and follows pagination, whose response pages are bounded by size. It checks item kinds when a prefix returns both rounds and answers. A secondary index can support another key pattern, but it creates additional write, storage and consistency considerations.</p>
   </section>
@@ -465,7 +465,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>What you give up</h2>
     <p>DynamoDB offers managed key-based access but gives up ordinary relational joins and flexible exploration. Access patterns need planning. Quickturn uses exports for broader reporting instead of scanning live learner request paths.</p>
-    <p>If the required questions are still unknown or relationships and reporting dominate, a relational database may be easier to evolve. Point-in-time recovery protects production data by restoring another table; it still needs a tested procedure to put that restored data back into service.</p>
+    <p>If the required questions are still unknown or relationships and reporting dominate, a relational database may be easier to evolve. Point-in-time recovery restores another table. A tested recovery procedure must then put that restored data back into service.</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">Summary in three lines</p>

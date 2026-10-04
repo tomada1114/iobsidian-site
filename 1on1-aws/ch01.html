@@ -399,17 +399,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 1 of 14</span></p>
   <h1>What am I actually responsible for on AWS?</h1>
-  <p class="lead">After this page you can explain regions, accounts and the shared-responsibility line. You can also say why production gets its own account, and why pricing is part of the design.</p>
+  <p class="lead">A development mistake should not reach production learner data. Separate accounts reduce that risk, while service configuration and cross-account trust still need care.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>Where do things actually run on AWS?</li>
-      <li>What does AWS secure, and what do we?</li>
-      <li>Why separate accounts for dev and prod?</li>
-      <li>Why does the way a service is priced matter?</li>
+      <li>Regions and accounts</li>
+      <li>Shared responsibility</li>
+      <li>The account as a blast radius</li>
+      <li>Pricing is part of the design</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -417,7 +417,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p>An AWS account contains resources, permissions and billing information. A Region is a geographic area containing several isolated Availability Zones. Many services are regional, while services such as IAM and CloudFront have global aspects.</p>
     <p>Quickturn places its primary regional resources in Tokyo for its initial Japanese learners. Account boundaries and geographic placement solve different problems: one concerns ownership and access, the other latency, resilience and data-location requirements.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Inside one organization, the dev account contains the Tokyo region, which contains availability zones holding Quickturn's resources; the prod account sits beside it as its own box, and a mistake cannot cross the account boundary.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="Inside one organization, the dev account contains the Tokyo region, which contains availability zones holding Quickturn's resources; the prod account sits beside it as its own box, and production uses a separate account boundary.">
       <rect x="8" y="8" width="384" height="356" rx="10" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">Organization</text>
       <rect x="20" y="52" width="360" height="200" rx="8" class="node-acc"/>
@@ -434,7 +434,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="36" y="298" class="t-hd">Prod account</text>
       <text x="36" y="324" class="t-sm">Tokyo too: own resources and bill</text>
     </svg>
-    <figcaption>The account edge is the line that matters. A mistake, a leaked key or a runaway bill inside dev stays inside dev.</figcaption>
+    <figcaption>Separate accounts reduce the reach of development mistakes. Broad cross-account trust can still expose production, and development spending still contributes to the organization’s bill.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -460,13 +460,13 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     </svg>
     <figcaption>Everything above a dashed line is yours. The line sits lower on a virtual machine, but the top layer, data and IAM, is yours in every case.</figcaption>
   </figure>
-    <p>Managed Lambda and DynamoDB reduce operating-system and database maintenance. They do not decide whether an execution role should read every table, whether a token is trusted or whether one learner can access another's records. Those remain application and account responsibilities.</p>
+    <p>Managed Lambda and DynamoDB reduce operating-system and database maintenance. They do not choose an execution role’s table access or establish whether a token is trusted. Application authorization still decides which learner records a caller may reach. Those remain application and account responsibilities.</p>
   </section>
   <section aria-labelledby="s3">
     <h2 id="s3"><span class="no">03</span>The account as a blast radius</h2>
     <p>Separate development and production accounts reduce the reach of ordinary development mistakes. Quickturn uses AWS Organizations with a small management account and separate member accounts, plus IAM Identity Center for short-lived human access. Root users have MFA and no everyday access keys.</p>
     <p>The management account deserves particular care because organization guard policies do not constrain it in the same way as member accounts. Cross-account trust must also be controlled: an account boundary is not protection if broad roles deliberately cross it.</p>
-    <p>Separation adds setup and operational work. Free-plan and organization eligibility rules should be checked before relying on credits; billing benefits are not the reason to place learner data behind a separate boundary.</p>
+    <p>Separation adds setup and operational work. Check free-plan and organization eligibility rules before relying on credits. Billing benefits are separate from the need to protect production learner data.</p>
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>Pricing is part of the design</h2>
@@ -485,7 +485,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">needed</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">mostly not</text>
     </svg>
-    <figcaption>The top row is why a small app picks per-request parts: when nobody practices, almost nothing is billed.</figcaption>
+    <figcaption>Low request charges make these parts attractive when practice is irregular. Retained data, logs and any fixed resources still contribute to the idle bill.</figcaption>
   </figure>
     <p>An idle development environment can be inexpensive with few fixed components. At sustained high load, provisioned or always-on capacity may be cheaper. Evaluate both zero traffic and realistic growth, rather than assume “serverless” means free.</p>
   </section>

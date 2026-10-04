@@ -2,7 +2,7 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Contents · 14 pages</span></p>
   <h1>Engineering Readers: AWS Foundation</h1>
-  <p class="lead">Fourteen short chapters about running a small app on AWS. After them you can explain accounts, access, serverless compute and DynamoDB design. You can also explain infrastructure as code, sign-in, keeping users' data apart, and cost.</p>
+  <p class="lead">A small AWS app still owns access, data and spending decisions. These chapters follow Quickturn from its account boundaries to its monthly bill.</p>
   <p class="meta"><span>14 pages</span><span>About 55 min</span><span>English, B2 · explanatory prose</span></p>
 </header>
 <div class="flow">
@@ -41,10 +41,10 @@
       <li><a href="ch01.html">What am I actually responsible for on AWS?</a> — Regions, accounts, and the line between AWS's security and ours.</li>
       <li><a href="ch02.html">Why does our deploy have no AWS keys?</a> — Roles hand out short-lived credentials, so there is no long-lived key to leak.</li>
       <li><a href="ch03.html">What do we give up by running the API on Lambda?</a> — No servers to run, in exchange for cold starts and limits.</li>
-      <li><a href="ch04.html">Why doesn't Quickturn have a VPC?</a> — Nothing private to reach means no network to build and pay for.</li>
-      <li><a href="ch05.html">How does DynamoDB find my data so fast?</a> — Keys decide where items live, so a Query beats a Scan.</li>
+      <li><a href="ch04.html">Why doesn't Quickturn have a VPC?</a> — Its present path needs no customer VPC attachment.</li>
+      <li><a href="ch05.html">How does DynamoDB find my data so fast?</a> — Key ranges avoid reading unrelated learner records.</li>
       <li><a href="ch06.html">Why DynamoDB and not PostgreSQL?</a> — A learner boundary built into the keys decided it.</li>
-      <li><a href="ch07.html">List the questions first, then design the table</a> — Every access pattern becomes a key before any data exists.</li>
+      <li><a href="ch07.html">List the questions first, then design the table</a> — Access patterns guide keys, pages and indexes.</li>
       <li><a href="ch08.html">What if the app crashes halfway through a write?</a> — One transaction with conditions keeps the log and its summaries in step.</li>
       <li><a href="ch09.html">Why write infrastructure as code at all?</a> — Reviewed code describes the intended state; tests and live checks detect drift.</li>
       <li><a href="ch10.html">Split what breaks often from what must never be lost</a> — Durable resources have a separate lifecycle and explicit retention policies.</li>

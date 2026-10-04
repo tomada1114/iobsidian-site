@@ -2,17 +2,17 @@
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 2 of 14</span></p>
   <h1>Why does our deploy have no AWS keys?</h1>
-  <p class="lead">After this page you can explain IAM users, roles and least privilege. You can also describe how CI gets into AWS through OIDC, with no stored secret at all.</p>
+  <p class="lead">A deployment needs permission to change AWS resources, but keeping a permanent access key creates another secret to protect. Temporary roles change that tradeoff.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What's the difference between a user and a role?</li>
-      <li>How does the workflow get into AWS without a key?</li>
-      <li>What does least privilege cost?</li>
-      <li>Does an AI agent need a role too?</li>
+      <li>Users and roles</li>
+      <li>Two sides of a role, and OIDC</li>
+      <li>What least privilege costs</li>
+      <li>Agents get roles too</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -20,7 +20,7 @@
     <p>An IAM user is a long-lived identity that can have passwords or access keys. A role is assumed for temporary credentials issued by STS. Quickturn favors roles and Identity Center sessions rather than stored long-lived deployment keys.</p>
     <p>IAM begins with implicit denial; policies allow specific operations, and an applicable explicit denial can override an allowance. Root access is reserved for tasks that require it.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="An IAM user with an access key gets credentials once and they live until deleted, so a copied key keeps working and must be rotated; a role gives temporary credentials that expire on their own, so a copied credential soon stops working and needs no rotation.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="An IAM user with an access key gets credentials once and they live until deleted, so a copied key keeps working and must be rotated; a role gives temporary credentials that expire on their own, so copied credentials stop working at expiry but can be abused before then.">
       <text x="104" y="24" text-anchor="middle" class="t-hd">User + access key</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Role</text>
       <text x="16" y="56" class="t-sm">Gets credentials</text>
@@ -36,12 +36,12 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">yours</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">none</text>
     </svg>
-    <figcaption>Everything else follows from the second row. Credentials that expire on their own are worth little to anyone who copies them.</figcaption>
+    <figcaption>Everything else follows from the second row. Automatic expiry limits the exposure window. Copied credentials can still grant their permitted access until they expire.</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
     <h2 id="s2"><span class="no">02</span>Two sides of a role, and OIDC</h2>
-    <p>A role has two distinct questions: its trust policy controls who may assume it, and its permission policies control what the resulting session may do. GitHub Actions can present an OIDC token rather than retrieve an AWS key from repository secrets.</p>
+    <p>A role has two distinct questions. Its trust policy controls who may assume it; its permission policies control what the resulting session may do. GitHub Actions can present an OIDC token rather than retrieve an AWS key from repository secrets.</p>
   <figure class="fig">
     <svg viewBox="0 0 400 372" role="img" aria-label="The workflow starts, GitHub issues a signed OIDC token, STS checks the role's trust conditions for audience, repository and branch, STS returns temporary credentials that expire on their own, and the deploy role hands off to the CDK bootstrap roles.">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
@@ -61,11 +61,11 @@
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="334">Hand off to CDK deploy roles</text>
     </svg>
-    <figcaption>No step reads a stored secret. The credentials in the fourth step expire on their own, so there's nothing to leak or rotate.</figcaption>
+    <figcaption>This deployment avoids a stored long-lived AWS key. Temporary credentials still need protection while valid, and the role’s trust conditions control who receives them.</figcaption>
   </figure>
     <p>The deployment trust checks audience and the exact repository and branch or environment subject. GitHub's <code>id-token: write</code> permission lets the job request that token. The resulting role is limited to assuming the intended CDK deployment roles; production adds an approval gate.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The API function's execution role sits in the center; it may read and write the learner table and read one secret parameter above, and decrypt only through Parameter Store and write its own logs below; nothing else is reachable.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="The diagram illustrates table, secret, decryption and log grants for an execution role. Actual policy review must also include any queue operations required by its code.">
       <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
       <line x1="296" y1="76" x2="240" y2="118" class="ln"/>
       <line x1="104" y1="182" x2="160" y2="166" class="ln"/>
@@ -76,9 +76,9 @@
       <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">API role</text>
       <rect x="16" y="182" width="176" height="48" rx="6" class="node"/><text x="104" y="212" text-anchor="middle">KMS, via SSM</text>
       <rect x="208" y="182" width="176" height="48" rx="6" class="node"/><text x="296" y="212" text-anchor="middle">Its own logs</text>
-      <text x="200" y="270" text-anchor="middle" class="t-sm">nothing else is reachable</text>
+      <text x="200" y="270" text-anchor="middle" class="t-sm">illustrated grants</text>
     </svg>
-    <figcaption>The role lists exactly four things. Anything not drawn here is denied by default.</figcaption>
+    <figcaption>The diagram groups this example’s allowed resources. The actual policies must list every required action and resource, including the worker’s queue permissions.</figcaption>
   </figure>
     <p>Lambda uses an execution role too. Quickturn limits it to the required table, queue and secret resources, with appropriate service conditions for decryption. The role limits AWS access even if application code attempts more.</p>
   </section>

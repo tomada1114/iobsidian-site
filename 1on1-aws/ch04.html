@@ -399,17 +399,17 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 4 of 14</span></p>
   <h1>Why doesn't Quickturn have a VPC?</h1>
-  <p class="lead">After this page you can explain how a CDN serves an app and its API from one origin. You can also say what a VPC is for, what it costs, and when you really need one.</p>
+  <p class="lead">The web app and API need one browser origin, but neither needs a private database connection. That distinction shapes Quickturn’s delivery and networking.</p>
   <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
 </header>
 <div class="flow">
   <nav class="toc" aria-label="In this page">
     <p class="label">In this page</p>
     <ul>
-      <li>What sits between the browser and our code?</li>
-      <li>Why does one origin matter?</li>
-      <li>What is a VPC, and why don't we have one?</li>
-      <li>When would we need a VPC?</li>
+      <li>The edge</li>
+      <li>One origin for two backends</li>
+      <li>What a VPC is for</li>
+      <li>When you do need a VPC</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
@@ -448,7 +448,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <h2 id="s3"><span class="no">03</span>What a VPC is for</h2>
     <p>A VPC defines an AWS network with subnets, routing and security groups. A subnet is public when its route table provides an internet-gateway route; actual public reachability also depends on addresses and security controls. Private resources may use NAT or service endpoints for outbound access.</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="A typical VPC contains a public subnet with a NAT gateway billed every hour and a private subnet with Lambda and a database; Quickturn's Lambda sits outside any VPC and calls DynamoDB directly, so it pays no NAT gateway.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="A typical VPC contains a public subnet with a NAT gateway billed every hour and a private subnet with Lambda and a database; Quickturn’s Lambda has no attachment to a customer VPC and calls DynamoDB directly, so it pays no NAT gateway.">
       <rect x="8" y="8" width="384" height="232" rx="10" class="zone-soft"/>
       <text x="24" y="36" class="t-hd">A typical VPC</text>
       <rect x="24" y="52" width="352" height="76" rx="8" class="zone"/>
@@ -469,7 +469,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="220" y="292" width="160" height="52" rx="6" class="node"/>
       <text x="300" y="323" text-anchor="middle">DynamoDB</text>
     </svg>
-    <figcaption>The typical setup pays for the NAT gateway every hour, used or not. Quickturn's Lambda runs outside any VPC and calls DynamoDB directly.</figcaption>
+    <figcaption>The typical setup pays for the NAT gateway every hour, used or not. Quickturn does not attach its Lambda to a customer VPC; it calls DynamoDB’s managed endpoint directly.</figcaption>
   </figure>
     <p>Quickturn calls managed public service endpoints with signed, IAM-authorized requests and has no private database to reach. It therefore avoids VPC networking costs for this path. This does not mean “public endpoint” makes the application's table public, or that IAM alone covers every application threat.</p>
   </section>
@@ -482,7 +482,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <p class="label" id="sum">Summary in three lines</p>
     <ol>
       <li>A CDN can serve a private bucket and route <code>/api/*</code> to the API, so the browser sees one origin.</li>
-      <li>Without private resources, IAM on every call protects the app; a VPC adds nothing but cost.</li>
+      <li>Quickturn uses IAM plus application authentication and authorization; its present request path has no resource requiring a customer VPC.</li>
       <li>Add a VPC when you must reach something private, and budget for NAT gateways and endpoints billed by the hour.</li>
     </ol>
   </section>
