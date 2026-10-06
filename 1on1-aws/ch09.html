@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AWS Foundation 09 · Why infrastructure as code</title>
+<title>AWS の基礎 09 · インフラをコードで書く理由</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-3">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS の基礎">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AWS</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">AWS の基礎</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,24 +365,24 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AWS Foundation pages">
-  <h2><a href="ch00.html">Engineering Readers: AWS Foundation</a></h2>
+<aside class="side" id="side" aria-label="小さなアプリで学ぶ AWS の基礎 pages">
+  <h2><a href="ch00.html">小さなアプリで学ぶ AWS の基礎</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>What am I responsible for on AWS</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Why our deploy has no AWS keys</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>What we give up on Lambda</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Why Quickturn has no VPC</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>How DynamoDB finds data fast</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Why DynamoDB, not PostgreSQL</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>List the questions first</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>A crash halfway through a write</span></a></li>
-    <li><a href="ch09.html" aria-current="page"><span class="n">09</span><span>Why infrastructure as code</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Split what breaks from what lasts</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What happens at sign-in</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Where a web app keeps tokens</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>Keeping learners apart</span></a></li>
-    <li><a href="ch14.html"><span class="n">14</span><span>Cost when nobody uses it</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>自分たちが責任を持つ範囲</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>デプロイにキーを置かない理由</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Lambda で手放すもの</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>VPC を置かない理由</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>DynamoDB が速く見つける仕組み</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>PostgreSQL でなく DynamoDB</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>先に問い合わせを書き出す</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>書き込みの途中で落ちたら</span></a></li>
+    <li><a href="ch09.html" aria-current="page"><span class="n">09</span><span>インフラをコードで書く理由</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>壊すものと残すものを分ける</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>サインインで起きること</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>トークンの置き場所</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>学習者どうしを分ける</span></a></li>
+    <li><a href="ch14.html"><span class="n">14</span><span>使われないときの費用</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../aws.html">← AWS</a><br>
@@ -397,31 +397,31 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 9 of 14</span></p>
-  <h1>Why write infrastructure as code at all?</h1>
-  <p class="lead">A console change makes the API faster, but the next deployment may overwrite it. Reviewed infrastructure code must capture both the setting and its reason.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第9章 / 全14章</span></p>
+  <h1>インフラをコードで書くのはなぜか</h1>
+  <p class="lead">コンソールで設定を変えて API が速くなっても、次のデプロイでその変更が上書きされるかもしれません。レビューを経たインフラのコードには、設定そのものと、その理由の両方を残す必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Why not the console</li>
-      <li>How CDK works</li>
-      <li>The tools</li>
-      <li>What it costs, and how we test it</li>
+      <li>コンソールで済ませない理由</li>
+      <li>CDK の仕組み</li>
+      <li>ツールの選択肢</li>
+      <li>代償とテストのしかた</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Why not the console</h2>
-    <p>A console experiment can reveal that more Lambda memory improves latency. If that change is not reflected in infrastructure code, the next deploy may undo it or leave a drifted setting. Infrastructure as code makes the intended configuration reviewable and reproducible.</p>
-    <p>Sandbox exploration is useful, but the learned change should be written back into source with its reason. The running account must still be checked against that source.</p>
+    <h2 id="s1"><span class="no">01</span>コンソールで済ませない理由</h2>
+    <p>コンソールで試すと、Lambda のメモリを増やせばレイテンシが改善する、とわかることがあります。その変更をインフラのコードに反映しなければ、次のデプロイで元に戻るか、コードとずれた設定（ドリフト）が残ります。インフラをコードで書けば、意図した構成をレビューでき、同じ構成を再現できます。</p>
+    <p>サンドボックスでの試行は役に立ちますが、そこで得た変更は、理由と一緒にソースへ書き戻すべきです。そのうえで、実際に動いているアカウントがソースと一致しているかも確かめる必要があります。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>How CDK works</h2>
-    <p>CDK runs a program to synthesize CloudFormation templates and deployment assets. CloudFormation calculates and applies a change set. A failed update often rolls back, but rollback can also fail or leave retained resources requiring attention.</p>
+    <h2 id="s2"><span class="no">02</span>CDK の仕組み</h2>
+    <p>CDK はプログラムを実行して、CloudFormation のテンプレートとデプロイ用のアセットを合成（synthesize）します。CloudFormation は変更セットを計算して適用します。更新に失敗すると多くの場合はロールバックされますが、ロールバック自体が失敗したり、保持されたリソースが残って対応が必要になったりすることもあります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="TypeScript constructs are synthesized by cdk synth into a CloudFormation template plus assets, CloudFormation computes a change set, and the stack is updated or rolled back if a step fails.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="TypeScript のコンストラクトを cdk synth で合成すると、CloudFormation のテンプレートとアセットができる。CloudFormation が変更セットを計算し、スタックが更新されるか、途中で失敗すればロールバックされる。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -429,76 +429,76 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">TypeScript constructs</text>
+      <text x="64" y="46">TypeScript のコンストラクト</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="118">cdk synth</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Template plus assets</text>
+      <text x="64" y="190">テンプレートとアセット</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">CloudFormation change set</text>
+      <text x="64" y="262">CloudFormation の変更セット</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Stack updated, or rolled back</text>
+      <text x="64" y="334" class="t-hd">スタックの更新、またはロールバック</text>
     </svg>
-    <figcaption>CDK synthesizes the template and prepares deployment assets. CloudFormation applies the resource changes; the deployment result and live settings still need checking.</figcaption>
+    <figcaption>CDK はテンプレートを合成し、デプロイ用のアセットを準備します。リソースの変更を適用するのは CloudFormation です。デプロイの結果と実際の設定は、それでも確かめる必要があります。</figcaption>
   </figure>
-    <p>Bootstrapping creates deployment resources and roles for an account and Region. Quickturn uses foundation, deployment-access, application and agent stacks, with an explicit deployment order. Development deploys can be automatic while production waits for approval.</p>
+    <p>ブートストラップは、アカウントとリージョンごとに、デプロイ用のリソースとロールを作ります。Quickturn は、基盤、デプロイ用アクセス、アプリ、エージェントの四つのスタックを使い、デプロイの順序を明示しています。開発環境へのデプロイは自動にし、本番は承認を待つようにできます。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>The tools</h2>
-    <p>CloudFormation and SAM define AWS-managed stacks. CDK supplies a programming-language layer that still deploys through CloudFormation. Terraform and similar tools offer broader provider choices with their own state-management model.</p>
+    <h2 id="s3"><span class="no">03</span>ツールの選択肢</h2>
+    <p>CloudFormation と SAM は、AWS が管理するスタックを定義します。CDK はプログラミング言語の層を提供しますが、デプロイは引き続き CloudFormation を通して行います。Terraform などのツールは、AWS 以外も含む幅広いプロバイダーを扱え、独自の状態管理のモデルを持っています。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of how infrastructure is written, configuration or a programming language, against who keeps the state, AWS or you: CloudFormation and SAM are configuration with AWS state, CDK is a language with AWS state, Terraform is configuration with your state, and CDK for Terraform or Pulumi is a language with your state.">
-      <text x="44" y="18" class="t-sm">↑ State kept by you</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="インフラを設定ファイルで書くかプログラミング言語で書くかと、状態を AWS が持つか自分たちが持つかの二軸。CloudFormation と SAM は設定ファイルで AWS が状態を持ち、CDK は言語で AWS が状態を持ち、Terraform は設定ファイルで自分たちが状態を持ち、CDK for Terraform や Pulumi は言語で自分たちが状態を持つ。">
+      <text x="44" y="18" class="t-sm">↑ 状態を自分たちで持つ</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Written in a language →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">プログラミング言語で書く →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
       <text x="134" y="112" text-anchor="middle">Terraform</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="302" y="100" text-anchor="middle">Pulumi, CDK</text><text x="302" y="124" text-anchor="middle">for Terraform</text>
+      <text x="302" y="100" text-anchor="middle">Pulumi、CDK</text><text x="302" y="124" text-anchor="middle">for Terraform</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">CloudFormation</text><text x="134" y="272" text-anchor="middle" class="t-sm">and SAM</text>
+      <text x="134" y="248" text-anchor="middle">CloudFormation</text><text x="134" y="272" text-anchor="middle" class="t-sm">と SAM</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
       <text x="302" y="248" text-anchor="middle" class="t-hd t-acc">CDK</text><text x="302" y="272" text-anchor="middle" class="t-sm">Quickturn</text>
     </svg>
-    <figcaption>Moving right uses a programming language; moving up gives the team a separate state-management responsibility. CDK takes the language and leaves the state to AWS.</figcaption>
+    <figcaption>右へ行くほどプログラミング言語を使い、上へ行くほどチームが状態管理の責任を別に負います。CDK は言語を使い、状態は AWS に任せる位置にあります。</figcaption>
   </figure>
-    <p>Quickturn chooses TypeScript CDK for a shared language and tests across infrastructure involving CloudFront, WAF, Cognito and functions. It does not expect CDK to make CloudFormation deployments instant. A smaller function-focused system could reasonably choose SAM.</p>
+    <p>Quickturn が TypeScript の CDK を選んだのは、CloudFront、WAF、Cognito、関数にまたがるインフラで、言語とテストを共通にするためです。CDK を使えば CloudFormation のデプロイが一瞬で終わる、とは考えていません。関数が中心の、もっと小さなシステムなら、SAM を選ぶのも妥当です。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What it costs, and how we test it</h2>
-    <p>Infrastructure abstractions can generate permissions and resources the author did not explicitly write. Test the synthesized result, especially key schemas, retention, billing mode and OIDC trust, rather than rely only on the construct's name.</p>
+    <h2 id="s4"><span class="no">04</span>代償とテストのしかた</h2>
+    <p>インフラの抽象化は、作者が明示的に書いていない権限やリソースを生成することがあります。コンストラクトの名前だけを頼りにせず、合成された結果をテストしてください。特に、キースキーマ、保持の設定、課金モード、OIDC の信頼関係は確かめておきたいところです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="Type checks, template assertions, bundling and deployment answer different questions. Reading live resources then confirms requested settings in the actual account.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="型チェック、テンプレートへのアサーション、バンドル、デプロイは、それぞれ別の問いに答える。そのあと実際のリソースを読み戻して、要求した設定が実際のアカウントに反映されているかを確かめる。">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="48">Type check</text>
+      <text x="32" y="48">型チェック</text>
       <rect x="16" y="76" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="108">Assertions on the template</text>
+      <text x="32" y="108">テンプレートへのアサーション</text>
       <rect x="16" y="136" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="168">Bundling test</text>
+      <text x="32" y="168">バンドルのテスト</text>
       <rect x="16" y="196" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="228">Deploy</text>
+      <text x="32" y="228">デプロイ</text>
       <rect x="16" y="264" width="368" height="52" rx="6" class="node-acc"/>
-      <text x="32" y="296" class="t-hd t-acc">Read the live resource back</text>
+      <text x="32" y="296" class="t-hd t-acc">実際のリソースを読み戻す</text>
     </svg>
-    <figcaption>These checks answer different questions, from code validity to packaging and live settings. A successful deploy alone does not confirm every requested setting.</figcaption>
+    <figcaption>これらの確認は、コードの正しさからパッケージング、実際の設定まで、それぞれ別の問いに答えます。デプロイが成功しただけでは、要求した設定がすべて反映されたとは言えません。</figcaption>
   </figure>
-    <p>Focused assertions and resource allowlists make important changes visible. Full-template snapshots can bury them in large diffs. Bundling tests catch deploy-time packaging mistakes; post-deploy reads confirm live settings.</p>
-    <p>Offline synthesis works when constructs do not require live lookups. Passing synthesis and template tests does not confirm an accepted deployment. The running service’s requested configuration needs a live check.</p>
+    <p>焦点を絞ったアサーションとリソースの許可リストを使うと、重要な変更が目に入りやすくなります。テンプレート全体のスナップショットでは、大きな差分の中に埋もれがちです。バンドルのテストはデプロイ時のパッケージングの誤りを捕まえ、デプロイ後の読み取りは実際の設定を確かめます。</p>
+    <p>コンストラクトが実環境への問い合わせ（lookup）を必要としなければ、合成はオフラインでも動きます。合成とテンプレートのテストに通っても、デプロイが受け入れられたことの確認にはなりません。動いているサービスに要求どおりの設定が入っているかは、実環境で確かめる必要があります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Infrastructure as code defines reviewable intended environments; live checks still detect console drift.</li>
-      <li>CDK synthesizes CloudFormation templates; CloudFormation applies them as stacks and keeps the state.</li>
-      <li>Test the synthesized template for what matters, then read the live resource back after a deploy.</li>
+      <li>インフラをコードで書くと、意図した環境をレビューできる形で定義できます。それでも、コンソールで生じたドリフトを見つけるには実環境の確認が要ります。</li>
+      <li>CDK は CloudFormation のテンプレートを合成し、CloudFormation がそれをスタックとして適用して状態を持ちます。</li>
+      <li>合成したテンプレートで大事な点をテストし、デプロイ後には実際のリソースを読み戻します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch08.html"><span>Previous</span><b>What if the app crashes halfway through a write?</b></a>
-    <a class="next" href="ch10.html"><span>Next</span><b>Split what breaks often from what must never be lost</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch08.html"><span>前へ</span><b>書き込みの途中でアプリが落ちたらどうなるか</b></a>
+    <a class="next" href="ch10.html"><span>次へ</span><b>よく壊すものと、失ってはいけないものを分ける</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成。</p>
 </div>
 </div>
 <script>

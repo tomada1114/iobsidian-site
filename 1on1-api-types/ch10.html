@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>API and TypeScript 10 · Offline when the server rules</title>
+<title>API と TypeScript 10 · オフラインとサーバーのルール</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API &amp; TypeScript">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API と TypeScript">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>API &amp; TypeScript</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">API と TypeScript</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,21 +365,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
-  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：API と TypeScript pages">
+  <h2><a href="ch00.html">エンジニアリング読本：API と TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Which compiler flags matter</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Why not another boolean flag</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Should a function throw</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>Trust nothing at the boundary</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>REST, GraphQL or RPC</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Where the API contract lives</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Change an API without breaking</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>The same request twice</span></a></li>
-    <li><a href="ch10.html" aria-current="page"><span class="n">10</span><span>Offline when the server rules</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>Why a static SPA</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>実行時に消える型</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>効くコンパイラオプション</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>フラグでなくユニオン型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>例外か、失敗を返すか</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>境界で一度だけパース</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>REST・GraphQL・RPC</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>API 契約のありか</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>壊さずに API を変える</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>同じリクエストが二度</span></a></li>
+    <li><a href="ch10.html" aria-current="page"><span class="n">10</span><span>オフラインとサーバーのルール</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>静的 SPA を選ぶ理由</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -394,48 +394,48 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 10 of 11</span></p>
-  <h1>Can an app work offline if the server owns the rules?</h1>
-  <p class="lead">A learner loses connectivity while answering a fetched deck. The device can retain those answers even when scheduling and streak rules remain on the server.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第10章 / 全11章</span></p>
+  <h1>ルールをサーバーが持つアプリは、オフラインで動けるか</h1>
+  <p class="lead">取得済みのデッキに答えている途中で、学習者の通信が切れます。出題スケジュールや連続記録のルールがサーバーにあっても、端末はその回答を手元に残しておけます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Two ways to be offline</li>
-      <li>The queue and the replay</li>
-      <li>Time you can't trust</li>
-      <li>What this design gives up</li>
+      <li>オフライン対応の二つの方法</li>
+      <li>キューと再送</li>
+      <li>信用できない時刻</li>
+      <li>この設計で諦めること</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Two ways to be offline</h2>
-    <p>Offline operation does not always require copying the business rules onto a device. One design runs local rules and later merges state, perhaps using CRDTs for suitable data. Another records facts locally and lets the server decide their meaning when connectivity returns.</p>
+    <h2 id="s1"><span class="no">01</span>オフライン対応の二つの方法</h2>
+    <p>オフラインで動かすために、ビジネスルールを端末に複製しなければならないとは限りません。一つは、端末でルールを実行し、あとで状態をマージする設計です。データの性質が合えば CRDT を使うこともあります。もう一つは、端末では事実だけを記録し、接続が戻ったときにその意味をサーバーが決める設計です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Client-owned rules need a local database and merge conflicts and implement the rules in every language; server-owned rules only queue facts, the server decides, and the rules exist once.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Client-owned rules</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Server-owned rules</text>
-      <text x="16" y="56" class="t-sm">On the device</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">DB and sync</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a queue of facts</text>
-      <text x="16" y="136" class="t-sm">Hard part</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">merge conflicts</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">safe replay</text>
-      <text x="16" y="216" class="t-sm">Rules implemented in</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">every language</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">one place</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="ルールをクライアントが持つ場合は、ローカルのデータベースとマージの競合への対処が必要で、ルールをすべての言語で実装することになります。ルールをサーバーが持つ場合は事実をキューに入れるだけで、判断はサーバーが行い、ルールは一か所にしかありません。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">ルールは端末側</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">ルールはサーバー側</text>
+      <text x="16" y="56" class="t-sm">端末にあるもの</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">DB と同期</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">事実のキュー</text>
+      <text x="16" y="136" class="t-sm">難しいところ</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">マージの競合</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">安全な再送</text>
+      <text x="16" y="216" class="t-sm">ルールを実装する場所</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">すべての言語</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">一か所</text>
     </svg>
-    <figcaption>The bottom row decided it for Quickturn. With four clients in three languages, one copy of the rules is worth more than offline rule-running.</figcaption>
+    <figcaption>Quickturn にとっての決め手は「ルールを実装する場所」の行でした。三つの言語で四つのクライアントがある以上、オフラインでルールを動かせることより、ルールが一か所にあることのほうが価値があります。</figcaption>
   </figure>
-    <p>Quickturn takes the second approach. A round's deck is fetched online, then the device records answers to those cards offline. Dealing, scheduling and streak rules remain on the server for web, native and agent callers.</p>
+    <p>Quickturn は二つ目の方法をとっています。ラウンドのデッキはオンラインで取得し、そのカードへの回答を、オフラインのあいだ端末に記録します。カードの配布、スケジュール、連続記録のルールは、Web、ネイティブ、エージェントのどの呼び出し元に対してもサーバーに置いたままです。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The queue and the replay</h2>
-    <p>Each answer receives a device-generated ID and enters an ordered queue. The web queue uses session storage, which survives a tab reload. Closing the tab or clearing storage can remove the queue. Native clients need an appropriate durable device store.</p>
-    <p>A failed send stays at the queue head. Retries reuse its ID, allowing the server to skip an answer whose original response was lost.</p>
+    <h2 id="s2"><span class="no">02</span>キューと再送</h2>
+    <p>各回答には端末で作った ID が付き、順序付きのキューに入ります。Web のキューはセッションストレージを使うので、タブを再読み込みしても残ります。タブを閉じたりストレージを消去したりすると、キューは失われることがあります。ネイティブのクライアントには、端末上の適切な永続ストアが必要です。</p>
+    <p>送信に失敗した回答は、キューの先頭に残ります。リトライでは同じ ID を使うので、元のレスポンスが失われた回答を、サーバーはスキップできます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="An answer is given on the device with an id and a time, it is queued, a failed send stays at the head, the answer is resent with the same id when the signal returns, and the server clamps the time and records it once on the right day.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="端末で ID と時刻の付いた回答が作られてキューに入ります。送信に失敗した回答は先頭に残り、電波が戻ると同じ ID で再送されます。サーバーは時刻を範囲内に収め、正しい日付で一度だけ記録します。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -443,63 +443,63 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Answer on the device: id, time</text>
+      <text x="64" y="46">端末で回答：ID と時刻を付ける</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Send fails, stays at the head</text>
+      <text x="64" y="118">送信に失敗し、先頭に残る</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Signal back: resend, same id</text>
+      <text x="64" y="190">電波が戻ったら同じ ID で再送</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Server clamps time, applies</text>
+      <text x="64" y="262">サーバーが時刻を補正して適用</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Once, on the right day</text>
+      <text x="64" y="334" class="t-hd">正しい日付に一度だけ</text>
     </svg>
-    <figcaption>While the queue is retained, retries reuse the answer ID. The server applies the rules after receiving the facts; storage loss still needs consideration.</figcaption>
+    <figcaption>キューが残っているあいだは、リトライで同じ回答 ID を使います。サーバーは事実を受け取ってからルールを適用します。それでも、ストレージが失われる場合は別に考える必要があります。</figcaption>
   </figure>
-    <p>Online and replayed answers use the same batch endpoint. The server orders a batch by time and then ID, and a resume endpoint returns the answers already held. Resuming therefore depends on acknowledged server state as well as the local queue.</p>
+    <p>オンラインの回答も再送された回答も、同じバッチ用エンドポイントを使います。サーバーはバッチを時刻順、次に ID 順に並べ、再開用のエンドポイントはすでに受け付けた回答を返します。そのため、再開はローカルのキューだけでなく、サーバーが受付を確認した状態にも依存します。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Time you can't trust</h2>
-    <p>Device clocks can drift or be changed. Quickturn clamps a reported answer time between the round's start and the server's current time, using current time if none was supplied. This limits implausible values without claiming to prove the exact moment of practice.</p>
+    <h2 id="s3"><span class="no">03</span>信用できない時刻</h2>
+    <p>端末の時計はずれることも、変更されることもあります。Quickturn は、報告された回答時刻を、ラウンドの開始時刻とサーバーの現在時刻のあいだに収めます。時刻が送られてこなければ現在時刻を使います。これはありえない値を抑えるための処理で、実際に練習した正確な時刻を証明するものではありません。</p>
     <pre><code>const answeredAt = Math.min(
-  Math.max(reported ?? now, round.startedAt), // not before the round began
-  now,                                        // not after the server's "now"
+  Math.max(reported ?? now, round.startedAt), // ラウンド開始より前にはしない
+  now,                                        // サーバーの「現在」より後にはしない
 );</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 260" role="img" aria-label="Inside the round's day, the accepted window runs from the round's start to the server's current time; a reported time outside the window is pulled to the nearest edge.">
+    <svg viewBox="0 0 400 260" role="img" aria-label="ラウンドの日の中で、受け付ける範囲はラウンドの開始からサーバーの現在時刻までです。範囲の外で報告された時刻は、近いほうの端に寄せられます。">
       <rect x="8" y="8" width="384" height="244" rx="10" class="zone-soft"/>
-      <text x="24" y="38" class="t-hd">Counted on the round's day</text>
+      <text x="24" y="38" class="t-hd">ラウンドの日として数える</text>
       <rect x="72" y="64" width="256" height="112" rx="8" class="node-acc"/>
-      <text x="200" y="104" text-anchor="middle" class="t-hd t-acc">Accepted window</text>
-      <text x="200" y="130" text-anchor="middle" class="t-sm">round start → server now</text>
+      <text x="200" y="104" text-anchor="middle" class="t-hd t-acc">受け付ける範囲</text>
+      <text x="200" y="130" text-anchor="middle" class="t-sm">ラウンド開始 → サーバーの現在</text>
       <circle cx="40" cy="120" r="6" class="dot"/>
       <line x1="46" y1="120" x2="68" y2="120" class="ln" marker-end="url(#arw)"/>
       <circle cx="360" cy="120" r="6" class="dot"/>
       <line x1="354" y1="120" x2="332" y2="120" class="ln" marker-end="url(#arw)"/>
-      <text x="200" y="214" text-anchor="middle" class="t-sm">times outside are pulled to the edge</text>
+      <text x="200" y="214" text-anchor="middle" class="t-sm">範囲の外の時刻は端に寄せる</text>
     </svg>
-    <figcaption>Clamping keeps accepted times inside the stated window. It cannot establish the actual practice time or the amount of clock error.</figcaption>
+    <figcaption>補正によって、受け付ける時刻は定めた範囲の中に収まります。ただし、実際に練習した時刻や、時計のずれの大きさまではわかりません。</figcaption>
   </figure>
-    <p>A late answer belongs to its original round's practice day. It can be logged without rewinding a card schedule already updated by a newer answer. For example, Monday's offline answer arriving after Wednesday's online answer should remain in history while Wednesday's scheduling state remains effective.</p>
-    <p>The rules also allow an abandoned round to receive practiced answers. Product meaning, timestamp handling and scheduling order need explicit tests.</p>
+    <p>遅れて届いた回答は、元のラウンドの練習日に属します。新しい回答によってすでに更新されたカードのスケジュールを巻き戻さずに、記録だけを残せます。たとえば、月曜日にオフラインでした回答が水曜日のオンラインの回答よりあとに届いたら、月曜日の回答は履歴に残し、スケジュールは水曜日の状態を有効のままにします。</p>
+    <p>このルールでは、途中で放棄されたラウンドにも、練習した回答を受け付けます。プロダクトとしての意味、タイムスタンプの扱い、スケジュールの順序は、明示的なテストで確かめる必要があります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What this design gives up</h2>
-    <p>This design supports continuing a fetched deck, not obtaining a new one offline. Streaks remain provisional until answers arrive, and session storage has limited durability. Clamping favors retaining practice over rejecting clock anomalies; it also means the reported time is not strong anti-cheat evidence.</p>
-    <p>Quickturn's no-expiry policy for late answers is a deliberate recovery choice. A local-first design can be better when user-owned documents and independent offline creation are central requirements. The right model follows what users must be able to do without the server.</p>
+    <h2 id="s4"><span class="no">04</span>この設計で諦めること</h2>
+    <p>この設計で対応できるのは取得済みのデッキを続けることで、新しいデッキをオフラインで手に入れることではありません。連続記録は回答が届くまで暫定のままで、セッションストレージの永続性にも限りがあります。時刻の補正は、時計の異常を理由に回答を拒否するより、練習の記録を残すことを優先しています。そのため、報告された時刻は不正対策の強い根拠にはなりません。</p>
+    <p>遅れて届いた回答に期限を設けない Quickturn の方針は、復旧を重視した意図的な選択です。ユーザーが所有するドキュメントや、オフラインでの独立した作成が中心的な要件なら、ローカルファーストの設計のほうが適している場合があります。どのモデルが正しいかは、ユーザーがサーバーなしで何をできなければならないかで決まります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>With server-owned rules, offline means the client queues facts and the server decides when they arrive.</li>
-      <li>Client-made ids make replay harmless, and a failed send stays at the head of the queue.</li>
-      <li>Clamp reported times to the round's window, count late answers on the round's day, and never rewind a schedule.</li>
+      <li>ルールをサーバーが持つ場合、オフライン対応とは、クライアントが事実をキューに入れ、届いた時点でサーバーが判断することを指します。</li>
+      <li>クライアントが作る ID によって再送は無害になり、送信に失敗した回答はキューの先頭に残ります。</li>
+      <li>報告された時刻はラウンドの範囲に収め、遅れた回答はラウンドの日に数え、スケジュールは巻き戻しません。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch09.html"><span>Previous</span><b>What if the same request arrives twice?</b></a>
-    <a class="next" href="ch11.html"><span>Next</span><b>Why a static SPA instead of server rendering?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch09.html"><span>前へ</span><b>同じリクエストが二度届いたらどうなるか</b></a>
+    <a class="next" href="ch11.html"><span>次へ</span><b>なぜサーバーレンダリングでなく静的な SPA なのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>

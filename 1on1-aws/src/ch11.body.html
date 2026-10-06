@@ -1,30 +1,30 @@
-<!-- title: AWS Foundation 11 · What happens at sign-in | accent: run -->
+<!-- title: AWS の基礎 11 · サインインで起きること | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 11 of 14</span></p>
-  <h1>What actually happens when a learner signs in?</h1>
-  <p class="lead">A token names a learner, but readable claims alone do not establish identity. The sign-in flow and API verification supply different parts of that trust.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第11章 / 全14章</span></p>
+  <h1>学習者がサインインするとき、実際に何が起きているか</h1>
+  <p class="lead">トークンは学習者を名乗っていますが、読める内容があるだけでは、本人だと確かめたことにはなりません。サインインの流れと API での検証が、この信頼のそれぞれ別の部分を受け持ちます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Who you are, what you may do</li>
-      <li>The code flow with PKCE</li>
-      <li>Three tokens</li>
-      <li>What a managed service costs</li>
+      <li>誰なのかと、何をしてよいか</li>
+      <li>PKCE を使った認可コードフロー</li>
+      <li>三つのトークン</li>
+      <li>マネージドサービスの代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Who you are, what you may do</h2>
-    <p>Decoding a JWT reveals its claims but does not verify them. Anyone can construct token-shaped text with a desired subject. Authentication establishes the caller; authorization decides which operation and data that caller may access.</p>
-    <p>OpenID Connect adds identity to OAuth's authorization framework. In Quickturn, the learner is the resource owner and the web backend is the client. Cognito issues tokens, while the API serves protected resources.</p>
+    <h2 id="s1"><span class="no">01</span>誰なのかと、何をしてよいか</h2>
+    <p>JWT をデコードすればクレームは読めますが、その内容が正しいことは確かめられません。好きな subject を書いたトークンらしき文字列は、誰でも作れます。認証は呼び出し元が誰かを確かめ、認可はその呼び出し元がどの操作とデータにアクセスしてよいかを決めます。</p>
+    <p>OpenID Connect は、OAuth の認可の枠組みに ID の仕組みを加えたものです。Quickturn では、学習者がリソースオーナー、Web のバックエンドがクライアントにあたります。トークンを発行するのは Cognito で、保護されたリソースを提供するのは API です。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The code flow with PKCE</h2>
-    <p>Quickturn uses authorization code flow with PKCE. The login endpoint creates state and a verifier, then sends the verifier's SHA-256 challenge to Cognito. The callback carries a short-lived code rather than the final tokens.</p>
+    <h2 id="s2"><span class="no">02</span>PKCE を使った認可コードフロー</h2>
+    <p>Quickturn は、PKCE を使った認可コードフローを採用しています。ログイン用のエンドポイントが state と verifier を作り、verifier の SHA-256 から作った challenge を Cognito に送ります。コールバックで受け取るのは最終的なトークンではなく、短時間だけ有効なコードです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="The learner clicks sign in; the API makes a state and a verifier and redirects with the challenge; the learner signs in on the managed login page; Cognito redirects back with a code and the state; the backend sends the code, verifier and secret to the token endpoint; tokens are issued to the backend and never to page scripts.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="学習者がサインインを押すと、API が state と verifier を作り、challenge を付けてリダイレクトする。学習者はマネージドのログインページでサインインし、Cognito がコードと state を付けてリダイレクトで戻す。バックエンドはコード、verifier、シークレットをトークンエンドポイントに送る。トークンはバックエンドに発行され、ページのスクリプトには渡らない。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -33,47 +33,47 @@
       <circle cx="28" cy="328" r="6" class="dot"/>
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Learner clicks sign in</text>
+      <text x="64" y="46">学習者がサインインを押す</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">State, verifier, redirect</text>
+      <text x="64" y="118">state と verifier を作りリダイレクト</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Managed login page</text>
+      <text x="64" y="190">マネージドのログインページ</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Back with code and state</text>
+      <text x="64" y="262">コードと state を持って戻る</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Code, verifier, secret sent</text>
+      <text x="64" y="334">コード、verifier、シークレットを送る</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">Tokens go to the backend</text>
+      <text x="64" y="406" class="t-hd">トークンはバックエンドへ</text>
     </svg>
-    <figcaption>The web backend exchanges the callback code for tokens. It keeps token values from page scripts; the browser later carries protected session cookies.</figcaption>
+    <figcaption>Web のバックエンドが、コールバックで受け取ったコードをトークンと交換します。トークンの値はページのスクリプトに渡さず、以後のブラウザは保護されたセッション Cookie を送ります。</figcaption>
   </figure>
-    <p>The backend verifies state and exchanges the code with the verifier and its client credentials. Native clients use the system browser and PKCE without a secret embedded in the app. State, redirect handling and verifier binding have distinct protections and must all be correct.</p>
+    <p>バックエンドは state を検証し、verifier と自分のクライアント認証情報を添えてコードを交換します。ネイティブのクライアントは、アプリにシークレットを埋め込まず、システムのブラウザと PKCE を使います。state、リダイレクトの扱い、verifier との結び付けは、それぞれ別の攻撃を防ぐもので、どれも正しく実装しなければなりません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Three tokens</h2>
-    <p>The ID token describes authentication to the client, the access token authorizes API use, and the refresh token obtains new access tokens. Quickturn's web session keeps the tokens needed for API access and renewal, not a decoded ID token as authorization evidence.</p>
+    <h2 id="s3"><span class="no">03</span>三つのトークン</h2>
+    <p>ID トークンはクライアントに認証の結果を伝え、アクセストークンは API の利用を認可し、リフレッシュトークンは新しいアクセストークンを得るために使います。Quickturn の Web のセッションが保持するのは、API へのアクセスと更新に必要なトークンです。デコードした ID トークンを、認可の根拠として持つことはしません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The ID token is meant for the client, says who signed in, is not sent to the API and is short-lived; the access token is meant for the API, says what the caller may do, is sent to the API and is short-lived.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">ID token</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Access token</text>
-      <text x="16" y="56" class="t-sm">Meant for</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">the client</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">the API</text>
-      <text x="16" y="136" class="t-sm">Says</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">who signed in</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">what it may do</text>
-      <text x="16" y="216" class="t-sm">Sent to the API?</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">no</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">yes</text>
-      <text x="16" y="296" class="t-sm">Lifetime</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">short</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">short</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="ID トークンはクライアント向けで、誰がサインインしたかを表し、API には送らず、有効期間は短い。アクセストークンは API 向けで、呼び出し元が何をしてよいかを表し、API に送り、有効期間は短い。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">ID トークン</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">アクセストークン</text>
+      <text x="16" y="56" class="t-sm">宛先</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">クライアント</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">API</text>
+      <text x="16" y="136" class="t-sm">表す内容</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">サインインした人</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">何をしてよいか</text>
+      <text x="16" y="216" class="t-sm">API に送るか</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">送らない</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">送る</text>
+      <text x="16" y="296" class="t-sm">有効期間</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">短い</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">短い</text>
     </svg>
-    <figcaption>Both tokens name the learner. Only the access token is meant to open the API.</figcaption>
+    <figcaption>どちらのトークンも学習者を指しています。API を開けるためのものは、アクセストークンだけです。</figcaption>
   </figure>
-    <p>Verification checks the signature against trusted keys, expiration, issuer, token use and intended client or resource. Cognito access tokens include client_id; an aud claim can also appear when resource binding is requested.</p>
+    <p>検証では、信頼できる鍵による署名、有効期限、発行者、トークンの用途、想定するクライアントやリソースを確かめます。Cognito のアクセストークンには client_id が含まれ、リソースへの結び付けを要求した場合は aud クレームが入ることもあります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="Check the signature against the pool's public keys, then the issuer, then that the token use is access, then the client id, then expiry; only after all five is the sub claim trusted.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="ユーザープールの公開鍵で署名を確認し、次に発行者、トークンの用途が access であること、クライアント ID、有効期限を確認する。五つすべてを通過して初めて sub クレームを信用する。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -82,38 +82,38 @@
       <circle cx="28" cy="328" r="6" class="dot"/>
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Signature, with public keys</text>
+      <text x="64" y="46">公開鍵で署名を確認</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Issuer is our user pool</text>
+      <text x="64" y="118">発行者が自分たちのユーザープール</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Token use is access</text>
+      <text x="64" y="190">token_use が access</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Client id is our app</text>
+      <text x="64" y="262">client_id が自分たちのアプリ</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Not expired</text>
+      <text x="64" y="334">期限が切れていない</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">Now trust the sub claim</text>
+      <text x="64" y="406" class="t-hd">ここで sub クレームを信用する</text>
     </svg>
-    <figcaption>Decoding skips every step above the last one. That's why a token that decodes proves nothing.</figcaption>
+    <figcaption>デコードするだけでは、最後の手順より上がすべて抜け落ちます。デコードできたトークンが何の証明にもならないのは、このためです。</figcaption>
   </figure>
-    <p>Quickturn uses the same verifier with Cognito keys in production and controlled signing keys in tests. That permits negative tests for incorrect issuer, expiration or client identity without relying on a live sign-in service.</p>
+    <p>Quickturn は、本番では Cognito の鍵、テストでは管理下の署名鍵で、同じ検証処理を使います。これにより、本物のサインインサービスに頼らずに、発行者、有効期限、クライアント ID が誤っている場合の否定テストを書けます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What a managed service costs</h2>
-    <p>Managed sign-in reduces password and recovery work but adds provider-specific settings, plan choices and migration concerns. Quickturn maps provider subjects to its own learner IDs. Replacing a pool need not rename owned records, although identity mappings still need migration.</p>
-    <p>Token verification belongs in a path shared by cookie and Bearer authentication. Logs identify which check failed without including the token. A readable token can be a usable credential until its effective expiry or revocation enforcement takes effect.</p>
+    <h2 id="s4"><span class="no">04</span>マネージドサービスの代償</h2>
+    <p>マネージドなサインインを使えば、パスワードやアカウント復旧の作業は減りますが、プロバイダー固有の設定、料金プランの選択、移行の問題が加わります。Quickturn は、プロバイダーの subject を自分たちの学習者 ID に対応付けています。ユーザープールを入れ替えても、学習者が持つレコードの名前を変える必要はありません。ただし、ID の対応付けは移行しなければなりません。</p>
+    <p>トークンの検証は、Cookie での認証と Bearer での認証が共有する経路に置きます。ログには、どの確認で失敗したかを残し、トークン自体は含めません。読み取れるトークンは、実際の有効期限が来るか、失効の仕組みが効くまでは、そのまま使える認証情報になりえます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>OAuth handles delegated access; OpenID Connect adds a standard sign-in and an ID token.</li>
-      <li>Quickturn’s web backend exchanges the code using PKCE; native clients instead manage their own protected tokens.</li>
-      <li>Verify the access token's signature, issuer, token use, client and expiry before trusting its user id.</li>
+      <li>OAuth は委任されたアクセスを扱い、OpenID Connect はそこに標準的なサインインと ID トークンを加えます。</li>
+      <li>Quickturn の Web のバックエンドは PKCE を使ってコードを交換し、ネイティブのクライアントは自分で保護したトークンを管理します。</li>
+      <li>ユーザー ID を信用する前に、アクセストークンの署名、発行者、用途、クライアント、有効期限を検証します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch10.html"><span>Previous</span><b>Split what breaks often from what must never be lost</b></a>
-    <a class="next" href="ch12.html"><span>Next</span><b>Where should a web app keep its tokens?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch10.html"><span>前へ</span><b>よく壊すものと、失ってはいけないものを分ける</b></a>
+    <a class="next" href="ch12.html"><span>次へ</span><b>Web アプリはトークンをどこに置くべきか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html">Cognito token verification</a>.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成、2026年10月改訂。サービスの詳細（英語）：<a href="https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html">Cognito のトークン検証</a>。</p>
 </div>

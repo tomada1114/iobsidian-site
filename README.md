@@ -13,11 +13,11 @@
 
 | 読み物 | 目次 |
 |---|---|
-| Engineering Readers: Architecture（英語・B2・解説文） | `1on1-architecture/ch00.html` |
-| Engineering Readers: API and TypeScript（英語・B2・解説文） | `1on1-api-types/ch00.html` |
-| Engineering Readers: AWS Foundation（英語・B2・解説文） | `1on1-aws/ch00.html` |
-| Engineering Readers: AI in Production（英語・B2・解説文） | `1on1-ai/ch00.html` |
-| Engineering Readers: Operations and Quality（英語・B2・解説文） | `1on1-ops/ch00.html` |
+| エンジニアリング読本: アーキテクチャ（日本語・解説文） | `1on1-architecture/ch00.html` |
+| エンジニアリング読本: API と TypeScript（日本語・解説文） | `1on1-api-types/ch00.html` |
+| エンジニアリング読本: AWS の基礎（日本語・解説文） | `1on1-aws/ch00.html` |
+| エンジニアリング読本: AI機能を本番で動かす（日本語・解説文） | `1on1-ai/ch00.html` |
+| エンジニアリング読本: 運用と品質（日本語・解説文） | `1on1-ops/ch00.html` |
 | AgentCore Reader（英語・B2・08〜13は解説文、01〜07は対話） | `agentcore-reader/ch00.html` |
 | 一拍おいて話す（日本語・Quick Book・解説型） | `book-pause-before-speaking/ch00.html` |
 | キャリアの移り目（日本語・Quick Book・解説型） | `book-career-transitions/ch00.html` |

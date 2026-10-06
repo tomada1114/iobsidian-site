@@ -1,107 +1,107 @@
-<!-- title: Architecture 01 · Isn't architecture just folders | accent: think -->
+<!-- title: アーキテクチャ 01 · アーキテクチャはフォルダ構成のことか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 1 of 11</span></p>
-  <h1>Isn't architecture just folders?</h1>
-  <p class="lead">Quickturn changes one missed-card rule, but eleven files need edits. The problem is where the rule lives and what depends on it.</p>
-  <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第1章 / 全11章</span></p>
+  <h1>アーキテクチャはフォルダ構成のことか</h1>
+  <p class="lead">Quickturnでミス判定のルールを一つ変えたところ、11ファイルの修正が必要になりました。問題はファイルの数ではなく、ルールがどこにあり、何がそれに依存しているかにあります。</p>
+  <p class="meta"><span>読了 約6分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Eleven files for one small rule</li>
-      <li>Draw the arrows</li>
-      <li>Why named styles exist</li>
-      <li>What structure costs</li>
+      <li>小さなルール一つに11ファイル</li>
+      <li>依存の矢印を描く</li>
+      <li>スタイルに名前がある理由</li>
+      <li>構造にかかるコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Eleven files for one small rule</h2>
-    <p>Quickturn is a language-learning app in which a learner answers a card before a timer ends. A product change says that flipping a card before answering counts as a miss, even while time remains. That small change touches eleven files because the UI, API handler and database statistics each contain their own version of the rule.</p>
-    <p>Moving the files into better folders would leave three copies to update. <b>Coupling</b> concerns how much one part must know about another. <b>Cohesion</b> concerns whether the things inside a part belong together. The UI changes for design reasons, storage code for database reasons, and the missed-card rule for product reasons. The rule therefore needs one home in the domain; the other parts display, carry or store its answer.</p>
+    <h2 id="s1"><span class="no">01</span>小さなルール一つに11ファイル</h2>
+    <p>Quickturnは、学習者がタイマーが切れる前にカードに答える語学学習アプリです。ある仕様変更で、回答前にカードをめくった場合は、時間が残っていてもミスとして扱うことになりました。この小さな変更で11ファイルに手が入ったのは、UI、APIハンドラー、データベースの集計が、それぞれ独自にこのルールを持っていたからです。</p>
+    <p>ファイルを整理してフォルダを分け直しても、更新すべきコピーが3つ残ることに変わりはありません。<b>結合度</b>は、ある部分が別の部分についてどれだけ知っている必要があるかを表します。<b>凝集度</b>は、一つの部分の中身が本当にまとまるべきものかどうかを表します。UIはデザインの都合で、保存のコードはデータベースの都合で、ミス判定のルールはプロダクトの都合で変わります。そのためルールはドメインの一か所だけに置き、ほかの部分はその結果を表示し、受け渡し、保存する役に徹します。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="Changing the missed-card rule in a tangled codebase touches the UI, the API handler and the database code; in a codebase split by reason to change, it touches only one domain module.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Tangled</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Split by reason</text>
+      <svg viewBox="0 0 400 300" role="img" aria-label="混在したコードベースでミス判定のルールを変えると、UI、APIハンドラー、データベースのコードに手が入る。変更理由で分けたコードベースでは、ドメインのモジュール一つだけで済む。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">混在</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">変更理由で分割</text>
         <text x="16" y="54" class="t-sm">UI</text>
-        <rect x="16" y="62" width="176" height="44" rx="6" class="node"/><text x="104" y="90" text-anchor="middle">rule copy 1</text>
-        <rect x="208" y="62" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="90" text-anchor="middle" class="t-sm">shows the result</text>
-        <text x="16" y="132" class="t-sm">API handler</text>
-        <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">rule copy 2</text>
-        <rect x="208" y="140" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="168" text-anchor="middle" class="t-sm">passes it on</text>
-        <text x="16" y="210" class="t-sm">Rules / storage</text>
-        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">rule copy 3</text>
-        <rect x="208" y="218" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="246" text-anchor="middle" class="t-hd">the one rule</text>
-        <text x="200" y="290" text-anchor="middle" class="t-sm">Change the rule: three places vs one</text>
+        <rect x="16" y="62" width="176" height="44" rx="6" class="node"/><text x="104" y="90" text-anchor="middle">ルールのコピー1</text>
+        <rect x="208" y="62" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="90" text-anchor="middle" class="t-sm">結果を表示する</text>
+        <text x="16" y="132" class="t-sm">APIハンドラー</text>
+        <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">ルールのコピー2</text>
+        <rect x="208" y="140" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="168" text-anchor="middle" class="t-sm">そのまま渡す</text>
+        <text x="16" y="210" class="t-sm">ルール／保存</text>
+        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">ルールのコピー3</text>
+        <rect x="208" y="218" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="246" text-anchor="middle" class="t-hd">唯一のルール</text>
+        <text x="200" y="290" text-anchor="middle" class="t-sm">ルールの変更：3か所か、1か所か</text>
       </svg>
-      <figcaption>On the left, the missed-card rule has three copies, so one change touches three layers. On the right, the rule has one home in the domain, and the other layers only pass along its answer.</figcaption>
+      <figcaption>左では、ミス判定のルールにコピーが3つあり、一つの変更が3つの層に及びます。右では、ルールの置き場所はドメインの一か所だけで、ほかの層はその結果を受け渡すだけです。</figcaption>
     </figure>
-    <p>Folders become useful when they reflect those decisions. They show which code changes together, but a folder name cannot prevent duplicated rules or conflicting results.</p>
+    <p>フォルダが役に立つのは、こうした判断を反映しているときです。フォルダを見れば一緒に変わるコードは分かりますが、フォルダ名だけではルールの重複や結果の食い違いは防げません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Draw the arrows</h2>
-    <p>If module A imports B, its dependency arrow points from A to B. In this design, dependencies point toward the product rules and away from the framework, database client and deployment platform. Dealing cards, calculating streaks and changing levels should not need rewriting because an SDK releases a new version.</p>
+    <h2 id="s2"><span class="no">02</span>依存の矢印を描く</h2>
+    <p>モジュールAがBをimportしているなら、依存の矢印はAからBに向きます。この設計では、依存がプロダクトのルールに向かい、フレームワーク、データベースクライアント、デプロイ先のプラットフォームからは離れるようにします。カードを配る、連続記録を数える、レベルを変えるといった処理は、SDKの新バージョンが出たからといって書き直すべきものではありません。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 290" role="img" aria-label="The UI and API layer depends on the application layer, which depends on the domain; all arrows point inward, and the domain imports nothing.">
-        <text x="16" y="18" class="t-sm">Closest to users and tools</text>
+      <svg viewBox="0 0 400 290" role="img" aria-label="UIとAPIの層はアプリケーション層に依存し、アプリケーション層はドメインに依存する。矢印はすべて内側を向き、ドメインは何もimportしない。">
+        <text x="16" y="18" class="t-sm">利用者とツールに最も近い</text>
         <rect x="16" y="28" width="368" height="56" rx="6" class="node"/>
-        <text x="32" y="54">HTTP API and worker</text><text x="32" y="74" class="t-sm">frameworks, AWS, the database client</text>
+        <text x="32" y="54">HTTP APIとワーカー</text><text x="32" y="74" class="t-sm">フレームワーク、AWS、DBクライアント</text>
         <line x1="200" y1="86" x2="200" y2="112" class="ln" marker-end="url(#arw)"/>
         <rect x="16" y="116" width="368" height="56" rx="6" class="node"/>
-        <text x="32" y="142">Application</text><text x="32" y="162" class="t-sm">commands, queries, interfaces</text>
+        <text x="32" y="142">アプリケーション</text><text x="32" y="162" class="t-sm">コマンド、クエリ、インターフェース</text>
         <line x1="200" y1="174" x2="200" y2="200" class="ln" marker-end="url(#arw)"/>
         <rect x="16" y="204" width="368" height="64" rx="6" class="node-acc"/>
-        <text x="32" y="232" class="t-hd t-acc">Domain</text><text x="32" y="254" class="t-sm">the rules of the drill</text>
-        <text x="368" y="244" text-anchor="end" class="t-sm">imports nothing</text>
+        <text x="32" y="232" class="t-hd t-acc">ドメイン</text><text x="32" y="254" class="t-sm">出題と採点のルール</text>
+        <text x="368" y="244" text-anchor="end" class="t-sm">何もimportしない</text>
       </svg>
-      <figcaption>Source dependencies point toward the protected rules. The domain has no external imports, limiting direct coupling to frameworks and storage.</figcaption>
+      <figcaption>ソースコードの依存は、守りたいルールの方を向きます。ドメインは外部のものを一切importしないので、フレームワークや保存先と直接結びつくことがありません。</figcaption>
     </figure>
-    <p>Quickturn makes that direction testable. The domain package imports no external package, including Node built-ins. Time arrives as an argument. A lint rule rejects forbidden imports, while a separate import-graph test also fails the build if a boundary is crossed.</p>
-    <p>The web, iOS and Android clients use the same API, so there is one server-side implementation of the rules. This boundary protects the rules shared by these clients. It does not require every project to exclude all libraries from its domain.</p>
+    <p>Quickturnでは、この向きをテストで確かめられるようにしています。ドメインのパッケージは、Nodeの組み込みモジュールも含めて、外部パッケージを一つもimportしません。時刻は引数として渡します。禁止されたimportはlintのルールが弾き、それとは別のimportグラフのテストも、境界を越えた時点でビルドを失敗させます。</p>
+    <p>Web、iOS、Androidのクライアントは同じAPIを使うので、ルールのサーバー側の実装は一つだけです。この境界が守っているのは、これらのクライアントが共有するルールです。どのプロジェクトでもドメインからあらゆるライブラリを締め出すべきだ、という話ではありません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Why named styles exist</h2>
-    <p>Layered, hexagonal, onion and clean architecture provide vocabulary for organizing responsibilities and dependencies. Conventional layering can make business logic depend on data access. Ports and adapters and the inward dependency rule protect application policy from that direction.</p>
-    <p>A style name helps a team communicate, but it does not replace inspecting the code. Ask what each boundary protects, where dependencies point, and how much extra wiring the style requires. Those questions reveal more than a familiar folder template.</p>
+    <h2 id="s3"><span class="no">03</span>スタイルに名前がある理由</h2>
+    <p>レイヤード、ヘキサゴナル、オニオン、クリーンといったアーキテクチャは、責務と依存関係を整理するための語彙を与えてくれます。従来のレイヤー構成では、ビジネスロジックがデータアクセスに依存しがちです。ポートとアダプターや、依存を内側に向けるルールは、アプリケーションの方針をそうした向きの依存から守ります。</p>
+    <p>スタイルの名前はチーム内の意思疎通には役立ちますが、コードを確かめる代わりにはなりません。それぞれの境界が何を守っているのか、依存がどちらを向いているのか、そのスタイルにはどれだけ追加の配線が必要なのか。こうした点を確かめるほうが、見慣れたフォルダのテンプレートよりも多くのことを教えてくれます。</p>
     <div class="aside note">
-      <p class="label">Key point</p>
-      <p>Architecture is the set of decisions about what changes together and which way dependencies point. Folders and named styles are ways to show and share those decisions.</p>
+      <p class="label">要点</p>
+      <p>アーキテクチャとは、何が一緒に変わるのか、依存がどちらを向くのかについての判断の集まりです。フォルダや名前のついたスタイルは、その判断を示し、共有するための手段です。</p>
     </div>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What structure costs</h2>
-    <p>Structure costs interfaces, wiring and indirection. A reader may need to follow a call through several files that a small script would keep together. Frequent, expensive changes can justify that cost. Known alternatives, such as production and test stores, can also give an interface a clear purpose.</p>
+    <h2 id="s4"><span class="no">04</span>構造にかかるコスト</h2>
+    <p>構造には、インターフェース、配線、間接参照というコストがかかります。小さなスクリプトなら一か所にまとまっている処理を、読む人が何ファイルもたどって追うことになるかもしれません。頻繁に起きて、しかも高くつく変更があるなら、このコストを払う理由になります。本番用とテスト用のストアのように差し替え先がすでに分かっている場合も、インターフェースを置く目的がはっきりします。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of how often a part changes against how costly a change there is today; the high-change, high-cost quadrant is where to put structure, and the low-change quadrants are where to keep it simple.">
-        <text x="44" y="18" class="t-sm">↑ Cost of a change today</text>
+      <svg viewBox="0 0 400 366" role="img" aria-label="ある部分の変更頻度と、現時点での変更コストを軸にした2×2の図。変更が多くコストも高い象限が構造を入れる場所で、変更の少ない象限はシンプルに保つ。">
+        <text x="44" y="18" class="t-sm">↑ 今の変更コスト</text>
         <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
         <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-        <text x="390" y="356" text-anchor="end" class="t-sm">How often it changes →</text>
+        <text x="390" y="356" text-anchor="end" class="t-sm">変更の頻度 →</text>
         <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-        <text x="134" y="100" text-anchor="middle">Keep it simple</text><text x="134" y="124" text-anchor="middle" class="t-sm">rarely touched</text>
+        <text x="134" y="100" text-anchor="middle">シンプルに保つ</text><text x="134" y="124" text-anchor="middle" class="t-sm">めったに触らない</text>
         <rect x="222" y="36" width="160" height="140" rx="6" class="node-acc"/>
-        <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">Put structure</text><text x="302" y="124" text-anchor="middle" class="t-hd t-acc">here</text>
+        <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">構造を入れる</text><text x="302" y="124" text-anchor="middle" class="t-hd t-acc">のはここ</text>
         <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="134" y="248" text-anchor="middle">Keep it simple</text><text x="134" y="272" text-anchor="middle" class="t-sm">cheap and quiet</text>
+        <text x="134" y="248" text-anchor="middle">シンプルに保つ</text><text x="134" y="272" text-anchor="middle" class="t-sm">安く、変化も少ない</text>
         <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-        <text x="302" y="248" text-anchor="middle">Fine as it is</text><text x="302" y="272" text-anchor="middle" class="t-sm">cheap to change</text>
+        <text x="302" y="248" text-anchor="middle">今のままでよい</text><text x="302" y="272" text-anchor="middle" class="t-sm">安く変えられる</text>
       </svg>
-      <figcaption>Frequent, expensive changes can justify structure in the top-right corner. Rare changes may favor plain code, unless known alternatives give an interface another purpose.</figcaption>
+      <figcaption>右上の、頻繁で高くつく変更には構造を入れる価値があります。めったに変わらない部分は素直なコードのほうがよい場合が多いものの、差し替え先が分かっているならインターフェースには別の目的が生まれます。</figcaption>
     </figure>
-    <p>The missed-card rule is expensive to change because it has several copies. A rarely changed report script may gain little from additional layers. YAGNI, “you aren't gonna need it,” discourages paying for hypothetical variation: use change history and known requirements to identify the seams.</p>
-    <p>An AI application can benefit from a provider adapter when models or vendors change. The adapter concentrates provider-specific calls, although differing model behavior may still require prompt and evaluation changes. Keep stable, simple code plain, and spend structure where evidence shows that it reduces work.</p>
+    <p>ミス判定のルールの変更が高くついたのは、コピーが複数あったからです。めったに変更しないレポート用のスクリプトなら、層を増やしても得るものは少ないでしょう。YAGNI（“you aren't gonna need it”、必要になるまで作らない）は、仮定の変化に備えてコストを払うことを戒める考え方です。継ぎ目をどこに置くかは、変更履歴と、すでに分かっている要件から判断します。</p>
+    <p>AIを使うアプリケーションなら、モデルやベンダーが変わるときにプロバイダーのアダプターが役立ちます。アダプターはプロバイダー固有の呼び出しを一か所に集めますが、モデルごとに振る舞いが違えば、プロンプトや評価の変更はやはり必要です。安定した単純なコードは素直なまま残し、構造は手間が減るという根拠がある場所に使います。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Architecture is deciding what changes together and which way dependencies point; folders only show those decisions.</li>
-      <li>Keep stable rules free of volatile tools, and let a machine check the direction of every import.</li>
-      <li>Structure costs indirection, so spend it where change is frequent or a part must be replaced.</li>
+      <li>アーキテクチャとは、何が一緒に変わるのか、依存がどちらを向くのかを決めることであり、フォルダはその判断を示すものにすぎません。</li>
+      <li>安定したルールを移り変わりやすいツールから切り離し、すべてのimportの向きを機械にチェックさせます。</li>
+      <li>構造には間接参照のコストがかかるので、変更が頻繁な場所や、差し替えが必要な部分に使います。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
-    <a class="next" href="ch02.html"><span>Next</span><b>If the rules can't touch the database, who saves?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch00.html"><span>前へ</span><b>目次</b></a>
+    <a class="next" href="ch02.html"><span>次へ</span><b>ルールがDBに触れないなら、誰が保存するのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

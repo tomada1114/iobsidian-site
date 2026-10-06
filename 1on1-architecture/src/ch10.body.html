@@ -1,69 +1,69 @@
-<!-- title: Architecture 10 · Who stops a bad import | accent: think -->
+<!-- title: アーキテクチャ 10 · 誰も見ていないとき、誤ったimportを誰が止めるのか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 10 of 11</span></p>
-  <h1>Who stops a bad import when nobody is watching?</h1>
-  <p class="lead">A command can gain a database import in one small edit. A boundary check must detect that dependency and explain how to repair it.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第10章 / 全11章</span></p>
+  <h1>誰も見ていないとき、誤ったimportを誰が止めるのか</h1>
+  <p class="lead">ほんの小さな編集で、コマンドにデータベースのimportが紛れ込むことがあります。境界のチェックは、その依存を検出し、どう直せばよいかまで示す必要があります。</p>
+  <p class="meta"><span>読了 約5分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>One repository or several</li>
-      <li>Packages with explicit surfaces</li>
-      <li>Edges enforced twice</li>
-      <li>Is it worth the config?</li>
+      <li>リポジトリは一つか、複数か</li>
+      <li>公開の入口が明確なパッケージ</li>
+      <li>依存の辺を二重にチェックする</li>
+      <li>設定の手間に見合うか</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>One repository or several</h2>
-    <p>A contract change can affect the API, web client and shared schema at once. A monorepo lets that coordinated change appear in one commit and review, under one set of checks. Separate repositories require versions and release ordering.</p>
+    <h2 id="s1"><span class="no">01</span>リポジトリは一つか、複数か</h2>
+    <p>契約を変えると、API、Webクライアント、共有スキーマに同時に影響が出ることがあります。モノレポなら、その連動した変更を一つのコミットと一つのレビューにまとめ、同じチェックを通せます。リポジトリが分かれていると、バージョンとリリースの順序を管理しなければなりません。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="In a monorepo a contract change updates the contract, API and web app in one commit with one set of gates; in separate repositories it takes three pull requests, versioned releases and separate toolchains.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Monorepo</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd">Separate repos</text>
-        <text x="16" y="56" class="t-sm">A contract change</text>
-        <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">one commit</text>
-        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">three PRs</text>
-        <text x="16" y="136" class="t-sm">Releases</text>
-        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">shared</text>
-        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">independent</text>
-        <text x="16" y="216" class="t-sm">Tools and gates</text>
-        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">one set</text>
-        <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one per repo</text>
+      <svg viewBox="0 0 400 276" role="img" aria-label="モノレポでは、契約の変更が契約、API、Webアプリを一つのコミットで更新し、同じゲートを通る。別々のリポジトリでは、3つのプルリクエスト、バージョンつきのリリース、別々のツールチェーンが必要になる。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">モノレポ</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd">別々のリポジトリ</text>
+        <text x="16" y="56" class="t-sm">契約の変更</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">1回のコミット</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">3つのPR</text>
+        <text x="16" y="136" class="t-sm">リリース</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">共通</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">それぞれ独立</text>
+        <text x="16" y="216" class="t-sm">ツールとゲート</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">1セット</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">リポジトリごと</text>
       </svg>
-      <figcaption>The first row decides it for us. When one team changes a contract and its clients together, a single commit beats three coordinated pull requests.</figcaption>
+      <figcaption>決め手は1行目です。一つのチームが契約とそのクライアントを一緒に変えるなら、3つのプルリクエストを調整するより、1回のコミットで済むほうが有利です。</figcaption>
     </figure>
-    <p>Separate repositories can still provide independent releases, permissions and toolchains. Swift and Kotlin clients may justify that separation. Repository layout should follow which components change together and who owns them, rather than indicate how serious the product is.</p>
+    <p>リポジトリを分ければ、リリース、権限、ツールチェーンをそれぞれ独立させられます。SwiftやKotlinのクライアントなら、分ける理由になるかもしれません。リポジトリの構成は、プロダクトの本格度を示すものではありません。どのコンポーネントが一緒に変わるか、誰が担当するかに合わせて決めます。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Packages with explicit surfaces</h2>
-    <p>Quickturn uses pnpm workspaces, with each package declaring dependencies in its manifest. Package exports expose an intended public entry point. Together they limit accidental coupling, though relative imports and configuration still need boundary checks.</p>
-    <p>Packages expose TypeScript source rather than separate prebuilt output. Vite, tests or the API runtime compile or handle it for their own use. Node's type stripping supports a subset of TypeScript; code must stay within the chosen runtime's supported syntax and resolution rules.</p>
+    <h2 id="s2"><span class="no">02</span>公開の入口が明確なパッケージ</h2>
+    <p>Quickturnはpnpmのワークスペースを使い、各パッケージはマニフェストで依存関係を宣言します。パッケージのexportsは、意図した公開の入口だけを外に見せます。この二つで偶発的な結合は抑えられますが、相対パスのimportや設定には、やはり境界のチェックが必要です。</p>
+    <p>パッケージは、ビルド済みの成果物ではなくTypeScriptのソースを公開します。Vite、テスト、APIのランタイムが、それぞれの用途に合わせてコンパイルしたり処理したりします。Nodeの型ストリッピングが対応しているのはTypeScriptの一部なので、コードは選んだランタイムが対応する構文と解決規則の範囲に収める必要があります。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 324" role="img" aria-label="The API app depends on adapters, which depend on the application, which depends on the domain; contracts sits to the side and depends only on zod; the web app reaches the API only over HTTP. The domain has nothing below it.">
-        <rect x="16" y="16" width="176" height="48" rx="6" class="node"/><text x="104" y="46" text-anchor="middle">api app</text>
-        <rect x="208" y="16" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="46" text-anchor="middle">web app</text>
+      <svg viewBox="0 0 400 324" role="img" aria-label="APIアプリはアダプターに、アダプターはアプリケーションに、アプリケーションはドメインに依存する。契約は横にあってZodだけに依存し、WebアプリはHTTPを通してのみAPIに届く。ドメインの下には何もない。">
+        <rect x="16" y="16" width="176" height="48" rx="6" class="node"/><text x="104" y="46" text-anchor="middle">APIアプリ</text>
+        <rect x="208" y="16" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="46" text-anchor="middle">Webアプリ</text>
         <line x1="192" y1="40" x2="208" y2="40" class="ln-dash"/>
-        <text x="296" y="84" text-anchor="middle" class="t-sm">only over HTTP</text>
+        <text x="296" y="84" text-anchor="middle" class="t-sm">HTTP経由のみ</text>
         <line x1="104" y1="66" x2="104" y2="94" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="98" width="176" height="48" rx="6" class="node"/><text x="104" y="128" text-anchor="middle">adapters</text>
+        <rect x="16" y="98" width="176" height="48" rx="6" class="node"/><text x="104" y="128" text-anchor="middle">アダプター</text>
         <line x1="104" y1="148" x2="104" y2="176" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="180" width="176" height="48" rx="6" class="node"/><text x="104" y="210" text-anchor="middle">application</text>
+        <rect x="16" y="180" width="176" height="48" rx="6" class="node"/><text x="104" y="210" text-anchor="middle">アプリケーション</text>
         <line x1="104" y1="230" x2="104" y2="258" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="262" width="176" height="48" rx="6" class="node-acc"/><text x="104" y="292" text-anchor="middle" class="t-hd t-acc">domain</text>
-        <text x="296" y="292" text-anchor="middle" class="t-sm">nothing below it</text>
-        <rect x="208" y="140" width="176" height="56" rx="6" class="node"/><text x="296" y="164" text-anchor="middle">contracts</text><text x="296" y="184" text-anchor="middle" class="t-sm">zod only</text>
+        <rect x="16" y="262" width="176" height="48" rx="6" class="node-acc"/><text x="104" y="292" text-anchor="middle" class="t-hd t-acc">ドメイン</text>
+        <text x="296" y="292" text-anchor="middle" class="t-sm">下には何もない</text>
+        <rect x="208" y="140" width="176" height="56" rx="6" class="node"/><text x="296" y="164" text-anchor="middle">契約</text><text x="296" y="184" text-anchor="middle" class="t-sm">Zodのみに依存</text>
       </svg>
-      <figcaption>The domain imports no external packages. Clients use HTTP contracts and generated types while server implementation packages stay behind the API boundary.</figcaption>
+      <figcaption>ドメインは外部パッケージを一切importしません。クライアントはHTTPの契約と生成された型を使い、サーバーの実装パッケージはAPIの境界の向こう側にとどまります。</figcaption>
     </figure>
-    <p>The domain has no adapter dependencies. Application code depends on the domain, adapters implement application interfaces, and HTTP contracts own boundary schemas. Web and native clients use HTTP contracts and generated client types rather than importing server internals.</p>
+    <p>ドメインはアダプターに依存しません。アプリケーションのコードはドメインに依存し、アダプターはアプリケーションのインターフェースを実装し、HTTPの契約が境界のスキーマを持ちます。Webとネイティブのクライアントは、サーバーの内部をimportするのではなく、HTTPの契約と生成されたクライアントの型を使います。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Edges enforced twice</h2>
-    <p>Lint uses an allowed-edge table. Domain imports no other workspace package; application imports domain. Adapters import application and domain, and contracts use Zod. An independent test examines actual imports and manifests. Removing one check leaves the other enforcing the boundary.</p>
+    <h2 id="s3"><span class="no">03</span>依存の辺を二重にチェックする</h2>
+    <p>lintは、許可された辺の表を使います。ドメインはほかのワークスペースパッケージを一切importせず、アプリケーションはドメインをimportします。アダプターはアプリケーションとドメインをimportし、契約はZodを使います。これとは独立したテストが、実際のimportとマニフェストを調べます。一方のチェックを外しても、もう一方が境界を守り続けます。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 386" role="img" aria-label="The agent writes a bad import, the lint rule fails, the boundary test fails, CI blocks the merge, and the agent fixes it by going through the port: fixed before review.">
+      <svg viewBox="0 0 400 386" role="img" aria-label="エージェントが誤ったimportを書くと、lintのルールが失敗し、境界テストも失敗し、CIがマージを止める。エージェントはポートを経由するように直し、レビューの前に修正が済む。">
         <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
         <circle cx="30" cy="44" r="6" class="dot"/>
         <circle cx="30" cy="118" r="6" class="dot"/>
@@ -71,38 +71,38 @@
         <circle cx="30" cy="266" r="6" class="dot"/>
         <circle cx="30" cy="342" r="8" class="f-acc"/>
         <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="40">Agent writes the import</text><text x="72" y="61" class="t-sm">adapter inside a command</text>
+        <text x="72" y="40">エージェントがimportを書く</text><text x="72" y="61" class="t-sm">コマンドの中でアダプターを使う</text>
         <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="114">Lint rule fails</text><text x="72" y="135" class="t-sm">edge not in the table</text>
+        <text x="72" y="114">lintのルールが失敗</text><text x="72" y="135" class="t-sm">表にない辺</text>
         <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="188">Boundary test fails</text><text x="72" y="209" class="t-sm">own copy, real import graph</text>
+        <text x="72" y="188">境界テストが失敗</text><text x="72" y="209" class="t-sm">独自の定義で実際のimportグラフを見る</text>
         <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="262">CI blocks the merge</text><text x="72" y="283" class="t-sm">required checks</text>
+        <text x="72" y="262">CIがマージを止める</text><text x="72" y="283" class="t-sm">必須のチェック</text>
         <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="338" class="t-hd">Repair before acceptance</text><text x="72" y="359" class="t-sm">agent goes through the port</text>
+        <text x="72" y="338" class="t-hd">受け入れ前に修正する</text><text x="72" y="359" class="t-sm">エージェントがポート経由に直す</text>
       </svg>
-      <figcaption>In this illustrated change, both checks reject the forbidden import. Their errors point toward the port; review still examines the resulting design.</figcaption>
+      <figcaption>この例の変更では、二つのチェックがどちらも禁止されたimportを拒否します。エラーはポートを使う方向へ導きますが、その結果の設計はやはりレビューで確かめます。</figcaption>
     </figure>
-    <p>Manifests control package reachability, while boundary rules control permitted direction and file-level relationships. A useful error identifies the forbidden edge and points to the application-owned port. That helps both a developer and a coding agent repair the design.</p>
-    <p>Nx offers boundary checks; Turborepo focuses on task orchestration and caching. Quickturn's short builds and source packages do not yet justify adding a task system solely for caching.</p>
+    <p>マニフェストはどのパッケージに届くかを制御し、境界のルールは許される向きとファイル単位の関係を制御します。役に立つエラーは、禁止された辺を特定し、アプリケーションが持つポートを指し示します。そうすれば、開発者もコーディングエージェントも設計を直しやすくなります。</p>
+    <p>Nxは境界のチェック機能を持ち、Turborepoはタスクの実行管理とキャッシュに重点を置いています。Quickturnはビルドが短く、パッケージもソースのまま公開しているので、キャッシュのためだけにタスク管理の仕組みを足す理由はまだありません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Is it worth the config?</h2>
-    <p>Workspace manifests, lint configuration and an import-graph test all require maintenance. A new package must declare its intended edges. That small delay is the moment to decide what it may depend on.</p>
-    <p>The benefit grows when many people or agents change code. Written guidance can be missed; a forbidden import that produces a failing check has a concrete consequence. An architectural fitness function tests a design property rather than a feature.</p>
-    <p>A small project may need only a modest lint policy. Independent checks are useful when boundaries face frequent edits, provided the team can keep those checks understandable and current.</p>
+    <h2 id="s4"><span class="no">04</span>設定の手間に見合うか</h2>
+    <p>ワークスペースのマニフェスト、lintの設定、importグラフのテストは、どれも保守が必要です。新しいパッケージを作るときは、想定する依存の辺を宣言しなければなりません。そのわずかな手間が、そのパッケージが何に依存してよいかを決める機会になります。</p>
+    <p>この仕組みの効果は、多くの人やエージェントがコードを変更するほど大きくなります。文章のガイドラインは見落とされることがありますが、禁止されたimportでチェックが失敗すれば、それは具体的な結果として現れます。アーキテクチャの適応度関数（fitness function）は、機能ではなく設計の性質をテストするものです。</p>
+    <p>小さなプロジェクトなら、控えめなlintの方針で足りるかもしれません。独立したチェックが役立つのは、境界の周りが頻繁に編集される場合で、しかもチームがそのチェックを分かりやすく、最新の状態に保てる場合です。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>One repository lets a contract and its clients change in one commit, when one team changes them together.</li>
-      <li>Workspace dependencies and a single exported entry file make each package's public surface explicit.</li>
-      <li>Lint and a graph test both check the allowed edges, so a wrong import fails the build, whoever wrote it.</li>
+      <li>一つのチームが契約とクライアントを一緒に変えるなら、リポジトリを一つにすると一回のコミットで変更できます。</li>
+      <li>ワークスペースの依存の宣言と、exportする入口のファイルを一つに絞ることで、各パッケージの公開範囲が明確になります。</li>
+      <li>lintとグラフのテストの両方が許可された辺をチェックするので、誰が書いたかに関係なく、誤ったimportはビルドを失敗させます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch09.html"><span>Previous</span><b>Do we need event sourcing to keep the history?</b></a>
-    <a class="next" href="ch11.html"><span>Next</span><b>How do I defend a design decision in a review?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch09.html"><span>前へ</span><b>履歴を残すにはイベントソーシングが必要か</b></a>
+    <a class="next" href="ch11.html"><span>次へ</span><b>設計判断をレビューでどう説明するか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

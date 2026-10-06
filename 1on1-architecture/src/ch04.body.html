@@ -1,119 +1,119 @@
-<!-- title: Architecture 04 · Clean vs Hexagonal | accent: think -->
+<!-- title: アーキテクチャ 04 · クリーンとヘキサゴナルは何が違うのか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 4 of 11</span></p>
-  <h1>Clean vs Hexagonal — what's actually different?</h1>
-  <p class="lead">Two teams can protect the same business rules while choosing different internal structures. Clean and hexagonal architecture explain parts of that choice.</p>
-  <p class="meta"><span>About 5 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第4章 / 全11章</span></p>
+  <h1>クリーンとヘキサゴナルは何が違うのか</h1>
+  <p class="lead">同じビジネスルールを守りながら、二つのチームがまったく違う内部構造を選ぶことがあります。クリーンアーキテクチャとヘキサゴナルアーキテクチャは、その選択の一部を説明してくれます。</p>
+  <p class="meta"><span>読了 約6分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Three pictures, one rule</li>
-      <li>The difference is the inside</li>
-      <li>What Quickturn took and left</li>
-      <li>When the full ceremony pays</li>
+      <li>三つの図に共通するルール</li>
+      <li>違いは内側にある</li>
+      <li>Quickturnが取り入れたもの、見送ったもの</li>
+      <li>お作法を一式そろえる価値があるとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Three pictures, one rule</h2>
-    <p>Onion architecture places a domain model at the center, with domain and application services around it and infrastructure outside. Domain services express rules that do not fit one object; application services coordinate tasks such as loading, deciding and saving. Clean Architecture describes entities, use cases, interface adapters, and frameworks or drivers, with source-code dependencies pointing inward.</p>
+    <h2 id="s1"><span class="no">01</span>三つの図に共通するルール</h2>
+    <p>オニオンアーキテクチャは、ドメインモデルを中心に置き、その周りにドメインサービスとアプリケーションサービス、いちばん外側にインフラストラクチャを配置します。ドメインサービスは一つのオブジェクトに収まらないルールを表し、アプリケーションサービスは読み込み、判断、保存といった作業の段取りを担います。クリーンアーキテクチャは、エンティティ、ユースケース、インターフェースアダプター、フレームワークとドライバーという層を描き、ソースコードの依存はすべて内側を向きます。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="Clean architecture's rings: frameworks and drivers contain interface adapters, which contain use cases, which contain entities at the center; dependencies point inward.">
+      <svg viewBox="0 0 400 300" role="img" aria-label="クリーンアーキテクチャの同心円。フレームワークとドライバーがインターフェースアダプターを囲み、その内側にユースケース、中心にエンティティがある。依存は内側を向く。">
         <rect x="8" y="8" width="384" height="284" rx="10" class="zone-soft"/>
-        <text x="24" y="34" class="t-sm">Frameworks and drivers</text>
+        <text x="24" y="34" class="t-sm">フレームワークとドライバー</text>
         <rect x="28" y="48" width="344" height="228" rx="8" class="node"/>
-        <text x="44" y="74" class="t-sm">Interface adapters</text>
+        <text x="44" y="74" class="t-sm">インターフェースアダプター</text>
         <rect x="48" y="88" width="304" height="172" rx="8" class="node"/>
-        <text x="64" y="114" class="t-sm">Use cases</text>
+        <text x="64" y="114" class="t-sm">ユースケース</text>
         <rect x="88" y="132" width="224" height="72" rx="6" class="node-acc"/>
-        <text x="200" y="174" text-anchor="middle" class="t-hd t-acc">Entities</text>
+        <text x="200" y="174" text-anchor="middle" class="t-hd t-acc">エンティティ</text>
         <line x1="200" y1="252" x2="200" y2="210" class="ln-acc" marker-end="url(#arw-acc)"/>
-        <text x="190" y="236" text-anchor="end" class="t-sm t-acc">points inward</text>
+        <text x="190" y="236" text-anchor="end" class="t-sm t-acc">内側を向く</text>
       </svg>
-      <figcaption>Clean architecture nests rings around the entities. Whatever the ring names, the one rule is that every dependency points toward the center.</figcaption>
+      <figcaption>クリーンアーキテクチャは、エンティティの周りに円を重ねます。円の名前が何であれ、ルールは一つで、すべての依存が中心を向くことです。</figcaption>
     </figure>
-    <p>Hexagonal architecture emphasizes the boundary between application and outside technologies. All three can protect business rules from storage and framework details. Their diagrams are useful when they explain actual dependencies rather than serve as mandatory folder layouts.</p>
+    <p>ヘキサゴナルアーキテクチャが重視するのは、アプリケーションと外部の技術との境界です。三つのどれを使っても、ビジネスルールを保存やフレームワークの詳細から守れます。これらの図が役立つのは実際の依存関係を説明するときであって、従うべきフォルダ構成として使うときではありません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The difference is the inside</h2>
-    <p>Hexagonal architecture leaves the application's internal organization largely open. Onion and Clean offer more guidance about separating business rules from application workflows. A common Clean implementation uses interactors, input and output ports, and presenters. The dependency rule does not require one class for every operation.</p>
+    <h2 id="s2"><span class="no">02</span>違いは内側にある</h2>
+    <p>ヘキサゴナルアーキテクチャは、アプリケーション内部の構成をほぼ自由にしています。オニオンとクリーンは、ビジネスルールとアプリケーションの処理の流れをどう分けるかについて、もう少し踏み込んだ指針を示します。クリーンアーキテクチャのよくある実装では、インタラクター、入力ポートと出力ポート、プレゼンターを使います。ただし依存のルール自体は、操作ごとにクラスを一つ作ることまでは求めていません。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="Hexagonal draws a boundary with ports and leaves the inside blank; clean draws the same boundary but splits the inside into entities and use cases, plus presenters and output ports. The internal roles are the difference shown here.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Hexagonal</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Clean</text>
+      <svg viewBox="0 0 400 300" role="img" aria-label="ヘキサゴナルはポートで境界を描き、内側は空白のままにする。クリーンは同じ境界を描いたうえで、内側をエンティティとユースケースに分け、プレゼンターと出力ポートも置く。この図で示す違いは内部の役割である。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">ヘキサゴナル</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">クリーン</text>
         <rect x="16" y="40" width="176" height="220" rx="10" class="node"/>
-        <text x="104" y="68" text-anchor="middle" class="t-sm">ports on the edge</text>
-        <text x="104" y="156" text-anchor="middle" class="t-sm">inside: open</text>
+        <text x="104" y="68" text-anchor="middle" class="t-sm">境界にポート</text>
+        <text x="104" y="156" text-anchor="middle" class="t-sm">内側：自由</text>
         <rect x="208" y="40" width="176" height="220" rx="10" class="node"/>
-        <text x="296" y="68" text-anchor="middle" class="t-sm">ports on the edge</text>
-        <rect x="224" y="82" width="144" height="44" rx="6" class="node-acc"/><text x="296" y="110" text-anchor="middle">Entities</text>
-        <rect x="224" y="132" width="144" height="44" rx="6" class="node-acc"/><text x="296" y="160" text-anchor="middle">Use cases</text>
-        <rect x="224" y="180" width="144" height="34" rx="6" class="node"/><text x="296" y="202" text-anchor="middle" class="t-sm">I/O ports</text>
-        <text x="296" y="236" text-anchor="middle" class="t-sm">presenters sit</text><text x="296" y="251" text-anchor="middle" class="t-sm">on the ring</text>
-        <text x="200" y="288" text-anchor="middle" class="t-sm">Same boundary; the inside is the difference</text>
+        <text x="296" y="68" text-anchor="middle" class="t-sm">境界にポート</text>
+        <rect x="224" y="82" width="144" height="44" rx="6" class="node-acc"/><text x="296" y="110" text-anchor="middle">エンティティ</text>
+        <rect x="224" y="132" width="144" height="44" rx="6" class="node-acc"/><text x="296" y="160" text-anchor="middle">ユースケース</text>
+        <rect x="224" y="180" width="144" height="34" rx="6" class="node"/><text x="296" y="202" text-anchor="middle" class="t-sm">入出力ポート</text>
+        <text x="296" y="236" text-anchor="middle" class="t-sm">プレゼンターは</text><text x="296" y="251" text-anchor="middle" class="t-sm">円の上に置く</text>
+        <text x="200" y="288" text-anchor="middle" class="t-sm">境界は同じで、違いは内側にある</text>
       </svg>
-      <figcaption>Both diagrams separate technology from application policy. The Clean example also names internal roles; teams still decide how to implement those roles.</figcaption>
+      <figcaption>どちらの図も、技術とアプリケーションの方針を分けています。クリーンの例ではさらに内部の役割にも名前がついていますが、それをどう実装するかはチームが決めます。</figcaption>
     </figure>
-    <p>The two approaches differ in how much internal structure they describe. The tables compare representative implementations; “ceremony” means the additional interfaces, mapping and wiring a team chooses to maintain.</p>
+    <p>二つの違いは、内部構造をどこまで描くかにあります。次の表は、代表的な実装を比べたものです。表の中の「追加の手間」は、チームが維持すると決めた追加のインターフェース、詰め替え、配線を指します。この章では、こうした手間をまとめて「お作法」と呼びます。</p>
     <div class="tbl"><table>
-      <thead><tr><th>Style</th><th>Its picture</th><th>What it prescribes inside</th></tr></thead>
+      <thead><tr><th>スタイル</th><th>図の形</th><th>内側に定めること</th></tr></thead>
       <tbody>
-        <tr><td class="key">Layered</td><td>stacked layers</td><td>layers call downward</td></tr>
-        <tr><td class="key">Hexagonal</td><td>inside and outside</td><td>internal organization left open</td></tr>
-        <tr><td class="key">Onion</td><td>rings around the domain</td><td>domain model, domain and application services</td></tr>
-        <tr><td class="key">Clean</td><td>rings around entities</td><td>entities, use cases, ports; presenters in the ring</td></tr>
+        <tr><td class="key">レイヤード</td><td>積み重ねた層</td><td>層は下へ呼び出す</td></tr>
+        <tr><td class="key">ヘキサゴナル</td><td>内側と外側</td><td>内部の構成は自由</td></tr>
+        <tr><td class="key">オニオン</td><td>ドメインを囲む円</td><td>ドメインモデル、ドメインサービス、アプリケーションサービス</td></tr>
+        <tr><td class="key">クリーン</td><td>エンティティを囲む円</td><td>エンティティ、ユースケース、ポート。プレゼンターは円の上</td></tr>
       </tbody>
     </table></div>
     <div class="tbl"><table>
-      <thead><tr><th>Style</th><th>Where the database goes</th><th>Example extra work</th></tr></thead>
+      <thead><tr><th>スタイル</th><th>データベースの位置</th><th>追加の手間の例</th></tr></thead>
       <tbody>
-        <tr><td class="key">Layered</td><td>the bottom layer</td><td>cross-layer calls</td></tr>
-        <tr><td class="key">Hexagonal</td><td>outside, behind a port</td><td>ports and adapter wiring</td></tr>
-        <tr><td class="key">Onion</td><td>the outer ring</td><td>domain and application services</td></tr>
-        <tr><td class="key">Clean</td><td>the outer ring</td><td>role interfaces and mapping</td></tr>
+        <tr><td class="key">レイヤード</td><td>最下層</td><td>層をまたぐ呼び出し</td></tr>
+        <tr><td class="key">ヘキサゴナル</td><td>外側の、ポートの向こう</td><td>ポートとアダプターの配線</td></tr>
+        <tr><td class="key">オニオン</td><td>いちばん外側の円</td><td>ドメインサービスとアプリケーションサービス</td></tr>
+        <tr><td class="key">クリーン</td><td>いちばん外側の円</td><td>役割ごとのインターフェースと詰め替え</td></tr>
       </tbody>
     </table></div>
-    <p>Conventional layering can leave policy dependent on data access. The inward styles move technology implementations outside the protected core. Teams should inspect their actual arrows, because the same style label can describe substantially different code.</p>
+    <p>従来のレイヤー構成では、方針がデータアクセスに依存したままになることがあります。内向きのスタイルは、技術の実装を守られたコアの外側へ移します。同じスタイル名でも中身のコードは大きく違いうるので、チームは実際の矢印を確かめる必要があります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What Quickturn took and left</h2>
-    <p>Quickturn adopts inward dependencies and a composition root for each executable entry point. A composition root wires the real store, catalog, authenticator, clock and ID generator together. Commands elsewhere receive those dependencies rather than locate them globally.</p>
-    <p>Commands are plain async functions such as <code>startRound(deps, context, command)</code>. They return values without separate presenter classes or output ports. Domain types pass through the application, and request and response shapes are mapped at the HTTP boundary.</p>
+    <h2 id="s3"><span class="no">03</span>Quickturnが取り入れたもの、見送ったもの</h2>
+    <p>Quickturnが取り入れたのは、内向きの依存と、実行可能なエントリーポイントごとのコンポジションルートです。コンポジションルートは、本物のストア、カタログ、認証、時計、ID生成器を組み合わせる場所です。ほかの場所にあるコマンドは、これらの依存をグローバルに探しに行くのではなく、引数として受け取ります。</p>
+    <p>コマンドは<code>startRound(deps, context, command)</code>のような素の非同期関数です。独立したプレゼンタークラスや出力ポートは使わず、値を返します。ドメインの型はアプリケーション層までそのまま通り、リクエストとレスポンスの形はHTTPの境界で変換します。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 288" role="img" aria-label="What Quickturn took from clean architecture, the dependency rule and a composition root, next to what it left out: interactors, presenters, output ports and per-ring data mapping.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Took</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd">Left out</text>
+      <svg viewBox="0 0 400 288" role="img" aria-label="Quickturnがクリーンアーキテクチャから取り入れた依存のルールとコンポジションルートと、見送ったインタラクター、プレゼンター、出力ポート、円ごとのデータの詰め替え。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">取り入れた</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd">見送った</text>
         <rect x="16" y="40" width="176" height="104" rx="6" class="node-acc"/>
-        <text x="104" y="84" text-anchor="middle">Dependency</text><text x="104" y="106" text-anchor="middle">rule</text>
+        <text x="104" y="84" text-anchor="middle">依存の</text><text x="104" y="106" text-anchor="middle">ルール</text>
         <rect x="16" y="156" width="176" height="104" rx="6" class="node-acc"/>
-        <text x="104" y="200" text-anchor="middle">Composition</text><text x="104" y="222" text-anchor="middle">root per deploy</text>
-        <rect x="208" y="40" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="70" text-anchor="middle">Interactors</text>
-        <rect x="208" y="96" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="126" text-anchor="middle">Presenters</text>
-        <rect x="208" y="156" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="186" text-anchor="middle">Output ports</text>
-        <rect x="208" y="212" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="242" text-anchor="middle">Per-ring mapping</text>
-        <text x="200" y="282" text-anchor="middle" class="t-sm">Kept the rule, skipped the ceremony</text>
+        <text x="104" y="200" text-anchor="middle">コンポジション</text><text x="104" y="222" text-anchor="middle">ルート（入口ごと）</text>
+        <rect x="208" y="40" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="70" text-anchor="middle">インタラクター</text>
+        <rect x="208" y="96" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="126" text-anchor="middle">プレゼンター</text>
+        <rect x="208" y="156" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="186" text-anchor="middle">出力ポート</text>
+        <rect x="208" y="212" width="176" height="48" rx="6" class="node-soft"/><text x="296" y="242" text-anchor="middle">円ごとの詰め替え</text>
+        <text x="200" y="282" text-anchor="middle" class="t-sm">ルールは残し、お作法は省いた</text>
       </svg>
-      <figcaption>Quickturn wires dependencies at each executable entry point and keeps decisions separate from technology. Extra presentation objects need a distinct responsibility to justify their maintenance.</figcaption>
+      <figcaption>Quickturnは、実行可能なエントリーポイントごとに依存を組み立て、判断を技術から切り離しています。表示用のオブジェクトを増やすなら、維持するに見合う独自の責務が必要です。</figcaption>
     </figure>
-    <p>Adding a card hint illustrates the trade. Its domain type gains a field, the decision function uses it, and the API contract exposes it. Extra output objects, presenters and ring-to-ring mappers would each copy the same field unless they had a distinct responsibility. Quickturn avoids those copies because it currently needs only one presentation shape.</p>
+    <p>カードにヒントを追加する場合を考えると、このトレードオフが見えてきます。ドメインの型にフィールドが一つ増え、判断の関数がそれを使い、APIの契約がそれを公開します。出力用のオブジェクト、プレゼンター、円から円への変換を挟むと、それぞれに独自の責務がない限り、同じフィールドを写すだけの箇所が増えます。Quickturnが今必要としている表示の形は一つだけなので、こうしたコピーを避けています。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When the full ceremony pays</h2>
-    <p>More structure can clarify ownership across teams or support several presentations of one use case. It can also protect an object model from UI data. A report, web page and voice interface may each justify their own presenter.</p>
-    <p>The main cost is often developer attention: more files, names and mappings to update. For Quickturn's small team, a second presentation for the same use case would be a concrete reason to add a presenter. A review should state the adopted dependency rule, the omitted machinery and the condition that would justify adding it.</p>
+    <h2 id="s4"><span class="no">04</span>お作法を一式そろえる価値があるとき</h2>
+    <p>構造を増やすと、チームをまたいだ担当範囲がはっきりしたり、一つのユースケースを複数の形で表示しやすくなったりします。オブジェクトモデルをUIのデータから守る役にも立ちます。レポート、Webページ、音声インターフェースなら、それぞれ専用のプレゼンターを持つ理由があるかもしれません。</p>
+    <p>主なコストは、多くの場合、開発者の注意力です。更新すべきファイル、名前、変換が増えます。Quickturnのような小さなチームでは、同じユースケースに二つ目の表示形式が必要になったときが、プレゼンターを追加する具体的なきっかけになります。レビューでは、採用した依存のルール、省いた仕組み、それを追加すべき条件を示します。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Hexagonal, onion and clean share one rule, the core doesn't depend on technology; classic layering points at the database.</li>
-      <li>Hexagonal emphasizes the application boundary; Clean also describes internal roles such as entities, use cases and interface adapters.</li>
-      <li>A team can adopt the rule without the ceremony, and should say what it left out and why.</li>
+      <li>ヘキサゴナル、オニオン、クリーンには「コアは技術に依存しない」という共通のルールがあり、古典的なレイヤー構成ではデータベースに向かって依存します。</li>
+      <li>ヘキサゴナルはアプリケーションの境界を重視し、クリーンはさらにエンティティ、ユースケース、インターフェースアダプターといった内部の役割まで描きます。</li>
+      <li>お作法を省いてルールだけを取り入れることもでき、その場合は何を省いたのか、なぜ省いたのかを説明できるようにしておきます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch03.html"><span>Previous</span><b>Should every dependency get a port?</b></a>
-    <a class="next" href="ch05.html"><span>Next</span><b>Isn't DDD just another architecture style?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch03.html"><span>前へ</span><b>すべての依存にポートを用意すべきか</b></a>
+    <a class="next" href="ch05.html"><span>次へ</span><b>DDDはアーキテクチャスタイルの一種なのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

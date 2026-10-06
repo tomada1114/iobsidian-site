@@ -1,83 +1,83 @@
-<!-- title: Operations 06 · More unit tests? | accent: think -->
+<!-- title: 運用と品質 06 · 単体テストを増やせばよいか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 6 of 12</span></p>
-  <h1>Is a testing strategy just 'write more unit tests'?</h1>
-  <p class="lead">A save test passes against a mock while the real adapter rejects its commit. Different test boundaries provide different evidence about that failure.</p>
-  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第6章 / 全12章</span></p>
+  <h1>テスト戦略とは「単体テストを増やす」ことなのか</h1>
+  <p class="lead">保存のテストはモックに対しては通るのに、本物のアダプターではコミットが拒否されます。テストの境界をどこに置くかで、この失敗について得られる証拠が変わります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What each test buys</li>
-      <li>Pyramid or trophy</li>
-      <li>Mocks, fakes and recordings</li>
-      <li>When the output isn&#x27;t fixed</li>
+      <li>テストごとに得られるもの</li>
+      <li>ピラミッドかトロフィーか</li>
+      <li>モック、フェイク、記録した応答</li>
+      <li>出力が一つに決まらないとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What each test buys</h2>
-    <p>Line coverage reports execution, not whether an assertion would detect a broken save. Different tests protect different properties. Unit tests check rules, adapter contracts check integration promises, and component tests check screen behavior. Smoke tests check a built path.</p>
-    <p>Quickturn's pure domain makes unit tests cheap and repeatable. Tests at the seams add confidence that those rules are wired to the actual storage and HTTP behavior.</p>
+    <h2 id="s1"><span class="no">01</span>テストごとに得られるもの</h2>
+    <p>行カバレッジからわかるのはコードが実行されたかどうかで、壊れた保存処理をアサーションが検出できるかどうかではありません。テストの種類ごとに、守る性質が違います。単体テストはルールを、アダプターの契約テストは結合部分の約束を、コンポーネントテストは画面の振る舞いを確かめます。スモークテストは、ビルドしたものを通る経路を確かめます。</p>
+    <p>Quickturn のドメインは純粋なので、単体テストは安く、何度でも同じ結果になります。境界部分のテストを足すと、そのルールが実際のストレージや HTTP の振る舞いにつながっているという確信が得られます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Illustrative test placements for speed and confidence about the described behavior. Fast with low confidence: tests built on mocks. Fast with high confidence: tests against a fake checked for the covered contract cases. Slow with low confidence: flaky tests. Slow with high confidence: the smoke test.">
-      <text x="151" y="24" text-anchor="middle" class="t-sm">slow</text>
-      <text x="309" y="24" text-anchor="middle" class="t-sm">fast</text>
-      <text x="8" y="80" class="t-sm">low</text>
-      <text x="8" y="196" class="t-sm">high</text>
+    <svg viewBox="0 0 400 300" role="img" aria-label="速さと、記述した振る舞いについての確信をもとに、テストを置く場所を例示した図。速いが確信の低いもの：モックの上に組んだテスト。速く確信も高いもの：対象の契約ケースで確かめたフェイクに対するテスト。遅く確信の低いもの：不安定なテスト。遅いが確信の高いもの：スモークテスト。">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">遅い</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">速い</text>
+      <text x="8" y="80" class="t-sm">低い</text>
+      <text x="8" y="196" class="t-sm">高い</text>
       <rect x="76" y="36" width="150" height="100" rx="6" class="node"/>
-      <text x="151" y="92" text-anchor="middle">flaky tests</text>
+      <text x="151" y="92" text-anchor="middle">不安定なテスト</text>
       <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
-      <text x="309" y="92" text-anchor="middle">mock-heavy</text>
+      <text x="309" y="92" text-anchor="middle">モック頼み</text>
       <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
-      <text x="151" y="208" text-anchor="middle">smoke test</text>
+      <text x="151" y="208" text-anchor="middle">スモークテスト</text>
       <rect x="234" y="152" width="150" height="100" rx="6" class="node-acc"/>
-      <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">tested fake</text>
+      <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">検証済みフェイク</text>
     </svg>
-    <figcaption>Down is confidence about real behavior. The accented corner shows useful fast tests whose fake matches covered contract cases. Meaningful assertions and other integration evidence remain necessary.</figcaption>
+    <figcaption>下に行くほど、実際の振る舞いについての確信が高くなります。アクセントの角は、対象の契約ケースと一致するフェイクを使った、役に立つ速いテストです。それでも、意味のあるアサーションと、ほかの結合テストの証拠は欠かせません。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Pyramid or trophy</h2>
-    <p>A test pyramid emphasizes many unit tests, while a testing trophy emphasizes static checks and integration. Neither is a fixed quota. The useful balance follows the code's boundaries and failure risks.</p>
+    <h2 id="s2"><span class="no">02</span>ピラミッドかトロフィーか</h2>
+    <p>テストピラミッドは単体テストを多く書くことを重視し、テスティングトロフィーは静的チェックと結合テストを重視します。どちらも決まった配分を定めるものではありません。ちょうどよい釣り合いは、コードの境界と、どこで壊れやすいかで決まります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 268" role="img" aria-label="The pyramid and the trophy use the same four rows: end-to-end, integration, unit and static. The pyramid puts the most weight on unit tests; the trophy puts it on integration tests.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Pyramid</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Trophy</text>
-      <rect x="56" y="40" width="96" height="44" rx="6" class="node"/><text x="104" y="68" text-anchor="middle" class="t-sm">end-to-end</text>
-      <rect x="40" y="96" width="128" height="44" rx="6" class="node"/><text x="104" y="124" text-anchor="middle">integration</text>
-      <rect x="16" y="152" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="180" text-anchor="middle" class="t-hd t-acc">unit</text>
-      <rect x="64" y="208" width="80" height="44" rx="6" class="node-soft"/><text x="104" y="236" text-anchor="middle" class="t-sm">static</text>
-      <rect x="248" y="40" width="96" height="44" rx="6" class="node"/><text x="296" y="68" text-anchor="middle" class="t-sm">end-to-end</text>
-      <rect x="208" y="96" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="124" text-anchor="middle" class="t-hd t-acc">integration</text>
-      <rect x="232" y="152" width="128" height="44" rx="6" class="node"/><text x="296" y="180" text-anchor="middle">unit</text>
-      <rect x="216" y="208" width="160" height="44" rx="6" class="node"/><text x="296" y="236" text-anchor="middle">static</text>
+    <svg viewBox="0 0 400 268" role="img" aria-label="ピラミッドとトロフィーは、E2E、結合、単体、静的という同じ四つの段を使う。ピラミッドは単体テストに最も重みを置き、トロフィーは結合テストに置く。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">ピラミッド</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">トロフィー</text>
+      <rect x="56" y="40" width="96" height="44" rx="6" class="node"/><text x="104" y="68" text-anchor="middle" class="t-sm">E2E</text>
+      <rect x="40" y="96" width="128" height="44" rx="6" class="node"/><text x="104" y="124" text-anchor="middle">結合</text>
+      <rect x="16" y="152" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="180" text-anchor="middle" class="t-hd t-acc">単体</text>
+      <rect x="64" y="208" width="80" height="44" rx="6" class="node-soft"/><text x="104" y="236" text-anchor="middle" class="t-sm">静的</text>
+      <rect x="248" y="40" width="96" height="44" rx="6" class="node"/><text x="296" y="68" text-anchor="middle" class="t-sm">E2E</text>
+      <rect x="208" y="96" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="124" text-anchor="middle" class="t-hd t-acc">結合</text>
+      <rect x="232" y="152" width="128" height="44" rx="6" class="node"/><text x="296" y="180" text-anchor="middle">単体</text>
+      <rect x="216" y="208" width="160" height="44" rx="6" class="node"/><text x="296" y="236" text-anchor="middle">静的</text>
     </svg>
-    <figcaption>Same rows, different weight. Which row deserves the weight depends on where your code keeps its logic.</figcaption>
+    <figcaption>段は同じで、重みが違います。どの段に重みを置くべきかは、コードがロジックをどこに持っているかで決まります。</figcaption>
   </figure>
-    <p>Quickturn separates fast unit and component suites from process automation, built-system smoke tests and container-based DynamoDB tests. Each has an appropriate timeout and prerequisites. A pure unit test hanging for seconds is a different failure from a container taking time to start.</p>
+    <p>Quickturn は、速い単体テストとコンポーネントテストのスイートを、プロセス自動化のテスト、ビルドしたシステムへのスモークテスト、コンテナを使う DynamoDB のテストから分けています。それぞれに合ったタイムアウトと前提条件があります。純粋な単体テストが何秒も止まるのは、コンテナの起動に時間がかかるのとは別の種類の失敗です。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Mocks, fakes and recordings</h2>
-    <p>Mocks assert interactions; fakes provide simpler working behavior; recordings replay known responses. Prefer asserting results where possible, using a fake through the same port as production. Verify that fake against shared contract cases.</p>
-    <p>Interaction assertions can be necessary when the interaction is itself the contract, but should not mirror incidental internal call order. Coverage floors reveal gaps; they do not prove the suite would catch the important defects.</p>
+    <h2 id="s3"><span class="no">03</span>モック、フェイク、記録した応答</h2>
+    <p>モックはやり取りをアサートし、フェイクは単純化した、実際に動く振る舞いを提供し、記録した応答は既知のレスポンスを再生します。できるだけ結果のほうをアサートし、フェイクは本番と同じポートを通して使います。そのフェイクは、共通の契約ケースで検証しておきます。</p>
+    <p>やり取りそのものが契約である場合は、やり取りをアサートする必要もあります。ただし、内部でたまたまそうなっている呼び出し順をなぞるべきではありません。カバレッジの下限は穴を見つける助けにはなりますが、重要な欠陥をスイートが捕まえられることの証明にはなりません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When the output isn't fixed</h2>
-    <p>Nondeterministic model output needs two kinds of evidence. Deterministic tests check parsing, retry behavior, idempotent results and failures with fakes or recordings. Live evaluations estimate agreement with human labels and quality under the current configuration.</p>
-    <p>Both should exercise the production task path. A response recording cannot replace a current quality evaluation, and an evaluation score cannot replace tests of the application's failure handling.</p>
+    <h2 id="s4"><span class="no">04</span>出力が一つに決まらないとき</h2>
+    <p>モデルの出力は一つに決まらないので、2種類の証拠が必要です。決定的なテストでは、フェイクや記録した応答を使って、パース、リトライの振る舞い、冪等な結果、失敗時の動きを確かめます。実際のモデルを使う評価では、今の構成で人手のラベルとどれだけ一致するかと、品質を見積もります。</p>
+    <p>どちらも、本番のタスクと同じ経路を通す必要があります。記録した応答は現在の品質評価の代わりにならず、評価のスコアはアプリケーションの失敗処理のテストの代わりになりません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Each kind of test buys different confidence at a different price; choose the mix by where the risk is.</li>
-      <li>Prefer fakes to mocks, mock only at boundaries, and assert behavior rather than calls.</li>
-      <li>When output isn't fixed, tests check the plumbing and evaluations measure quality.</li>
+      <li>テストの種類ごとに、得られる確信と払う代償が違います。組み合わせは、リスクがどこにあるかで選びます。</li>
+      <li>モックよりフェイクを選び、モックは境界でだけ使い、呼び出しではなく振る舞いをアサートします。</li>
+      <li>出力が一つに決まらないときは、テストで配管を確かめ、評価で品質を測ります。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>How do we see what a model call costs?</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>How do we know the fake database behaves like the real one?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>モデル呼び出しのコストをどう見るか</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>フェイクのデータベースが本物と同じように動くと、どう確かめるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

@@ -1,24 +1,24 @@
-<!-- title: API and TypeScript 03 · Why not another boolean flag | accent: reach -->
+<!-- title: API と TypeScript 03 · フラグでなくユニオン型 | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 3 of 11</span></p>
-  <h1>Why not just add another boolean flag?</h1>
-  <p class="lead">A system flag can appear without a job name, or beside an unrelated learner ID. Optional fields allow combinations that the actor model needs to rule out.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第3章 / 全11章</span></p>
+  <h1>真偽値フラグを足すだけでは、なぜ足りないのか</h1>
+  <p class="lead">システムフラグが立っているのにジョブ名がなかったり、無関係な学習者 ID と並んでいたりすることがあります。省略可能なフィールドを並べた型では、アクターのモデルが排除すべき組み合わせまで表せてしまいます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>A bag of flags</li>
-      <li>One tag, exact fields</li>
-      <li>Exhaustive, and no enums</li>
-      <li>When a union is the wrong shape</li>
+      <li>フラグの寄せ集め</li>
+      <li>タグ一つで、必要なフィールドを決める</li>
+      <li>網羅性チェックと、enum を使わない理由</li>
+      <li>ユニオン型が合わない場合</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>A bag of flags</h2>
-    <p>An actor represented by optional learner ID, system flag, job name and on-behalf-of ID permits many meaningless combinations. A system flag alone does not say which job is running or which learner it serves. Every reader would need to reconstruct those constraints.</p>
-    <p>“Make illegal states unrepresentable” means designing the type around valid alternatives. This improves the model inside checked code; runtime input still requires parsing, and unsafe assertions can bypass it.</p>
+    <h2 id="s1"><span class="no">01</span>フラグの寄せ集め</h2>
+    <p>アクターを、省略可能な学習者 ID、システムフラグ、ジョブ名、代理対象の ID で表すと、意味のない組み合わせがいくつも作れます。システムフラグだけでは、どのジョブが動いているのか、どの学習者のための処理なのかがわかりません。読む側は毎回、こうした制約を頭の中で組み立て直すことになります。</p>
+    <p>「不正な状態を表現できないようにする（Make illegal states unrepresentable）」とは、正しい選択肢を中心に型を設計することです。これで検査済みコードの中のモデルは改善されます。ただし、実行時の入力には引き続きパースが必要で、安全でないアサーションを使えばこの仕組みは迂回されてしまいます。</p>
     <pre><code>type Actor = {
   learnerId?: string;
   isSystem?: boolean;
@@ -26,15 +26,15 @@
   onBehalfOf?: string;
 };</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Optional fields allow combinations that do not describe a valid actor. The union requires the fields for its learner, system or agent alternative.">
-      <text x="96" y="24" text-anchor="middle" class="t-hd">Flag bag</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Union</text>
+    <svg viewBox="0 0 400 300" role="img" aria-label="省略可能なフィールドでは、正しいアクターを表さない組み合わせも作れます。ユニオン型では、学習者・システム・エージェントのそれぞれの選択肢に必要なフィールドが必須になります。">
+      <text x="96" y="24" text-anchor="middle" class="t-hd">フラグの寄せ集め</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">ユニオン型</text>
       <rect x="16" y="40" width="36" height="36" rx="4" class="node"/><rect x="58" y="40" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="40" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="40" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="82" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="82" width="36" height="36" rx="4" class="node"/><rect x="100" y="82" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="82" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="124" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="124" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="124" width="36" height="36" rx="4" class="node"/><rect x="142" y="124" width="36" height="36" rx="4" class="node-soft"/>
       <rect x="16" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="58" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="100" y="166" width="36" height="36" rx="4" class="node-soft"/><rect x="142" y="166" width="36" height="36" rx="4" class="node-soft"/>
-      <text x="96" y="232" text-anchor="middle" class="t-sm">many combinations</text>
-      <text x="96" y="254" text-anchor="middle" class="t-sm">roles may conflict</text>
+      <text x="96" y="232" text-anchor="middle" class="t-sm">組み合わせが多い</text>
+      <text x="96" y="254" text-anchor="middle" class="t-sm">役割が矛盾しうる</text>
       <rect x="200" y="40" width="192" height="162" rx="8" class="node-acc"/>
       <text x="216" y="72" class="t-hd">learner</text>
       <text x="216" y="92" class="t-sm">learnerId</text>
@@ -42,16 +42,16 @@
       <text x="216" y="144" class="t-sm">job, onBehalfOf</text>
       <text x="216" y="176" class="t-hd">agent</text>
       <text x="216" y="194" class="t-sm">onBehalfOf, grants</text>
-      <text x="296" y="232" text-anchor="middle" class="t-sm">3 shapes</text>
-      <text x="296" y="254" text-anchor="middle" class="t-sm">required fields</text>
+      <text x="296" y="232" text-anchor="middle" class="t-sm">形は3つ</text>
+      <text x="296" y="254" text-anchor="middle" class="t-sm">フィールドは必須</text>
     </svg>
-    <figcaption>The flag bag does not encode which fields belong together. The union describes three valid actor alternatives, each with its required fields.</figcaption>
+    <figcaption>フラグの寄せ集めでは、どのフィールドが組になるのかが型に表れません。ユニオン型は、正しいアクターの三つの選択肢を、それぞれの必須フィールドとともに表します。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>One tag, exact fields</h2>
-    <p>Quickturn's actor is a discriminated union. Its <code>kind</code> identifies a learner, a system job or an agent, and each member requires the fields appropriate to that case. Checking the tag narrows the available fields.</p>
-    <p>An agent actor names one learner and carries operation grants. An <code>as const</code> list supplies runtime operation names. Its indexed access type, <code>(typeof LIST)[number]</code>, gives the corresponding static union. The type describes the grants; authorization must still enforce them.</p>
+    <h2 id="s2"><span class="no">02</span>タグ一つで、必要なフィールドを決める</h2>
+    <p>Quickturn のアクターは判別可能なユニオン型です。<code>kind</code> が学習者・システムジョブ・エージェントのどれかを示し、各メンバーはそれぞれに必要なフィールドを必須にしています。タグを検査すると、使えるフィールドが絞り込まれます。</p>
+    <p>エージェントのアクターは、学習者を一人指定し、操作の許可（grants）を持ちます。実行時の操作名は <code>as const</code> を付けた配列で用意し、そのインデックスアクセス型 <code>(typeof LIST)[number]</code> から、対応する静的なユニオン型を得ます。型は許可の内容を表すだけなので、実際に許可を強制するのは認可の処理です。</p>
     <pre><code>type Actor =
   | { kind: "learner"; learnerId: LearnerId }
   | { kind: "system"; job: SystemJob;
@@ -59,7 +59,7 @@
   | { kind: "agent"; onBehalfOf: LearnerId;
       grants: readonly OperationKind[] };</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Actor sits in the center; a learner member with its learner id sits above, and a system member and an agent member sit below, each carrying the one learner it acts for.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="中央に Actor があり、上に学習者 ID を持つ learner メンバー、下に system メンバーと agent メンバーがあります。どのメンバーも、代わりに処理する学習者を一人だけ持ちます。">
       <line x1="200" y1="76" x2="200" y2="118" class="ln"/>
       <line x1="104" y1="182" x2="160" y2="166" class="ln"/>
       <line x1="296" y1="182" x2="240" y2="166" class="ln"/>
@@ -74,14 +74,14 @@
       <rect x="208" y="182" width="176" height="60" rx="6" class="node"/>
       <text x="296" y="208" text-anchor="middle" class="t-hd">agent</text>
       <text x="296" y="230" text-anchor="middle" class="t-sm">onBehalfOf, grants</text>
-      <text x="200" y="280" text-anchor="middle" class="t-sm">every actor serves exactly one learner</text>
+      <text x="200" y="280" text-anchor="middle" class="t-sm">どのアクターも、学習者一人のために動く</text>
     </svg>
-    <figcaption>Every member of the union names one learner. That rule is not a check someone must remember; it's in the shape of the type.</figcaption>
+    <figcaption>ユニオン型のどのメンバーも、学習者を一人指定します。このルールは誰かが覚えておくべきチェックではなく、型の形そのものに含まれています。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Exhaustive, and no enums</h2>
-    <p>An exhaustive switch handles every union member. Assigning the remaining value to <code>never</code> makes a newly added case fail compilation. An exhaustiveness lint rule can serve the same purpose.</p>
+    <h2 id="s3"><span class="no">03</span>網羅性チェックと、enum を使わない理由</h2>
+    <p>網羅的な switch は、ユニオン型のすべてのメンバーを扱います。残った値を <code>never</code> 型に代入しておくと、新しいケースを追加したときにコンパイルが失敗します。網羅性を検査する lint ルールでも、同じ目的を果たせます。</p>
     <pre><code>switch (actor.kind) {
   case "learner": return actor.learnerId;
   case "system":  return actor.onBehalfOf;
@@ -92,42 +92,42 @@
   }
 }</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Adding a union member exposes missing cases in switches checked for exhaustiveness. Those errors identify code that must handle the new alternative.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="ユニオン型にメンバーを追加すると、網羅性を検査している switch で漏れているケースがわかります。そのエラーが、新しい選択肢に対応すべきコードを示します。">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="6" class="dot"/>
       <circle cx="28" cy="256" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Add a member to the union</text>
+      <text x="64" y="46">ユニオン型にメンバーを追加</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Checked switches show gaps</text>
+      <text x="64" y="118">検査対象の switch が漏れを示す</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Each switch handles the new case</text>
+      <text x="64" y="190">各 switch が新しいケースを扱う</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Exhaustive checks pass</text>
+      <text x="64" y="262" class="t-hd">網羅性チェックが通る</text>
     </svg>
-    <figcaption>Exhaustive checks report missing cases at participating switches. Other code paths and the intended behavior still need review and tests.</figcaption>
+    <figcaption>網羅性チェックが漏れを報告するのは、チェックの対象になっている switch だけです。それ以外のコードパスや意図した振る舞いは、引き続きレビューとテストで確かめます。</figcaption>
   </figure>
-    <p>A catch-all default inside controlled code can conceal missing behavior. Across a public API, however, an installed client may receive an alternative added after it shipped, so a safe fallback is necessary.</p>
-    <p>Quickturn uses string unions instead of enums because its runtime relies on erasable TypeScript syntax. Enums can require JavaScript output that a type-stripping runtime does not provide. Exact strings also map directly to JSON.</p>
+    <p>自分たちが管理するコードでは、何でも受け止める default 節が、振る舞いの抜けを隠してしまうことがあります。一方、公開 API の向こう側では、インストール済みのクライアントが、自分のリリース後に追加された選択肢を受け取る可能性があります。そのため、安全なフォールバックが必要です。</p>
+    <p>Quickturn が enum ではなく文字列のユニオン型を使うのは、ランタイムが消去可能な TypeScript 構文を前提にしているためです。enum は JavaScript のコード出力を必要とすることがあり、型を取り除くだけのランタイムはそれを生成しません。特定の文字列なら、そのまま JSON にも対応します。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When a union is the wrong shape</h2>
-    <p>A union is most helpful when cases have different required fields. If nearly every field is shared, use a common shape or base rather than repeat the entire object. A very large union may indicate that several independent concepts have been mixed together.</p>
-    <p>Parse external data into the union before relying on narrowing. Inside one controlled version, use exhaustive handling; across independently deployed clients, allow unknown variants safely. An actor type helps expose missing identity or grants, but the server must derive identity from trusted authentication and check permissions.</p>
+    <h2 id="s4"><span class="no">04</span>ユニオン型が合わない場合</h2>
+    <p>ユニオン型が最も役立つのは、ケースごとに必須フィールドが異なるときです。ほとんどのフィールドが共通なら、オブジェクト全体を繰り返さず、共通の形や基底を使います。ユニオン型が極端に大きくなったら、独立したいくつかの概念が混ざっている兆候かもしれません。</p>
+    <p>絞り込みに頼る前に、外部データをユニオン型へパースします。一つのバージョンで管理しているコードの中では網羅的に扱い、別々にデプロイされるクライアントとのあいだでは、未知の選択肢を安全に受け流せるようにします。アクターの型は、ID や許可の欠落を見つける助けになります。ただし、ID は信頼できる認証からサーバーが導き出し、権限もサーバーが確認しなければなりません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A discriminated union requires the fields for each alternative inside checked code; external input still needs parsing.</li>
-      <li>Exhaustive checks expose missing switch cases; a catch-all branch can conceal behavior that still needs to be added.</li>
-      <li>Inside your code stay exhaustive, but clients of a public API keep a default branch for new cases.</li>
+      <li>判別可能なユニオン型は、検査済みコードの中で、各選択肢に必要なフィールドを必須にします。外部からの入力には引き続きパースが必要です。</li>
+      <li>網羅性チェックは switch のケースの漏れを明らかにします。何でも受け止める分岐は、追加すべき振る舞いを隠してしまうことがあります。</li>
+      <li>自分たちのコードの中では網羅的に扱い、公開 API のクライアントでは新しいケースに備えて default 分岐を残します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch02.html"><span>Previous</span><b>Which compiler flags change how I write code?</b></a>
-    <a class="next" href="ch04.html"><span>Next</span><b>Should a function throw, or return its failure?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch02.html"><span>前へ</span><b>コードの書き方を変えるコンパイラオプションはどれか</b></a>
+    <a class="next" href="ch04.html"><span>次へ</span><b>関数は例外を投げるべきか、失敗を返すべきか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

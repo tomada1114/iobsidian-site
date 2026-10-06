@@ -1,47 +1,47 @@
-<!-- title: AWS Foundation 13 · Keeping learners apart | accent: run -->
+<!-- title: AWS の基礎 13 · 学習者どうしを分ける | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 13 of 14</span></p>
-  <h1>How do we prove one learner can't see another's data?</h1>
-  <p class="lead">Learner B requests learner A’s round ID. Trusted identity, a shared authorization policy and learner-bound stores must keep that request inside B’s ownership.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第13章 / 全14章</span></p>
+  <h1>ある学習者が他人のデータを見られないことを、どう確かめるか</h1>
+  <p class="lead">学習者 B が、学習者 A のラウンド ID を指定してリクエストを送ってきたとします。信頼できる ID、共通の認可ポリシー、学習者に縛ったストアの三つで、このリクエストを B の持ち物の範囲に閉じ込めなければなりません。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Identity enters once</li>
-      <li>One policy, bound stores, one test</li>
-      <li>Silo, pool and bridge</li>
-      <li>Agents follow the same rule</li>
+      <li>ID は入口で一度だけ決める</li>
+      <li>一つのポリシー、縛ったストア、一つのテスト</li>
+      <li>サイロ、プール、ブリッジ</li>
+      <li>エージェントも同じルールに従う</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Identity enters once</h2>
-    <p>Signing in identifies a caller but does not stop a handler from accidentally reading another learner's record. Quickturn derives identity once at the verified request edge and builds a context with actor, learner, time and request ID.</p>
+    <h2 id="s1"><span class="no">01</span>ID は入口で一度だけ決める</h2>
+    <p>サインインで呼び出し元はわかりますが、それだけでは、ハンドラーがうっかりほかの学習者のレコードを読むことは防げません。Quickturn は、検証を済ませたリクエストの入口で一度だけ ID を導き出し、操作者、学習者、時刻、リクエスト ID を持つコンテキストを組み立てます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 392" role="img" aria-label="A request comes in at the top, is authenticated once at the edge, becomes a request context with an actor, passes one authorize check, gets a store bound to one learner, and can only reach keys inside that learner's partition.">
+    <svg viewBox="0 0 400 392" role="img" aria-label="リクエストが上から届き、入口で一度だけ認証され、操作者を持つリクエストのコンテキストになり、一つの authorize の確認を通り、一人の学習者に縛ったストアを受け取る。そのストアが届くのは、その学習者のパーティション内のキーだけになる。">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="48">Request arrives</text>
+      <text x="32" y="48">リクエストが届く</text>
       <rect x="16" y="76" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="108">Authenticate once, at the edge</text>
+      <text x="32" y="108">入口で一度だけ認証する</text>
       <rect x="16" y="136" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="168">Request context and actor</text>
+      <text x="32" y="168">リクエストのコンテキストと操作者</text>
       <rect x="16" y="196" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="228">authorize(actor, operation)</text>
       <rect x="16" y="256" width="368" height="52" rx="6" class="node-acc"/>
-      <text x="32" y="288" class="t-hd t-acc">Store bound to one learner</text>
+      <text x="32" y="288" class="t-hd t-acc">一人の学習者に縛ったストア</text>
       <rect x="16" y="316" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="348">Keys in that learner's partition</text>
+      <text x="32" y="348">その学習者のパーティション内のキー</text>
     </svg>
-    <figcaption>Each layer narrows what the next can do. By the time code touches the table, it can only reach one learner's items.</figcaption>
+    <figcaption>各層が、次の層にできることを狭めていきます。コードがテーブルに触れる時点では、一人の学習者のアイテムにしか届きません。</figcaption>
   </figure>
-    <p>The owned learner ID does not come from a body, path or model-written tool argument. Commands receive a trusted context identifying a learner, a scoped system job or an agent with grants. Any requested record ID remains subject to that ownership context.</p>
+    <p>データの持ち主となる学習者の ID は、リクエストのボディやパス、モデルが書いたツールの引数からは取りません。コマンドは、学習者、範囲を限ったシステムのジョブ、権限を付与されたエージェントのいずれかを示す、信頼できるコンテキストを受け取ります。要求されたレコードの ID は、どれもその所有のコンテキストの制約を受けます。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>One policy, bound stores, one test</h2>
-    <p>One authorization function checks actor and operation. Agents receive only their explicit grants and no broader authority than the learner. The application obtains a learner-bound store whose methods do not accept another arbitrary learner ID.</p>
+    <h2 id="s2"><span class="no">02</span>一つのポリシー、縛ったストア、一つのテスト</h2>
+    <p>一つの認可関数が、操作者と操作を確かめます。エージェントが受け取るのは明示的に付与された権限だけで、学習者本人より広い権限は持ちません。アプリが受け取るのは学習者に縛ったストアで、そのメソッドは別の任意の学習者 ID を受け付けません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Write learner A's data, read everything as learner B, expect nothing, write the same keys as B, and check that A's data is unchanged.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="学習者 A のデータを書き込み、学習者 B としてすべての読み取りを呼び、何も返らないことを期待し、B として同じキーに書き込み、A のデータが変わっていないことを確かめる。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -49,61 +49,61 @@
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Write A's data</text>
+      <text x="64" y="46">A のデータを書き込む</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Call every read as B</text>
+      <text x="64" y="118">B としてすべての読み取りを呼ぶ</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Expect nothing</text>
+      <text x="64" y="190">何も返らないことを期待する</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Write the same keys as B</text>
+      <text x="64" y="262">B として同じキーに書き込む</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">A's data unchanged</text>
+      <text x="64" y="334" class="t-hd">A のデータは変わらない</text>
     </svg>
-    <figcaption>These cases test read and write isolation for the operations exercised. Each new store method or authorization path must preserve the same ownership boundary.</figcaption>
+    <figcaption>これらのケースは、試した操作について読み書きの分離をテストします。ストアのメソッドや認可の経路を新しく追加するたびに、同じ所有の境界を守る必要があります。</figcaption>
   </figure>
-    <p>The adapter includes that learner key in every operation. Another learner's round appears absent, commonly returning 404 without confirming its existence. Contract tests exercise read and write isolation for in-memory and DynamoDB stores, and HTTP tests repeat the scenario with distinct tokens.</p>
-    <p>A bound interface reduces opportunities to omit ownership checks. Every method and future change still needs tests. Passing today’s contract suite provides evidence for the covered cases, rather than proving every possible behavior.</p>
+    <p>アダプターは、すべての操作にその学習者のキーを含めます。ほかの学習者のラウンドは存在しないものとして扱われ、多くの場合は、存在するかどうかを明かさずに 404 を返します。契約テストは、インメモリと DynamoDB の両方のストアで読み書きの分離を確かめ、HTTP のテストでは別々のトークンを使って同じシナリオを繰り返します。</p>
+    <p>縛ったインターフェースを使えば、所有の確認を書き忘れる機会は減ります。それでも、すべてのメソッドと今後の変更にはテストが必要です。今日の契約テストに通ることは、対象にしたケースについての証拠にはなりますが、ありうるすべての振る舞いを証明するものではありません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Silo, pool and bridge</h2>
-    <p>Silo isolation gives tenants separate resources; pool isolation shares resources with tenant keys; bridge designs mix these choices. Thousands of small learners can favor a shared table, while a few large customers may need dedicated resources.</p>
+    <h2 id="s3"><span class="no">03</span>サイロ、プール、ブリッジ</h2>
+    <p>サイロ型の分離では、テナントごとに別々のリソースを持たせます。プール型の分離では、リソースを共有し、テナントのキーで分けます。ブリッジ型の設計は、この二つを組み合わせます。小さな学習者が何千人もいるなら共有のテーブルが向き、少数の大口の顧客には専用のリソースが必要になることもあります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="In the silo model the boundary is separate resources, cost per tenant is high, separate resources can reduce a bug’s reach when permissions preserve that boundary; in the pool model the boundary is a key in shared resources, cost per tenant is low, a bug can reach every tenant, and contract tests exercise the learner-key boundary.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Silo</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Pool</text>
-      <text x="16" y="56" class="t-sm">Where the boundary lives</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">own resources</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a key in each item</text>
-      <text x="16" y="136" class="t-sm">Cost per tenant</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">high</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">low</text>
-      <text x="16" y="216" class="t-sm">What a bug can reach</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">limited by access</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">every tenant</text>
-      <text x="16" y="296" class="t-sm">What to check</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">layout and access</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">a contract test</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="サイロ型では境界は別々のリソースで、テナントあたりの費用は高い。権限がその境界を保っていれば、別々のリソースはバグが届く範囲を狭められる。プール型では境界は共有リソースの中のキーで、テナントあたりの費用は低く、バグはすべてのテナントに届きうる。契約テストで学習者のキーの境界を確かめる。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">サイロ</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">プール</text>
+      <text x="16" y="56" class="t-sm">境界の置き場所</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">専用のリソース</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">各アイテムのキー</text>
+      <text x="16" y="136" class="t-sm">テナントあたりの費用</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">高い</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">低い</text>
+      <text x="16" y="216" class="t-sm">バグが届く範囲</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">アクセス権で限定</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">全テナント</text>
+      <text x="16" y="296" class="t-sm">確かめること</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">配置とアクセス権</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">契約テスト</text>
     </svg>
-    <figcaption>Pool shares resources, so trusted key construction and authorization carry the learner boundary. Tests provide evidence for those paths and must grow with the interface.</figcaption>
+    <figcaption>プール型はリソースを共有するので、学習者の境界を担うのは、信頼できるキーの組み立てと認可です。テストはそれらの経路についての証拠になり、インターフェースが増えればテストも増やす必要があります。</figcaption>
   </figure>
-    <p>Quickturn's API uses one AWS execution role, so IAM alone does not distinguish each learner's application requests. The tenant boundary is enforced by trusted identity, authorization and key construction in code. Separate resources would add operations without removing all application-level obligations.</p>
+    <p>Quickturn の API は AWS の実行ロールを一つしか使わないので、IAM だけでは、学習者ごとのアプリのリクエストを区別できません。テナントの境界を守っているのは、コードの中の信頼できる ID、認可、キーの組み立てです。リソースを分ければ運用の手間が増えますが、アプリのレベルで果たすべき責任がすべてなくなるわけではありません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Agents follow the same rule</h2>
-    <p>The tutor follows the same ownership rule. Its tools do not accept a learner ID supplied by the model, and their granted operations remain narrow. Prompt injection cannot change the identity simply by changing a tool argument.</p>
-    <p>That limits cross-learner access; it does not eliminate harmful actions within allowed operations or disclosure of the current learner's data. Cross-learner administrative work uses a distinct, clearly named interface so its broader reach is visible and reviewable.</p>
+    <h2 id="s4"><span class="no">04</span>エージェントも同じルールに従う</h2>
+    <p>チューターも同じ所有のルールに従います。そのツールはモデルが渡した学習者 ID を受け付けず、許可された操作も狭く保たれています。プロンプトインジェクションでツールの引数を書き換えても、それだけで ID を変えることはできません。</p>
+    <p>これで学習者をまたぐアクセスは制限できますが、許可された操作の範囲内での有害な動作や、現在の学習者自身のデータの漏えいまでは防げません。学習者をまたぐ管理作業には、名前ではっきり区別した専用のインターフェースを使い、その広い影響範囲が見えて、レビューできるようにします。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Resolve identity once at the edge, and let one authorize function decide what each actor may do.</li>
-      <li>Hand out stores already bound to one learner, and test read and write isolation on every store.</li>
-      <li>Trusted identity, authorization and key construction enforce pooled access. Tests provide evidence for covered paths; agents use trusted session identity.</li>
+      <li>ID は入口で一度だけ決め、各操作者に何を許すかは一つの authorize 関数に判断させます。</li>
+      <li>最初から一人の学習者に縛ったストアを渡し、すべてのストアで読み書きの分離をテストします。</li>
+      <li>共有したアクセスを守るのは、信頼できる ID、認可、キーの組み立てです。テストは対象にした経路の証拠になり、エージェントは信頼できるセッションの ID を使います。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch12.html"><span>Previous</span><b>Where should a web app keep its tokens?</b></a>
-    <a class="next" href="ch14.html"><span>Next</span><b>How much will this cost if nobody uses it?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch12.html"><span>前へ</span><b>Web アプリはトークンをどこに置くべきか</b></a>
+    <a class="next" href="ch14.html"><span>次へ</span><b>誰も使わないとき、いくらかかるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成。</p>
 </div>

@@ -1,94 +1,94 @@
-<!-- title: Operations 07 · A fake you can trust | accent: think -->
+<!-- title: 運用と品質 07 · 信頼できるフェイク | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 7 of 12</span></p>
-  <h1>How do we know the fake database behaves like the real one?</h1>
-  <p class="lead">The in-memory store accepts a stale update that production rejects. A shared contract makes both adapters answer the same cases and exposes that disagreement.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第7章 / 全12章</span></p>
+  <h1>フェイクのデータベースが本物と同じように動くと、どう確かめるか</h1>
+  <p class="lead">インメモリのストアは、本番なら拒否される古い更新を受け入れてしまいます。共通の契約を置けば、二つのアダプターが同じケースに答えることになり、この食い違いが表に出ます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>When a fake lies</li>
-      <li>The contract suite</li>
-      <li>Isolation as a contract</li>
-      <li>What it still doesn&#x27;t prove</li>
+      <li>フェイクが本物と食い違うとき</li>
+      <li>契約スイート</li>
+      <li>分離も契約の一部</li>
+      <li>それでも証明できないこと</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>When a fake lies</h2>
-    <p>An in-memory store can accept a commit that DynamoDB rejects, making fast tests falsely reassuring about that case. The fake remains valuable, but its behavior needs a stated contract rather than a separate interpretation of database documentation.</p>
-    <p>Quickturn exposes storage through a port. Shared tests describe what each implementation must accept, reject and return.</p>
+    <h2 id="s1"><span class="no">01</span>フェイクが本物と食い違うとき</h2>
+    <p>インメモリのストアは、DynamoDB なら拒否するコミットを受け入れることがあります。そうなると、速いテストがそのケースについて誤った安心を与えます。フェイクの価値がなくなるわけではありませんが、データベースのドキュメントを実装ごとに解釈するのではなく、振る舞いを契約として明文化しておく必要があります。</p>
+    <p>Quickturn は、ストレージをポートの向こう側に置いています。各実装が何を受け入れ、何を拒否し、何を返すべきかは、共通のテストが記述します。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The contract suite</h2>
-    <p>A contract-suite function receives a store factory and runs the same cases for each adapter. It checks version creation, stale updates, transaction atomicity and duplicate answer behavior.</p>
+    <h2 id="s2"><span class="no">02</span>契約スイート</h2>
+    <p>契約スイートの関数はストアのファクトリーを受け取り、アダプターごとに同じケースを実行します。確かめるのは、バージョンの作成、古い更新、トランザクションの原子性、重複した回答の扱いです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="The contract suite, written once, in the center. Around it: the in-memory store, run in every test run; the DynamoDB store on DynamoDB local, run in CI; and any new implementation, which adds one more call.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="中央に一度だけ書く契約スイートがある。その周りに、テストのたびに実行するインメモリのストア、CI で DynamoDB local に対して実行する DynamoDB のストア、そして呼び出しを一つ足すだけで加わる新しい実装がある。">
       <line x1="200" y1="166" x2="104" y2="48" class="ln"/>
       <line x1="200" y1="166" x2="296" y2="48" class="ln"/>
       <line x1="200" y1="166" x2="200" y2="284" class="ln"/>
       <rect x="16" y="20" width="176" height="56" rx="6" class="node"/>
-      <text x="104" y="44" text-anchor="middle">in-memory</text>
-      <text x="104" y="64" text-anchor="middle" class="t-sm">every test run</text>
+      <text x="104" y="44" text-anchor="middle">インメモリ</text>
+      <text x="104" y="64" text-anchor="middle" class="t-sm">テストのたびに</text>
       <rect x="208" y="20" width="176" height="56" rx="6" class="node"/>
       <text x="296" y="44" text-anchor="middle">DynamoDB local</text>
-      <text x="296" y="64" text-anchor="middle" class="t-sm">in CI</text>
+      <text x="296" y="64" text-anchor="middle" class="t-sm">CI で</text>
       <rect x="96" y="256" width="208" height="56" rx="6" class="node-soft"/>
-      <text x="200" y="280" text-anchor="middle">a new store</text>
-      <text x="200" y="300" text-anchor="middle" class="t-sm">one more call</text>
+      <text x="200" y="280" text-anchor="middle">新しいストア</text>
+      <text x="200" y="300" text-anchor="middle" class="t-sm">呼び出しを一つ足す</text>
       <rect x="104" y="136" width="192" height="60" rx="8" class="node-acc"/>
-      <text x="200" y="164" text-anchor="middle" class="t-hd t-acc">contract suite</text>
-      <text x="200" y="184" text-anchor="middle" class="t-sm">written once</text>
+      <text x="200" y="164" text-anchor="middle" class="t-hd t-acc">契約スイート</text>
+      <text x="200" y="184" text-anchor="middle" class="t-sm">一度だけ書く</text>
     </svg>
-    <figcaption>The center is written once. Each store around it earns trust by passing the same cases.</figcaption>
+    <figcaption>中央は一度だけ書きます。周りの各ストアは、同じケースに通ることで信頼を得ます。</figcaption>
   </figure>
-    <p>The fake also enforces the application's commit limits. DynamoDB's action and size limits and restrictions on repeated item targets are separate conditions that must be represented where relevant.</p>
+    <p>フェイクは、アプリケーションが決めたコミットの上限も守らせます。DynamoDB のアクション数やサイズの上限、同じ項目を一度に複数回対象にできない制限は別の条件で、関係する箇所ではそれも表現しておく必要があります。</p>
 <dl class="terms">
-  <dt>Accepts a 101-item commit?</dt><dd>Without a contract: maybe. With one: refused, like DynamoDB.</dd>
-  <dt>Accepts a stale update?</dt><dd>Without a contract: maybe. With one: refused.</dd>
-  <dt>Lets B read A's data?</dt><dd>Without a contract: nobody checked. With one: tested empty for the covered reads.</dd>
+  <dt>101件のコミットを受け入れるか</dt><dd>契約なし：受け入れるかもしれない。契約あり：DynamoDB と同じく拒否する。</dd>
+  <dt>古い更新を受け入れるか</dt><dd>契約なし：受け入れるかもしれない。契約あり：拒否する。</dd>
+  <dt>B が A のデータを読めるか</dt><dd>契約なし：誰も確かめていない。契約あり：対象の読み取りで何も返らないことをテストしている。</dd>
 </dl>
-    <p>The in-memory suite runs quickly; the DynamoDB suite runs against a pinned local service in CI. A future adapter invokes the same test function rather than copy-pasting a weaker suite. New failure cases improve both implementations.</p>
+    <p>インメモリのスイートはすぐに終わり、DynamoDB のスイートは CI で、バージョンを固定したローカルのサービスに対して走ります。将来のアダプターは、弱いスイートをコピーして作るのではなく、同じテスト関数を呼び出します。新しい失敗ケースを足せば、両方の実装がよくなります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Isolation as a contract</h2>
-    <p>Isolation cases write as learner A and try each read as B. Then B uses the same record IDs without changing A’s data. Compile-time coverage of the method list helps ensure that a new method cannot silently escape the suite.</p>
+    <h2 id="s3"><span class="no">03</span>分離も契約の一部</h2>
+    <p>分離のケースでは、学習者 A としてデータを書き込み、B として各読み取りを試します。続いて B が同じレコード ID を使っても、A のデータが変わらないことを確かめます。メソッドの一覧をコンパイル時に網羅しておけば、新しいメソッドが気づかれないままスイートから漏れることを防げます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of the caller down and whose data across. Learner A reading A's data finds it; learner B reading B's data finds it; learner A reading B's data, and learner B reading A's data, find nothing.">
-      <text x="151" y="24" text-anchor="middle" class="t-sm">A's data</text>
-      <text x="309" y="24" text-anchor="middle" class="t-sm">B's data</text>
-      <text x="8" y="80" class="t-sm">as A</text>
-      <text x="8" y="196" class="t-sm">as B</text>
+    <svg viewBox="0 0 400 300" role="img" aria-label="縦が呼び出す人、横が誰のデータかの表。学習者 A が A のデータを読むと見つかり、B が B のデータを読むと見つかる。A が B のデータを読んでも、B が A のデータを読んでも、何も見つからない。">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">A のデータ</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">B のデータ</text>
+      <text x="8" y="80" class="t-sm">A が</text>
+      <text x="8" y="196" class="t-sm">B が</text>
       <rect x="76" y="36" width="150" height="100" rx="6" class="node"/>
-      <text x="151" y="92" text-anchor="middle">found</text>
+      <text x="151" y="92" text-anchor="middle">見つかる</text>
       <rect x="234" y="36" width="150" height="100" rx="6" class="node-acc"/>
-      <text x="309" y="92" text-anchor="middle" class="t-hd t-acc">nothing</text>
+      <text x="309" y="92" text-anchor="middle" class="t-hd t-acc">何もない</text>
       <rect x="76" y="152" width="150" height="100" rx="6" class="node-acc"/>
-      <text x="151" y="208" text-anchor="middle" class="t-hd t-acc">nothing</text>
+      <text x="151" y="208" text-anchor="middle" class="t-hd t-acc">何もない</text>
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
-      <text x="309" y="208" text-anchor="middle">found</text>
+      <text x="309" y="208" text-anchor="middle">見つかる</text>
     </svg>
-    <figcaption>The isolation cases expect these cross-learner reads to return nothing. The method list ensures each adapter’s exposed reads participate in that check.</figcaption>
+    <figcaption>分離のケースでは、学習者をまたぐこれらの読み取りが何も返さないことを期待します。メソッドの一覧によって、各アダプターが公開する読み取りがすべてこの確認に加わります。</figcaption>
   </figure>
-    <p>This makes ownership a tested store property as well as a review concern. The results provide evidence for covered methods and cases. Production configuration and future code still need checks for possible data leaks.</p>
+    <p>これで、誰のデータかという区別は、レビューで気をつける点であるだけでなく、テストで確かめたストアの性質にもなります。ただし結果が証拠になるのは、対象のメソッドとケースについてだけです。本番の設定や今後のコードについては、データ漏えいの可能性を別に確かめる必要があります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What it still doesn't prove</h2>
-    <p>DynamoDB Local does not reproduce every cloud behavior, such as IAM or point-in-time recovery. Those need other tests or deployment checks. If the required container is unavailable, the integration suite fails with a useful prerequisite message instead of skipping and appearing green.</p>
-    <p>A shared contract is particularly valuable when several implementations claim the same semantics. Consumer-driven API contracts use a related idea: consumers state expectations and providers verify them. The precise test boundary and remaining gaps must be explicit.</p>
+    <h2 id="s4"><span class="no">04</span>それでも証明できないこと</h2>
+    <p>DynamoDB Local は、IAM やポイントインタイムリカバリーのような、クラウドの振る舞いをすべて再現するわけではありません。そうした部分には、別のテストやデプロイ時のチェックが必要です。必要なコンテナが使えないとき、結合テストのスイートはスキップして緑に見せるのではなく、前提条件をわかりやすく伝えるメッセージとともに失敗します。</p>
+    <p>共通の契約が特に役立つのは、複数の実装が同じ意味を持つと主張するときです。コンシューマー駆動の API 契約も近い考え方で、利用する側が期待を述べ、提供する側がそれを検証します。どちらの場合も、テストの境界がどこにあり、何がまだ確かめられていないのかを明示しておく必要があります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A contract suite writes a port's promises once and runs them against every implementation.</li>
-      <li>Shared contract cases support confidence in a fake’s covered behavior; each application test still needs meaningful assertions.</li>
-      <li>Isolation is a contract case, and DynamoDB local is still not the real service.</li>
+      <li>契約スイートは、ポートの約束を一度だけ書き、すべての実装に対して実行します。</li>
+      <li>共通の契約ケースがあれば、対象となる振る舞いについてフェイクを信頼できます。それでも、アプリケーションの各テストには意味のあるアサーションが必要です。</li>
+      <li>分離も契約のケースの一つです。DynamoDB local は、本物のサービスではありません。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch06.html"><span>Previous</span><b>Is a testing strategy just 'write more unit tests'?</b></a>
-    <a class="next" href="ch08.html"><span>Next</span><b>How do you test things that aren't plain code?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch06.html"><span>前へ</span><b>テスト戦略とは「単体テストを増やす」ことなのか</b></a>
+    <a class="next" href="ch08.html"><span>次へ</span><b>コードではないものをどうテストするか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

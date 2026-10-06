@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>API and TypeScript 08 · Change an API without breaking</title>
+<title>API と TypeScript 08 · 壊さずに API を変える</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API &amp; TypeScript">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API と TypeScript">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>API &amp; TypeScript</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">API と TypeScript</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,21 +365,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
-  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：API と TypeScript pages">
+  <h2><a href="ch00.html">エンジニアリング読本：API と TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Which compiler flags matter</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Why not another boolean flag</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Should a function throw</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>Trust nothing at the boundary</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>REST, GraphQL or RPC</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Where the API contract lives</span></a></li>
-    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>Change an API without breaking</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>The same request twice</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Offline when the server rules</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>Why a static SPA</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>実行時に消える型</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>効くコンパイラオプション</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>フラグでなくユニオン型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>例外か、失敗を返すか</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>境界で一度だけパース</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>REST・GraphQL・RPC</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>API 契約のありか</span></a></li>
+    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>壊さずに API を変える</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>同じリクエストが二度</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>オフラインとサーバーのルール</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>静的 SPA を選ぶ理由</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -394,25 +394,25 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 8 of 11</span></p>
-  <h1>How do you change an API without breaking old apps?</h1>
-  <p class="lead">The server removes a response field that the current web app no longer reads. An installed phone app may still depend on it.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第8章 / 全11章</span></p>
+  <h1>古いアプリを壊さずに API を変えるには</h1>
+  <p class="lead">現在の Web アプリがもう読んでいないレスポンスのフィールドを、サーバーから削除したとします。インストール済みのスマートフォンアプリは、まだそのフィールドに依存しているかもしれません。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Codes, not messages</li>
-      <li>Additive only inside /v1</li>
-      <li>Deprecate, then version</li>
-      <li>What the discipline costs</li>
+      <li>メッセージではなくコードで</li>
+      <li>/v1 の中では追加だけ</li>
+      <li>非推奨にしてから、バージョンを上げる</li>
+      <li>互換性を守るコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Codes, not messages</h2>
-    <p>Installed apps update independently of the server. Removing a duplicate response field can break an older client even if the current web app no longer reads it. The API must account for those deployed consumers.</p>
-    <p>Errors illustrate the contract: a stable code directs program behavior, while a message explains it to a person. Clients retain a generic fallback for codes introduced after they shipped. Retry behavior follows the documented error category rather than message text.</p>
+    <h2 id="s1"><span class="no">01</span>メッセージではなくコードで</h2>
+    <p>インストール済みのアプリは、サーバーとは別のタイミングで更新されます。重複したレスポンスのフィールドを削除すると、現在の Web アプリがもう読んでいなくても、古いクライアントが壊れることがあります。API は、すでに配布されている利用者のことも考えなければなりません。</p>
+    <p>エラーはこの契約のよい例です。安定したコードはプログラムの振る舞いを決め、メッセージは人に向けて状況を説明します。クライアントは、自分のリリース後に追加されたコードに備えて、汎用のフォールバックを残しておきます。リトライするかどうかも、メッセージの文面ではなく、ドキュメントに定めたエラーの分類で決めます。</p>
     <pre><code>{ "error": {
     "code": "ERR_ROUND_CLOSED",
     "message": "This round is already finished." } }
@@ -424,44 +424,44 @@ switch (error.code) {
 }</code></pre>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Additive only inside /v1</h2>
-    <p>Quickturn uses additive changes within <code>/v1</code>. A tolerant reader ignores response fields it does not need, so adding one is often compatible. Renaming or removing an existing field changes what an old client can read.</p>
+    <h2 id="s2"><span class="no">02</span>/v1 の中では追加だけ</h2>
+    <p>Quickturn は、<code>/v1</code> の中では追加による変更だけを行います。寛容な読み手（tolerant reader）は必要のないレスポンスのフィールドを無視するので、フィールドを追加しても互換性が保たれる場合が多くあります。既存のフィールドの名前を変えたり削除したりすると、古いクライアントが読めるものが変わってしまいます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="A tolerant old client accepts an extra response field. Renaming a field removes data the client still expects.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Additive</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Breaking</text>
-      <text x="16" y="56" class="t-sm">The change</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">a new field</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a renamed field</text>
-      <text x="16" y="136" class="t-sm">The old app reads</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">what it knows</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">nothing</text>
-      <text x="16" y="216" class="t-sm">Result</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">keeps working</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">fails</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="寛容な古いクライアントは、レスポンスに追加されたフィールドを受け入れます。フィールドの名前を変えると、クライアントがまだ必要としているデータがなくなります。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">追加</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">破壊的変更</text>
+      <text x="16" y="56" class="t-sm">変更の内容</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">新しいフィールド</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">フィールド名の変更</text>
+      <text x="16" y="136" class="t-sm">古いアプリが読めるもの</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">既知のフィールド</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">何もない</text>
+      <text x="16" y="216" class="t-sm">結果</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">動き続ける</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">失敗する</text>
     </svg>
-    <figcaption>In this example, the tolerant client accepts the extra field. Renaming the field removes data it still expects.</figcaption>
+    <figcaption>この例では、寛容なクライアントは追加されたフィールドを受け入れます。フィールドの名前を変えると、クライアントがまだ必要としているデータがなくなります。</figcaption>
   </figure>
-    <p>The compatibility table distinguishes changes that only appear additive from those existing clients can actually accept.</p>
+    <p>次の表では、一見追加に見えるだけの変更と、既存のクライアントが実際に受け入れられる変更を区別しています。</p>
   <div class="tbl"><table>
-    <thead><tr><th>Change</th><th>Safe in /v1?</th><th>Why</th></tr></thead>
+    <thead><tr><th>変更</th><th>/v1 で安全か</th><th>理由</th></tr></thead>
     <tbody>
-      <tr><td class="key">New endpoint</td><td>Usually</td><td>Old apps do not call it</td></tr>
-      <tr><td class="key">New optional request field</td><td>Usually</td><td>Existing request behavior remains accepted</td></tr>
-      <tr><td class="key">New response field</td><td>If tolerant</td><td>Old apps must accept unknown fields</td></tr>
-      <tr><td class="key">Remove or rename a field</td><td>No</td><td>Old apps read nothing</td></tr>
-      <tr><td class="key">Change what a field means</td><td>No</td><td>Old apps read it wrongly</td></tr>
-      <tr><td class="key">Make an optional field required</td><td>No</td><td>Old requests are refused</td></tr>
-      <tr><td class="key">New value in a closed list</td><td>No</td><td>Exhaustive clients break</td></tr>
+      <tr><td class="key">エンドポイントの追加</td><td>通常は安全</td><td>古いアプリは呼ばない</td></tr>
+      <tr><td class="key">省略可能なリクエストフィールドの追加</td><td>通常は安全</td><td>既存のリクエストは引き続き受け付けられる</td></tr>
+      <tr><td class="key">レスポンスフィールドの追加</td><td>寛容なら安全</td><td>古いアプリが未知のフィールドを受け入れる必要がある</td></tr>
+      <tr><td class="key">フィールドの削除・名前の変更</td><td>安全でない</td><td>古いアプリが何も読めない</td></tr>
+      <tr><td class="key">フィールドの意味の変更</td><td>安全でない</td><td>古いアプリが誤って読む</td></tr>
+      <tr><td class="key">省略可能なフィールドを必須にする</td><td>安全でない</td><td>古いリクエストが拒否される</td></tr>
+      <tr><td class="key">閉じた選択肢への値の追加</td><td>安全でない</td><td>網羅的に扱うクライアントが壊れる</td></tr>
     </tbody>
   </table></div>
-    <p>Making a previously optional request field required can reject older apps that never sent it. Adding a union variant may also break a generated client that assumes its known set is complete. Keep response schemas and generated consumers open where future extensions are intended, and test compatibility with real consumer behavior.</p>
+    <p>以前は省略可能だったリクエストのフィールドを必須にすると、それを送ってこなかった古いアプリが拒否されることがあります。ユニオン型に選択肢を追加した場合も、既知の集合が完全だと想定している生成クライアントが壊れる可能性があります。将来の拡張を想定している箇所では、レスポンスのスキーマと、生成される利用側のコードを開いた形にしておき、実際の利用側の振る舞いで互換性をテストします。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Deprecate, then version</h2>
-    <p>A duplicate field can be marked deprecated while continuing to serve its existing value. The document names the replacement. Removal belongs in a breaking version, with the earlier version supported for an explicit deprecation period.</p>
+    <h2 id="s3"><span class="no">03</span>非推奨にしてから、バージョンを上げる</h2>
+    <p>重複したフィールドは、既存の値を返し続けたまま非推奨としてマークできます。ドキュメントには代わりのフィールドを書きます。削除は破壊的なバージョンで行い、以前のバージョンは、明示した非推奨期間のあいだサポートを続けます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="The field is marked deprecated in v1, v2 ships without it, v1 traffic is watched as it falls, the deprecation window ends, and only then is v1 retired and the field removed.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="v1 でフィールドを非推奨にし、そのフィールドを含まない v2 をリリースします。v1 のトラフィックが減っていくのを観察し、非推奨期間が終わってから、ようやく v1 を廃止してフィールドを削除します。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -469,38 +469,38 @@ switch (error.code) {
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Mark the field deprecated in /v1</text>
+      <text x="64" y="46">/v1 でフィールドを非推奨にする</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Ship /v2 without it</text>
+      <text x="64" y="118">フィールドなしの /v2 をリリース</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Watch /v1 traffic fall</text>
+      <text x="64" y="190">/v1 のトラフィック減少を見守る</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">The window ends</text>
+      <text x="64" y="262">非推奨期間が終わる</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Removed only after the window</text>
+      <text x="64" y="334" class="t-hd">削除は期間が終わってから</text>
     </svg>
-    <figcaption>Removal is the last step, not the first. Each step before it gives installed apps time to move.</figcaption>
+    <figcaption>削除は最初ではなく最後の手順です。その前の各手順が、インストール済みのアプリに移行の時間を与えます。</figcaption>
   </figure>
-    <p>Deprecation and Sunset response headers communicate status and a planned end date. Usage observations reveal which consumers still depend on the old contract. Choose the window with installed clients in mind, and verify generator support rather than assume every generated client displays a warning.</p>
+    <p>Deprecation と Sunset のレスポンスヘッダーで、非推奨であることと終了予定日を伝えます。利用状況を観察すれば、どの利用者がまだ古い契約に依存しているかがわかります。期間はインストール済みのクライアントを念頭に置いて決めます。また、生成されたクライアントがすべて警告を表示すると決めつけず、ジェネレーターの対応状況を確かめます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What the discipline costs</h2>
-    <p>Compatibility discipline slows cleanup: a poor name may remain until a major change, and parallel versions cost code, tests and attention. Reviewing the contract before release is cheaper than repairing a promise afterward.</p>
-    <p>Path versions are visible and simple, while headers or media types can carry versions too. Problem Details is a standardized alternative error format. Whichever format is chosen, stable machine fields and safe fallbacks matter more than whether a response envelope looks fashionable.</p>
+    <h2 id="s4"><span class="no">04</span>互換性を守るコスト</h2>
+    <p>互換性を守る規律は、整理を遅らせます。よくない名前がメジャーな変更まで残ることもありますし、複数のバージョンを並行して持てば、コード、テスト、注意力のコストがかかります。それでも、リリース前に契約をレビューするほうが、あとから約束を修復するより安く済みます。</p>
+    <p>パスにバージョンを入れる方法は目に見えてわかりやすく、ヘッダーやメディアタイプでバージョンを伝えることもできます。Problem Details は、標準化された別のエラー形式です。どの形式を選ぶにしても、レスポンスの外枠が流行りの形かどうかより、機械が読む安定したフィールドと安全なフォールバックのほうが重要です。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Failures carry stable codes for programs and readable messages for people; independently updated clients need a safe fallback.</li>
-      <li>Additive changes still need compatible consumers; removing fields, changing their meaning or tightening input can break installed apps.</li>
-      <li>Mark a field deprecated first, ship breaking changes as a new version, and retire the old one after a window.</li>
+      <li>失敗には、プログラム向けの安定したコードと、人向けの読めるメッセージを持たせます。別々に更新されるクライアントには、安全なフォールバックが必要です。</li>
+      <li>追加による変更でも、利用側に互換性が必要です。フィールドの削除、意味の変更、入力の制約の強化は、インストール済みのアプリを壊すことがあります。</li>
+      <li>まずフィールドを非推奨にし、破壊的な変更は新しいバージョンとして出し、古いバージョンは期間が過ぎてから廃止します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch07.html"><span>Previous</span><b>Where does the API contract actually live?</b></a>
-    <a class="next" href="ch09.html"><span>Next</span><b>What if the same request arrives twice?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch07.html"><span>前へ</span><b>API の契約は、実際にはどこにあるのか</b></a>
+    <a class="next" href="ch09.html"><span>次へ</span><b>同じリクエストが二度届いたらどうなるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>

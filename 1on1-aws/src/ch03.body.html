@@ -1,25 +1,25 @@
-<!-- title: AWS Foundation 03 · What we give up on Lambda | accent: run -->
+<!-- title: AWS の基礎 03 · Lambda で手放すもの | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 3 of 14</span></p>
-  <h1>What do we give up by running the API on Lambda?</h1>
-  <p class="lead">A learner starts practice after the API returns a deck. Lambda can suit that short request while longer grading work needs another execution path.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第3章 / 全14章</span></p>
+  <h1>API を Lambda で動かすと何を手放すのか</h1>
+  <p class="lead">学習者が練習を始められるのは、API がカードの束を返してからです。この短いリクエストには Lambda が向いていますが、時間のかかる採点には別の実行経路が要ります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>How Lambda runs a request</li>
-      <li>The front door</li>
-      <li>What serverless gives up</li>
-      <li>Long AI jobs</li>
+      <li>Lambda がリクエストを処理する流れ</li>
+      <li>入口の選び方</li>
+      <li>サーバーレスで手放すもの</li>
+      <li>時間のかかる AI の処理</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>How Lambda runs a request</h2>
-    <p>Quickturn uses the default Lambda execution model. An execution environment loads code, initializes the runtime and handles an invocation. Warm environments may be reused, while a new environment incurs initialization latency, called a cold start.</p>
+    <h2 id="s1"><span class="no">01</span>Lambda がリクエストを処理する流れ</h2>
+    <p>Quickturn は Lambda の標準の実行モデルを使っています。実行環境はコードを読み込み、ランタイムを初期化してから、呼び出しを処理します。ウォームな環境は再利用されることがありますが、新しい環境では初期化の待ち時間が生じます。これをコールドスタートと呼びます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="A request arrives and finds no free environment, so Lambda creates one, loads the code and runs the setup, which happens on a cold start only, and then handles the request; a warm request goes straight to handling.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="リクエストが届き、空いている環境がないと、Lambda は環境を作ってコードを読み込み、初期化を実行してからリクエストを処理する。ここまでの準備はコールドスタートのときだけ起きる。ウォームなリクエストはすぐ処理に進む。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -27,86 +27,86 @@
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">A request arrives</text>
+      <text x="64" y="46">リクエストが届く</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node-soft"/>
-      <text x="64" y="118">No free environment</text>
+      <text x="64" y="118">空いている環境がない</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node-soft"/>
-      <text x="64" y="190">Create it, load the code</text>
+      <text x="64" y="190">環境を作り、コードを読み込む</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-soft"/>
-      <text x="64" y="262">Run setup: config, clients</text>
+      <text x="64" y="262">初期化：設定、クライアント</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Handle the request</text>
+      <text x="64" y="334" class="t-hd">リクエストを処理する</text>
     </svg>
-    <figcaption>The three soft steps happen on a cold start only. A warm request skips them and goes straight to the last step.</figcaption>
+    <figcaption>「空いている環境がない」から初期化までの三つの手順は、コールドスタートのときだけ起きます。ウォームなリクエストはそれらを飛ばし、最後の手順に直接進みます。</figcaption>
   </figure>
-    <p>The API initializes configuration and service clients once per environment and can reuse them on warm calls. It does not rely on that reuse for durable state. The learner's drill timer runs on the device, so initialization latency does not consume the timed answer window.</p>
+    <p>API は、設定とサービスのクライアントを環境ごとに一度だけ初期化し、ウォームな呼び出しで再利用できるようにしています。ただし、永続させたい状態をこの再利用に頼ることはしません。練習のタイマーは端末で動いているので、初期化の待ち時間が、制限時間付きの回答時間を削ることはありません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The front door</h2>
-    <p>API Gateway HTTP APIs provide a comparatively simple HTTP front door. REST APIs add other capabilities such as usage plans and caching. Load balancers and function URLs are additional options with different operation and security models.</p>
-    <p>Quickturn chooses an HTTP API catch-all route. A CloudFront OAC-protected function URL requires payload hashes for POST and PUT, which would affect clients. A secret-header alternative needs explicit validation and rotation; possession of an obscure URL alone is not access control.</p>
+    <h2 id="s2"><span class="no">02</span>入口の選び方</h2>
+    <p>API Gateway の HTTP API は、比較的シンプルな HTTP の入口になります。REST API は、使用量プランやキャッシュなどの機能を追加で備えています。ロードバランサーや関数 URL という選択肢もあり、それぞれ運用とセキュリティの考え方が異なります。</p>
+    <p>Quickturn は、すべてのパスを受ける HTTP API のルートを選びました。CloudFront の OAC で保護した関数 URL を使うと、POST と PUT でペイロードのハッシュが必要になり、クライアントに影響が出ます。秘密のヘッダーで守る方法もありますが、その場合は明示的な検証とローテーションが要ります。推測されにくい URL を知っているだけでは、アクセス制御になりません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What serverless gives up</h2>
-    <p>A standard Lambda invocation has a time limit and account-level concurrency constraints. Memory may survive in a warm environment but is never a durable session store. Cost scales with requests and execution duration. These statements concern the default model; Managed Instances and durable workflows have different characteristics.</p>
-    <p>Quickturn monitors errors and throttles and exercises alarms in development with controlled throttling.</p>
+    <h2 id="s3"><span class="no">03</span>サーバーレスで手放すもの</h2>
+    <p>標準の Lambda の呼び出しには、実行時間の上限と、アカウント単位の同時実行数の制約があります。メモリの内容はウォームな環境で残ることもありますが、永続的なセッションの保存先にはなりません。費用はリクエスト数と実行時間に応じて増えます。これは標準の実行モデルの話で、Lambda Managed Instances や、長時間続くワークフローの仕組みには別の特性があります。</p>
+    <p>Quickturn はエラーとスロットリングを監視し、開発環境で意図的にスロットリングを起こして、アラームが動くことを確かめています。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="Lambda with an HTTP API costs close to nothing when idle, scales per request, uses a thirty-second HTTP API integration limit, may incur initialization on new environments and needs little operations work; containers behind a load balancer bill by the hour when idle, scale by adding tasks, allow long requests, may reuse already running tasks and need more operations work.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Lambda + HTTP API</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Containers + LB</text>
-      <text x="16" y="56" class="t-sm">Cost when idle</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">close to zero</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="92" text-anchor="middle">billed per hour</text>
-      <text x="16" y="136" class="t-sm">Scaling</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">per request</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">add tasks</text>
-      <text x="16" y="216" class="t-sm">Longest request</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">30 s, gateway</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">front-door limits</text>
-      <text x="16" y="296" class="t-sm">First-request wait</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">cold starts</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">running tasks</text>
-      <text x="16" y="376" class="t-sm">Operations work</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">little</text>
-      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">more</text>
+    <svg viewBox="0 0 400 436" role="img" aria-label="HTTP API と組み合わせた Lambda は、使われていないときの費用がほぼゼロで、リクエストごとにスケールし、HTTP API の統合には30秒の上限がある。新しい環境では初期化が起きることがあり、運用の手間は少ない。ロードバランサーの後ろに置いたコンテナは、使われていなくても時間ごとに課金され、タスクを足してスケールし、長いリクエストも扱える。すでに動いているタスクを再利用でき、運用の手間は多い。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Lambda＋HTTP API</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">コンテナ＋LB</text>
+      <text x="16" y="56" class="t-sm">使われていないときの費用</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd">ほぼゼロ</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="92" text-anchor="middle">時間ごとに課金</text>
+      <text x="16" y="136" class="t-sm">スケーリング</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">リクエストごと</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">タスクを追加</text>
+      <text x="16" y="216" class="t-sm">最長のリクエスト</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">ゲートウェイで30秒</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">入口側の上限</text>
+      <text x="16" y="296" class="t-sm">最初のリクエストの待ち</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">コールドスタート</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">稼働中のタスク</text>
+      <text x="16" y="376" class="t-sm">運用の手間</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">少ない</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">多い</text>
     </svg>
-    <figcaption>Containers win several rows. The first row decided it for Quickturn: an app that sleeps at night shouldn't pay by the hour.</figcaption>
+    <figcaption>いくつかの行ではコンテナが勝ります。Quickturn にとって決め手は「使われていないときの費用」の行でした。夜は眠っているアプリが、時間単位で払い続ける理由はありません。</figcaption>
   </figure>
-    <p>Containers can suit steady load, long-running work or connection patterns that do not fit ordinary request invocations. Their fixed capacity and load balancer costs must be compared with measured Lambda usage. Cold-start assumptions should be tested rather than treated as decisive by themselves.</p>
+    <p>安定した負荷、長時間動く処理、普通のリクエスト単位の呼び出しに合わない接続のしかたには、コンテナが向くことがあります。その場合は、固定の容量とロードバランサーの費用を、実測した Lambda の使用量と比べる必要があります。コールドスタートについての思い込みも、それだけで決め手にせず、実際に測って確かめてください。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of traffic shape against job length: spiky or low traffic with short jobs suits serverless functions, steady high traffic with short jobs suits containers, spiky traffic with long jobs suits a queue, a workflow or an agent runtime, and steady traffic with long jobs suits containers.">
-      <text x="44" y="18" class="t-sm">↑ Job length: minutes to hours</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="トラフィックの形と処理時間の二軸。波があるか少ないトラフィックで処理が短いならサーバーレスの関数、安定して多いトラフィックで処理が短いならコンテナ、波があるトラフィックで処理が長いならキュー、ワークフロー、エージェントの実行基盤、安定したトラフィックで処理が長いならコンテナが候補になる。">
+      <text x="44" y="18" class="t-sm">↑ 処理時間：数分〜数時間</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Traffic: steady, high →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">トラフィック：安定して多い →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="88" text-anchor="middle">Queue,</text><text x="134" y="112" text-anchor="middle">workflow,</text><text x="134" y="136" text-anchor="middle">agent runtime</text>
+      <text x="134" y="88" text-anchor="middle">キュー、</text><text x="134" y="112" text-anchor="middle">ワークフロー、</text><text x="134" y="136" text-anchor="middle">エージェント基盤</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="302" y="112" text-anchor="middle">Containers</text>
+      <text x="302" y="112" text-anchor="middle">コンテナ</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-acc"/>
-      <text x="134" y="248" text-anchor="middle" class="t-hd t-acc">Functions</text><text x="134" y="272" text-anchor="middle" class="t-sm">our API</text>
+      <text x="134" y="248" text-anchor="middle" class="t-hd t-acc">関数</text><text x="134" y="272" text-anchor="middle" class="t-sm">この API</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="248" text-anchor="middle">Containers</text><text x="302" y="272" text-anchor="middle" class="t-sm">always busy</text>
+      <text x="302" y="248" text-anchor="middle">コンテナ</text><text x="302" y="272" text-anchor="middle" class="t-sm">常に忙しい</text>
     </svg>
-    <figcaption>The matrix identifies candidates to compare, rather than a fixed winner. Measure request length, traffic and operating costs before choosing capacity or a workflow.</figcaption>
+    <figcaption>このマトリクスが示すのは比べるべき候補で、決まった勝者ではありません。容量やワークフローを選ぶ前に、リクエストの長さ、トラフィック、運用の費用を測ってください。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Long AI jobs</h2>
-    <p>Long AI work should not be hidden inside an ordinary interactive request. Typed-answer grading goes onto an SQS queue, where a worker performs bounded jobs. Workflow services can coordinate longer sequences and waits.</p>
-    <p>Quickturn's tutor uses a managed agent runtime for longer sessions. A job or session still needs timeouts, retries, authorization and progress visibility. Choosing a different execution model moves those responsibilities; it does not remove them.</p>
+    <h2 id="s4"><span class="no">04</span>時間のかかる AI の処理</h2>
+    <p>時間のかかる AI の処理を、普通の対話的なリクエストの中に隠すべきではありません。記述式の回答の採点は SQS のキューに入れ、ワーカーが時間の上限を決めたジョブとして処理します。もっと長い一連の処理や待ち合わせは、ワークフローのサービスで調整できます。</p>
+    <p>Quickturn のチューター機能は、長いセッションのためにマネージドなエージェント実行基盤を使っています。それでもジョブやセッションには、タイムアウト、リトライ、認可、進捗の見える化が必要です。別の実行モデルを選ぶと、これらの責任は移りますが、なくなりはしません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>New Lambda environments incur initialization; warm reuse can avoid it, but later requests may also need new environments.</li>
-      <li>Default Lambda gives up durable process memory and unlimited request duration. Request charges vary with use, while retained resources can still cost money.</li>
-      <li>Pick by the shape of the work: short and spiky suits functions, steady or long suits containers, queues or agent runtimes.</li>
+      <li>新しい Lambda の環境では初期化が起きます。ウォームな環境を再利用できれば避けられますが、後続のリクエストでも新しい環境が必要になることがあります。</li>
+      <li>標準の Lambda では、永続的なプロセスのメモリと、無制限のリクエスト時間を手放します。リクエストの料金は使った分だけですが、残しておくリソースには費用がかかり続けます。</li>
+      <li>処理の形で選びます。短くて波があるなら関数が、安定しているか長いならコンテナ、キュー、エージェントの実行基盤が向きます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch02.html"><span>Previous</span><b>Why does our deploy have no AWS keys?</b></a>
-    <a class="next" href="ch04.html"><span>Next</span><b>Why doesn't Quickturn have a VPC?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch02.html"><span>前へ</span><b>デプロイに AWS のキーを置かない理由</b></a>
+    <a class="next" href="ch04.html"><span>次へ</span><b>Quickturn に VPC がないのはなぜか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html">Lambda execution environment</a>, <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html">CloudFront and function URL origins</a>.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成、2026年10月改訂。サービスの詳細（英語）：<a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html">Lambda の実行環境</a>、<a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html">CloudFront と関数 URL のオリジン</a>。</p>
 </div>

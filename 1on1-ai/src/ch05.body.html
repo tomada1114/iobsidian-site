@@ -1,50 +1,50 @@
-<!-- title: AI in Production 05 · One port per LLM task | accent: guard -->
+<!-- title: AI機能を本番で動かす 05 · タスクごとのポート | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 5 of 13</span></p>
-  <h1>Why not one complete(prompt) function for every feature?</h1>
-  <p class="lead">A learner disputes an old grade. A named grading task makes its prompt, rubric and model versions easier to identify and evaluate together.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第5章 / 全13章</span></p>
+  <h1>すべての機能を1つのcomplete(prompt)関数で済ませないのはなぜか</h1>
+  <p class="lead">学習者が、以前の採点結果に異議を申し立てました。採点に名前の付いたタスクがあれば、そのプロンプト、ルーブリック、モデルのバージョンを特定し、まとめて評価しやすくなります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>One helper for everything</li>
-      <li>Task-level ports</li>
-      <li>Tests and swaps</li>
-      <li>When a port is too much</li>
+      <li>何でも引き受ける1つのヘルパー</li>
+      <li>タスク単位のポート</li>
+      <li>テストと差し替え</li>
+      <li>ポートが過剰になるとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>One helper for everything</h2>
-    <p>A generic <code>complete(prompt)</code> helper centralizes transport but leaves each caller owning its prompt, parser, versions and cost attribution. When several features use it, there may be no clear unit for evaluation or investigating an old result.</p>
-    <p>A named grading task instead records its model, prompt and rubric versions and has a specific evaluation set. That responsibility boundary is more useful than simply avoiding repeated SDK calls.</p>
+    <h2 id="s1"><span class="no">01</span>何でも引き受ける1つのヘルパー</h2>
+    <p>汎用の<code>complete(prompt)</code>ヘルパーは通信処理を1か所にまとめますが、プロンプト、パーサー、バージョン、費用の振り分けは呼び出し元ごとに任されたままです。複数の機能がこれを使うと、評価の単位も、過去の結果を調べるときの手がかりもはっきりしなくなります。</p>
+    <p>名前の付いた採点タスクなら、モデル、プロンプト、ルーブリックのバージョンを記録し、専用の評価セットを持てます。SDKの呼び出しの重複を避けることより、この責任の境界のほうが役に立ちます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="With one generic complete function, the prompt, schema, version, evaluation set and cost tag are each owned by every caller, or by nobody; with task ports, named tasks give each responsibility an explicit owner in this design.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="汎用のcomplete関数では、プロンプト、スキーマ、バージョン、評価セット、コストタグのそれぞれを、呼び出し元の全員が持つか、誰も持ちません。タスクのポートでは、名前の付いたタスクがそれぞれの責任をはっきり持ちます。">
       <text x="104" y="24" text-anchor="middle" class="t-hd">complete(prompt)</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Task ports</text>
-      <text x="16" y="56" class="t-sm">The prompt</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">each caller</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">the task</text>
-      <text x="16" y="136" class="t-sm">The schema</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">each caller</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the task</text>
-      <text x="16" y="216" class="t-sm">The version</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">unspecified</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">the task</text>
-      <text x="16" y="296" class="t-sm">The evaluation set</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">unspecified</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">the task</text>
-      <text x="16" y="376" class="t-sm">The cost tag</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">if remembered</text>
-      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">the task</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">タスクのポート</text>
+      <text x="16" y="56" class="t-sm">プロンプト</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">呼び出し元ごと</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">タスク</text>
+      <text x="16" y="136" class="t-sm">スキーマ</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">呼び出し元ごと</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">タスク</text>
+      <text x="16" y="216" class="t-sm">バージョン</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">決まっていない</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">タスク</text>
+      <text x="16" y="296" class="t-sm">評価セット</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">決まっていない</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">タスク</text>
+      <text x="16" y="376" class="t-sm">コストタグ</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">覚えていれば</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">タスク</text>
     </svg>
-    <figcaption>The example on the left leaves important ownership unspecified. A generic helper can have disciplined callers, but the helper alone does not establish those responsibilities.</figcaption>
+    <figcaption>左の例では、大事な責任の持ち主が決まっていません。汎用のヘルパーでも呼び出し元が規律を守ることはできますが、ヘルパーそのものがその責任を定めるわけではありません。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Task-level ports</h2>
-    <p>The application owns a port per task, such as grade, explain or generate. A grading input contains the card, expected answers and learner response; its result is a Grade or a typed LLM error. A trusted request context identifies the learner for authorization and accounting.</p>
+    <h2 id="s2"><span class="no">02</span>タスク単位のポート</h2>
+    <p>アプリケーションは、採点、解説、生成といったタスクごとにポートを持ちます。採点の入力にはカード、想定される正解、学習者の解答が入り、結果はGradeか型つきのLLMエラーです。認可と使用量の計上に使う学習者は、信頼できるリクエストコンテキストから特定します。</p>
     <pre><code>interface GradeTask {
   grade(
     ctx: RequestContext,
@@ -54,47 +54,47 @@
   &gt;;
 }</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The grading port at the center owns four things above it: the prompt, the schema, the rubric version and the evaluation set; below it, three implementations: a fake, a recording and the Bedrock adapter.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="中央の採点ポートは、上にある4つを持ちます。プロンプト、スキーマ、ルーブリックの版、評価セットです。下には3つの実装があります。フェイク、記録した応答、Bedrockのアダプターです。">
       <line x1="100" y1="112" x2="200" y2="176" class="ln"/>
       <line x1="300" y1="112" x2="200" y2="176" class="ln"/>
       <line x1="68" y1="272" x2="200" y2="206" class="ln"/>
       <line x1="200" y1="272" x2="200" y2="206" class="ln"/>
       <line x1="332" y1="272" x2="200" y2="206" class="ln"/>
-      <rect x="6" y="8" width="188" height="44" rx="6" class="node"/><text x="100" y="36" text-anchor="middle">Prompt</text>
-      <rect x="206" y="8" width="188" height="44" rx="6" class="node"/><text x="300" y="36" text-anchor="middle">Schema</text>
-      <rect x="6" y="68" width="188" height="44" rx="6" class="node"/><text x="100" y="96" text-anchor="middle">Rubric version</text>
-      <rect x="206" y="68" width="188" height="44" rx="6" class="node"/><text x="300" y="96" text-anchor="middle">Evaluation set</text>
+      <rect x="6" y="8" width="188" height="44" rx="6" class="node"/><text x="100" y="36" text-anchor="middle">プロンプト</text>
+      <rect x="206" y="8" width="188" height="44" rx="6" class="node"/><text x="300" y="36" text-anchor="middle">スキーマ</text>
+      <rect x="6" y="68" width="188" height="44" rx="6" class="node"/><text x="100" y="96" text-anchor="middle">ルーブリックの版</text>
+      <rect x="206" y="68" width="188" height="44" rx="6" class="node"/><text x="300" y="96" text-anchor="middle">評価セット</text>
       <rect x="110" y="146" width="180" height="60" rx="8" class="node-acc"/>
-      <text x="200" y="182" text-anchor="middle" class="t-hd t-acc">Grading port</text>
-      <rect x="6" y="272" width="124" height="52" rx="6" class="node-soft"/><text x="68" y="304" text-anchor="middle">Fake</text>
-      <rect x="138" y="272" width="124" height="52" rx="6" class="node-soft"/><text x="200" y="304" text-anchor="middle">Recording</text>
+      <text x="200" y="182" text-anchor="middle" class="t-hd t-acc">採点ポート</text>
+      <rect x="6" y="272" width="124" height="52" rx="6" class="node-soft"/><text x="68" y="304" text-anchor="middle">フェイク</text>
+      <rect x="138" y="272" width="124" height="52" rx="6" class="node-soft"/><text x="200" y="304" text-anchor="middle">記録した応答</text>
       <rect x="270" y="272" width="124" height="52" rx="6" class="node-soft"/><text x="332" y="304" text-anchor="middle">Bedrock</text>
     </svg>
-    <figcaption>What the task owns sits above the port; what can stand in for the model sits below. Callers only ever see the port.</figcaption>
+    <figcaption>ポートの上にはタスクが持つもの、下にはモデルの代わりになれるものを置いています。呼び出し元から見えるのはポートだけです。</figcaption>
   </figure>
-    <p>Each task owns its prompt, output schema, rubric and evaluation data. A shared Bedrock adapter can implement several tasks beneath those interfaces. Transport code can be reused without collapsing their different promises into one untyped string function.</p>
+    <p>各タスクは、自分のプロンプト、出力スキーマ、ルーブリック、評価データを持ちます。その下では、共通のBedrockアダプターが複数のタスクを実装できます。通信のコードは使い回しつつ、タスクごとに違う約束を、型のない1つの文字列関数に押し込めずに済みます。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Tests and swaps</h2>
-    <p>A fixed fake exercises application behavior without a model call. A recorded real response tests parsing and integration against a known example. Live evaluations test current quality using the actual task port and adapter.</p>
-    <p>A recording proves that code handles that saved response, not that today's model is accurate. Changing a model or prompt needs a fresh evaluation. Provider replacement may also require capability or prompt changes, so the interface is a seam rather than a guarantee of interchangeable behavior.</p>
+    <h2 id="s3"><span class="no">03</span>テストと差し替え</h2>
+    <p>固定の応答を返すフェイクを使えば、モデルを呼ばずにアプリケーションの振る舞いを確かめられます。実際の応答を記録しておけば、既知の例に対してパースと結合をテストできます。ライブの評価は、実際のタスクのポートとアダプターを使い、今の品質を確かめます。</p>
+    <p>記録した応答で分かるのは、その保存済みの応答をコードが処理できることだけで、今日のモデルが正確であることまでは分かりません。モデルやプロンプトを変えたら、評価をやり直す必要があります。提供元を差し替えるときも、機能の違いやプロンプトの調整が必要になることがあります。インターフェースは差し替えの継ぎ目であって、振る舞いが入れ替え可能だという保証ではありません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When a port is too much</h2>
-    <p>Task ports add files and ownership work. A one-off experiment may reasonably call the SDK directly. Once a feature needs production evaluation, cost questions and failure handling, an explicit task boundary is more valuable.</p>
-    <p>Refresh recordings deliberately and review their diffs. In a migration, wrap existing model uses as named tasks, establish their expected behavior, then change providers one task at a time. That makes regressions and costs easier to attribute.</p>
+    <h2 id="s4"><span class="no">04</span>ポートが過剰になるとき</h2>
+    <p>タスクのポートを設けると、ファイルも、誰が持つかを決める手間も増えます。一度きりの実験なら、SDKを直接呼んでもかまいません。機能に本番の評価、費用の把握、失敗への対処が必要になった時点で、タスクの境界をはっきりさせる価値が大きくなります。</p>
+    <p>記録した応答は意図して更新し、その差分をレビューします。移行するときは、既存のモデルの使い方を名前の付いたタスクで包み、期待される振る舞いを確かめてから、提供元を1タスクずつ切り替えます。そうすれば、品質の低下や費用の変化がどこから来たかを特定しやすくなります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Give each LLM task its own port, named for the task, not the vendor.</li>
-      <li>Each task owns its prompt, schema, rubric version and evaluation set.</li>
-      <li>Fakes and recordings test code behavior; reviewed live evaluation provides evidence for adopting a new model or prompt.</li>
+      <li>LLMのタスクごとに専用のポートを設け、名前は提供元ではなくタスクに合わせる。</li>
+      <li>各タスクが、自分のプロンプト、スキーマ、ルーブリックの版、評価セットを持つ。</li>
+      <li>フェイクと記録した応答はコードの振る舞いを確かめるもので、新しいモデルやプロンプトを採用する根拠はレビュー済みのライブ評価から得る。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch04.html"><span>Previous</span><b>Can an LLM return a type instead of a paragraph?</b></a>
-    <a class="next" href="ch06.html"><span>Next</span><b>Should the timed drill wait for the grader?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch04.html"><span>前へ</span><b>LLMに文章ではなく型を返させられるか</b></a>
+    <a class="next" href="ch06.html"><span>次へ</span><b>時間制限のあるドリルは採点を待つべきか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>

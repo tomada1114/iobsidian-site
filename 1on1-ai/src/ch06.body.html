@@ -1,46 +1,46 @@
-<!-- title: AI in Production 06 · Keep the grader off the drill | accent: guard -->
+<!-- title: AI機能を本番で動かす 06 · ドリルを採点から切り離す | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 6 of 13</span></p>
-  <h1>Should the timed drill wait for the grader?</h1>
-  <p class="lead">A learner answers before the timer ends, but the model is still waiting. Saving practice first lets the drill continue while grading has its own failure path.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第6章 / 全13章</span></p>
+  <h1>時間制限のあるドリルは採点を待つべきか</h1>
+  <p class="lead">学習者は制限時間内に答えたのに、モデルの応答はまだ返ってきません。先に解答を保存しておけば、ドリルは止まらずに進み、採点の失敗は別の経路で扱えます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>The hot path</li>
-      <li>The job and its key</li>
-      <li>Where it runs</li>
-      <li>What grading later costs</li>
+      <li>ホットパス</li>
+      <li>ジョブとそのキー</li>
+      <li>どこで動かすか</li>
+      <li>あとで採点することの代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The hot path</h2>
-    <p>A model call in the timed card path makes each answer depend on external latency. Streaming feedback does not remove the wait for a complete verdict. Offline answers also arrive later, so synchronous grading cannot be the only successful practice path.</p>
-    <p>Quickturn records the answer immediately and grades it in the background. The summary and recap show the result when it is ready, while the drill continues.</p>
+    <h2 id="s1"><span class="no">01</span>ホットパス</h2>
+    <p>時間制限のあるカードの処理経路にモデルの呼び出しを入れると、解答のたびに外部のレイテンシを待つことになります。フィードバックをストリーミングしても、判定が出そろうまでの待ち時間はなくなりません。オフラインで答えた解答もあとから届くので、同期の採点だけを練習の成功経路にはできません。</p>
+    <p>Quickturnは解答をすぐに記録し、採点はバックグラウンドで行います。ドリルはそのまま進み、結果が出たらラウンドのまとめと振り返りの画面に表示します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="With inline grading the drill waits, a model failure breaks the drill, and a retry calls the model again; with grading as a job the drill continues, and matching retries reuse a completed result while unfinished attempts need coordination.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Inline</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">As a job</text>
-      <text x="16" y="56" class="t-sm">Does the drill wait?</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">yes</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">no</text>
-      <text x="16" y="136" class="t-sm">Model fails: drill breaks?</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">yes</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">no</text>
-      <text x="16" y="216" class="t-sm">Retry calls the model?</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">again</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">reuse if complete</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="同期で採点すると、ドリルは待たされ、モデルの障害でドリルが止まり、再試行ではモデルをもう一度呼びます。ジョブで採点すると、ドリルは進み続け、同じ内容の再試行は完了済みの結果を再利用します。未完了の試行には調整が必要です。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">同期で採点</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">ジョブで採点</text>
+      <text x="16" y="56" class="t-sm">ドリルは待つか</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">待つ</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">待たない</text>
+      <text x="16" y="136" class="t-sm">モデルの障害でドリルが止まるか</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">止まる</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">止まらない</text>
+      <text x="16" y="216" class="t-sm">再試行でモデルを呼ぶか</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">もう一度呼ぶ</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">完了済みなら再利用</text>
     </svg>
-    <figcaption>For Quickturn's timed drill, the operational requirements favor a background job. What it costs is immediacy: the learner sees the grade after the round, not on the card.</figcaption>
+    <figcaption>Quickturnの時間制限つきドリルでは、運用上の要件からバックグラウンドのジョブが有利です。代わりに失うのは即時性で、学習者が採点を見るのはカードの上ではなく、ラウンドが終わってからです。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The job and its key</h2>
-    <p>A grading job key combines answer ID and rubric version. The first accepted result is stored conditionally; duplicate deliveries and retries reuse it. A new rubric version creates a distinct grading job without erasing the previous result.</p>
+    <h2 id="s2"><span class="no">02</span>ジョブとそのキー</h2>
+    <p>採点ジョブのキーは、解答IDとルーブリックのバージョンを組み合わせたものです。最初に受け入れた結果を条件付き書き込みで保存し、重複した配信や再試行ではそれを再利用します。ルーブリックのバージョンが変われば別の採点ジョブになり、以前の結果は消えません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 516" role="img" aria-label="The answer is stored, a job is queued, the worker checks the key, cost is reserved, the worker calls the model under the job’s attempt policy, the result is stored under the key, and the grade is shown on the round summary.">
+    <svg viewBox="0 0 400 516" role="img" aria-label="解答を保存し、ジョブをキューに入れ、ワーカーがキーを確かめ、コストを予約し、ジョブの試行ポリシーに沿ってワーカーがモデルを呼び、結果をキーで保存し、ラウンドのまとめに採点を表示します。">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -50,64 +50,64 @@
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <circle cx="28" cy="472" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Answer stored</text>
+      <text x="64" y="46">解答を保存</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Job queued</text>
+      <text x="64" y="118">ジョブをキューに入れる</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Worker checks the key</text>
+      <text x="64" y="190">ワーカーがキーを確認</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Cost reserved</text>
+      <text x="64" y="262">コストを予約</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Model call</text>
+      <text x="64" y="334">モデルを呼ぶ</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">Result stored under the key</text>
+      <text x="64" y="406" class="t-hd">結果をキーで保存</text>
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="478">Grade on the round summary</text>
+      <text x="64" y="478">ラウンドのまとめに採点を表示</text>
     </svg>
-    <figcaption>Later matching deliveries can reuse the stored grade. Concurrent provider attempts still need coordination; saving one accepted result protects the learner-visible outcome.</figcaption>
+    <figcaption>あとから届いた同じ内容の配信は、保存済みの採点を再利用できます。提供元への試行が同時に走る場合は別の調整が必要ですが、受け入れた結果を1つだけ保存することで、学習者に見える結果は守られます。</figcaption>
   </figure>
-    <p>Two workers can still call the provider before one wins the conditional result write. Result deduplication protects the learner-visible effect, while attempt coordination and accounting must handle any duplicate provider cost. The UI represents the grade as pending until a result or final failure is known.</p>
+    <p>それでも、条件付き書き込みでどちらかが勝つ前に、2つのワーカーが両方とも提供元を呼んでしまうことはあります。結果の重複排除は学習者に見える影響を守り、試行の調整と使用量の計上は提供元への重複した費用に対処します。UIは、結果か最終的な失敗が確定するまで、採点を保留中として表示します。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Where it runs</h2>
-    <p>The job function can run inline locally and from an SQS-triggered worker in the hosted system. Standard queues can redeliver messages, so the stable key is part of normal behavior. Repeated failures move to a dead-letter queue for diagnosis and controlled replay.</p>
-    <p>A cost reservation is made before the call. Replaying a message must reuse the relevant job identity and settlement state. The saved answer remains available even when grading fails.</p>
+    <h2 id="s3"><span class="no">03</span>どこで動かすか</h2>
+    <p>ジョブの関数は、ローカルではその場で実行し、ホスティング環境ではSQSをトリガーとするワーカーから実行できます。標準キューはメッセージを再配信することがあるので、安定したキーは通常の動作の一部です。失敗を繰り返したメッセージはデッドレターキューに移し、原因を調べてから、管理された形で再処理します。</p>
+    <p>コストの予約は、呼び出しの前に行います。メッセージを再処理するときは、該当するジョブのIDと精算の状態を引き継ぐ必要があります。採点に失敗しても、保存した解答はそのまま残ります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="An initial attempt reserves cost before calling the model. A matching delivery after result storage reuses that result; concurrent attempts need separate coordination.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">First delivery</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Completed repeat</text>
-      <text x="16" y="56" class="t-sm">Key found?</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">yes</text>
-      <text x="16" y="136" class="t-sm">Model called?</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">once</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">no</text>
-      <text x="16" y="216" class="t-sm">Cost reserved?</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">yes</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">no</text>
-      <text x="16" y="296" class="t-sm">What is returned</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">the new result</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">stored result</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="最初の試行では、モデルを呼ぶ前にコストを予約します。結果の保存後に届いた同じ内容の配信は、その結果を再利用します。同時に走る試行には別の調整が必要です。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">最初の配信</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">完了後の再配信</text>
+      <text x="16" y="56" class="t-sm">キーはあるか</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">ない</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">ある</text>
+      <text x="16" y="136" class="t-sm">モデルを呼ぶか</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">1回</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">呼ばない</text>
+      <text x="16" y="216" class="t-sm">コストを予約するか</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">する</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">しない</text>
+      <text x="16" y="296" class="t-sm">返すもの</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">新しい結果</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">保存済みの結果</text>
     </svg>
-    <figcaption>This completed repeat reuses the stored result without another call. A delivery arriving before completion requires the attempt and accounting controls described above.</figcaption>
+    <figcaption>完了後の再配信は、もう一度呼び出さずに保存済みの結果を再利用します。完了前に届いた配信には、前の節で述べた試行と計上の制御が必要です。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What grading later costs</h2>
-    <p>Background grading adds a queue, worker, result storage and pending UI states, and sacrifices immediate feedback on the card. A direct explanation request may reasonably wait synchronously because the learner has explicitly asked for it.</p>
-    <p>One call per round reduces call count but enlarges output and the failure unit. Per-answer calls isolate failure and retry. Compare measured cost, latency and recovery rather than choosing from request count alone. Keeping AI classification out of ticket creation is a similar way to preserve a core workflow during model outages.</p>
+    <h2 id="s4"><span class="no">04</span>あとで採点することの代償</h2>
+    <p>バックグラウンドで採点すると、キュー、ワーカー、結果の保存先、保留中を表すUIの状態が増え、カード上で即座にフィードバックを返すこともできなくなります。一方、学習者が自分から解説を求めた場合は、同期で待たせても差し支えないでしょう。</p>
+    <p>ラウンドごとに1回呼べば呼び出し回数は減りますが、出力が大きくなり、失敗したときにやり直す単位も大きくなります。解答ごとに呼べば、失敗と再試行を1件に閉じ込められます。リクエスト数だけで選ばず、実測した費用、レイテンシ、復旧のしやすさを比べます。問い合わせチケットの作成からAIによる分類を切り離しておくのも、モデルの障害時に中心の業務を守る同じ考え方です。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Keep model calls off a timed path; store the answer and grade it as a background job.</li>
-      <li>Key the job by answer id and rubric version, and store the first result under that key.</li>
-      <li>Reuse a stored accepted result for matching retries; coordinate unfinished attempts and reconcile any duplicate provider cost.</li>
+      <li>時間制限のある経路にはモデルの呼び出しを置かず、解答を保存してバックグラウンドのジョブで採点する。</li>
+      <li>ジョブのキーは解答IDとルーブリックのバージョンで作り、最初の結果をそのキーで保存する。</li>
+      <li>同じ内容の再試行には保存済みの受け入れた結果を再利用し、未完了の試行は調整して、提供元への重複した費用は突き合わせる。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>Why not one complete(prompt) function for every feature?</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>How would we know a prompt change made grading worse?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>すべての機能を1つのcomplete(prompt)関数で済ませないのはなぜか</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>プロンプトの変更で採点が悪くなったと、どうすれば分かるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>

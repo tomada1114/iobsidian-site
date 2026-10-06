@@ -1,94 +1,94 @@
-<!-- title: Operations 12 · Before we open | accent: think -->
+<!-- title: 運用と品質 12 · 一般公開の前に | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 12 of 12</span></p>
-  <h1>What has to be true before we open to the public?</h1>
-  <p class="lead">Public learners bring persistent data, abusive traffic and expectations of recovery. Readiness means showing that the required boundaries and operating paths work for that exposure.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第12章 / 全12章</span></p>
+  <h1>一般公開の前に何がそろっていればよいか</h1>
+  <p class="lead">一般の学習者を迎えると、残り続けるデータ、悪意のあるトラフィック、復旧への期待もついてきます。公開の準備ができているとは、その状況で必要な境界と運用の経路が働くと示せることです。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>When strangers arrive</li>
-      <li>The readiness list</li>
-      <li>What we do without</li>
-      <li>An internal AI agent</li>
+      <li>見知らぬ利用者が来るとき</li>
+      <li>準備のチェックリスト</li>
+      <li>あえて持たないもの</li>
+      <li>社内向けの AI エージェント</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>When strangers arrive</h2>
-    <p>A team-only environment and a public service have different exposure. Public launch brings persistent learner data, account recovery, abusive traffic and operational promises. Quickturn establishes hard-to-add foundations early: isolation, identity, data design and repeatable deployment.</p>
+    <h2 id="s1"><span class="no">01</span>見知らぬ利用者が来るとき</h2>
+    <p>チームだけの環境と一般向けのサービスでは、外にさらされる度合いが違います。一般公開すると、残り続ける学習者のデータ、アカウントの復旧、悪意のあるトラフィック、運用上の約束が生じます。Quickturn は、あとから足しにくい基盤を早めに作っています。分離、ID、データ設計、繰り返し実行できるデプロイです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A matrix of whether something is hard to add later across and whether it is needed at launch down. Needed at launch and hard to add later: built early, like isolation and auth. Needed at launch but easy to add: added in the guard phase before launch. Not needed yet and easy to add: done without at this size. Not needed yet but hard to add later: plan it early.">
-      <text x="151" y="24" text-anchor="middle" class="t-sm">easy to add later</text>
-      <text x="309" y="24" text-anchor="middle" class="t-sm">hard to add later</text>
-      <text x="8" y="80" class="t-sm">needed</text>
-      <text x="8" y="196" class="t-sm">not yet</text>
+    <svg viewBox="0 0 400 300" role="img" aria-label="横があとから足しにくいかどうか、縦が公開時に必要かどうかの表。公開時に必要であとから足しにくいものは、分離や認証のように早めに作る。公開時に必要だが足しやすいものは、公開前の守りの段階で加える。まだ不要で足しやすいものは、この規模では持たない。まだ不要だがあとから足しにくいものは、早めに計画する。">
+      <text x="151" y="24" text-anchor="middle" class="t-sm">あとから足しやすい</text>
+      <text x="309" y="24" text-anchor="middle" class="t-sm">あとから足しにくい</text>
+      <text x="8" y="80" class="t-sm">必要</text>
+      <text x="8" y="196" class="t-sm">まだ不要</text>
       <rect x="76" y="36" width="150" height="100" rx="6" class="node-acc"/>
-      <text x="151" y="92" text-anchor="middle" class="t-hd t-acc">before launch</text>
+      <text x="151" y="92" text-anchor="middle" class="t-hd t-acc">公開前に足す</text>
       <rect x="234" y="36" width="150" height="100" rx="6" class="node"/>
-      <text x="309" y="92" text-anchor="middle">built early</text>
+      <text x="309" y="92" text-anchor="middle">早めに作る</text>
       <rect x="76" y="152" width="150" height="100" rx="6" class="node"/>
-      <text x="151" y="208" text-anchor="middle">do without</text>
+      <text x="151" y="208" text-anchor="middle">持たない</text>
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
-      <text x="309" y="208" text-anchor="middle">plan early</text>
+      <text x="309" y="208" text-anchor="middle">早めに計画</text>
     </svg>
-    <figcaption>The top row is what's needed at launch. The accented corner groups controls that can be added before launch. The full readiness decision also includes foundations and operating paths elsewhere in the matrix.</figcaption>
+    <figcaption>上の行が、公開時に必要なものです。アクセントの角には、公開前に足せる対策をまとめています。公開してよいかの判断には、表のほかの場所にある基盤と運用の経路も含まれます。</figcaption>
   </figure>
-    <p>Before launch it adds production accounts, controlled access and the necessary operational guards. Separate accounts and short-lived credentials limit ordinary development reach, provided cross-account roles and emergency access are also governed.</p>
+    <p>公開前には、本番用のアカウント、管理されたアクセス、必要な運用上の守りを加えます。アカウントを分け、短命の認証情報を使えば、普段の開発作業が届く範囲を限れます。ただし、アカウントをまたぐロールや緊急時のアクセスも管理されていることが前提です。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The readiness list</h2>
-    <p>Production readiness includes reviewed stacks, abuse controls and reliable sign-up and recovery email. It also covers data recovery, export and deletion, privacy descriptions, and monitored error and cost alerts. An alarm needs a destination and someone responsible for responding.</p>
+    <h2 id="s2"><span class="no">02</span>準備のチェックリスト</h2>
+    <p>本番の準備には、レビューしたスタック、悪用への対策、確実に届く登録と復旧のメールが含まれます。データの復旧、エクスポートと削除、プライバシーについての説明、監視されたエラーとコストのアラートも対象です。アラームには、通知の宛先と、対応に責任を持つ人が必要です。</p>
 <dl class="terms">
-  <dt>Accounts</dt><dd>Dev: the dev account. Prod: its own account.</dd>
-  <dt>Who can sign up</dt><dd>Dev: the team. Prod: anyone, self sign-up on.</dd>
-  <dt>Deploy approval</dt><dd>Dev: none. Prod: a reviewer, with an audit trail.</dd>
-  <dt>Abuse limits</dt><dd>Dev: none. Prod: WAF rate-based rules.</dd>
-  <dt>Auth email</dt><dd>Dev: the built-in sender. Prod: SES.</dd>
-  <dt>Data guards and rights</dt><dd>Dev: Retain and user pool protection. Prod: those, plus recovery and table deletion protection.</dd>
+  <dt>アカウント</dt><dd>dev：dev 用のアカウント。prod：専用のアカウント。</dd>
+  <dt>登録できる人</dt><dd>dev：チーム。prod：誰でも（セルフサインアップを有効にする）。</dd>
+  <dt>デプロイの承認</dt><dd>dev：なし。prod：レビュアーが承認し、監査証跡を残す。</dd>
+  <dt>悪用の制限</dt><dd>dev：なし。prod：WAF のレートベースのルール。</dd>
+  <dt>認証メール</dt><dd>dev：組み込みの送信機能。prod：SES。</dd>
+  <dt>データの守りと権利</dt><dd>dev：Retain とユーザープールの保護。prod：それに加えて、リカバリーとテーブルの削除保護。</dd>
 </dl>
-    <p>A runbook states what the alarm means, the first checks and ways to reduce harm. An incident has a coordinator and timeline, followed by a review of system conditions that allowed it. Exercise recovery and notification paths before relying on them during a real failure.</p>
+    <p>ランブックには、そのアラームが何を意味するか、最初に確かめること、被害を抑える方法を書きます。インシデントには調整役とタイムラインを置き、そのあと、それを許したシステムの条件を振り返ります。復旧と通知の経路は、本当の障害で頼る前に演習しておきます。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What we do without</h2>
-    <p>Some controls may be deferred for a small product if the risks and revisit conditions are explicit. A paid threat-protection tier or separate analytics database is a choice to assess, not automatically a launch requirement or automatically unnecessary.</p>
-    <p>Development and production add operational cost. Spend that effort according to the data, exposure and obligations the service actually has. A recorded deferred decision can be reconsidered; an unnoticed missing capability provides no such warning.</p>
+    <h2 id="s3"><span class="no">03</span>あえて持たないもの</h2>
+    <p>小さなプロダクトでは、リスクと見直す条件を明示したうえで、一部の対策を先送りにすることがあります。有料の脅威保護の上位プランや分析用の別データベースは、検討すべき選択肢です。自動的に公開の必須条件になるわけでも、自動的に不要になるわけでもありません。</p>
+    <p>開発環境と本番環境を分けて持てば、運用のコストが増えます。その労力は、サービスが実際に扱うデータ、外にさらされる度合い、負っている義務に応じてかけます。先送りした判断を記録しておけば見直せますが、気づかないまま欠けている機能は何の警告も出しません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The production-guard phase adds accounts, stacks, approvals, guards and data rights; then the prod stacks exist but are closed; then launch, with self sign-up on and policies published; then the first weeks of watched alarms.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="本番の守りを整える段階で、アカウント、スタック、承認、守り、データの権利を加える。次に、prod のスタックはあるが閉じた状態になる。そして公開し、セルフサインアップを有効にしてポリシーを公表する。そのあと、アラームを見守る最初の数週間が続く。">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="7" class="f-acc"/>
       <circle cx="28" cy="256" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Production-guard phase</text>
+      <text x="64" y="46">本番の守りを整える段階</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Prod exists, but closed</text>
+      <text x="64" y="118">prod はあるが、閉じている</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="190" class="t-hd">Launch · sign-up on</text>
+      <text x="64" y="190" class="t-hd">公開 · 登録を開く</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">First weeks, watched</text>
+      <text x="64" y="262">最初の数週間を見守る</text>
     </svg>
-    <figcaption>The sign-up switch follows the preceding readiness checks. Launch begins ongoing observation and response; it does not finish the team’s operating responsibilities.</figcaption>
+    <figcaption>登録を開くスイッチは、それまでの準備のチェックを終えてから入れます。公開は継続的な観察と対応の始まりで、チームの運用の責任がそこで終わるわけではありません。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>An internal AI agent</h2>
-    <p>An internal AI agent needs the same review plus trusted acting identity, scoped tools, spending bounds, evaluation and task-success monitoring. It also needs a reachable human escalation path and controlled retention of sensitive content.</p>
-    <p>“Internal” does not mean harmless: employees may supply customer information on the first day. Assess what the system can read, change and disclose, and verify those boundaries before real users depend on it.</p>
+    <h2 id="s4"><span class="no">04</span>社内向けの AI エージェント</h2>
+    <p>社内向けの AI エージェントにも同じレビューが必要で、さらに、信頼できる実行時の ID、範囲を絞ったツール、支出の上限、評価、タスク成功率の監視が要ります。人へのエスカレーションの経路が実際に使えることと、機密性のある内容の保持を管理することも必要です。</p>
+    <p>社内向けだからといって、無害とは限りません。社員は初日から顧客の情報を入力するかもしれません。システムが何を読め、何を変えられ、何を開示しうるかを評価し、実際の利用者が頼る前にその境界を確かめます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Production means strangers' data, abuse and expectations, not just a new URL.</li>
-      <li>Build hard-to-retrofit things early; add accounts, approvals, WAF, SES and data guards before launch.</li>
-      <li>Give every alarm a runbook, and write down each thing you do without, with its reason.</li>
+      <li>本番に出すとは、新しい URL を用意することではなく、見知らぬ人のデータ、悪用、期待を引き受けることです。</li>
+      <li>あとから足しにくいものは早めに作り、アカウント、承認、WAF、SES、データの守りは公開前に加えます。</li>
+      <li>どのアラームにもランブックを用意し、あえて持たないものは一つずつ理由とともに書き留めます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch11.html"><span>Previous</span><b>What happens to a learner's data when things go wrong?</b></a>
-    <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch11.html"><span>前へ</span><b>障害が起きたとき、学習者のデータはどうなるか</b></a>
+    <a class="next" href="ch00.html"><span>次へ</span><b>目次</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

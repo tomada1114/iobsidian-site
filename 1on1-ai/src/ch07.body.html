@@ -1,119 +1,119 @@
-<!-- title: AI in Production 07 · Knowing grading got worse | accent: guard -->
+<!-- title: AI機能を本番で動かす 07 · 採点の悪化に気づく | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 7 of 13</span></p>
-  <h1>How would we know a prompt change made grading worse?</h1>
-  <p class="lead">A new prompt produces a few convincing grades. A reviewed evaluation set must show which cases improved, worsened or became less stable before adoption.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第7章 / 全13章</span></p>
+  <h1>プロンプトの変更で採点が悪くなったと、どうすれば分かるか</h1>
+  <p class="lead">新しいプロンプトで、いくつか説得力のある採点結果が出ました。採用する前に、レビュー済みの評価セットで、どのケースが良くなり、どのケースが悪くなり、どこで判定が不安定になったかを示す必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Why evals come first</li>
-      <li>Datasets from what exists</li>
-      <li>The metrics</li>
-      <li>What the numbers cost</li>
+      <li>評価を先に用意する理由</li>
+      <li>手元にあるものからデータセットを作る</li>
+      <li>指標</li>
+      <li>数字の代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Why evals come first</h2>
-    <p>Reading ten improved-looking grades is useful error analysis, but not a reproducible quality result. Name the failures observed, label representative cases and define what improvement means before adopting a prompt.</p>
-    <p>An evaluation set becomes the feature's acceptance evidence. It should exercise the real adapter and record the configuration, not a separate copy of a prompt in a notebook.</p>
+    <h2 id="s1"><span class="no">01</span>評価を先に用意する理由</h2>
+    <p>良くなったように見える採点結果を10件読むのは、誤りの分析としては役に立ちますが、再現できる品質の結果にはなりません。プロンプトを採用する前に、観察した失敗に名前を付け、代表的なケースにラベルを付け、何をもって改善とするかを決めておきます。</p>
+    <p>評価セットは、その機能の受け入れ基準の証拠になります。ノートブックに写したプロンプトではなく、実際のアダプターを通して実行し、設定も記録します。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Datasets from what exists</h2>
-    <p>Quickturn starts with reviewed alternative answers as positive examples and deliberately perturbed answers as candidate negatives. A person checks perturbations because removing an article or changing a phrase can still produce valid English.</p>
+    <h2 id="s2"><span class="no">02</span>手元にあるものからデータセットを作る</h2>
+    <p>Quickturnはまず、レビュー済みの別解を正例として、わざと手を加えた解答を負例の候補として使います。手を加えた解答は人が確認します。冠詞を抜いたり言い回しを変えたりしても、正しい英語のままのことがあるからです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 344" role="img" aria-label="The grading gold set at the center is fed by four sources: reviewed alternative answers as positives, perturbed reference answers as tagged negatives, adversarial inputs, and typed answers learners graded themselves.">
+    <svg viewBox="0 0 400 344" role="img" aria-label="中央の採点用ゴールドセットには、4つの供給源があります。正例となるレビュー済みの別解、タグ付きの負例となる手を加えた模範解答、敵対的な入力、学習者が自分で採点した解答です。">
       <line x1="100" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="300" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="100" y1="264" x2="200" y2="172" class="ln"/>
       <line x1="300" y1="264" x2="200" y2="172" class="ln"/>
       <rect x="6" y="16" width="188" height="64" rx="6" class="node"/>
-      <text x="100" y="44" text-anchor="middle" class="t-hd">Alternatives</text>
-      <text x="100" y="66" text-anchor="middle" class="t-sm">positives</text>
+      <text x="100" y="44" text-anchor="middle" class="t-hd">別解</text>
+      <text x="100" y="66" text-anchor="middle" class="t-sm">正例</text>
       <rect x="206" y="16" width="188" height="64" rx="6" class="node"/>
-      <text x="300" y="44" text-anchor="middle" class="t-hd">Perturbations</text>
-      <text x="300" y="66" text-anchor="middle" class="t-sm">tagged negatives</text>
+      <text x="300" y="44" text-anchor="middle" class="t-hd">手を加えた解答</text>
+      <text x="300" y="66" text-anchor="middle" class="t-sm">タグ付きの負例</text>
       <rect x="110" y="142" width="180" height="60" rx="8" class="node-acc"/>
-      <text x="200" y="178" text-anchor="middle" class="t-hd t-acc">Gold set</text>
+      <text x="200" y="178" text-anchor="middle" class="t-hd t-acc">ゴールドセット</text>
       <rect x="6" y="264" width="188" height="64" rx="6" class="node"/>
-      <text x="100" y="292" text-anchor="middle" class="t-hd">Attacks</text>
-      <text x="100" y="314" text-anchor="middle" class="t-sm">adversarial inputs</text>
+      <text x="100" y="292" text-anchor="middle" class="t-hd">攻撃</text>
+      <text x="100" y="314" text-anchor="middle" class="t-sm">敵対的な入力</text>
       <rect x="206" y="264" width="188" height="64" rx="6" class="node"/>
-      <text x="300" y="292" text-anchor="middle" class="t-hd">Self-graded</text>
-      <text x="300" y="314" text-anchor="middle" class="t-sm">learners' own marks</text>
+      <text x="300" y="292" text-anchor="middle" class="t-hd">自己採点</text>
+      <text x="300" y="314" text-anchor="middle" class="t-sm">学習者自身の判定</text>
     </svg>
-    <figcaption>Each source reuses something Quickturn already stores or can make. Gold labels need a defensible review process, with particular attention to noisy self-grades and uncertain perturbations.</figcaption>
+    <figcaption>どの供給源も、Quickturnがすでに保存しているか、作れるものを使い回しています。ゴールドラベルには説明のつくレビュー手順が必要で、ノイズの多い自己採点と判断の難しい改変解答には特に注意します。</figcaption>
   </figure>
-    <p>Include empty, oversized, wrong-language, off-task and adversarial inputs. Learner-marked data is useful but noisier than reviewed labels. Card review uses accepted and rejected cards with reasons. Treat each language pair as its own evidence requirement; labels in one pair do not prove another pair's quality.</p>
+    <p>空の入力、長すぎる入力、違う言語の入力、課題と関係のない入力、敵対的な入力も含めます。学習者が付けたラベルは役に立ちますが、レビュー済みのラベルよりノイズが多くなります。カードのレビューには、理由付きで承認・却下されたカードを使います。言語の組み合わせごとに証拠を用意します。ある組み合わせのラベルは、別の組み合わせの品質を証明しません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>The metrics</h2>
-    <p>Agreement measures verdict quality, especially on negatives that should not be accepted. Schema and tag validity expose operational failures. Cost and latency reveal whether a quality gain is worth its price.</p>
+    <h2 id="s3"><span class="no">03</span>指標</h2>
+    <p>一致率は判定の質を測る指標で、特に受け入れてはいけない負例で重要になります。スキーマとタグの妥当性は、運用上の失敗をあぶり出します。費用とレイテンシを見れば、品質の向上がその値段に見合うかが分かります。</p>
   <table>
-    <thead><tr><th>Metric</th><th>What it tells you</th></tr></thead>
+    <thead><tr><th>指標</th><th>分かること</th></tr></thead>
     <tbody>
-      <tr><td>Agreement</td><td>How often the verdict matches the gold label</td></tr>
-      <tr><td>Flip rate</td><td>How often the verdict changes on the same input</td></tr>
-      <tr><td>Tag precision</td><td>Of the tags it gave, how many were right</td></tr>
-      <tr><td>Tag recall</td><td>Of the real errors, how many it found</td></tr>
-      <tr><td>Cost, latency</td><td>What one graded answer costs, and how long it takes</td></tr>
+      <tr><td>一致率</td><td>判定がゴールドラベルと一致する頻度</td></tr>
+      <tr><td>判定反転率</td><td>同じ入力で判定が変わる頻度</td></tr>
+      <tr><td>タグの適合率</td><td>付けたタグのうち、正しかったものの割合</td></tr>
+      <tr><td>タグの再現率</td><td>実際の誤りのうち、見つけたものの割合</td></tr>
+      <tr><td>費用、レイテンシ</td><td>解答1件の採点にかかる費用と時間</td></tr>
     </tbody>
   </table>
-    <p>Repeated grading estimates verdict stability. A mean agreement score can hide a category whose decisions change frequently.</p>
+    <p>同じ解答を繰り返し採点すると、判定の安定性を見積もれます。平均の一致率だけを見ていると、判定がたびたび変わる分類が隠れてしまいます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="An illustrative flip rate for five answers each graded ten times: answers one to four flip zero, one, zero and one times, while the fifth, a borderline answer, flips six times.">
-      <text x="16" y="36" class="t-sm">Answer 1</text>
+    <svg viewBox="0 0 400 300" role="img" aria-label="5つの解答をそれぞれ10回採点したときの判定反転率の例です。解答1から4の反転は0回、1回、0回、1回で、5つ目の境界例は6回反転しています。">
+      <text x="16" y="36" class="t-sm">解答1</text>
       <rect x="112" y="22" width="4" height="22" rx="2" class="node"/><text x="124" y="38" class="t-sm">0</text>
-      <text x="16" y="84" class="t-sm">Answer 2</text>
+      <text x="16" y="84" class="t-sm">解答2</text>
       <rect x="112" y="70" width="36" height="22" rx="2" class="node"/><text x="156" y="86" class="t-sm">1</text>
-      <text x="16" y="132" class="t-sm">Answer 3</text>
+      <text x="16" y="132" class="t-sm">解答3</text>
       <rect x="112" y="118" width="4" height="22" rx="2" class="node"/><text x="124" y="134" class="t-sm">0</text>
-      <text x="16" y="180" class="t-sm">Answer 4</text>
+      <text x="16" y="180" class="t-sm">解答4</text>
       <rect x="112" y="166" width="36" height="22" rx="2" class="node"/><text x="156" y="182" class="t-sm">1</text>
-      <text x="16" y="228" class="t-sm">Borderline</text>
+      <text x="16" y="228" class="t-sm">境界例</text>
       <rect x="112" y="214" width="216" height="22" rx="2" class="node-acc"/><text x="336" y="230" class="t-hd t-acc">6</text>
-      <text x="16" y="284" class="t-sm">Verdict changes in ten runs (illustrative)</text>
+      <text x="16" y="284" class="t-sm">10回の採点で判定が変わった回数（例示）</text>
     </svg>
-    <figcaption>In this illustration, two answers stay stable and two change once. The borderline answer changes six times, suggesting a case to investigate rather than proving a rubric defect.</figcaption>
+    <figcaption>この例では、2つの解答は安定していて、2つは1回だけ変わっています。境界例は6回変わっており、調べるべきケースであることを示しますが、ルーブリックの欠陥を証明するものではありません。</figcaption>
   </figure>
-    <p>For error tags, precision asks how many emitted tags are right; recall asks how many real errors were found.</p>
+    <p>エラータグについては、適合率は付けたタグのうちいくつが正しいかを、再現率は実際の誤りのうちいくつを見つけたかを問います。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the grader gave a tag against whether the error is really there: tag given and real is a true positive; given but not real is a false positive; not given but real is a false negative; neither is a true negative. Precision is read along the given row, recall along the real column.">
-      <text x="44" y="18" class="t-sm">↑ Tag given by the grader</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="採点者がタグを付けたかどうかと、誤りが実際にあるかどうかの2軸の図です。タグを付けて誤りもあれば真陽性、付けたが誤りがなければ偽陽性、付けなかったが誤りがあれば偽陰性、どちらもなければ真陰性です。適合率はタグを付けた行で、再現率は誤りがある列で読みます。">
+      <text x="44" y="18" class="t-sm">↑ 採点者がタグを付けた</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Error really there →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">誤りが実際にある →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="100" text-anchor="middle">False</text><text x="134" y="124" text-anchor="middle">positive</text>
+      <text x="134" y="112" text-anchor="middle">偽陽性</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-acc"/>
-      <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">True</text><text x="302" y="124" text-anchor="middle" class="t-hd t-acc">positive</text>
+      <text x="302" y="112" text-anchor="middle" class="t-hd t-acc">真陽性</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">True</text><text x="134" y="272" text-anchor="middle">negative</text>
+      <text x="134" y="260" text-anchor="middle">真陰性</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="248" text-anchor="middle">False</text><text x="302" y="272" text-anchor="middle">negative</text>
+      <text x="302" y="260" text-anchor="middle">偽陰性</text>
     </svg>
-    <figcaption>Precision reads along the top row: of the tags given, how many were real. Recall reads down the right column: of the real errors, how many got a tag.</figcaption>
+    <figcaption>適合率は上の行で読みます。付けたタグのうち、実際の誤りだったものの割合です。再現率は右の列で読みます。実際の誤りのうち、タグが付いたものの割合です。</figcaption>
   </figure>
-    <p>Finding 8 true errors among 10 emitted tags gives precision 0.8. If 12 errors were present, recall is about 0.67 and their harmonic-mean F1 is about 0.73. The denominator and label set need to be explicit.</p>
+    <p>付けたタグ10個のうち8個が本当の誤りなら、適合率は0.8です。誤りが全部で12個あったなら、再現率は約0.67で、両者の調和平均であるF1は約0.73になります。分母とラベルの集合は明示しておく必要があります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What the numbers cost</h2>
-    <p>A grader that accepts every positive can score well on a positive-only dataset. Include rejects, borderline cases and failure categories rather than rely on one aggregate metric.</p>
-    <p>Human labeling costs time, and small sets are noisy. Compare a candidate with a recorded baseline using tolerances justified by repeated runs. A convincing demo is not evidence that a model upgrade preserved policy answers or grading behavior. Real failures should become labeled regression cases.</p>
+    <h2 id="s4"><span class="no">04</span>数字の代償</h2>
+    <p>何でも受け入れる採点者は、正例だけのデータセットでは高い点を取れてしまいます。1つの集計指標に頼らず、却下すべき例、境界例、失敗の分類を含めます。</p>
+    <p>人がラベルを付けるには時間がかかり、小さなセットはノイズが大きくなります。候補は記録しておいたベースラインと比べ、許容幅は繰り返し実行した結果から根拠をもって決めます。デモが説得力を持っていても、モデルの更新でポリシーに関する回答や採点の振る舞いが保たれた証拠にはなりません。実際に起きた失敗は、ラベル付きの回帰テストのケースにします。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Build the evaluation before the feature; it is the test suite and the definition of done.</li>
-      <li>Use reviewed positives, candidate negatives, attacks and rejects, checking that each gold label matches the intended rubric.</li>
-      <li>Track several metrics against a recorded baseline, because any one metric can be gamed.</li>
+      <li>評価は機能より先に作る。それがテストスイートであり、完成の定義になる。</li>
+      <li>レビュー済みの正例、負例の候補、攻撃、却下例を使い、各ゴールドラベルが意図したルーブリックに合っているかを確かめる。</li>
+      <li>どの指標も1つだけなら抜け道があるので、複数の指標を記録済みのベースラインと比べて追う。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch06.html"><span>Previous</span><b>Should the timed drill wait for the grader?</b></a>
-    <a class="next" href="ch08.html"><span>Next</span><b>Where do evals run: in CI, at night or in production?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch06.html"><span>前へ</span><b>時間制限のあるドリルは採点を待つべきか</b></a>
+    <a class="next" href="ch08.html"><span>次へ</span><b>評価はCI、夜間、本番のどこで動かすのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>

@@ -1,46 +1,46 @@
-<!-- title: AI in Production 04 · A type instead of a paragraph | accent: guard -->
+<!-- title: AI機能を本番で動かす 04 · 文章ではなく型を返す | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 4 of 13</span></p>
-  <h1>Can an LLM return a type instead of a paragraph?</h1>
-  <p class="lead">The learner needs readable feedback, but the application needs a verdict and known error tags. Separate fields let code check shape without treating prose as instructions.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第4章 / 全13章</span></p>
+  <h1>LLMに文章ではなく型を返させられるか</h1>
+  <p class="lead">学習者には読みやすいフィードバックが必要ですが、アプリケーションには判定と決まったエラータグが必要です。フィールドを分けておけば、コードは文章を指示として扱わずに、形を検査できます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Why free text breaks</li>
-      <li>Constrained output</li>
-      <li>Validate again anyway</li>
-      <li>What a tight schema costs</li>
+      <li>自由なテキストが壊れる理由</li>
+      <li>制約つきの出力</li>
+      <li>それでも検証し直す</li>
+      <li>きついスキーマの代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Why free text breaks</h2>
-    <p>Parsing a grade from “the first line” fails when a model adds a greeting, changes a label or merges fields. Quickturn needs a verdict and error tags for code, plus feedback for the learner. Those should be separate fields, not conventions hidden in prose.</p>
+    <h2 id="s1"><span class="no">01</span>自由なテキストが壊れる理由</h2>
+    <p>「1行目」から採点結果を読み取る方式は、モデルが挨拶を足したり、ラベルを変えたり、フィールドをまとめたりすると壊れます。Quickturnには、コードが使う判定とエラータグ、学習者向けのフィードバックが必要です。これらは文章の中の暗黙の決まりではなく、別々のフィールドにするべきです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="For the same graded answer, a prose reply buries the verdict in a sentence, mentions errors loosely, mixes feedback into the text and adds chatter; a schema-bound reply has a verdict from a fixed list, error tags as concept ids, feedback as one field and no chatter.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Prose reply</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Schema-bound</text>
-      <text x="16" y="56" class="t-sm">Verdict</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">in a sentence</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="同じ解答の採点で、文章の応答では判定が文中に埋もれ、誤りへの言及は曖昧で、フィードバックが本文に混ざり、余計な前置きが付きます。スキーマに沿った応答では、判定は決まった一覧から選ばれ、エラータグは概念ID、フィードバックは1つのフィールドで、前置きはありません。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">文章の応答</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">スキーマ準拠</text>
+      <text x="16" y="56" class="t-sm">判定</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">文中に埋もれる</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">"acceptable"</text>
-      <text x="16" y="136" class="t-sm">Error tags</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">loosely named</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">concept ids</text>
-      <text x="16" y="216" class="t-sm">Feedback</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">mixed in</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one field</text>
-      <text x="16" y="296" class="t-sm">Extra chatter</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">"Sure! Here is…"</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">none</text>
+      <text x="16" y="136" class="t-sm">エラータグ</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">呼び方が揺れる</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">概念ID</text>
+      <text x="16" y="216" class="t-sm">フィードバック</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">本文に混ざる</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">1つのフィールド</text>
+      <text x="16" y="296" class="t-sm">余計な前置き</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">「はい！以下が…」</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="332" text-anchor="middle" class="t-hd t-acc">なし</text>
     </svg>
-    <figcaption>The right column has one typed value per row. Code can parse these fields separately, then check whether their values satisfy the task’s rules.</figcaption>
+    <figcaption>右の列は、どの行にも型の決まった値が1つずつ入っています。コードはこれらのフィールドを個別にパースし、値がタスクのルールを満たしているかを確かめられます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Constrained output</h2>
-    <p>Structured output supplies a supported JSON schema to constrain the response shape. The prompt still defines meaning, such as the difference between correct and acceptable. Quickturn derives the output schema from its typed Grade definition.</p>
+    <h2 id="s2"><span class="no">02</span>制約つきの出力</h2>
+    <p>構造化出力では、対応するJSONスキーマを渡して応答の形を制約します。それでも、正解と許容の違いのような意味を決めるのはプロンプトです。Quickturnは、出力スキーマを型つきのGrade定義から生成しています。</p>
     <pre><code>const Verdict = z.enum([
   "correct", "acceptable",
   "incorrect",
@@ -51,7 +51,7 @@ const Grade = z.object({
   feedback: z.string(),
 });</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="A zod schema becomes JSON Schema in the request, the model's output is constrained to it, the adapter validates it with zod and checks domain rules, and a typed result reaches domain code; a failure becomes a typed LLM error instead.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="zodのスキーマがリクエスト内のJSON Schemaになり、モデルの出力はそれに制約されます。アダプターがzodで検証してドメインルールを確かめ、型つきの結果がドメインのコードに届きます。失敗した場合は、代わりに型つきのLLMエラーになります。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -59,54 +59,54 @@ const Grade = z.object({
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">zod schema</text>
+      <text x="64" y="46">zodのスキーマ</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">JSON Schema in the request</text>
+      <text x="64" y="118">リクエスト内のJSON Schema</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Constrained output</text>
+      <text x="64" y="190">制約された出力</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">zod check, domain rules</text>
+      <text x="64" y="262">zodの検証、ドメインルール</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Typed result in domain code</text>
+      <text x="64" y="334" class="t-hd">ドメインのコードに型つき結果</text>
     </svg>
-    <figcaption>If the fourth step fails, the adapter returns a typed LLM error instead. The domain receives a parsed result or typed failure rather than the unparsed model reply.</figcaption>
+    <figcaption>4つ目のステップで失敗すると、アダプターは代わりに型つきのLLMエラーを返します。ドメインが受け取るのは、パース済みの結果か型つきの失敗で、未加工のモデルの応答ではありません。</figcaption>
   </figure>
-    <p>The adapter converts that definition to the supported JSON Schema subset and parses the result. Error tags use known concept IDs so “wrong tense” and “tense error” do not become unrelated categories. Support depends on model and API, and truncation or unsuccessful response status still needs handling.</p>
+    <p>アダプターは、その定義を対応するJSON Schemaのサブセットに変換し、結果をパースします。エラータグには既知の概念IDを使うので、「時制の誤り」と「時制ミス」が無関係な分類になることはありません。対応状況はモデルとAPIによって違い、出力の途中切れや失敗したレスポンスのステータスには、別に対処が必要です。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Validate again anyway</h2>
-    <p>A schema establishes shape, not truth. A well-formed reply may refer to a nonexistent concept, use the wrong feedback language or contradict its verdict. Quickturn checks those domain constraints after parsing and returns a typed task failure when they do not hold.</p>
+    <h2 id="s3"><span class="no">03</span>それでも検証し直す</h2>
+    <p>スキーマが保証するのは形であって、内容の正しさではありません。形の整った応答でも、存在しない概念を指したり、フィードバックの言語を間違えたり、自分の判定と矛盾したりすることがあります。Quickturnはパースのあとでこうしたドメインの制約を確かめ、満たしていなければ型つきのタスク失敗を返します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The adapter is the outer ring, where free text from the model is allowed; inside it the application layer; and at the center the domain core, which sees only typed fields.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="外側の輪がアダプターで、モデルからの自由なテキストはここまで許されます。その内側にアプリケーション層があり、中心のドメインコアは型つきのフィールドしか見ません。">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
-      <text x="24" y="36" class="t-hd">Adapter</text>
-      <text x="24" y="58" class="t-sm">free text allowed here</text>
+      <text x="24" y="36" class="t-hd">アダプター</text>
+      <text x="24" y="58" class="t-sm">自由なテキストはここまで</text>
       <rect x="40" y="76" width="320" height="200" rx="10" class="node"/>
-      <text x="56" y="104" class="t-hd">Application</text>
+      <text x="56" y="104" class="t-hd">アプリケーション</text>
       <rect x="80" y="128" width="240" height="120" rx="8" class="node-acc"/>
-      <text x="200" y="184" text-anchor="middle" class="t-hd t-acc">Domain core</text>
-      <text x="200" y="208" text-anchor="middle" class="t-sm">typed fields only</text>
+      <text x="200" y="184" text-anchor="middle" class="t-hd t-acc">ドメインコア</text>
+      <text x="200" y="208" text-anchor="middle" class="t-sm">型つきのフィールドのみ</text>
     </svg>
-    <figcaption>The adapter parses the model reply before returning a typed result or error. Feedback remains a string for safe display, rather than executable instructions.</figcaption>
+    <figcaption>アダプターはモデルの応答をパースしてから、型つきの結果かエラーを返します。フィードバックは安全に表示するための文字列のままで、実行される指示にはなりません。</figcaption>
   </figure>
-    <p>Retries are bounded. A persistently invalid grade remains ungraded rather than becoming a fabricated success. Feedback is displayed as text and is never used as executable code or as a machine decision hidden in free-form wording.</p>
+    <p>再試行の回数には上限があります。何度やっても不正な採点結果しか返らなければ、成功をでっち上げず、未採点のままにします。フィードバックはテキストとして表示するだけで、実行可能なコードとして使うことも、自由な文面に機械向けの判断を紛れ込ませることもしません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What a tight schema costs</h2>
-    <p>An excessively narrow label set can force a poor answer into the wrong category. Human disagreement with recurring “correct but unexpected” cases can justify an acceptable category or revised rubric. Flat schemas are easier to inspect than deeply nested responses.</p>
-    <p>Invoice extraction illustrates the same design: typed net, tax and total fields allow a separate arithmetic check. A schema makes errors detectable; domain checks and evaluations decide whether the values make sense.</p>
+    <h2 id="s4"><span class="no">04</span>きついスキーマの代償</h2>
+    <p>ラベルの選択肢を絞りすぎると、合わない答えを無理に間違った分類へ押し込むことになります。「正しいが想定外」の解答で人の判断とのずれが繰り返し起きるなら、許容の分類を設けるか、ルーブリックを見直す理由になります。また、深く入れ子になった応答より、平らなスキーマのほうが中身を確かめやすくなります。</p>
+    <p>請求書からの情報抽出でも、設計の考え方は同じです。税抜金額、税額、合計を型つきのフィールドにしておけば、計算が合っているかを別に確かめられます。スキーマは誤りを見つけられる形にするもので、値が筋の通ったものかどうかはドメインの検査と評価で判断します。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Ask for output that matches a schema, built from the same definitions as the API contract.</li>
-      <li>Parse the response and check domain rules; a schema-conforming value can still be wrong.</li>
-      <li>Typed fields drive decisions, while feedback remains text to display safely.</li>
+      <li>出力はスキーマに沿うように求め、そのスキーマはAPIの契約と同じ定義から作る。</li>
+      <li>応答をパースしてドメインルールを確かめる。スキーマに沿った値でも間違っていることはある。</li>
+      <li>判断には型つきのフィールドを使い、フィードバックは安全に表示するテキストのままにする。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch03.html"><span>Previous</span><b>Why does Bedrock want an inference profile, not a model?</b></a>
-    <a class="next" href="ch05.html"><span>Next</span><b>Why not one complete(prompt) function for every feature?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch03.html"><span>前へ</span><b>Bedrockはなぜモデルではなく推論プロファイルを求めるのか</b></a>
+    <a class="next" href="ch05.html"><span>次へ</span><b>すべての機能を1つのcomplete(prompt)関数で済ませないのはなぜか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/structured-output.html">Bedrock structured output support</a>.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成、2026年10月改訂。サービスの詳細：<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/structured-output.html">Bedrockの構造化出力への対応状況</a>。</p>
 </div>

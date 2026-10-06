@@ -1,85 +1,85 @@
-<!-- title: API and TypeScript 11 · Why a static SPA | accent: reach -->
+<!-- title: API と TypeScript 11 · 静的 SPA を選ぶ理由 | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 11 of 11</span></p>
-  <h1>Why a static SPA instead of server rendering?</h1>
-  <p class="lead">A signed-in practice screen shares its API with native apps. Server rendering would add another running tier; static files would leave an initial loading wait.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第11章 / 全11章</span></p>
+  <h1>なぜサーバーレンダリングでなく静的な SPA なのか</h1>
+  <p class="lead">ログイン後の練習画面は、ネイティブアプリと API を共有しています。サーバーレンダリングにすれば動かし続ける層が一つ増え、静的ファイルにすれば最初の読み込みで待ち時間が残ります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Four ways to render</li>
-      <li>Why Quickturn serves static files</li>
-      <li>Server state is a copy</li>
-      <li>When server rendering wins</li>
+      <li>四つのレンダリング方式</li>
+      <li>Quickturn が静的ファイルを配信する理由</li>
+      <li>手元のデータはサーバー状態のコピー</li>
+      <li>サーバーレンダリングが勝る場面</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Four ways to render</h2>
-    <p>Server-side rendering creates HTML per request. Static generation creates pages at build time. A single-page application sends a static shell, then renders after JavaScript and API data arrive. Hybrid frameworks combine these mechanisms.</p>
-    <p>Each option has operational consequences. Server rendering needs a runtime, a caching plan and secure data access. A static app moves interactive rendering and fetching into the browser while its API remains a separate responsibility.</p>
+    <h2 id="s1"><span class="no">01</span>四つのレンダリング方式</h2>
+    <p>サーバーサイドレンダリング（SSR）は、リクエストごとに HTML を作ります。静的サイト生成（SSG）は、ビルド時にページを作ります。シングルページアプリケーション（SPA）は静的な外枠を送り、JavaScript と API のデータが届いてから描画します。ハイブリッドなフレームワークは、これらの仕組みを組み合わせます。</p>
+    <p>どの方式にも、運用面での影響があります。サーバーレンダリングには、実行環境、キャッシュの計画、安全なデータアクセスが必要です。静的なアプリでは、インタラクティブな描画とデータ取得がブラウザ側に移り、API は別の責務として残ります。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Why Quickturn serves static files</h2>
-    <p>Quickturn's signed-in app shares an API with native clients and has little searchable public content. A web rendering server would add another session-aware tier. The public landing page can be static independently of the practice app.</p>
+    <h2 id="s2"><span class="no">02</span>Quickturn が静的ファイルを配信する理由</h2>
+    <p>Quickturn のログイン後のアプリはネイティブのクライアントと API を共有しており、検索で見つけてもらうための公開コンテンツはほとんどありません。Web 用のレンダリングサーバーを置くと、セッションを扱う層がもう一つ増えます。公開用のランディングページは、練習用のアプリとは別に静的にできます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of who sees the page against how often content changes: public pages that rarely change suit static generation, public pages that change per request suit server rendering, and pages behind sign-in suit a single-page app on a shared API in both rows.">
-      <text x="44" y="18" class="t-sm">↑ Content changes per request</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="誰がページを見るかと、内容がどれだけ頻繁に変わるかを軸にした2×2の図です。めったに変わらない公開ページには静的生成、リクエストごとに変わる公開ページにはサーバーレンダリングが向き、ログインが必要なページには、どちらの行でも共有 API を使う SPA が向いています。">
+      <text x="44" y="18" class="t-sm">↑ 内容がリクエストごとに変わる</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Behind sign-in →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">ログインが必要 →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="100" text-anchor="middle">SSR</text><text x="134" y="124" text-anchor="middle" class="t-sm">public, fresh</text>
+      <text x="134" y="100" text-anchor="middle">SSR</text><text x="134" y="124" text-anchor="middle" class="t-sm">公開、常に最新</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">SSG</text><text x="134" y="272" text-anchor="middle" class="t-sm">public, rarely</text>
+      <text x="134" y="248" text-anchor="middle">SSG</text><text x="134" y="272" text-anchor="middle" class="t-sm">公開、更新はまれ</text>
       <rect x="222" y="36" width="160" height="286" rx="6" class="node-acc"/>
       <text x="302" y="172" text-anchor="middle" class="t-hd t-acc">SPA</text>
-      <text x="302" y="198" text-anchor="middle" class="t-sm">on a shared API</text>
+      <text x="302" y="198" text-anchor="middle" class="t-sm">共有 API の上で</text>
     </svg>
-    <figcaption>Content freshness and first display help compare SSR and static generation. Quickturn's signed-in screens can use static files with their existing API.</figcaption>
+    <figcaption>内容の鮮度と最初の表示の速さは、SSR と静的生成を比べる手がかりになります。Quickturn のログイン後の画面は、既存の API と組み合わせて、静的ファイルで配信できます。</figcaption>
   </figure>
-    <p>The browser app and API use one origin, with the API under <code>/api</code>. An HttpOnly session cookie travels with requests without exposing its value to page scripts. Same-origin routing simplifies CORS and cookie policy, while state-changing requests still need CSRF protection.</p>
+    <p>ブラウザ用のアプリと API は同じオリジンを使い、API は <code>/api</code> の下に置いています。HttpOnly のセッション Cookie は、ページのスクリプトに値を見せずに、リクエストと一緒に送られます。同一オリジンにまとめると CORS や Cookie の設定は単純になりますが、状態を変えるリクエストには引き続き CSRF 対策が必要です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 260" role="img" aria-label="The CDN routes static files and API requests under one origin. Cookie authentication still follows its configured attributes and the browser’s cookie rules.">
+    <svg viewBox="0 0 400 260" role="img" aria-label="CDN が、静的ファイルと API のリクエストを一つのオリジンの下で振り分けます。Cookie による認証は、引き続き設定した属性とブラウザの Cookie のルールに従います。">
       <rect x="8" y="8" width="384" height="244" rx="10" class="zone-soft"/>
-      <text x="24" y="38" class="t-hd">One origin (the CDN)</text>
+      <text x="24" y="38" class="t-hd">一つのオリジン（CDN）</text>
       <rect x="24" y="56" width="168" height="80" rx="6" class="node"/>
       <text x="108" y="90" text-anchor="middle" class="t-hd">/*</text>
-      <text x="108" y="114" text-anchor="middle" class="t-sm">static files</text>
+      <text x="108" y="114" text-anchor="middle" class="t-sm">静的ファイル</text>
       <rect x="208" y="56" width="168" height="80" rx="6" class="node"/>
       <text x="292" y="90" text-anchor="middle" class="t-hd">/api/*</text>
-      <text x="292" y="114" text-anchor="middle" class="t-sm">the API</text>
+      <text x="292" y="114" text-anchor="middle" class="t-sm">API</text>
       <rect x="24" y="160" width="352" height="64" rx="6" class="node-acc"/>
-      <text x="200" y="198" text-anchor="middle" class="t-hd t-acc">Same-origin API requests</text>
+      <text x="200" y="198" text-anchor="middle" class="t-hd t-acc">同一オリジンの API リクエスト</text>
     </svg>
-    <figcaption>Both paths sit under the same domain. The browser sends the session cookie to the API as an ordinary same-site request.</figcaption>
+    <figcaption>どちらのパスも同じドメインの下にあります。ブラウザは、ふつうの同一サイトのリクエストとして、セッション Cookie を API に送ります。</figcaption>
   </figure>
-    <p>The cost is an initial wait for JavaScript and data, during which the app shows a loading state.</p>
+    <p>その代わり、最初は JavaScript とデータを待つ時間があり、そのあいだアプリは読み込み中の状態を表示します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="On first load the HTML shell comes from the CDN, then the JavaScript bundle, then a call to the home view with the cookie, and only then does the page render.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="最初の読み込みでは、CDN から HTML の外枠、次に JavaScript のバンドル、Cookie 付きのホーム用ビューの呼び出しが続き、それが済んでようやくページが描画されます。">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="6" class="dot"/>
       <circle cx="28" cy="256" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">HTML shell from the CDN</text>
+      <text x="64" y="46">CDN から HTML の外枠</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">The JavaScript bundle</text>
+      <text x="64" y="118">JavaScript のバンドル</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">GET /api/v1/home, with cookie</text>
+      <text x="64" y="190">GET /api/v1/home（Cookie 付き）</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Render</text>
+      <text x="64" y="262" class="t-hd">描画</text>
     </svg>
-    <figcaption>Server rendering can provide useful HTML before this client-side sequence finishes. Quickturn uses loading skeletons while its JavaScript and data arrive.</figcaption>
+    <figcaption>サーバーレンダリングなら、このクライアント側の手順が終わる前に、役に立つ HTML を表示できます。Quickturn は、JavaScript とデータが届くまでのあいだ、読み込み中のスケルトンを表示しています。</figcaption>
   </figure>
-    <p>Rendering only the home screen on a server would still require running and securing that tier. Quickturn first optimizes its bundle and home endpoint. A measured, persistent first-load problem could justify reconsidering rendering.</p>
+    <p>ホーム画面だけをサーバーで描画するとしても、その層を動かし、守る必要はなくなりません。Quickturn はまず、バンドルとホーム用エンドポイントを最適化しています。最初の読み込みの問題が計測で確認され、それが続くようなら、レンダリング方式を見直す理由になります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Server state is a copy</h2>
-    <p>The browser's streak and home data are cached copies of server state. TanStack Query tracks loading, errors and invalidation for those reads. Quickturn explicitly disables automatic retries and focus refetches as a product choice, rather than letting background activity surprise the learner.</p>
-    <p>Writes use the answer queue's retry policy. Keeping read caching and write replay responsibilities separate makes it clear which layer owns repetition and recovery.</p>
+    <h2 id="s3"><span class="no">03</span>手元のデータはサーバー状態のコピー</h2>
+    <p>ブラウザにある連続記録やホーム画面のデータは、サーバーの状態をキャッシュしたコピーです。TanStack Query は、こうした読み取りの読み込み状態、エラー、無効化を管理します。Quickturn は、裏で動く処理が学習者を驚かせないよう、プロダクトの判断として、自動リトライとフォーカス時の再取得を明示的に無効にしています。</p>
+    <p>書き込みは、回答キューのリトライ方針に従います。読み取りのキャッシュと書き込みの再送の責務を分けておくと、繰り返しと復旧をどの層が担うのかがはっきりします。</p>
     <pre><code>const homeQuery = queryOptions({
   queryKey: ["home"],
   queryFn: () =&gt; api.getHome(),
@@ -92,21 +92,21 @@ const queryClient = new QueryClient({
 });</code></pre>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When server rendering wins</h2>
-    <p>SSR or static generation can be useful for public content, search visibility and quick initial display. A rich signed-in app may reasonably use a static SPA. These are conditions to evaluate, not a ranking of modern and obsolete frameworks.</p>
-    <p>AI chat introduces a streaming interaction. Server-Sent Events or a streamed fetch can deliver text incrementally. The UI needs cancellation, partial-response handling and a way to report an interrupted answer. A completed-response query cache does not by itself provide that interaction model; choose the data flow for each screen.</p>
+    <h2 id="s4"><span class="no">04</span>サーバーレンダリングが勝る場面</h2>
+    <p>SSR や静的生成は、公開コンテンツ、検索での見つけやすさ、最初の表示の速さが求められる場面で役立ちます。機能の多いログイン後のアプリなら、静的な SPA を使うのも妥当です。これらは評価すべき条件であり、新しいフレームワークと古いフレームワークの順位付けではありません。</p>
+    <p>AI チャットでは、ストリーミングというやり取りが加わります。Server-Sent Events やストリーミングの fetch を使えば、テキストを少しずつ届けられます。UI には、キャンセル、途中までの応答の扱い、中断された回答を知らせる方法が必要です。完了した応答をキャッシュするクエリの仕組みだけでは、このやり取りには対応できません。データの流れは画面ごとに選びます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Server rendering and static generation earn their cost for public pages, search and content-first screens.</li>
-      <li>A same-origin static SPA suits Quickturn's shared API and signed-in screens, while initial loading remains a cost.</li>
-      <li>Treat API data as a cached copy of server state, and give streams like chat their own shape.</li>
+      <li>サーバーレンダリングと静的生成は、公開ページ、検索、内容を先に見せたい画面で、そのコストに見合います。</li>
+      <li>同一オリジンの静的 SPA は、Quickturn の共有 API とログイン後の画面に合っています。ただし、最初の読み込みのコストは残ります。</li>
+      <li>API のデータはサーバーの状態をキャッシュしたコピーとして扱い、チャットのようなストリームには、それに合った形を与えます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch10.html"><span>Previous</span><b>Can an app work offline if the server owns the rules?</b></a>
-    <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch10.html"><span>前へ</span><b>ルールをサーバーが持つアプリは、オフラインで動けるか</b></a>
+    <a class="next" href="ch00.html"><span>次へ</span><b>目次</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

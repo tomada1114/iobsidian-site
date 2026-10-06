@@ -1,24 +1,24 @@
-<!-- title: Operations 05 · What a model call costs | accent: think -->
+<!-- title: 運用と品質 05 · モデル呼び出しのコスト | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 5 of 12</span></p>
-  <h1>How do we see what a model call costs?</h1>
-  <p class="lead">A model bill rises after a prompt change. Call records can connect versions and usage, while the monthly bill confirms a different view of spending.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第5章 / 全12章</span></p>
+  <h1>モデル呼び出しのコストをどう見るか</h1>
+  <p class="lead">プロンプトを変えたあと、モデルの請求額が上がりました。呼び出しの記録からはバージョンと使用量の関係がわかり、月ごとの請求書は支出を別の角度から確かめる材料になります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What the bill can&#x27;t say</li>
-      <li>Where each piece comes from</li>
-      <li>What the records cost</li>
-      <li>Many calls, one task</li>
+      <li>請求書からはわからないこと</li>
+      <li>各項目の出どころ</li>
+      <li>記録からコストを出す</li>
+      <li>多くの呼び出しと一つのタスク</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What the bill can't say</h2>
-    <p>A monthly model bill cannot explain which prompt change made grading expensive. One API request may contain no model call or many calls, so call-level records are the useful starting unit.</p>
-    <p>Record model, feature, prompt version, input and output usage, cache usage, latency and estimated cost. The sample values are illustrative. Version fields let an investigator separate the old and new behavior instead of mixing them into one total.</p>
+    <h2 id="s1"><span class="no">01</span>請求書からはわからないこと</h2>
+    <p>月ごとのモデルの請求書を見ても、どのプロンプト変更で採点が高くついたのかはわかりません。一つの API リクエストにモデル呼び出しが一度もないこともあれば、何度も含まれることもあります。出発点として役に立つのは、呼び出し単位の記録です。</p>
+    <p>モデル、機能、プロンプトのバージョン、入力と出力の使用量、キャッシュの使用量、レイテンシ、推定コストを記録します。下の値は説明のための例です。バージョンの項目があれば、調べる人は新旧の振る舞いを一つの合計に混ぜずに、分けて見られます。</p>
     <pre><code>{
   "modelId": "…haiku…",
   "promptVersion": "grade-v3",
@@ -31,70 +31,70 @@
   "estimatedCostUsd": 0.0013
 }</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="One model call in the center, with six parts around it: model id, prompt version, feature, tokens including cache, latency and estimated cost. The call is the unit a regression or a cost spike is traced back to.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="中央に一回のモデル呼び出しがあり、周りに六つの項目がある。モデル ID、プロンプトのバージョン、機能、キャッシュを含むトークン数、レイテンシ、推定コスト。品質の低下やコストの急増は、この呼び出しを単位にさかのぼって調べる。">
       <line x1="200" y1="166" x2="104" y2="44" class="ln"/>
       <line x1="200" y1="166" x2="296" y2="44" class="ln"/>
       <line x1="200" y1="166" x2="80" y2="166" class="ln"/>
       <line x1="200" y1="166" x2="320" y2="166" class="ln"/>
       <line x1="200" y1="166" x2="104" y2="288" class="ln"/>
       <line x1="200" y1="166" x2="296" y2="288" class="ln"/>
-      <rect x="16" y="20" width="176" height="48" rx="6" class="node"/><text x="104" y="50" text-anchor="middle">model id</text>
-      <rect x="208" y="20" width="176" height="48" rx="6" class="node"/><text x="296" y="50" text-anchor="middle">prompt version</text>
-      <rect x="8" y="142" width="112" height="48" rx="6" class="node"/><text x="64" y="172" text-anchor="middle">feature</text>
-      <rect x="280" y="142" width="112" height="48" rx="6" class="node"/><text x="336" y="172" text-anchor="middle">latency</text>
-      <rect x="16" y="264" width="176" height="48" rx="6" class="node"/><text x="104" y="294" text-anchor="middle">tokens + cache</text>
-      <rect x="208" y="264" width="176" height="48" rx="6" class="node"/><text x="296" y="294" text-anchor="middle">estimated cost</text>
+      <rect x="16" y="20" width="176" height="48" rx="6" class="node"/><text x="104" y="50" text-anchor="middle">モデル ID</text>
+      <rect x="208" y="20" width="176" height="48" rx="6" class="node"/><text x="296" y="50" text-anchor="middle">プロンプトの版</text>
+      <rect x="8" y="142" width="112" height="48" rx="6" class="node"/><text x="64" y="172" text-anchor="middle">機能</text>
+      <rect x="280" y="142" width="112" height="48" rx="6" class="node"/><text x="336" y="172" text-anchor="middle">レイテンシ</text>
+      <rect x="16" y="264" width="176" height="48" rx="6" class="node"/><text x="104" y="294" text-anchor="middle">トークン + キャッシュ</text>
+      <rect x="208" y="264" width="176" height="48" rx="6" class="node"/><text x="296" y="294" text-anchor="middle">推定コスト</text>
       <rect x="132" y="138" width="136" height="56" rx="8" class="node-acc"/>
-      <text x="200" y="172" text-anchor="middle" class="t-hd t-acc">one call</text>
+      <text x="200" y="172" text-anchor="middle" class="t-hd t-acc">1回の呼び出し</text>
     </svg>
-    <figcaption>Call records let an investigator compare usage and outcomes across configurations. Each part around it answers one question.</figcaption>
+    <figcaption>呼び出しの記録があれば、調べる人は構成ごとに使用量と結果を比べられます。周りの各項目が、それぞれ一つの問いに答えます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Where each piece comes from</h2>
-    <p>The adapter collects provider-reported token usage and measures the call duration. Optional raw invocation logging is a different signal that may retain sensitive content. Tagged inference profiles provide another view in billing reports.</p>
+    <h2 id="s2"><span class="no">02</span>各項目の出どころ</h2>
+    <p>トークンの使用量はプロバイダーが報告する値をアダプターが集め、呼び出しの所要時間もアダプターが計ります。任意で有効にできる生の呼び出しログは別のシグナルで、機密性のある内容を残すことがあります。タグをつけた推論プロファイルを使うと、請求レポートでも別の切り口で見られます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Four layers: the application call record, which knows the feature and prompt version; Bedrock invocation logs with the raw request and response; tags on the inference profiles; and Cost Explorer with the cost dashboard.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="四つの層。機能とプロンプトのバージョンを知っているアプリケーションの呼び出し記録、生のリクエストとレスポンスを残す Bedrock の呼び出しログ、推論プロファイルのタグ、そしてコストダッシュボードを持つ Cost Explorer。">
       <rect x="16" y="16" width="368" height="56" rx="6" class="node-acc"/>
-      <text x="32" y="50" class="t-hd t-acc">App record · prompt version</text>
+      <text x="32" y="50" class="t-hd t-acc">アプリの記録 · プロンプトのバージョン</text>
       <rect x="16" y="88" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="122">Invocation logs · raw text</text>
+      <text x="32" y="122">呼び出しログ · 生のテキスト</text>
       <rect x="16" y="160" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="194">Profile tags · per feature</text>
+      <text x="32" y="194">プロファイルのタグ · 機能ごと</text>
       <rect x="16" y="232" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="266">Cost Explorer · dashboard</text>
+      <text x="32" y="266">Cost Explorer · ダッシュボード</text>
     </svg>
-    <figcaption>Quickturn’s application record explicitly includes the prompt version. Billing tags, optional raw logs and usage totals provide complementary evidence.</figcaption>
+    <figcaption>Quickturn のアプリケーションの記録には、プロンプトのバージョンを明示的に入れています。請求のタグ、任意の生ログ、使用量の合計は、それを補う証拠になります。</figcaption>
   </figure>
-    <p>Standard telemetry conventions can make tooling interoperable, but evolving GenAI names should be adopted under a pinned version. Agent session traces connect calls and tools. Application records remain necessary where only the application knows the feature and prompt version.</p>
+    <p>標準的なテレメトリの規約に合わせると、ツールどうしを組み合わせやすくなります。ただし、生成 AI 向けの名前はまだ変わり続けているので、バージョンを固定して採用します。エージェントのセッショントレースは、呼び出しとツールをつなぎます。それでも、機能やプロンプトのバージョンをアプリケーションしか知らない以上、アプリケーション側の記録は欠かせません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What the records cost</h2>
-    <p>Token counts are observed quantities; cost is computed from a dated price table. Retain the counts and pricing version so estimates can be checked. Cache reads and writes need their own rules to avoid counting the same input twice.</p>
+    <h2 id="s3"><span class="no">03</span>記録からコストを出す</h2>
+    <p>トークン数は観測された量で、コストは日付つきの価格表から計算した値です。推定を検証できるように、トークン数と価格表のバージョンを残しておきます。キャッシュの読み込みと書き込みには、同じ入力を二重に数えないための専用のルールが必要です。</p>
 <dl class="terms">
-  <dt>Which feature?</dt><dd>The bill: only with tags. The call record: always.</dd>
-  <dt>Which prompt version?</dt><dd>The bill: never. The call record: always.</dd>
-  <dt>Compare changes?</dt><dd>The bill: no. The call record: compare versions and times, then investigate the cause.</dd>
-  <dt>Per learner?</dt><dd>The bill: no. The usage ledger: yes.</dd>
+  <dt>どの機能か</dt><dd>請求書：タグがあればわかる。呼び出し記録：常にわかる。</dd>
+  <dt>どのプロンプトのバージョンか</dt><dd>請求書：わからない。呼び出し記録：常にわかる。</dd>
+  <dt>変更の前後を比べられるか</dt><dd>請求書：比べられない。呼び出し記録：バージョンと時刻で比べ、そのうえで原因を調べられる。</dd>
+  <dt>学習者ごとに見られるか</dt><dd>請求書：見られない。使用量の台帳：見られる。</dd>
 </dl>
-    <p>Raw prompts require separate access and retention decisions. Task ports and a shared adapter make the telemetry less dependent on callers remembering fields. Usage reservations and account budget controls act on spending; telemetry exposes what actually happened.</p>
+    <p>生のプロンプトについては、アクセス権と保持期間を別に決める必要があります。タスクごとのポートと共通のアダプターを通せば、呼び出す側が項目を覚えていなくてもテレメトリが残ります。使用量の予約やアカウントの予算管理は支出そのものを抑え、テレメトリは実際に何が起きたかを見せます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Many calls, one task</h2>
-    <p>An agent task can contain ten inexpensive-looking calls whose combined cost is significant. Share a task, session or trace identifier and aggregate usage per completed and failed task.</p>
-    <p>Wall-clock task latency is not always the sum of call durations because calls can run in parallel or include waiting. Measure the whole task directly and use spans to explain its parts. Per-call detail supports diagnosis; task totals support product and spending decisions.</p>
+    <h2 id="s4"><span class="no">04</span>多くの呼び出しと一つのタスク</h2>
+    <p>エージェントの1タスクに、一つずつは安く見える呼び出しが10回含まれ、合計すると無視できないコストになることがあります。タスク、セッション、トレースのいずれかの識別子を共有し、完了したタスクと失敗したタスクごとに使用量を集計します。</p>
+    <p>タスクの実時間のレイテンシは、呼び出しの所要時間の合計になるとは限りません。呼び出しが並行して走ったり、待ち時間が入ったりするからです。タスク全体を直接計り、その内訳はスパンで説明します。呼び出し単位の詳細は診断に、タスク単位の合計はプロダクトと支出の判断に使います。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Record every model call with its model, prompt version, feature, tokens, latency and cost.</li>
-      <li>Include prompt versions explicitly in application records; billing reports and provider logs answer complementary questions.</li>
-      <li>Prompts may contain personal data; shared task IDs connect agent calls for investigation.</li>
+      <li>モデルの呼び出しはすべて、モデル、プロンプトのバージョン、機能、トークン数、レイテンシ、コストとともに記録します。</li>
+      <li>アプリケーションの記録にはプロンプトのバージョンを明示的に入れます。請求レポートとプロバイダーのログは、それを補う別の問いに答えます。</li>
+      <li>プロンプトには個人データが含まれることがあります。共通のタスク ID があれば、エージェントの呼び出しをつないで調べられます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch04.html"><span>Previous</span><b>How reliable is reliable enough?</b></a>
-    <a class="next" href="ch06.html"><span>Next</span><b>Is a testing strategy just 'write more unit tests'?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch04.html"><span>前へ</span><b>どこまで信頼できれば十分か</b></a>
+    <a class="next" href="ch06.html"><span>次へ</span><b>テスト戦略とは「単体テストを増やす」ことなのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

@@ -1,113 +1,113 @@
-<!-- title: Architecture 02 · If the rules can't touch the database | accent: think -->
+<!-- title: アーキテクチャ 02 · ルールがDBに触れないなら、誰が保存するのか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 2 of 11</span></p>
-  <h1>If the rules can't touch the database, who saves?</h1>
-  <p class="lead">The application still has to save a round, even when its rules cannot import the database client. Saving and source-code dependencies need different directions.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第2章 / 全11章</span></p>
+  <h1>ルールがDBに触れないなら、誰が保存するのか</h1>
+  <p class="lead">ルールのコードがデータベースクライアントをimportできなくても、アプリケーションはラウンドを保存しなければなりません。保存の処理が流れる向きと、ソースコードの依存の向きは、別々に決める必要があります。</p>
+  <p class="meta"><span>読了 約5分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>The layers everyone learns first</li>
-      <li>Flip one arrow</li>
-      <li>Enforced, not just drawn</li>
-      <li>When plain layering wins</li>
+      <li>最初に習うレイヤー構成</li>
+      <li>矢印を一本だけ反転する</li>
+      <li>図に描くだけでなく強制する</li>
+      <li>素直なレイヤー構成で足りるとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The layers everyone learns first</h2>
-    <p>A conventional layered application lets pages call business logic, which calls data access, which calls the database. This is easy to explain and often adequate for CRUD tools. It also means the business rules depend on the data-access layer.</p>
+    <h2 id="s1"><span class="no">01</span>最初に習うレイヤー構成</h2>
+    <p>従来のレイヤー構成では、画面がビジネスロジックを呼び、ビジネスロジックがデータアクセスを呼び、データアクセスがデータベースを呼びます。説明しやすく、CRUD中心のツールならたいていこれで十分です。ただしこの構成では、ビジネスルールがデータアクセス層に依存することになります。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 296" role="img" aria-label="Classic N-tier layering: presentation depends on business logic, which depends on data access, which depends on the database, so everything ends up depending on the database.">
-        <text x="16" y="18" class="t-sm">Closest to users</text>
-        <rect x="16" y="28" width="368" height="44" rx="6" class="node"/><text x="32" y="56">Presentation</text>
+      <svg viewBox="0 0 400 296" role="img" aria-label="古典的なN層構成。プレゼンテーションはビジネスロジックに、ビジネスロジックはデータアクセスに、データアクセスはデータベースに依存するので、結局すべてがデータベースに依存する。">
+        <text x="16" y="18" class="t-sm">利用者に最も近い</text>
+        <rect x="16" y="28" width="368" height="44" rx="6" class="node"/><text x="32" y="56">プレゼンテーション</text>
         <line x1="200" y1="74" x2="200" y2="94" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="98" width="368" height="44" rx="6" class="node"/><text x="32" y="126">Business logic</text>
+        <rect x="16" y="98" width="368" height="44" rx="6" class="node"/><text x="32" y="126">ビジネスロジック</text>
         <line x1="200" y1="144" x2="200" y2="164" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="168" width="368" height="44" rx="6" class="node"/><text x="32" y="196">Data access</text>
+        <rect x="16" y="168" width="368" height="44" rx="6" class="node"/><text x="32" y="196">データアクセス</text>
         <line x1="200" y1="214" x2="200" y2="234" class="ln" marker-end="url(#arw)"/>
-        <rect x="16" y="238" width="368" height="48" rx="6" class="node-acc"/><text x="32" y="268" class="t-hd t-acc">Database</text>
-        <text x="368" y="268" text-anchor="end" class="t-sm">everyone depends on it</text>
+        <rect x="16" y="238" width="368" height="48" rx="6" class="node-acc"/><text x="32" y="268" class="t-hd t-acc">データベース</text>
+        <text x="368" y="268" text-anchor="end" class="t-sm">全員がここに依存する</text>
       </svg>
-      <figcaption>In classic layering every arrow points down. Follow them and everything, including the business rules, ends up depending on the database.</figcaption>
+      <figcaption>古典的なレイヤー構成では、矢印はすべて下を向きます。たどっていくと、ビジネスルールを含むすべてが、最終的にデータベースに依存しています。</figcaption>
     </figure>
-    <p>That dependency affects both change and testing. Exercising a rule may need a database or a substitute, and a storage change can reach the rules. Quickturn's early SQL prototype avoided this by keeping its drill rules as plain functions. Moving to DynamoDB changed the storage implementation while those functions stayed the same.</p>
+    <p>この依存は、変更とテストの両方に影響します。ルールを試すのにデータベースかその代用品が必要になり、保存方法の変更がルールにまで及ぶこともあります。Quickturnの初期のSQLプロトタイプは、出題のルールを素の関数として書くことでこれを避けていました。そのおかげでDynamoDBに移行したときも、変わったのは保存の実装だけで、ルールの関数はそのままでした。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Flip one arrow</h2>
-    <p>Dependency inversion separates high-level policy from low-level technology. The inner side defines an interface describing what the application needs, and the outer adapter implements it. Runtime calls can still reach the database even though source-code dependencies point inward.</p>
+    <h2 id="s2"><span class="no">02</span>矢印を一本だけ反転する</h2>
+    <p>依存関係逆転は、上位の方針と下位の技術を切り離します。内側が、アプリケーションに必要なことを表すインターフェースを定義し、外側のアダプターがそれを実装します。ソースコードの依存は内側を向いていても、実行時の呼び出しはこれまでどおりデータベースまで届きます。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="On the left, business logic depends on data access. On the right, the application owns a store interface and the DynamoDB adapter points up into it, so the flipped arrow now points inward.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Classic</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Inverted</text>
-        <rect x="16" y="44" width="176" height="52" rx="6" class="node"/><text x="104" y="76" text-anchor="middle">Business logic</text>
+      <svg viewBox="0 0 400 300" role="img" aria-label="左ではビジネスロジックがデータアクセスに依存する。右ではアプリケーションがストアのインターフェースを持ち、DynamoDBのアダプターがそこへ向かって依存するので、反転した矢印は内側を向く。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">従来</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">逆転後</text>
+        <rect x="16" y="44" width="176" height="52" rx="6" class="node"/><text x="104" y="76" text-anchor="middle">ビジネスロジック</text>
         <line x1="104" y1="98" x2="104" y2="196" class="ln" marker-end="url(#arw)"/>
-        <text x="112" y="152" class="t-sm">imports</text>
-        <rect x="16" y="200" width="176" height="52" rx="6" class="node-soft"/><text x="104" y="232" text-anchor="middle">Data access</text>
-        <rect x="208" y="44" width="176" height="52" rx="6" class="node"/><text x="296" y="68" text-anchor="middle">Application</text><text x="296" y="88" text-anchor="middle" class="t-sm">owns the interface</text>
+        <text x="112" y="152" class="t-sm">import</text>
+        <rect x="16" y="200" width="176" height="52" rx="6" class="node-soft"/><text x="104" y="232" text-anchor="middle">データアクセス</text>
+        <rect x="208" y="44" width="176" height="52" rx="6" class="node"/><text x="296" y="68" text-anchor="middle">アプリケーション</text><text x="296" y="88" text-anchor="middle" class="t-sm">インターフェースを持つ</text>
         <rect x="224" y="112" width="144" height="40" rx="6" class="node"/><text x="296" y="137" text-anchor="middle" class="t-sm">LearnerStore</text>
         <line x1="296" y1="198" x2="296" y2="156" class="ln-acc" marker-end="url(#arw-acc)"/>
-        <text x="304" y="182" class="t-sm t-acc">implements</text>
+        <text x="304" y="182" class="t-sm t-acc">実装する</text>
         <rect x="208" y="200" width="176" height="52" rx="6" class="node"/><text x="296" y="232" text-anchor="middle">DynamoDB</text>
-        <text x="200" y="288" text-anchor="middle" class="t-sm">Only one arrow changed direction</text>
+        <text x="200" y="288" text-anchor="middle" class="t-sm">向きが変わった矢印は一本だけ</text>
       </svg>
-      <figcaption>The boxes are the same; only the arrow between them flips. On the right the adapter depends on an interface the application defined, so storage points inward.</figcaption>
+      <figcaption>箱は同じで、間の矢印が一本反転しただけです。右では、アダプターがアプリケーションの定義したインターフェースに依存するので、保存側の依存が内側を向きます。</figcaption>
     </figure>
-    <p>Quickturn's application package owns a learner-store interface for reading a round, reading today's portion and committing changes. DynamoDB and in-memory adapters implement it. At startup, the HTTP application supplies the real adapter.</p>
-    <p>The domain does not call that interface. It takes values and returns decisions. The application loads the values, asks the domain to decide, then commits through the store. The application coordinates saving; the adapter performs it.</p>
+    <p>Quickturnのアプリケーションパッケージは、学習者ストアのインターフェースを持っています。ラウンドの読み込み、その日のノルマの読み込み、変更のコミットを表すものです。DynamoDB版とインメモリ版のアダプターがこれを実装し、起動時にHTTPアプリケーションが本物のアダプターを渡します。</p>
+    <p>ドメインはこのインターフェースを呼びません。値を受け取って判断を返すだけです。アプリケーションが値を読み込み、ドメインに判断させ、ストアを通じてコミットします。保存の段取りを組むのはアプリケーションで、実際に保存するのはアダプターです。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Enforced, not just drawn</h2>
-    <p>A dependency diagram needs enforcement. Quickturn's domain accepts time, time zones and randomness as inputs instead of reading them through external libraries. A test can therefore exercise 3:59 a.m. directly.</p>
-    <p>Lint checks forbidden imports, and an independent test scans the import graph and declared dependencies. Removing a lint rule does not remove the second check.</p>
+    <h2 id="s3"><span class="no">03</span>図に描くだけでなく強制する</h2>
+    <p>依存関係の図は、強制する仕組みがあって初めて意味を持ちます。Quickturnのドメインは、時刻、タイムゾーン、乱数を外部ライブラリから読まず、入力として受け取ります。そのためテストでは、午前3時59分の状況をそのまま試せます。</p>
+    <p>禁止されたimportはlintがチェックし、それとは独立したテストが、importグラフと宣言された依存関係を走査します。lintのルールを外しても、二つ目のチェックは残ります。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="A proposed domain-to-database import fails lint and an independent import-graph test. The storage adapter belongs outside the protected rules.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Proposed import</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Boundary checks</text>
-        <text x="16" y="56" class="t-sm">New dependency</text>
+      <svg viewBox="0 0 400 276" role="img" aria-label="ドメインからデータベースへのimportを追加すると、lintと、それとは独立したimportグラフのテストの両方で失敗する。保存のアダプターは、守られたルールの外側に置く。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">追加されたimport</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">境界のチェック</text>
+        <text x="16" y="56" class="t-sm">新しい依存</text>
         <rect x="16" y="64" width="176" height="44" rx="6" class="node"/>
-        <text x="104" y="83" text-anchor="middle" class="t-sm">domain imports</text>
-        <text x="104" y="101" text-anchor="middle" class="t-sm">database client</text>
+        <text x="104" y="83" text-anchor="middle" class="t-sm">ドメインが</text>
+        <text x="104" y="101" text-anchor="middle" class="t-sm">DBクライアントをimport</text>
         <rect x="208" y="64" width="176" height="44" rx="6" class="node"/>
-        <text x="296" y="83" text-anchor="middle" class="t-sm">lint rejects</text>
-        <text x="296" y="101" text-anchor="middle" class="t-sm">the import</text>
-        <text x="16" y="136" class="t-sm">Independent check</text>
+        <text x="296" y="83" text-anchor="middle" class="t-sm">lintが</text>
+        <text x="296" y="101" text-anchor="middle" class="t-sm">importを拒否する</text>
+        <text x="16" y="136" class="t-sm">独立したチェック</text>
         <rect x="16" y="144" width="176" height="44" rx="6" class="node"/>
-        <text x="104" y="163" text-anchor="middle" class="t-sm">declared package</text>
-        <text x="104" y="181" text-anchor="middle" class="t-sm">dependency</text>
+        <text x="104" y="163" text-anchor="middle" class="t-sm">パッケージの</text>
+        <text x="104" y="181" text-anchor="middle" class="t-sm">依存の宣言</text>
         <rect x="208" y="144" width="176" height="44" rx="6" class="node"/>
-        <text x="296" y="163" text-anchor="middle" class="t-sm">graph test checks</text>
-        <text x="296" y="181" text-anchor="middle" class="t-sm">the same edge</text>
-        <text x="16" y="216" class="t-sm">Repair</text>
+        <text x="296" y="163" text-anchor="middle" class="t-sm">グラフのテストも</text>
+        <text x="296" y="181" text-anchor="middle" class="t-sm">同じ辺を確かめる</text>
+        <text x="16" y="216" class="t-sm">修正</text>
         <rect x="16" y="224" width="176" height="44" rx="6" class="node"/>
-        <text x="104" y="243" text-anchor="middle" class="t-sm">storage detail</text>
-        <text x="104" y="261" text-anchor="middle" class="t-sm">inside the rules</text>
+        <text x="104" y="243" text-anchor="middle" class="t-sm">保存の詳細が</text>
+        <text x="104" y="261" text-anchor="middle" class="t-sm">ルールの内側にある</text>
         <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/>
-        <text x="296" y="243" text-anchor="middle" class="t-sm">application port</text>
-        <text x="296" y="261" text-anchor="middle" class="t-sm">adapter outside</text>
+        <text x="296" y="243" text-anchor="middle" class="t-sm">アプリのポート、</text>
+        <text x="296" y="261" text-anchor="middle" class="t-sm">アダプターは外側</text>
       </svg>
-      <figcaption>Lint and the graph test reject the same forbidden dependency independently. They enforce the chosen direction; they do not judge every design choice.</figcaption>
+      <figcaption>lintとグラフのテストは、同じ禁止された依存をそれぞれ独立に拒否します。どちらも選んだ向きを強制するもので、設計の良し悪しまで判断するわけではありません。</figcaption>
     </figure>
-    <p>A failed check makes the forbidden dependency visible before the change is accepted. Review still decides whether the interface expresses the right application need. The checks protect a chosen boundary rather than choose it for the team.</p>
+    <p>チェックが失敗すれば、禁止された依存は変更が受け入れられる前に表に出ます。それでも、インターフェースがアプリケーションに必要なことを正しく表しているかどうかは、レビューで判断します。チェックはチームが選んだ境界を守るものであって、境界を代わりに選んではくれません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When plain layering wins</h2>
-    <p>Inversion adds an interface, startup wiring and a search for the implementation when reading code. Mapping every object into a new shape at every layer adds another cost. Quickturn avoids most of that copying by passing domain types through the application and mapping at the HTTP boundary.</p>
-    <p>For a small admin tool whose behavior mostly follows its tables, conventional layering may be simpler. Strict layering allows calls only to the next layer; relaxed layering allows some layers to be skipped. Either needs an explicit dependency policy.</p>
-    <p>Independent rule tests, known storage alternatives and behavior shared by several clients each give the protected core a purpose. Quickturn has all three. Adding an interface to every trivial operation can instead make each change larger without creating a useful boundary.</p>
+    <h2 id="s4"><span class="no">04</span>素直なレイヤー構成で足りるとき</h2>
+    <p>依存関係逆転を入れると、インターフェース、起動時の配線、そしてコードを読むときに実装を探す手間が増えます。層ごとにすべてのオブジェクトを別の形に詰め替えるなら、コストはさらにかさみます。Quickturnは、ドメインの型をアプリケーション層までそのまま通し、HTTPの境界でだけ変換することで、詰め替えの大半を避けています。</p>
+    <p>振る舞いの大半がテーブル構造に沿っている小さな管理ツールなら、従来のレイヤー構成のほうが単純かもしれません。厳格なレイヤー構成では、すぐ下の層しか呼べません。緩いレイヤー構成では、一部の層を飛ばして呼べます。どちらを選ぶにしても、依存のルールを明文化しておく必要があります。</p>
+    <p>ルールを単独でテストしたい、保存先の候補がすでに複数ある、複数のクライアントが同じ振る舞いを共有している。このどれもが、守られたコアを持つ理由になります。Quickturnには三つともそろっています。逆に、ささいな操作のすべてにインターフェースを足すと、役に立つ境界は生まれないまま、変更のたびに手間が増えます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Conventional downward dependencies can make business-rule tests and changes depend on data-access behavior.</li>
-      <li>Dependency inversion lets the rules' side own the interface and makes the storage code implement it.</li>
-      <li>Inversion costs an interface and wiring; pay it when the rules are worth protecting, not for plain CRUD.</li>
+      <li>従来の下向きの依存では、ビジネスルールのテストや変更が、データアクセスの振る舞いに左右されることがあります。</li>
+      <li>依存関係逆転では、ルールの側がインターフェースを持ち、保存のコードがそれを実装します。</li>
+      <li>逆転にはインターフェースと配線のコストがかかるので、素朴なCRUDではなく、守る価値のあるルールがあるときに使います。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch01.html"><span>Previous</span><b>Isn't architecture just folders?</b></a>
-    <a class="next" href="ch03.html"><span>Next</span><b>Should every dependency get a port?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch01.html"><span>前へ</span><b>アーキテクチャはフォルダ構成のことか</b></a>
+    <a class="next" href="ch03.html"><span>次へ</span><b>すべての依存にポートを用意すべきか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

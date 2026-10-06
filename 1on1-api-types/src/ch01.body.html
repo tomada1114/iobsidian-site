@@ -1,35 +1,35 @@
-<!-- title: API and TypeScript 01 · If types vanish at runtime | accent: reach -->
+<!-- title: API と TypeScript 01 · 実行時に消える型 | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 1 of 11</span></p>
-  <h1>If types vanish at runtime, what are they for?</h1>
-  <p class="lead">A request contains a deck size as text, even though the handler expects a number. The TypeScript compiler cannot inspect bytes that arrive after the program starts.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第1章 / 全11章</span></p>
+  <h1>実行時に消える型は、何のためにあるのか</h1>
+  <p class="lead">ハンドラーは数値を期待しているのに、リクエストではデッキの枚数が文字列として届きます。プログラムが動き始めたあとに届くバイト列を、TypeScript のコンパイラは検査できません。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Shapes, not names</li>
-      <li>Unions and narrowing</li>
-      <li>What types cannot do</li>
-      <li>Beyond Quickturn</li>
+      <li>名前ではなく形で比べる</li>
+      <li>ユニオン型と絞り込み</li>
+      <li>型にできないこと</li>
+      <li>モデルの応答も外部データ</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Shapes, not names</h2>
-    <p>TypeScript compares the structure of values, rather than requiring a declared class or interface name. An object with a <code>learnerId</code> field can satisfy <code>HasLearner</code> even if it never names that interface. This is structural typing.</p>
-    <p>Inference supplies many local types, so explicit annotations are most useful at shared boundaries such as function parameters and exported return values. Those annotations state the promises other code relies on.</p>
+    <h2 id="s1"><span class="no">01</span>名前ではなく形で比べる</h2>
+    <p>TypeScript は、宣言されたクラス名やインターフェース名ではなく、値の構造を比べます。<code>learnerId</code> フィールドを持つオブジェクトなら、<code>HasLearner</code> という名前に一度も触れていなくても、そのインターフェースを満たせます。これを構造的型付けと呼びます。</p>
+    <p>ローカルな値の型の多くは推論で決まります。明示的な型注釈が役立つのは、関数の引数や export する戻り値のように、他のコードと共有する境界です。そこに書いた注釈が、他のコードが頼りにする約束になります。</p>
     <pre><code>interface HasLearner { learnerId: string }
 
 function greet(x: HasLearner) { return x.learnerId }
 
-// this object never mentions HasLearner
+// このオブジェクトは HasLearner に一度も触れていない
 const req = { learnerId: "L1", deckSize: 10 };
-greet(req); // compiles: the shape fits</code></pre>
+greet(req); // コンパイルが通る：形が合っている</code></pre>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Unions and narrowing</h2>
-    <p>A union describes alternatives: <code>string | undefined</code>, or exact strings such as <code>"first" | "retry"</code>. A check narrows the set of possible values in a branch. After an early return for undefined, the remaining value can be used as a string.</p>
+    <h2 id="s2"><span class="no">02</span>ユニオン型と絞り込み</h2>
+    <p>ユニオン型は選択肢を表します。<code>string | undefined</code> や、<code>"first" | "retry"</code> のような特定の文字列の組み合わせがその例です。分岐の中で値を検査すると、取りうる値の集合が絞り込まれます。undefined のときに早期 return すれば、残った値は文字列として扱えます。</p>
     <pre><code>function label(name: string | undefined) {
   // name: string | undefined
   if (name === undefined) {
@@ -39,78 +39,78 @@ greet(req); // compiles: the shape fits</code></pre>
   return name.toUpperCase();
 }</code></pre>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The type string contains the union of first and retry, which contains the single literal first; each check moves the value one step inward, ending at first.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="string 型の中に first と retry のユニオン型があり、その中にリテラル型 first だけがあります。検査を一つ通るたびに値は一段内側へ進み、最後は first に行き着きます。">
       <rect x="8" y="8" width="384" height="284" rx="10" class="zone-soft"/>
       <text x="24" y="40" class="t-hd">string</text>
-      <text x="24" y="62" class="t-sm">any text at all</text>
+      <text x="24" y="62" class="t-sm">どんな文字列でもよい</text>
       <rect x="40" y="84" width="320" height="192" rx="10" class="zone"/>
       <text x="56" y="114" class="t-hd">'first' | 'retry'</text>
-      <text x="56" y="136" class="t-sm">after checking it's a round kind</text>
+      <text x="56" y="136" class="t-sm">ラウンドの種類だと確かめたあと</text>
       <rect x="80" y="164" width="240" height="88" rx="6" class="node-acc"/>
       <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">'first'</text>
-      <text x="200" y="228" text-anchor="middle" class="t-sm">after kind === 'first'</text>
+      <text x="200" y="228" text-anchor="middle" class="t-sm">kind === 'first' の確認後</text>
     </svg>
-    <figcaption>Narrowing moves a value inward. Each check the code makes leaves a smaller set of possible values, until the branch knows exactly which one it has.</figcaption>
+    <figcaption>絞り込みは値を内側へ移します。コードが検査をするたびに取りうる値の集合が小さくなり、最後には分岐の中でどの値なのかが確定します。</figcaption>
   </figure>
-    <p>Narrowing lets code and types describe the same decision. With discriminated alternatives and an exhaustive check, adding a new round kind can expose handlers that have not considered it. The compiler helps inside the program, where it has evidence about a value.</p>
+    <p>絞り込みを使うと、コードと型が同じ判断を表すようになります。判別可能な選択肢と網羅性チェックを組み合わせれば、ラウンドの種類を新しく追加したとき、まだそれを考慮していないハンドラーが見つかります。コンパイラが助けになるのは、値についての根拠を持てるプログラムの内側です。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What types cannot do</h2>
-    <p>Type annotations and assertions are erased when TypeScript becomes JavaScript. Writing <code>as StartRoundRequest</code> after reading JSON does not inspect a request. It only asks the compiler to trust the programmer.</p>
+    <h2 id="s3"><span class="no">03</span>型にできないこと</h2>
+    <p>TypeScript を JavaScript に変換するとき、型注釈と型アサーションは消えます。JSON を読んだあとに <code>as StartRoundRequest</code> と書いても、リクエストの中身は検査されません。プログラマーを信じるよう、コンパイラに頼んでいるだけです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A TypeScript file is type-checked, then emitted as JavaScript with every type removed; at runtime JSON bytes arrive with no type attached, so no types exist there.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="TypeScript のファイルは型検査を受けたあと、型をすべて取り除いた JavaScript として出力されます。実行時には型の付いていない JSON のバイト列が届くので、そこに型は存在しません。">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="6" class="dot"/>
       <circle cx="28" cy="256" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">.ts source, with types</text>
+      <text x="64" y="46">型の付いた .ts ソース</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Type check: our code only</text>
+      <text x="64" y="118">型検査：対象は自分のコードだけ</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">.js output, types removed</text>
+      <text x="64" y="190">.js の出力：型は取り除かれる</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Runtime: no types here</text>
+      <text x="64" y="262" class="t-hd">実行時：ここに型はない</text>
     </svg>
-    <figcaption>The type check happens before the program runs. By the time a request body arrives, the types are gone, so nothing compares the bytes with the type.</figcaption>
+    <figcaption>型検査はプログラムが動く前に行われます。リクエストボディが届く頃には型はもう消えているので、バイト列と型を突き合わせるものは何もありません。</figcaption>
   </figure>
-    <p>If outside data contains <code>deckSize: "ten"</code>, the assertion does not turn it into a number. Treat external values as <code>unknown</code>, which prevents their use until a runtime check establishes their shape. <code>any</code> removes that protection.</p>
+    <p>外部データに <code>deckSize: "ten"</code> が含まれていても、アサーションで数値になるわけではありません。外から来た値は <code>unknown</code> として扱います。<code>unknown</code> の値は、実行時の検査で形が確かめられるまで使えません。<code>any</code> にすると、この保護がなくなります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Casting the body compiles but runs nothing, so a bad body flows on; reading it as unknown and checking it with a schema gives a typed value or refuses a bad body.">
+    <svg viewBox="0 0 400 276" role="img" aria-label="ボディを型アサーションで変換するとコンパイルは通りますが、実行時には何も動かず、不正なボディがそのまま先へ流れます。unknown として読みスキーマで検査すれば、型付きの値が得られるか、不正なボディが拒否されます。">
       <text x="104" y="24" text-anchor="middle" class="t-hd">as Request</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">unknown + schema</text>
-      <text x="16" y="56" class="t-sm">Input</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">unknown + スキーマ</text>
+      <text x="16" y="56" class="t-sm">入力</text>
       <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">any</text>
       <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">unknown</text>
-      <text x="16" y="136" class="t-sm">What runs</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">nothing</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">a schema check</text>
-      <text x="16" y="216" class="t-sm">A bad body</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">flows on</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">is refused</text>
+      <text x="16" y="136" class="t-sm">実行されるもの</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">何もない</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">スキーマ検査</text>
+      <text x="16" y="216" class="t-sm">不正なボディは</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">そのまま流れる</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">拒否される</text>
     </svg>
-    <figcaption>Both versions compile. Only the right one runs a check, so only the right one stops a bad body at the door.</figcaption>
+    <figcaption>どちらの書き方もコンパイルは通ります。検査を実行するのは「unknown + スキーマ」の側だけなので、不正なボディを入口で止められるのもこちらだけです。</figcaption>
   </figure>
-    <p>Quickturn limits body size, parses JSON and checks it against a schema before a command runs. Invalid input receives a stable bad-request code. Branded IDs add another compile-time distinction between values such as learner and card IDs, which would otherwise both look like strings.</p>
-    <p>Static checks add no runtime validation. Runtime parsing costs some code and time, so place it at actual trust boundaries.</p>
+    <p>Quickturn は、コマンドを実行する前にボディのサイズを制限し、JSON をパースし、スキーマで検査します。不正な入力には、不正なリクエストを表す決まったエラーコードを返します。さらにブランド型を使うと、学習者 ID とカード ID のように、どちらもただの文字列に見える値をコンパイル時に区別できます。</p>
+    <p>静的な検査は、実行時の検証を何も追加しません。実行時のパースにはコードと処理時間のコストがかかるので、本当に信頼の境界になっている場所に置きます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Beyond Quickturn</h2>
-    <p>A language-model response is outside data too. Asking for a score and reason does not make a parsed reply a <code>GradeResult</code>. A cast could hide <code>score: "high"</code> until unrelated downstream code fails.</p>
-    <p>Quickturn asks for structured output and still parses the reply. Requests, uploaded files, persisted browser data and model replies all cross boundaries where static types alone cannot establish trust.</p>
+    <h2 id="s4"><span class="no">04</span>モデルの応答も外部データ</h2>
+    <p>言語モデルの応答も外部データです。スコアと理由を返すよう頼んでも、パースした応答が <code>GradeResult</code> になる保証はありません。キャストで済ませると、<code>score: "high"</code> のような値が隠れたまま進み、関係のない下流のコードで初めて失敗することがあります。</p>
+    <p>Quickturn は構造化出力を指定したうえで、それでも応答をパースします。リクエスト、アップロードされたファイル、ブラウザに保存したデータ、モデルの応答は、どれも静的な型だけでは信頼を確立できない境界を越えてきます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>TypeScript checks shapes, infers most types and narrows unions as your code checks them.</li>
-      <li>Every type is erased at build time, so <code>as</code> and <code>any</code> check nothing while the program runs.</li>
-      <li>Treat anything from outside, including a model's reply, as <code>unknown</code> and check it once at the edge.</li>
+      <li>TypeScript は形で型を比べ、ほとんどの型を推論し、コードの検査に合わせてユニオン型を絞り込みます。</li>
+      <li>型はビルド時にすべて消えるため、<code>as</code> や <code>any</code> はプログラムの実行中に何も検査しません。</li>
+      <li>モデルの応答を含め、外から来るものはすべて <code>unknown</code> として扱い、入口で一度だけ検査します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
-    <a class="next" href="ch02.html"><span>Next</span><b>Which compiler flags change how I write code?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch00.html"><span>前へ</span><b>目次</b></a>
+    <a class="next" href="ch02.html"><span>次へ</span><b>コードの書き方を変えるコンパイラオプションはどれか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

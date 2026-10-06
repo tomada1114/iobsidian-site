@@ -1,59 +1,59 @@
-<!-- title: Engineering Readers: API and TypeScript · Contents | accent: reach -->
+<!-- title: エンジニアリング読本：API と TypeScript · 目次 | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Contents · 11 pages</span></p>
-  <h1>Engineering Readers: API and TypeScript</h1>
-  <p class="lead">A request can pass through checked code and still carry invalid data. An older app or a retry can also challenge an otherwise sound API. These chapters examine what types, boundaries and contracts can protect across those conditions.</p>
-  <p class="meta"><span>11 pages</span><span>About 44 min</span><span>English, B2 · explanatory prose</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>目次 · 全11章</span></p>
+  <h1>エンジニアリング読本：API と TypeScript</h1>
+  <p class="lead">型チェックを通ったコードにも、不正なデータを含むリクエストは届きます。設計に問題のない API でも、古いアプリや再送が加わると前提が崩れることがあります。この本では、そうした条件のもとで型・境界・契約がそれぞれ何を守れるのかを見ていきます。</p>
+  <p class="meta"><span>全11章</span><span>約45分</span><span>解説・図解</span></p>
 </header>
 <div class="flow">
   <section aria-labelledby="case">
-    <h2 id="case">The example application</h2>
-    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
-    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
+    <h2 id="case">題材にするアプリ</h2>
+    <p>Quickturn は架空の語学学習アプリです。学習者はタイマーが切れる前にカードに答え、あとで進み具合や間違えた問題を振り返ります。Web・iOS・Android のクライアントが一つの API を共有しています。</p>
+    <p>各章ではこのアプリを例に、具体的な設計の選択とそのコスト、そして別の設計を選ぶべき条件を説明します。どの章も単独で読めるので、前の章から順に読む必要はありません。</p>
   </section>
   <section aria-labelledby="map">
-    <h2 id="map">How the pages fit together</h2>
+    <h2 id="map">各章のつながり</h2>
     <figure class="fig">
-      <svg viewBox="0 0 400 312" role="img" aria-label="The pages build in four steps: types inside the program, the boundary where outside data is parsed, the contract between server and clients, and finally an API that survives old apps, retries and offline use, which is where the series lands.">
+      <svg viewBox="0 0 400 312" role="img" aria-label="章は4段階で進みます。プログラム内部の型、外部データをパースする境界、サーバーとクライアントのあいだの契約、そして古いアプリ・再送・オフラインに耐える API です。最後の段階がこの本の行き着く先です。">
         <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
         <circle cx="30" cy="44" r="6" class="dot"/>
         <circle cx="30" cy="118" r="6" class="dot"/>
         <circle cx="30" cy="192" r="6" class="dot"/>
         <circle cx="30" cy="268" r="8" class="f-acc"/>
         <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="40">Pages 1–4 · Types inside</text><text x="72" y="61" class="t-sm">flags, unions, brands, Result</text>
+        <text x="72" y="40">第1〜4章 · プログラム内部の型</text><text x="72" y="61" class="t-sm">フラグ、ユニオン型、ブランド型、Result</text>
         <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="114">Page 5 · The boundary</text><text x="72" y="135" class="t-sm">parse outside data once</text>
+        <text x="72" y="114">第5章 · 境界</text><text x="72" y="135" class="t-sm">外部データは一度だけパースする</text>
         <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="188">Pages 6–7 · The contract</text><text x="72" y="209" class="t-sm">API style, one source of truth</text>
+        <text x="72" y="188">第6〜7章 · 契約</text><text x="72" y="209" class="t-sm">API の方式と、唯一の正となる定義</text>
         <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="264" class="t-hd">Pages 8–11 · APIs that last</text><text x="72" y="285" class="t-sm">versions, retries, offline, the SPA</text>
+        <text x="72" y="264" class="t-hd">第8〜11章 · 長く使える API</text><text x="72" y="285" class="t-sm">バージョン、再送、オフライン、SPA</text>
       </svg>
-      <figcaption>You can read any page alone. In order, the pages move from types inside one program to an API that keeps working for clients you can't update.</figcaption>
+      <figcaption>どの章も単独で読めます。順に読むと、一つのプログラム内部の型から、更新を強制できないクライアントにも動き続ける API へと話が進みます。</figcaption>
     </figure>
   </section>
   <section aria-labelledby="pages">
-    <h2 id="pages">The pages</h2>
+    <h2 id="pages">目次</h2>
     <ol>
-      <li><a href="ch01.html">If types vanish at runtime, what are they for?</a> — Types check our code; outside data stays <code>unknown</code> until checked.</li>
-      <li><a href="ch02.html">Which compiler flags change how I write code?</a> — <code>strict</code> is a floor, and a loosened gate stops being one.</li>
-      <li><a href="ch03.html">Why not just add another boolean flag?</a> — A discriminated union describes valid alternatives inside checked code.</li>
-      <li><a href="ch04.html">Should a function throw, or return its failure?</a> — Return expected failures with a code, and handle unexpected failures separately.</li>
-      <li><a href="ch05.html">Trust nothing at the boundary: parse it once</a> — Parse outside data once at the edge into a precise type.</li>
-      <li><a href="ch06.html">REST, GraphQL or RPC: how do you choose?</a> — The API style follows the clients and how they read data.</li>
-      <li><a href="ch07.html">Where does the API contract actually live?</a> — Shared schemas feed documents and client types; tests check generation and behavior.</li>
-      <li><a href="ch08.html">How do you change an API without breaking old apps?</a> — Stable codes, additive changes, and deprecation before removal.</li>
-      <li><a href="ch09.html">What if the same request arrives twice?</a> — Client-made ids and conditional writes make repeats harmless.</li>
-      <li><a href="ch10.html">Can an app work offline if the server owns the rules?</a> — The client records facts; the server applies the rules on arrival.</li>
-      <li><a href="ch11.html">Why a static SPA instead of server rendering?</a> — A static client suits Quickturn's signed-in screens and shared API, with a first-load cost.</li>
+      <li><a href="ch01.html">実行時に消える型は、何のためにあるのか</a> — 型が検査するのは自分たちのコードです。外部データは検査するまで <code>unknown</code> として扱います。</li>
+      <li><a href="ch02.html">コードの書き方を変えるコンパイラオプションはどれか</a> — <code>strict</code> は最低ラインです。緩めたゲートは、もうゲートとして働きません。</li>
+      <li><a href="ch03.html">真偽値フラグを足すだけでは、なぜ足りないのか</a> — 判別可能なユニオン型は、検査済みコードの中で正しい選択肢だけを表します。</li>
+      <li><a href="ch04.html">関数は例外を投げるべきか、失敗を返すべきか</a> — 想定内の失敗はコード付きで返し、想定外の失敗は別に扱います。</li>
+      <li><a href="ch05.html">境界では何も信用せず、一度だけパースする</a> — 外部データは入口で一度だけパースし、正確な型にします。</li>
+      <li><a href="ch06.html">REST・GraphQL・RPC をどう選ぶか</a> — API の方式は、クライアントとそのデータの読み方で決まります。</li>
+      <li><a href="ch07.html">API の契約は、実際にはどこにあるのか</a> — 共有スキーマからドキュメントとクライアントの型を作り、生成結果と振る舞いをテストで確かめます。</li>
+      <li><a href="ch08.html">古いアプリを壊さずに API を変えるには</a> — 安定したコードを使い、変更は追加に限り、削除の前に非推奨の期間を設けます。</li>
+      <li><a href="ch09.html">同じリクエストが二度届いたらどうなるか</a> — クライアントが作る ID と条件付き書き込みで、繰り返しを無害にします。</li>
+      <li><a href="ch10.html">ルールをサーバーが持つアプリは、オフラインで動けるか</a> — クライアントは事実を記録し、サーバーは届いた時点でルールを適用します。</li>
+      <li><a href="ch11.html">なぜサーバーレンダリングでなく静的な SPA なのか</a> — 静的なクライアントは Quickturn のログイン後の画面と共有 API に合います。代わりに最初の読み込みのコストがかかります。</li>
     </ol>
   </section>
   <div class="aside note">
-    <p class="label">How to read this</p>
-    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
+    <p class="label">読み方</p>
+    <p>1章は数分で読めます。図とコード例を本文の説明と合わせて読んでください。3行まとめには主な判断を、例にはその判断が当てはまる場面を載せています。</p>
   </div>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
-    <a class="next" href="ch01.html"><span>Next</span><b>If types vanish at runtime, what are they for?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="../index.html"><span>前へ</span><b>Bookshelf</b></a>
+    <a class="next" href="ch01.html"><span>次へ</span><b>実行時に消える型は、何のためにあるのか</b></a>
   </nav>
 </div>

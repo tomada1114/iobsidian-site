@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 02 · Paying for one LLM call</title>
+<title>AI機能を本番で動かす 02 · LLM呼び出し1回の費用</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html" aria-current="page"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html" aria-current="page"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,94 +396,94 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 2 of 13</span></p>
-  <h1>What am I actually paying for in one LLM call?</h1>
-  <p class="lead">A compact grade may use fewer output tokens than input tokens and still spend a substantial share on output. Context, rates and latency need separate measurements.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第2章 / 全13章</span></p>
+  <h1>LLMを1回呼ぶと、何にお金を払っているのか</h1>
+  <p class="lead">短い採点結果は、出力トークンが入力トークンより少なくても、費用のかなりの割合を占めることがあります。コンテキスト、料金、レイテンシは、それぞれ別に測る必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Tokens and the context window</li>
-      <li>Why answers change, and what takes time</li>
-      <li>Price per call, and caching</li>
-      <li>A bill that grew every week</li>
+      <li>トークンとコンテキストウィンドウ</li>
+      <li>答えが変わる理由と、時間がかかる部分</li>
+      <li>1回あたりの料金とキャッシュ</li>
+      <li>毎週増えていった請求</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Tokens and the context window</h2>
-    <p>Tokens are model-specific pieces of text, not a fixed number of words or characters. A call's context includes the instructions, examples, input and any conversation history supplied by the application. Conversational memory is provided by that surrounding system.</p>
+    <h2 id="s1"><span class="no">01</span>トークンとコンテキストウィンドウ</h2>
+    <p>トークンはモデルごとに決まるテキストの断片で、単語数や文字数と一対一には対応しません。1回の呼び出しのコンテキストには、アプリケーションが渡す指示、例、入力、会話履歴が含まれます。会話を覚えているように見えるのは、周りのシステムが履歴を渡しているからです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="The context window holds the system prompt, the rubric, the examples and the learner's answer, with a slot reserved for the output; only the learner's answer changes from call to call.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="コンテキストウィンドウには、システムプロンプト、ルーブリック、例、学習者の解答が入り、出力用の枠も確保されます。呼び出しごとに変わるのは学習者の解答だけです。">
       <rect x="8" y="8" width="384" height="316" rx="10" class="zone-soft"/>
-      <text x="24" y="36" class="t-hd">Context window</text>
-      <rect x="24" y="52" width="352" height="40" rx="6" class="node"/><text x="40" y="78">System prompt</text>
-      <rect x="24" y="100" width="352" height="40" rx="6" class="node"/><text x="40" y="126">Rubric</text>
-      <rect x="24" y="148" width="352" height="40" rx="6" class="node"/><text x="40" y="174">Examples</text>
-      <rect x="24" y="196" width="352" height="48" rx="6" class="node-acc"/><text x="40" y="226" class="t-hd t-acc">The learner's answer</text>
-      <rect x="24" y="260" width="352" height="48" rx="6" class="node-soft"/><text x="40" y="290">Room for the output</text>
+      <text x="24" y="36" class="t-hd">コンテキストウィンドウ</text>
+      <rect x="24" y="52" width="352" height="40" rx="6" class="node"/><text x="40" y="78">システムプロンプト</text>
+      <rect x="24" y="100" width="352" height="40" rx="6" class="node"/><text x="40" y="126">ルーブリック</text>
+      <rect x="24" y="148" width="352" height="40" rx="6" class="node"/><text x="40" y="174">例</text>
+      <rect x="24" y="196" width="352" height="48" rx="6" class="node-acc"/><text x="40" y="226" class="t-hd t-acc">学習者の解答</text>
+      <rect x="24" y="260" width="352" height="48" rx="6" class="node-soft"/><text x="40" y="290">出力のための枠</text>
     </svg>
-    <figcaption>Only the learner's answer changes from call to call. A stable prefix can benefit from supported caching when its size, configuration and lifetime meet the model’s requirements.</figcaption>
+    <figcaption>呼び出しごとに変わるのは学習者の解答だけです。変わらない先頭部分は、サイズ、設定、有効期間がモデルの条件を満たせば、対応するキャッシュの恩恵を受けられます。</figcaption>
   </figure>
-    <p>The context and output limits constrain the request. Set an output cap high enough for a complete verdict and low enough to bound cost and latency. Monitor truncation rather than infer that the longest previously observed answer is an absolute upper bound.</p>
+    <p>リクエストは、コンテキストと出力の上限に縛られます。出力の上限は、判定を最後まで返せる程度に高く、費用とレイテンシを抑えられる程度に低く設定します。これまでで最も長かった答えを絶対的な上限とみなさず、出力が途中で切れていないかを監視します。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Why answers change, and what takes time</h2>
-    <p>Models generate tokens using learned probabilities and sampling controls. Lower temperature can reduce variation but does not guarantee identical results. Quickturn stores the first accepted grade instead of requiring a repeated call to reproduce it.</p>
+    <h2 id="s2"><span class="no">02</span>答えが変わる理由と、時間がかかる部分</h2>
+    <p>モデルは、学習した確率とサンプリングの設定に従ってトークンを生成します。temperatureを下げるとばらつきは減りますが、毎回同じ結果になる保証はありません。そこでQuickturnは、同じ結果を呼び出し直して再現しようとはせず、最初に受け入れた採点結果を保存します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 236" role="img" aria-label="An illustrative latency waterfall for one call: a short bar for the network, a medium bar for time to the first token, and the longest bar for writing the output tokens.">
-      <text x="16" y="28" class="t-sm">Network</text>
+    <svg viewBox="0 0 400 236" role="img" aria-label="1回の呼び出しのレイテンシを示した例示のウォーターフォールです。ネットワークは短い棒、最初のトークンまでは中くらいの棒、出力トークンの生成がいちばん長い棒です。">
+      <text x="16" y="28" class="t-sm">ネットワーク</text>
       <rect x="16" y="36" width="48" height="28" rx="4" class="node"/>
-      <text x="16" y="96" class="t-sm">Time to first token</text>
+      <text x="16" y="96" class="t-sm">最初のトークンまで</text>
       <rect x="64" y="104" width="96" height="28" rx="4" class="node"/>
-      <text x="16" y="164" class="t-sm">Writing the output</text>
+      <text x="16" y="164" class="t-sm">出力の生成</text>
       <rect x="160" y="172" width="224" height="28" rx="4" class="node-acc"/>
-      <text x="384" y="226" text-anchor="end" class="t-sm">time →</text>
+      <text x="384" y="226" text-anchor="end" class="t-sm">時間 →</text>
     </svg>
-    <figcaption>The shape is illustrative, not measured. Longer output often adds generation time, but this drawing does not establish which latency component dominates the actual endpoint.</figcaption>
+    <figcaption>この形は説明用で、測定値ではありません。出力が長いほど生成に時間がかかることは多いものの、実際のエンドポイントでどの部分が支配的かは、この図からは分かりません。</figcaption>
   </figure>
-    <p>Latency includes request and queue overhead, processing the input and generating output. Longer responses often take longer, which is one reason the grader returns a compact verdict rather than a full essay. Measure the actual endpoint instead of predicting latency solely from token count.</p>
+    <p>レイテンシには、リクエストとキューの待ち時間、入力の処理、出力の生成が含まれます。応答が長いほど時間がかかりやすいので、採点では長い講評ではなく短い判定を返させています。それでも、トークン数だけからレイテンシを予想せず、実際のエンドポイントで測ります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Price per call, and caching</h2>
-    <p>A token-priced call depends on input and output volume, with distinct rates. A comparison needs the same model, endpoint, Region and date. Two small calls may cost less than one larger call.</p>
+    <h2 id="s3"><span class="no">03</span>1回あたりの料金とキャッシュ</h2>
+    <p>トークン課金の呼び出しの料金は、入力と出力の量で決まり、それぞれ単価が違います。料金を比べるなら、モデル、エンドポイント、リージョン、日付をそろえる必要があります。小さな呼び出し2回のほうが、大きな呼び出し1回より安く済むこともあります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 236" role="img" aria-label="An illustrative grading call with 1,500 input tokens and 200 output tokens at the September 2026 Haiku 4.5 price: input costs $0.0015, output $0.0010, and the total is $0.0025, about a quarter of a cent.">
-      <text x="16" y="28" class="t-sm">Input, 1,500 tokens</text>
+    <svg viewBox="0 0 400 236" role="img" aria-label="入力1,500トークン、出力200トークンの採点呼び出しを、2026年9月時点のHaiku 4.5の料金で計算した例です。入力が0.0015ドル、出力が0.0010ドルで、合計0.0025ドル、1セントの約4分の1です。">
+      <text x="16" y="28" class="t-sm">入力 1,500トークン</text>
       <rect x="16" y="36" width="150" height="28" rx="4" class="node"/>
       <text x="176" y="56" class="t-sm">$0.0015</text>
-      <text x="16" y="96" class="t-sm">Output, 200 tokens</text>
+      <text x="16" y="96" class="t-sm">出力 200トークン</text>
       <rect x="16" y="104" width="100" height="28" rx="4" class="node"/>
       <text x="126" y="124" class="t-sm">$0.0010</text>
-      <text x="16" y="164" class="t-sm">Total</text>
+      <text x="16" y="164" class="t-sm">合計</text>
       <rect x="16" y="172" width="250" height="28" rx="4" class="node-acc"/>
       <text x="276" y="192" class="t-hd t-acc">$0.0025</text>
-      <text x="16" y="226" class="t-sm">About a quarter of a cent</text>
+      <text x="16" y="226" class="t-sm">1セントの約4分の1</text>
     </svg>
-    <figcaption>The example assumes these token counts and uses the dated Claude Haiku 4.5 Bedrock rates checked 2026-09-23. Output is a small part of the tokens but 40% of the cost.</figcaption>
+    <figcaption>トークン数は仮定で、料金は2026-09-23に確認したClaude Haiku 4.5のBedrock料金です。出力はトークン数ではわずかですが、費用では40%を占めます。</figcaption>
   </figure>
-    <p>The cost illustration uses 1,500 input and 200 output tokens at explicitly assumed rates. It is not a quote for every Tokyo inference profile. Prompt caching can discount a stable prefix, while cache writes and expiry have their own rules.</p>
-    <p>Quickturn keeps instructions and examples before the changing answer and records ordinary input, output, cache-read and cache-write usage separately. It measures per-answer versus per-round grading, including latency and failure behavior, before choosing. Extra examples earn their cost only if evaluation shows a useful improvement.</p>
+    <p>この試算は、入力1,500トークンと出力200トークンに、明示した仮定の単価を掛けたものです。東京のすべての推論プロファイルに当てはまる見積もりではありません。プロンプトキャッシュを使うと変わらない先頭部分が割り引かれますが、キャッシュの書き込みと有効期限には別のルールがあります。</p>
+    <p>Quickturnは、指示と例を変わる解答より前に置き、通常の入力、出力、キャッシュ読み込み、キャッシュ書き込みの使用量を分けて記録します。解答ごとに採点するか、ラウンドごとにまとめて採点するかは、レイテンシと失敗時の挙動も含めて測ってから選びます。例を増やすのは、評価で意味のある改善が確認できたときだけです。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>A bill that grew every week</h2>
-    <p>An agent's bill can grow without traffic growth if each turn resends a longer history and more tool definitions. Request counts alone conceal that change. Track tokens and cost per conversation, trim irrelevant history, use supported caching and bound the output.</p>
-    <p>Quickturn records model, prompt and rubric versions with latency and usage. That connects a cost increase to the particular task and configuration that produced it.</p>
+    <h2 id="s4"><span class="no">04</span>毎週増えていった請求</h2>
+    <p>エージェントの請求は、トラフィックが増えなくても膨らむことがあります。ターンのたびに、より長い履歴と多くのツール定義を送り直していれば、そうなります。リクエスト数だけを見ていると、この変化は見えません。会話あたりのトークンと費用を追い、関係のない履歴を削り、対応するキャッシュを使い、出力に上限を設けます。</p>
+    <p>Quickturnは、モデル、プロンプト、ルーブリックのバージョンを、レイテンシや使用量と一緒に記録しています。これで、費用が増えたときに、どのタスクのどの設定が原因かをたどれます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A call uses the context supplied by the application; conversation memory and caching require surrounding system support.</li>
-      <li>Input and output contribute differently to cost and latency; the same input can produce a different answer.</li>
-      <li>Put the stable part first so it can be cached, and record all four token counts on every call.</li>
+      <li>呼び出しはアプリケーションが渡したコンテキストだけを使い、会話の記憶やキャッシュには周りのシステムの支えが要る。</li>
+      <li>入力と出力は費用とレイテンシへの効き方が違い、同じ入力でも違う答えが返ることがある。</li>
+      <li>変わらない部分を先頭に置いてキャッシュを効かせ、呼び出しのたびに4種類のトークン数をすべて記録する。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch01.html"><span>Previous</span><b>Does every AI feature need to be an agent?</b></a>
-    <a class="next" href="ch03.html"><span>Next</span><b>Why does Bedrock want an inference profile, not a model?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch01.html"><span>前へ</span><b>AI機能はすべてエージェントにすべきか</b></a>
+    <a class="next" href="ch03.html"><span>次へ</span><b>Bedrockはなぜモデルではなく推論プロファイルを求めるのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

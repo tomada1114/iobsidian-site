@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>Operations 08 · Testing what isn't code</title>
+<title>運用と品質 08 · コード以外のテスト</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-1">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ops" data-label="Operations">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ops" data-label="運用と品質">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>Operations</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">運用と品質</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,22 +365,22 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: Operations and Quality pages">
-  <h2><a href="ch00.html">Engineering Readers: Operations and Quality</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：運用と品質 pages">
+  <h2><a href="ch00.html">エンジニアリング読本：運用と品質</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Observability, not just monitoring</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>A useful log line</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>What wakes someone up</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Reliable enough</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>What a model call costs</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>More unit tests?</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>A fake you can trust</span></a></li>
-    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>Testing what isn&#x27;t code</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>What stops a bad change</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Straight to production?</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>When data goes wrong</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Before we open</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>監視とオブザーバビリティ</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>役に立つログの1行</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>人を起こすアラーム</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>十分な信頼性</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>モデル呼び出しのコスト</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>単体テストを増やせばよいか</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>信頼できるフェイク</span></a></li>
+    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>コード以外のテスト</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>悪い変更を止める仕組み</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>そのまま本番へ出すか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>データに問題が起きたとき</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>一般公開の前に</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -395,26 +395,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 8 of 12</span></p>
-  <h1>How do you test things that aren't plain code?</h1>
-  <p class="lead">A handler test passes, but the committed API document is stale. Generated files, templates and dependency rules need checks aimed at those specific artifacts.</p>
-  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第8章 / 全12章</span></p>
+  <h1>コードではないものをどうテストするか</h1>
+  <p class="lead">ハンドラーのテストは通るのに、コミットされた API ドキュメントは古いままです。生成ファイル、テンプレート、依存関係のルールには、それぞれを狙ったチェックが必要です。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Drift in generated files</li>
-      <li>Infrastructure as testable code</li>
-      <li>Types and boundaries</li>
-      <li>The smoke test</li>
+      <li>生成ファイルのずれ</li>
+      <li>テストできるコードとしてのインフラ</li>
+      <li>型と境界</li>
+      <li>スモークテスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Drift in generated files</h2>
-    <p>A schema can change while its committed OpenAPI document and client types remain stale. Handler tests can still pass because they never examine those generated artifacts. A drift check regenerates them and compares the result without rewriting files in CI.</p>
+    <h2 id="s1"><span class="no">01</span>生成ファイルのずれ</h2>
+    <p>スキーマを変えても、コミット済みの OpenAPI ドキュメントやクライアントの型が古いまま残ることがあります。ハンドラーのテストはこうした生成物を一度も見ないので、それでも通ってしまいます。ずれのチェックでは生成物を作り直して比較し、CI ではファイルを書き換えません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="Edit a zod schema; a test regenerates the OpenAPI document in memory; it compares with the committed file; CI fails on a difference; run the one rewrite command; commit both files.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="zod のスキーマを編集する。テストがメモリ上で OpenAPI ドキュメントを生成し直し、コミット済みのファイルと比べる。違いがあれば CI が失敗する。書き換え用のコマンドを一つ実行し、両方のファイルをコミットする。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -423,67 +423,67 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="328" r="6" class="dot"/>
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Edit a zod schema</text>
+      <text x="64" y="46">zod のスキーマを編集する</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Regenerate in memory</text>
+      <text x="64" y="118">メモリ上で生成し直す</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Compare with the file</text>
+      <text x="64" y="190">コミット済みのファイルと比べる</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">CI fails on a difference</text>
+      <text x="64" y="262">違いがあれば CI が失敗</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Run the rewrite command</text>
+      <text x="64" y="334">書き換えコマンドを実行</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">Commit both</text>
+      <text x="64" y="406" class="t-hd">両方をコミットする</text>
     </svg>
-    <figcaption>The schema and the document move together. The generated definitions are checked for drift; route implementation and response behavior still need their own tests.</figcaption>
+    <figcaption>スキーマとドキュメントは一緒に変わります。生成した定義はずれをチェックされますが、ルートの実装やレスポンスの振る舞いには、それぞれのテストが必要です。</figcaption>
   </figure>
-    <p>The author regenerates locally and reviews the external contract diff before committing. The same comparison approach can protect other intentionally synchronized files. The failing check identifies a forgotten generation step rather than a broken handler.</p>
+    <p>変更する人はローカルで生成し直し、コミットする前に外部向けの契約の差分を確認します。同じ比較の方法は、意図して同期させている別のファイルにも使えます。このチェックが失敗したときに示しているのは、ハンドラーの故障ではなく、生成の手順を忘れたことです。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Infrastructure as testable code</h2>
-    <p>Infrastructure code can synthesize a template for focused assertions: key schema, billing mode, retention, production protection, role trust and permitted resource types. Offline checks require avoiding live lookups in that test path.</p>
-    <p>An allowlist makes an unexpected resource type a reviewable choice. Focused property assertions expose protected behavior more clearly than an enormous template snapshot. Unasserted properties still require review.</p>
+    <h2 id="s2"><span class="no">02</span>テストできるコードとしてのインフラ</h2>
+    <p>インフラのコードからはテンプレートを合成できるので、そこに絞ったアサーションを書けます。対象は、キースキーマ、課金モード、保持の設定、本番の保護、ロールの信頼関係、許可するリソースの種類などです。オフラインでチェックするには、そのテストの経路で実環境への問い合わせを避ける必要があります。</p>
+    <p>許可リストを置くと、想定外のリソースの種類が、レビューで判断すべき選択として表に出ます。守りたい振る舞いは、巨大なテンプレートのスナップショットより、性質を絞ったアサーションのほうがはっきり見えます。アサートしていない性質は、引き続きレビューで確かめます。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Types and boundaries</h2>
-    <p>Type tests check the intended inference and assignability, not just whether the application compiles. Negative cases using <code>@ts-expect-error</code> fail if an invalid call unexpectedly becomes legal. Literal lists and derived unions need to stay consistent.</p>
-    <p>A separate import-graph test checks dependency direction alongside lint. Independent checks protect an important boundary even if one rule is accidentally removed. Their expected graph must remain understandable and reviewed.</p>
+    <h2 id="s3"><span class="no">03</span>型と境界</h2>
+    <p>型のテストでは、アプリケーションがコンパイルできるかだけでなく、意図どおりに推論され、代入できるかを確かめます。<code>@ts-expect-error</code> を使った否定のケースは、不正な呼び出しが知らないうちに許されるようになったときに失敗します。リテラルの一覧と、そこから導いたユニオン型は、食い違わないように保つ必要があります。</p>
+    <p>import のグラフを調べる別のテストが、lint とは独立に依存の向きを確かめます。チェックが独立していれば、ルールの一つがうっかり消されても、重要な境界は守られます。ただし、期待するグラフは理解できる形に保ち、レビューし続ける必要があります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="What each check sees, from narrow to wide: types at compile time; unit tests, one function; CDK assertions, one template; the boundary test, the module graph; the smoke test, processes over HTTP; and the deployed dev stack, read back by hand.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="各チェックが見る範囲を、狭いものから広いものへ並べた図。型はコンパイル時、単体テストは一つの関数、CDK のアサーションは一つのテンプレート、境界のテストはモジュールのグラフ、スモークテストは HTTP 越しのプロセスを見る。デプロイした dev のスタックは、人が読み返して確かめる。">
       <rect x="16" y="16" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="50">Types · compile time</text>
+      <text x="32" y="50">型 · コンパイル時</text>
       <rect x="16" y="84" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="118">Unit · one function</text>
+      <text x="32" y="118">単体 · 一つの関数</text>
       <rect x="16" y="152" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="186">CDK · one template</text>
+      <text x="32" y="186">CDK · 一つのテンプレート</text>
       <rect x="16" y="220" width="368" height="56" rx="6" class="node"/>
-      <text x="32" y="254">Boundary · module graph</text>
+      <text x="32" y="254">境界 · モジュールのグラフ</text>
       <rect x="16" y="288" width="368" height="56" rx="6" class="node-acc"/>
-      <text x="32" y="322" class="t-hd t-acc">Smoke · processes, HTTP</text>
+      <text x="32" y="322" class="t-hd t-acc">スモーク · プロセスと HTTP</text>
       <rect x="16" y="356" width="368" height="56" rx="6" class="node-soft"/>
-      <text x="32" y="390">Deployed dev · by hand</text>
+      <text x="32" y="390">デプロイした dev · 人の目で</text>
     </svg>
-    <figcaption>The built-system smoke test crosses process seams in this strategy. Post-deploy reads then check the live environment, with automation or a person reviewing the result.</figcaption>
+    <figcaption>この戦略では、ビルドしたシステムへのスモークテストがプロセスの境目をまたぎます。そのあと、デプロイ後の読み返しで実環境を確かめ、その結果は自動化か人が確認します。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>The smoke test</h2>
-    <p>The smoke test runs the built app and API with a local database and asserts behavior over HTTP. It verifies served HTML and nonempty styling, plus a representative save/read path and refusal. It intentionally does not claim browser interaction coverage.</p>
-    <p>Its build freshness and container prerequisites are explicit. Post-deploy checks still confirm live configuration and reachable content. Policy-as-code assertions can extend the same method to organization-wide infrastructure requirements.</p>
+    <h2 id="s4"><span class="no">04</span>スモークテスト</h2>
+    <p>スモークテストは、ビルドしたアプリと API をローカルのデータベースとともに動かし、HTTP 越しに振る舞いをアサートします。配信された HTML とスタイルが空でないこと、代表的な保存と読み取りの経路、拒否のケースを確かめます。ブラウザーでの操作までカバーしているとは、あえて主張しません。</p>
+    <p>ビルドが最新であることと、コンテナの前提条件は明示しています。それでも、実環境の設定と、コンテンツに到達できることは、デプロイ後のチェックで確かめます。ポリシーをコードとして書いたアサーションを使えば、同じ方法を組織全体のインフラの要件にも広げられます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Generated files get drift tests: regenerate, compare, fail in CI, rewrite by one command.</li>
-      <li>Infrastructure, types and import rules each get a narrow check of the properties that matter.</li>
-      <li>The built smoke test exercises processes over HTTP; post-deploy checks still confirm live settings and reachable content.</li>
+      <li>生成ファイルにはずれのテストを用意します。生成し直して比べ、CI で失敗させ、コマンド一つで書き換えます。</li>
+      <li>インフラ、型、import のルールには、それぞれ大事な性質だけを確かめる狭いチェックを置きます。</li>
+      <li>ビルドしたものへのスモークテストは HTTP 越しにプロセスを動かします。実環境の設定とコンテンツへの到達は、デプロイ後のチェックで確かめます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch07.html"><span>Previous</span><b>How do we know the fake database behaves like the real one?</b></a>
-    <a class="next" href="ch09.html"><span>Next</span><b>What actually stops a bad change from merging?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch07.html"><span>前へ</span><b>フェイクのデータベースが本物と同じように動くと、どう確かめるか</b></a>
+    <a class="next" href="ch09.html"><span>次へ</span><b>悪い変更のマージを実際に止めるのは何か</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>

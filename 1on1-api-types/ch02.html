@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>API and TypeScript 02 · Which compiler flags matter</title>
+<title>API と TypeScript 02 · 効くコンパイラオプション</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API &amp; TypeScript">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API と TypeScript">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>API &amp; TypeScript</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">API と TypeScript</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,21 +365,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
-  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：API と TypeScript pages">
+  <h2><a href="ch00.html">エンジニアリング読本：API と TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
-    <li><a href="ch02.html" aria-current="page"><span class="n">02</span><span>Which compiler flags matter</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Why not another boolean flag</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Should a function throw</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>Trust nothing at the boundary</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>REST, GraphQL or RPC</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Where the API contract lives</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Change an API without breaking</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>The same request twice</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Offline when the server rules</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>Why a static SPA</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>実行時に消える型</span></a></li>
+    <li><a href="ch02.html" aria-current="page"><span class="n">02</span><span>効くコンパイラオプション</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>フラグでなくユニオン型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>例外か、失敗を返すか</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>境界で一度だけパース</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>REST・GraphQL・RPC</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>API 契約のありか</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>壊さずに API を変える</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>同じリクエストが二度</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>オフラインとサーバーのルール</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>静的 SPA を選ぶ理由</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -394,99 +394,99 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 2 of 11</span></p>
-  <h1>Which compiler flags change how I write code?</h1>
-  <p class="lead">An array lookup may have no value, even when its element type looks precise. Compiler options determine which missing cases the code must handle.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第2章 / 全11章</span></p>
+  <h1>コードの書き方を変えるコンパイラオプションはどれか</h1>
+  <p class="lead">配列の要素の型が正確に見えても、インデックスで取り出した値は存在しないことがあります。値がない場合のうち、どれをコードで扱わなければならないかは、コンパイラオプションで決まります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What strict leaves out</li>
-      <li>One flag, one bug</li>
-      <li>What the flags cost, and the gate</li>
+      <li>strict に含まれないもの</li>
+      <li>一つのオプションが一つのバグを防ぐ</li>
+      <li>オプションのコストとゲート</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What strict leaves out</h2>
-    <p>The <code>strict</code> compiler option enables a family of checks, including strict null checks and restrictions on implicit any. It does not enable every additional safety option. Quickturn adds four options for indexing, optional fields, index signatures and import syntax.</p>
+    <h2 id="s1"><span class="no">01</span>strict に含まれないもの</h2>
+    <p><code>strict</code> オプションは、厳密な null チェックや暗黙の any の禁止など、一連のチェックをまとめて有効にします。ただし、安全性を高めるオプションがすべて含まれるわけではありません。Quickturn では、インデックスアクセス、省略可能なフィールド、インデックスシグネチャ、import の構文に関する四つのオプションを追加しています。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The team's compiler config contains the strict bundle, with its null checks, no implicit any and unknown in catch; four extra flags sit inside the team config but outside strict.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="チームのコンパイラ設定の中に strict のまとまりがあり、null チェック、暗黙の any の禁止、catch での unknown を含みます。追加の四つのオプションは、チームの設定には含まれますが strict の外にあります。">
       <rect x="8" y="8" width="384" height="340" rx="10" class="zone-soft"/>
-      <text x="24" y="38" class="t-hd">Our shared compiler config</text>
+      <text x="24" y="38" class="t-hd">チーム共通のコンパイラ設定</text>
       <rect x="24" y="54" width="352" height="116" rx="8" class="zone"/>
       <text x="40" y="82" class="t-hd">strict</text>
-      <text x="40" y="108" class="t-sm">null checks</text>
-      <text x="40" y="130" class="t-sm">no implicit any</text>
-      <text x="40" y="152" class="t-sm">unknown in catch, and more</text>
+      <text x="40" y="108" class="t-sm">null チェック</text>
+      <text x="40" y="130" class="t-sm">暗黙の any を禁止</text>
+      <text x="40" y="152" class="t-sm">catch で unknown など</text>
       <rect x="24" y="186" width="352" height="148" rx="8" class="node-acc"/>
-      <text x="40" y="212" class="t-hd t-acc">Extra flags, not in strict</text>
+      <text x="40" y="212" class="t-hd t-acc">strict にない追加オプション</text>
       <text x="40" y="238" class="t-sm">noUncheckedIndexedAccess</text>
       <text x="40" y="260" class="t-sm">exactOptionalPropertyTypes</text>
       <text x="40" y="282" class="t-sm">noPropertyAccessFromIndexSignature</text>
       <text x="40" y="304" class="t-sm">verbatimModuleSyntax</text>
     </svg>
-    <figcaption>The four flags that change how we write code sit outside <code>strict</code>. Turning on <code>strict</code> alone never gives you them.</figcaption>
+    <figcaption>コードの書き方を変える四つのオプションは <code>strict</code> の外にあります。<code>strict</code> を有効にするだけでは、この四つは手に入りません。</figcaption>
   </figure>
-    <p>These options address different failure modes. They make potentially missing values and erased type imports more explicit, rather than merely prescribe formatting.</p>
+    <p>これらのオプションは、それぞれ別の種類の失敗に対応します。書式を指示するためのものではなく、値が欠けているかもしれない箇所や、変換後に消える型の import を明示させるためのものです。</p>
   <dl class="terms">
-    <dt>noUncheckedIndexedAccess</dt><dd><code>arr[i]</code> may be <code>undefined</code>. Catches reading past the end.</dd>
-    <dt>exactOptionalPropertyTypes</dt><dd>"Missing" and "<code>undefined</code>" differ. Catches clearing a field by accident.</dd>
-    <dt>noPropertyAccess<wbr>FromIndexSignature</dt><dd>Map lookups need brackets. Catches a lookup that looks like a field.</dd>
-    <dt>verbatimModuleSyntax</dt><dd>Imports are emitted as written. Catches a module that runs by surprise.</dd>
+    <dt>noUncheckedIndexedAccess</dt><dd><code>arr[i]</code> が <code>undefined</code> になりうるものとして扱います。配列の末尾を越えた読み取りを防ぎます。</dd>
+    <dt>exactOptionalPropertyTypes</dt><dd>「フィールドがない」と「<code>undefined</code> が入っている」を区別します。誤ってフィールドを消してしまうミスを防ぎます。</dd>
+    <dt>noPropertyAccess<wbr>FromIndexSignature</dt><dd>マップの参照にブラケット記法を求めます。フィールドへのアクセスに見えるマップ参照を防ぎます。</dd>
+    <dt>verbatimModuleSyntax</dt><dd>import を書いたとおりに出力します。意図せずモジュールが実行される事態を防ぎます。</dd>
   </dl>
-    <p>A shared compiler configuration gives every package the same expectations. The following examples explain what those expectations change in everyday code.</p>
+    <p>コンパイラ設定を共有すると、すべてのパッケージが同じ前提に立てます。以下の例では、その前提が日々のコードで何を変えるのかを説明します。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>One flag, one bug</h2>
-    <p>With <code>noUncheckedIndexedAccess</code>, an array or dictionary lookup may return undefined. A length test does not generally establish that a separately indexed expression is present. Read the element into a variable and narrow that value before using it.</p>
-    <p><code>exactOptionalPropertyTypes</code> distinguishes an absent optional field from explicitly assigning undefined unless the type includes it. This is useful for update objects, although JSON omits undefined values and an API must separately define how clearing a field works.</p>
-    <p>The <code>noPropertyAccessFromIndexSignature</code> flag requires bracket notation for fields supplied only by an index signature. The <code>verbatimModuleSyntax</code> flag makes type-only imports explicit, avoiding guessed import removal and unexpected module side effects.</p>
+    <h2 id="s2"><span class="no">02</span>一つのオプションが一つのバグを防ぐ</h2>
+    <p><code>noUncheckedIndexedAccess</code> を有効にすると、配列や辞書を参照した結果は undefined になりうるものとして扱われます。長さを確かめても、別に書いたインデックスアクセスの式に値があることまでは、一般には保証されません。要素をいったん変数に読み出し、その値を絞り込んでから使います。</p>
+    <p><code>exactOptionalPropertyTypes</code> は、省略可能なフィールドが存在しない状態と、明示的に undefined を代入した状態を区別します（型が undefined を含む場合を除きます）。更新用のオブジェクトで役に立ちますが、JSON は undefined の値を出力しないので、フィールドを空にする方法は API 側で別に定める必要があります。</p>
+    <p><code>noPropertyAccessFromIndexSignature</code> は、インデックスシグネチャだけで定義されたフィールドにブラケット記法を求めます。<code>verbatimModuleSyntax</code> は型だけの import を明示させます。import を消してよいかをコンパイラが推測することも、モジュールの副作用が意図せず起きることもなくなります。</p>
     <pre><code>const first = cards[0];
 if (first === undefined) return noCards();
 first.id; // first: Card
 
 type Settings = { sound?: boolean };
-const a: Settings = {};                 // ok: field absent
-const b: Settings = { sound: undefined }; // error</code></pre>
+const a: Settings = {};                 // OK：フィールドなし
+const b: Settings = { sound: undefined }; // エラー</code></pre>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What the flags cost, and the gate</h2>
-    <p>Enabling these options in an existing codebase creates migration work: missing-value checks, fallbacks and library incompatibilities must be handled. Quickturn accepts that cost for long-lived code and requires type checking in CI.</p>
-    <p>A generated client once failed under exact optional-property checks. The choices were to relax the configuration for that output or change what was generated.</p>
+    <h2 id="s3"><span class="no">03</span>オプションのコストとゲート</h2>
+    <p>既存のコードベースでこれらのオプションを有効にすると、移行の作業が発生します。値がない場合のチェック、フォールバック、ライブラリとの非互換に対応しなければなりません。Quickturn は長く使うコードのためにそのコストを受け入れ、CI で型チェックを必須にしています。</p>
+    <p>あるとき、生成したクライアントが省略可能プロパティの厳密なチェックで失敗しました。選択肢は、その生成物についてだけ設定を緩めるか、生成する内容を変えるかの二つでした。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Loosening the flag for generated code compiles but makes the gate weaker in one folder; generating only types and hand-writing the calls keeps the gate the same everywhere, at the cost of one small module.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Loosen the flag</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Types only</text>
-      <text x="16" y="56" class="t-sm">What compiles</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">everything</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">everything</text>
-      <text x="16" y="136" class="t-sm">The gate</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">weaker in a folder</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">same everywhere</text>
-      <text x="16" y="216" class="t-sm">What it costs</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">a weaker gate</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">one small module</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="生成コードに対してオプションを緩めるとコンパイルは通りますが、一部のフォルダでゲートが弱くなります。型だけを生成して呼び出しを手書きすれば、小さなモジュールを一つ抱える代わりに、どこでも同じゲートを保てます。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">オプションを緩める</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">型だけ生成</text>
+      <text x="16" y="56" class="t-sm">コンパイルが通る範囲</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">すべて</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">すべて</text>
+      <text x="16" y="136" class="t-sm">ゲート</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">一部で弱くなる</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd">どこでも同じ</text>
+      <text x="16" y="216" class="t-sm">コスト</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">ゲートが弱まる</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">小さなモジュール1つ</text>
     </svg>
-    <figcaption>Both options retain type checking that can detect incompatible uses of changed contracts. The right option also keeps the configured gate consistent across files.</figcaption>
+    <figcaption>どちらの案でも型チェックは残るので、変更された契約の誤った使い方は検出できます。「型だけ生成」の案は、それに加えて、設定したゲートをすべてのファイルで揃えられます。</figcaption>
   </figure>
-    <p>Quickturn generated types only and kept a small fetch module checked with <code>satisfies</code>. That operator tests compatibility without replacing the value's inferred type. The module needs maintenance, and a compatible generator release could make the choice worth revisiting.</p>
-    <p>A failing index read should normally be fixed by handling absence, rather than removing the check for an entire package. Exceptions require understanding which protection is being lost.</p>
+    <p>Quickturn は型だけを生成し、<code>satisfies</code> で検査する小さな fetch モジュールを手で保守しています。<code>satisfies</code> は、値の推論された型を置き換えずに、互換性だけを検査する演算子です。このモジュールには保守の手間がかかるので、互換性のあるジェネレーターが出れば判断を見直す価値があります。</p>
+    <p>インデックスの読み取りでエラーが出たら、パッケージ全体のチェックを外すのではなく、値がない場合を扱って直すのが基本です。例外を認めるなら、どの保護を失うのかを理解したうえで決めます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li><code>strict</code> is a floor; flags like <code>noUncheckedIndexedAccess</code> and <code>exactOptionalPropertyTypes</code> are separate opt-ins.</li>
-      <li>Each extra flag catches a class of mistakes before runtime, at the cost of more checks in everyday code.</li>
-      <li>Quickturn retains its checks by generating types and maintaining a small fetch module; a compatible generator could change that trade.</li>
+      <li><code>strict</code> は最低ラインです。<code>noUncheckedIndexedAccess</code> や <code>exactOptionalPropertyTypes</code> は、別に有効にするオプションです。</li>
+      <li>追加のオプションは、それぞれ一種類のミスを実行前に検出します。その代わり、日々のコードに書くチェックは増えます。</li>
+      <li>Quickturn は型を生成し、小さな fetch モジュールを保守することでチェックを維持しています。互換性のあるジェネレーターが出れば、この判断は変わりえます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch01.html"><span>Previous</span><b>If types vanish at runtime, what are they for?</b></a>
-    <a class="next" href="ch03.html"><span>Next</span><b>Why not just add another boolean flag?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch01.html"><span>前へ</span><b>実行時に消える型は、何のためにあるのか</b></a>
+    <a class="next" href="ch03.html"><span>次へ</span><b>真偽値フラグを足すだけでは、なぜ足りないのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>

@@ -1,25 +1,25 @@
-<!-- title: Operations 09 · What stops a bad change | accent: think -->
+<!-- title: 運用と品質 09 · 悪い変更を止める仕組み | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 9 of 12</span></p>
-  <h1>What actually stops a bad change from merging?</h1>
-  <p class="lead">A change passes a quick hook but fails an adapter contract in CI. Shared scripts give each gate a clear role without treating green checks as complete correctness.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第9章 / 全12章</span></p>
+  <h1>悪い変更のマージを実際に止めるのは何か</h1>
+  <p class="lead">ある変更は手早いフックを通過したのに、CI ではアダプターの契約テストに失敗しました。共通のスクリプトを使うと各ゲートの役割がはっきりしますが、チェックが緑だからといって、完全に正しいことにはなりません。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>The layers</li>
-      <li>Coverage floors</li>
-      <li>Strength and friction</li>
-      <li>Gates and AI agents</li>
+      <li>重なるゲート</li>
+      <li>カバレッジの下限</li>
+      <li>守りの強さと手間</li>
+      <li>ゲートと AI エージェント</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The layers</h2>
-    <p>Quickturn uses checks at several times: a quick pre-commit hook, an everyday local gate, a full gate and required CI checks. They call shared scripts so a developer and CI do not unknowingly test different definitions.</p>
+    <h2 id="s1"><span class="no">01</span>重なるゲート</h2>
+    <p>Quickturn は、いくつかの時点でチェックをかけます。手早いプレコミットフック、日常のローカルゲート、フルゲート、そして必須の CI チェックです。どれも共通のスクリプトを呼ぶので、開発者と CI が知らないうちに別の定義でテストしていた、ということは起きません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 516" role="img" aria-label="A change moves from save, to commit with the pre-commit hook, to the everyday gate, to the full gate, to push, to the required CI checks, and finally to merge.">
+    <svg viewBox="0 0 400 516" role="img" aria-label="変更は、保存、プレコミットフックのかかるコミット、日常のゲート、フルゲート、プッシュ、必須の CI チェックを経て、最後にマージへ進む。">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -29,72 +29,72 @@
       <circle cx="28" cy="400" r="6" class="dot"/>
       <circle cx="28" cy="472" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Save</text>
+      <text x="64" y="46">保存</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Commit · hook, seconds</text>
+      <text x="64" y="118">コミット · フック、数秒</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Everyday gate · no services</text>
+      <text x="64" y="190">日常のゲート · サービスなし</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Full gate · build, coverage</text>
+      <text x="64" y="262">フルゲート · ビルド、カバレッジ</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Push</text>
+      <text x="64" y="334">プッシュ</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="406">Required CI checks</text>
+      <text x="64" y="406">必須の CI チェック</text>
       <rect x="48" y="448" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="478" class="t-hd">Merge</text>
+      <text x="64" y="478" class="t-hd">マージ</text>
     </svg>
-    <figcaption>Each step adds something the one before couldn't see. Required checks enforce the protected merge path; passing them establishes the properties they actually test.</figcaption>
+    <figcaption>各段階は、前の段階には見えなかったものを足します。必須のチェックは保護されたマージの経路を強制しますが、それに通って確かめられるのは、実際にテストしている性質だけです。</figcaption>
   </figure>
-    <p>The fast hook checks staged changes and types; the full gate adds builds, smoke, database contracts and coverage. Required branch rules enforce the expected remote checks. A comparison test can detect drift between the declared local and CI lists.</p>
+    <p>手早いフックはステージした変更と型を確かめ、フルゲートはビルド、スモークテスト、データベースの契約テスト、カバレッジを加えます。必須のブランチルールが、リモートで期待するチェックを強制します。ローカルと CI で宣言したチェックの一覧がずれていないかは、比較のテストで検出できます。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Coverage floors</h2>
-    <p>A global coverage score can hide weakly tested code behind a heavily tested domain. Area-specific floors expose those gaps. Quickturn raises them as evidence improves rather than lowering them in an unrelated feature change.</p>
+    <h2 id="s2"><span class="no">02</span>カバレッジの下限</h2>
+    <p>全体のカバレッジの数字は、手厚くテストしたドメインの陰に、テストの薄いコードを隠してしまうことがあります。領域ごとに下限を設けると、そうした穴が見えます。Quickturn は、関係のない機能の変更のついでに下限を下げることはせず、証拠がそろうにつれて引き上げます。</p>
 <dl class="terms">
-  <dt>Does the PR go green?</dt><dd>Lowering the floor: yes. Covering the branch: yes.</dd>
-  <dt>Is protection left for the next change?</dt><dd>Lowering the floor: less, for everyone. Covering the branch: the same, plus one test.</dd>
-  <dt>Does a reviewer have to argue?</dt><dd>Lowering the floor: yes. Covering the branch: review the behavior and assertion.</dd>
+  <dt>PR は緑になるか</dt><dd>下限を下げる：なる。分岐をテストする：なる。</dd>
+  <dt>次の変更のための守りは残るか</dt><dd>下限を下げる：全員にとって減る。分岐をテストする：変わらず、テストが一つ増える。</dd>
+  <dt>レビュアーが議論する必要はあるか</dt><dd>下限を下げる：ある。分岐をテストする：振る舞いとアサーションを確認すればよい。</dd>
 </dl>
-    <p>An uncovered bad-JSON branch deserves a behavior test: the expected error, safe response and absence of side effects. Removing the branch from coverage or reducing a threshold would make the number green without checking the behavior.</p>
+    <p>不正な JSON を受けたときの分岐がカバーされていないなら、振る舞いのテストを書くべきです。期待するエラー、安全なレスポンス、副作用がないことを確かめます。その分岐をカバレッジの対象から外したり、しきい値を下げたりすれば、振る舞いを確かめないまま数字だけが緑になります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Strength and friction</h2>
-    <p>Checks add friction, so keep commit-time work fast and run expensive integration work at the appropriate stage. Start with a focused failing test, then run the required full validation before delivery.</p>
-    <p>If a gate itself is wrong, explain and change it through a dedicated review. A passing gate establishes its checked properties, not deployment success or complete correctness. Report gaps explicitly instead of silently treating a skipped check as a pass.</p>
+    <h2 id="s3"><span class="no">03</span>守りの強さと手間</h2>
+    <p>チェックは手間を増やすので、コミット時の処理は速く保ち、重い結合テストは適切な段階で走らせます。まず対象を絞った失敗するテストから始め、引き渡す前に必須のフル検証を実行します。</p>
+    <p>ゲートそのものが間違っているなら、理由を説明したうえで、専用のレビューを通して変更します。ゲートに通って確かめられるのはチェックした性質だけで、デプロイの成功や完全な正しさではありません。スキップしたチェックを黙って合格扱いにせず、確かめていない部分ははっきり報告します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="Nested rings: the hook sees staged files; the everyday gate sees the whole repository without services; the full gate and CI add the build, the container and coverage; outermost, only a human reviewer sees judgment calls such as deleting a workflow or relaxing a rule.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="入れ子の輪。フックはステージしたファイルを見る。日常のゲートは、サービスなしでリポジトリ全体を見る。フルゲートと CI は、ビルド、コンテナ、カバレッジを加える。いちばん外側では、ワークフローの削除やルールの緩和のような判断を、人のレビュアーだけが見る。">
       <rect x="8" y="8" width="384" height="340" rx="12" class="node-acc"/>
-      <text x="24" y="36" class="t-hd t-acc">Human review</text>
-      <text x="24" y="56" class="t-sm">judgment calls</text>
+      <text x="24" y="36" class="t-hd t-acc">人のレビュー</text>
+      <text x="24" y="56" class="t-sm">判断が要るもの</text>
       <rect x="32" y="72" width="336" height="260" rx="10" class="zone-soft"/>
-      <text x="48" y="100" class="t-hd">Full gate and CI</text>
-      <text x="48" y="120" class="t-sm">build, container, coverage</text>
+      <text x="48" y="100" class="t-hd">フルゲートと CI</text>
+      <text x="48" y="120" class="t-sm">ビルド、コンテナ、カバレッジ</text>
       <rect x="56" y="136" width="288" height="180" rx="8" class="node"/>
-      <text x="72" y="164" class="t-hd">Everyday gate</text>
-      <text x="72" y="184" class="t-sm">whole repo, no services</text>
+      <text x="72" y="164" class="t-hd">日常のゲート</text>
+      <text x="72" y="184" class="t-sm">リポジトリ全体、サービスなし</text>
       <rect x="80" y="200" width="240" height="96" rx="8" class="node"/>
-      <text x="200" y="240" text-anchor="middle" class="t-hd">Hook</text>
-      <text x="200" y="262" text-anchor="middle" class="t-sm">staged files</text>
+      <text x="200" y="240" text-anchor="middle" class="t-hd">フック</text>
+      <text x="200" y="262" text-anchor="middle" class="t-sm">ステージしたファイル</text>
     </svg>
-    <figcaption>The outer ring is where no tool replaces a person. Each ring sees more than the ring inside it.</figcaption>
+    <figcaption>いちばん外側の輪は、どんなツールも人の代わりになれない領域です。どの輪も、内側の輪より多くのものを見ます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Gates and AI agents</h2>
-    <p>“Make CI green” can lead a hurried person or agent to skip tests, lower thresholds or remove rules. The actual goal is to fix the behavior while preserving the checks that protect it.</p>
-    <p>Automated assertions catch mechanical violations; review must also notice weakened policy. A flaky failure can reveal a missing await or shared-state bug. Diagnose the cause before proposing to remove its evidence.</p>
+    <h2 id="s4"><span class="no">04</span>ゲートと AI エージェント</h2>
+    <p>「CI を緑にして」と言われると、急いでいる人やエージェントは、テストを飛ばしたり、しきい値を下げたり、ルールを消したりしがちです。本当の目的は、振る舞いを守っているチェックを残したまま、振る舞いを直すことです。</p>
+    <p>機械的な違反は自動のアサーションで捕まえられますが、方針が弱められたことにはレビューで気づく必要があります。不安定な失敗の裏に、await の抜けや共有状態のバグが隠れていることもあります。その証拠を消すことを提案する前に、原因を突き止めます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Hook, everyday gate, full gate and required CI checks all run the same scripts.</li>
-      <li>Quickturn records area-specific coverage floors and raises them with evidence; gate changes require their own review.</li>
-      <li>A red gate is fixed in the code; changing a gate is its own reviewed change, for people and agents.</li>
+      <li>フック、日常のゲート、フルゲート、必須の CI チェックは、どれも同じスクリプトを実行します。</li>
+      <li>Quickturn は領域ごとのカバレッジの下限を記録し、証拠に応じて引き上げます。ゲートの変更には、それ専用のレビューが必要です。</li>
+      <li>赤いゲートはコードを直して通します。ゲートを変えるのはレビューを通す別の変更で、これは人にもエージェントにも当てはまります。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch08.html"><span>Previous</span><b>How do you test things that aren't plain code?</b></a>
-    <a class="next" href="ch10.html"><span>Next</span><b>Should every merge go straight to production?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch08.html"><span>前へ</span><b>コードではないものをどうテストするか</b></a>
+    <a class="next" href="ch10.html"><span>次へ</span><b>マージしたものはすべて、そのまま本番に出すべきか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

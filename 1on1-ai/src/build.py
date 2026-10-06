@@ -6,7 +6,7 @@ here = pathlib.Path(__file__).parent
 sys.path.insert(0, str(here.parent.parent/"_shared"))
 import nav
 css = (here/"base.css").read_text() + nav.CSS
-LANG = "en"
+LANG = "ja"
 ACCENT = {"think": "1", "reach": "2", "run": "3", "guard": "4"}
 head = """<!doctype html>
 <html lang="{lang}">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 09 · When a learner attacks the prompt</title>
+<title>AI機能を本番で動かす 09 · 学習者がプロンプトを攻撃したら</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html" aria-current="page"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html" aria-current="page"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,50 +396,50 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 9 of 13</span></p>
-  <h1>What if a learner types 'ignore your instructions'?</h1>
-  <p class="lead">A learner’s answer tells the grader to ignore its rubric. The design must bound available capabilities even when instructions fail to resist that text.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第9章 / 全13章</span></p>
+  <h1>学習者が「指示を無視して」と入力したら</h1>
+  <p class="lead">学習者の解答に、ルーブリックを無視するよう採点者へ命じる文が入っていました。指示がその文に負けた場合でも、使える機能の範囲が限られているように設計する必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What injection is</li>
-      <li>What can a successful injection do?</li>
-      <li>Layers at the entry and the exit</li>
-      <li>The bigger risk, and the cost of guards</li>
+      <li>インジェクションとは何か</li>
+      <li>インジェクションが成功したら何ができるか</li>
+      <li>入口と出口の層</li>
+      <li>より大きなリスクと、防御の代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What injection is</h2>
-    <p>Prompt injection attempts to turn text treated as data into instructions the model follows. Direct injection can appear in a learner answer; indirect injection can arrive through a document or tool result. Delimiters and clearer instructions can help, but are not an authorization boundary.</p>
-    <p>Quickturn therefore asks what a successfully misled model could do, rather than treating a stronger prompt as the whole defense.</p>
+    <h2 id="s1"><span class="no">01</span>インジェクションとは何か</h2>
+    <p>プロンプトインジェクションは、データとして扱うはずのテキストを、モデルが従う指示に変えようとする攻撃です。直接のインジェクションは学習者の解答に現れることがあり、間接のインジェクションは文書やツールの結果を通して入り込みます。区切り文字やより明確な指示は助けになりますが、認可の境界にはなりません。</p>
+    <p>そこでQuickturnは、プロンプトを強くすることを防御のすべてとは考えません。うまく欺かれたモデルに何ができてしまうかを問います。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>What can a successful injection do?</h2>
-    <p>The grader has no tools and receives only the current task's data. Its output is limited to a grade shape, and the application binds storage to the verified learner. These choices reduce available capabilities even if the verdict is manipulated.</p>
+    <h2 id="s2"><span class="no">02</span>インジェクションが成功したら何ができるか</h2>
+    <p>採点者はツールを持たず、受け取るのは今のタスクのデータだけです。出力は採点結果の形に限られ、保存先はアプリケーションが検証済みの学習者に結びつけます。判定が操作されたとしても、これらの選択によって使える機能は狭まります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="The grader receives restricted task context and no tools. Misleading feedback, disclosure of supplied context and abusive cost remain possible without access to other learners’ records.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="採点者が受け取るのは限定されたタスクのコンテキストだけで、ツールはありません。誤解を招くフィードバック、渡されたコンテキストの漏えい、費用の乱用は起こりえますが、ほかの学習者の記録には届きません。">
       <rect x="8" y="8" width="384" height="316" rx="12" class="zone-soft"/>
-      <text x="24" y="36" class="t-hd">All of Quickturn's data</text>
+      <text x="24" y="36" class="t-hd">Quickturnの全データ</text>
       <rect x="32" y="52" width="336" height="256" rx="10" class="node"/>
-      <text x="48" y="80" class="t-hd">This learner's data</text>
+      <text x="48" y="80" class="t-hd">この学習者のデータ</text>
       <rect x="56" y="96" width="288" height="196" rx="8" class="node"/>
-      <text x="72" y="124">Current task data</text>
+      <text x="72" y="124">今のタスクのデータ</text>
       <rect x="80" y="148" width="240" height="120" rx="8" class="node-acc"/>
-      <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">Feedback, context</text>
-      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">and cost risks</text>
+      <text x="200" y="202" text-anchor="middle" class="t-hd t-acc">フィードバック、</text>
+      <text x="200" y="226" text-anchor="middle" class="t-hd t-acc">文脈、費用のリスク</text>
     </svg>
-    <figcaption>The restricted task context limits what data the grader receives. With no tools, a model request cannot directly run an application command.</figcaption>
+    <figcaption>限定されたタスクのコンテキストによって、採点者が受け取るデータの範囲が限られます。ツールがないので、モデルの要求がアプリケーションのコマンドを直接実行することはありません。</figcaption>
   </figure>
-    <p>The remaining risks still matter: incorrect feedback, exposure of supplied context and abusive cost. Include adversarial cases in evaluation and measure whether they change verdicts. Schema compliance does not prove that the feedback or classification is safe.</p>
+    <p>それでも残るリスクは軽くありません。誤ったフィードバック、渡したコンテキストの漏えい、費用の乱用です。評価に敵対的なケースを含め、それで判定が変わるかを測ります。スキーマに沿っていることは、フィードバックや分類が安全であることの証明になりません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Layers at the entry and the exit</h2>
-    <p>Entry controls limit size and can screen content. Bedrock Guardrails offers separately configured checks, but support, usage cost and false-positive behavior depend on the selected feature. It should be evaluated as one layer.</p>
+    <h2 id="s3"><span class="no">03</span>入口と出口の層</h2>
+    <p>入口の制御では、サイズを制限し、内容をふるいにかけられます。Bedrock Guardrailsは個別に設定する検査を提供しますが、対応範囲、利用料金、誤検知の傾向は選んだ機能によって違います。防御の1つの層として評価するべきものです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 516" role="img" aria-label="The learner's text passes a length cap, an optional ApplyGuardrail prompt-attack check, goes into a delimited field in the prompt, reaches a model with no tools, is checked by schema and domain validation at the exit, and is stored as a grade.">
+    <svg viewBox="0 0 400 516" role="img" aria-label="学習者のテキストは、長さの上限、任意のApplyGuardrailによるプロンプト攻撃の検査を通り、プロンプト内の区切られた欄に入り、ツールを持たないモデルに届きます。出口でスキーマとドメインの検査を受け、採点結果として保存されます。">
       <line x1="28" y1="40" x2="28" y2="472" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -449,58 +449,58 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <circle cx="28" cy="472" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Learner's text</text>
+      <text x="64" y="46">学習者のテキスト</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Length cap</text>
+      <text x="64" y="118">長さの上限</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Prompt-attack check</text>
+      <text x="64" y="190">プロンプト攻撃の検査</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Delimited field in the prompt</text>
+      <text x="64" y="262">プロンプト内の区切られた欄</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Model with no tools</text>
+      <text x="64" y="334">ツールを持たないモデル</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">Schema and domain checks</text>
+      <text x="64" y="406" class="t-hd">スキーマとドメインの検査</text>
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="478">Stored grade</text>
+      <text x="64" y="478">採点結果を保存</text>
     </svg>
-    <figcaption>The entry layers make an attack harder. Output checks can reject invalid shape or domain values, but cannot guarantee that every plausible grade or feedback sentence is correct.</figcaption>
+    <figcaption>入口の層は攻撃を難しくします。出口の検査は不正な形やドメインの値をはじけますが、もっともらしい採点結果やフィードバックの文がすべて正しいとまでは保証できません。</figcaption>
   </figure>
-    <p>The exit path parses the response and checks domain rules. It displays model text safely, without inserting it as HTML or running it. Output stays untrusted data even when the prompt was authored by the team.</p>
+    <p>出口では、応答をパースしてドメインルールを確かめます。モデルのテキストはHTMLとして埋め込んだり実行したりせず、安全に表示します。プロンプトをチームが書いていても、出力は信頼できないデータとして扱います。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>The bigger risk, and the cost of guards</h2>
-    <p>Token abuse needs input caps, bounded retries, a per-learner usage ledger and account-level cost containment. Content filtering needs a policy for legitimate practice sentences that resemble attacks. A single detector hit is not a reliable grade.</p>
+    <h2 id="s4"><span class="no">04</span>より大きなリスクと、防御の代償</h2>
+    <p>トークンの乱用には、入力の上限、回数を限った再試行、学習者ごとの使用量台帳、アカウント単位の費用の歯止めが必要です。内容のフィルタリングには、攻撃に似た正当な練習用の文をどう扱うかの方針が要ります。検知器が一度反応したことは、信頼できる採点結果にはなりません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="The grader has no tools, reads no outside content, and a successful injection can distort feedback, expose supplied context or waste tokens; the tutor agent has tools, reads outside content, and a successful injection could make it call a tool, so it needs policy and grants.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Grader</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Tutor agent</text>
-      <text x="16" y="56" class="t-sm">Tools</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">none</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">several</text>
-      <text x="16" y="136" class="t-sm">Reads outside content</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">no</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">yes</text>
-      <text x="16" y="216" class="t-sm">What injection can do</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">feedback, context</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">call a tool</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="採点者はツールを持たず、外部の内容を読まないので、インジェクションが成功してもできるのはフィードバックをゆがめる、渡されたコンテキストを漏らす、トークンを浪費することです。チューターエージェントはツールを持ち、外部の内容を読むので、インジェクションが成功するとツールを呼ばせられます。そのためポリシーと権限の付与が必要です。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">採点者</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">チューター</text>
+      <text x="16" y="56" class="t-sm">ツール</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">なし</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">複数</text>
+      <text x="16" y="136" class="t-sm">外部の内容を読むか</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">読まない</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">読む</text>
+      <text x="16" y="216" class="t-sm">インジェクションでできること</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">フィードバック、文脈</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">ツールを呼ぶ</text>
     </svg>
-    <figcaption>With tools, a successful injection can act. That's why an agent needs policy and grants, not just a better prompt.</figcaption>
+    <figcaption>ツールがあれば、インジェクションが成功したときに実際の操作が起こりえます。だからエージェントには、よりよいプロンプトだけでなく、ポリシーと権限の付与が必要です。</figcaption>
   </figure>
-    <p>Agents add tool-side consequences. An email-triage tool with arbitrary recipients could forward sensitive invoices after reading a hostile email. Constraining destinations and requiring approval for consequential actions limits that capability directly. Tool policies, identity and output handling remain necessary even with injection screening.</p>
+    <p>エージェントでは、ツールを通じた影響が加わります。宛先を自由に指定できるメール仕分けのツールなら、悪意のあるメールを読んだあとに、機密性のある請求書を転送してしまうかもしれません。宛先を制限し、影響の大きい操作には承認を求めれば、その能力を直接狭められます。インジェクションを検査していても、ツールのポリシー、アイデンティティ、出力の扱いは引き続き必要です。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A model can't reliably tell instructions from data, so prompt wording alone is not a reliable security boundary.</li>
-      <li>Limit what a successful injection can do: no tools, schema-bound output, the caller's own data only.</li>
-      <li>Treat guardrails as one layer, and meet cost abuse with caps, a per-learner ledger and an account budget limit.</li>
+      <li>モデルは指示とデータを確実には区別できないので、プロンプトの書き方だけでは信頼できるセキュリティの境界にならない。</li>
+      <li>インジェクションが成功してもできることを限定する。ツールを持たせず、出力をスキーマに縛り、呼び出し元自身のデータだけを渡す。</li>
+      <li>ガードレールは1つの層として扱い、費用の乱用には上限、学習者ごとの台帳、アカウントの予算の上限で備える。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch08.html"><span>Previous</span><b>Where do evals run: in CI, at night or in production?</b></a>
-    <a class="next" href="ch10.html"><span>Next</span><b>Who pays for the tokens, and what stops a runaway bill?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch08.html"><span>前へ</span><b>評価はCI、夜間、本番のどこで動かすのか</b></a>
+    <a class="next" href="ch10.html"><span>次へ</span><b>トークン代は誰が払い、請求の暴走は何が止めるのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

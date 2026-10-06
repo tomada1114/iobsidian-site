@@ -17,11 +17,11 @@ SITE = pathlib.Path(__file__).resolve().parent.parent
 
 # (slug, short label for navigation and reading history, entry page inside the slug folder)
 READERS = [
-    ("1on1-architecture", "Architecture", "ch00.html"),
-    ("1on1-api-types", "API & TypeScript", "ch00.html"),
-    ("1on1-aws", "AWS", "ch00.html"),
-    ("1on1-ai", "AI in Production", "ch00.html"),
-    ("1on1-ops", "Operations", "ch00.html"),
+    ("1on1-architecture", "アーキテクチャ", "ch00.html"),
+    ("1on1-api-types", "API と TypeScript", "ch00.html"),
+    ("1on1-aws", "AWS の基礎", "ch00.html"),
+    ("1on1-ai", "本番のAI", "ch00.html"),
+    ("1on1-ops", "運用と品質", "ch00.html"),
     ("agentcore-reader", "AgentCore", "ch00.html"),
     ("book-pause-before-speaking", "一拍おいて話す", "ch00.html"),
     ("book-career-transitions", "キャリアの移り目", "ch00.html"),
@@ -340,11 +340,11 @@ CATEGORY_PAGES = {
 # The page count is read from the reader's src/ (chapters other than ch00).
 LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
 BOOKS = {
-    "1on1-architecture": ("software", "Engineering Readers", "Architecture", "What architecture is for: dependency rules, ports and adapters, DDD, and how to choose.", "About 46 min", "B2 · prose", "en"),
-    "1on1-api-types": ("software", "Engineering Readers", "API and TypeScript", "Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.", "About 44 min", "B2 · prose", "en"),
-    "1on1-ops": ("software", "Engineering Readers", "Operations and Quality", "Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.", "About 44 min", "B2 · prose", "en"),
-    "1on1-aws": ("cloud-ai", "Engineering Readers", "AWS Foundation", "Running a small app on AWS: access, Lambda, DynamoDB, infrastructure as code, sign-in and cost.", "About 55 min", "B2 · prose", "en"),
-    "1on1-ai": ("software", "Engineering Readers", "AI in Production", "LLM features in a real product: cost, typed output, evaluation, defenses and agents.", "About 51 min", "B2 · prose", "en"),
+    "1on1-architecture": ("software", "エンジニアリング読本", "アーキテクチャ", "アーキテクチャは何のためにあるのか。依存のルール、ポートとアダプター、DDD、そしてどう選ぶか。", "About 57 min", "", "ja"),
+    "1on1-api-types": ("software", "エンジニアリング読本", "API と TypeScript", "壊れにくい型と API の設計。境界でのパース、契約、バージョン管理、再送、オフラインまで。", "About 45 min", "", "ja"),
+    "1on1-ops": ("software", "エンジニアリング読本", "運用と品質", "架空の語学アプリ Quickturn を例に、オブザーバビリティ、アラーム、SLO、テスト、デプロイ、データ保護、公開の準備を図解で読み解く12章。", "About 48 min", "", "ja"),
+    "1on1-aws": ("cloud-ai", "エンジニアリング読本", "小さなアプリで学ぶ AWS の基礎", "小さなアプリを AWS で動かす。権限、Lambda、DynamoDB、インフラのコード化、サインイン、費用までを一つの例でたどる。", "About 1 hour", "", "ja"),
+    "1on1-ai": ("software", "エンジニアリング読本", "AI機能を本番で動かす", "架空の語学アプリを例に、LLM呼び出しの費用、型つき出力、評価、インジェクション対策、費用の上限、AgentCore、権限までを本番の設計判断として説明します。", "About 55 min", "", "ja"),
     "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · prose (8–13)", "en"),
     "book-pause-before-speaking": ("relationships", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
     "book-career-transitions": ("work", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),

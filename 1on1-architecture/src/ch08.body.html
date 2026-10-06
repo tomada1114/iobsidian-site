@@ -1,102 +1,102 @@
-<!-- title: Architecture 08 · Where does the logic go | accent: think -->
+<!-- title: アーキテクチャ 08 · ハンドラーでないなら、ロジックはどこに書くのか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 8 of 11</span></p>
-  <h1>Where does the logic go, if not in the handler?</h1>
-  <p class="lead">A learner who has finished today's portion should receive an extra round. Testing that decision should not require an HTTP handler or a database.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第8章 / 全11章</span></p>
+  <h1>ハンドラーでないなら、ロジックはどこに書くのか</h1>
+  <p class="lead">今日のノルマを終えた学習者には、追加のラウンドを出すべきです。この判断をテストするのに、HTTPハンドラーもデータベースも要らないはずです。</p>
+  <p class="meta"><span>読了 約5分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Load, decide, commit</li>
-      <li>Two kinds of failure</li>
-      <li>One shape, many callers</li>
-      <li>What it costs</li>
+      <li>読み込み、判断し、コミットする</li>
+      <li>二種類の失敗</li>
+      <li>一つの形を多くの呼び出し元で使う</li>
+      <li>この形のコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Load, decide, commit</h2>
-    <p>Suppose the learner has already completed today's portion. Starting another round should create an “extra” round rather than another “today” round. That is a product decision, not an HTTP or database concern. Putting it inside the handler makes its test depend on mocked infrastructure.</p>
+    <h2 id="s1"><span class="no">01</span>読み込み、判断し、コミットする</h2>
+    <p>学習者がすでに今日のノルマを終えているとします。この状態でもう一度ラウンドを始めたら、「今日」のラウンドをもう一つ作るのではなく、「追加」のラウンドを作るべきです。これはプロダクトの判断であって、HTTPやデータベースの関心事ではありません。この判断をハンドラーの中に書くと、そのテストはモック化したインフラに依存することになります。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 312" role="img" aria-label="A command loads data through ports, a pure decide function turns plain values into changes and an answer, and the command commits the changes in one conditional write, or returns an expected failure as a value.">
+      <svg viewBox="0 0 400 312" role="img" aria-label="コマンドはポートを通してデータを読み込み、純粋なdecide関数が素の値を変更と応答に変え、コマンドがその変更を1回の条件付き書き込みでコミットする。想定内の失敗の場合は値として返す。">
         <line x1="30" y1="44" x2="30" y2="268" class="ln"/>
         <circle cx="30" cy="44" r="6" class="dot"/>
         <circle cx="30" cy="156" r="6" class="dot"/>
         <circle cx="30" cy="268" r="8" class="f-acc"/>
         <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="40">Load</text><text x="72" y="61" class="t-sm">round, portion, totals, catalog</text>
+        <text x="72" y="40">読み込み</text><text x="72" y="61" class="t-sm">ラウンド、ノルマ、累計、カタログ</text>
         <rect x="56" y="102" width="328" height="108" rx="6" class="node"/>
-        <text x="72" y="128">Decide (pure)</text>
-        <text x="72" y="152" class="t-sm">plain values and "now" in;</text>
-        <text x="72" y="174" class="t-sm">changes and answer out,</text>
-        <text x="72" y="196" class="t-sm">or an expected failure</text>
+        <text x="72" y="128">判断（純粋）</text>
+        <text x="72" y="152" class="t-sm">素の値と「現在時刻」を受け取り、</text>
+        <text x="72" y="174" class="t-sm">変更と応答を返す。</text>
+        <text x="72" y="196" class="t-sm">または想定内の失敗を返す</text>
         <rect x="56" y="240" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="264" class="t-hd">Commit</text><text x="72" y="285" class="t-sm">one conditional write</text>
+        <text x="72" y="264" class="t-hd">コミット</text><text x="72" y="285" class="t-sm">1回の条件付き書き込み</text>
       </svg>
-      <figcaption>Every command runs the same three steps. Only the middle one holds decisions, and it touches no store, no clock and no network.</figcaption>
+      <figcaption>どのコマンドも同じ3つのステップで動きます。判断を持つのは真ん中だけで、そこはストアにも時計にもネットワークにも触れません。</figcaption>
     </figure>
-    <p>Quickturn's command instead loads required values through application-owned ports, calls a pure domain decision function, and commits its changes. Time and IDs are supplied values. The decision returns either an expected failure or the changes and response.</p>
+    <p>そこでQuickturnのコマンドは、アプリケーションが持つポートを通して必要な値を読み込み、ドメインの純粋な判断関数を呼び、その変更をコミットします。時刻とIDは値として渡します。判断関数は、想定内の失敗か、変更と応答のどちらかを返します。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 276" role="img" aria-label="Testing the rule through the handler needs a mock store, clock and catalog and many setup lines; testing decide takes plain input and checks plain output.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd">Via the handler</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Via decide</text>
-        <text x="16" y="56" class="t-sm">Setup</text>
-        <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle" class="t-sm">three mocks</text>
-        <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">a plain object</text>
-        <text x="16" y="136" class="t-sm">Call</text>
-        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">run the handler</text>
-        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">call decide</text>
-        <text x="16" y="216" class="t-sm">Check</text>
-        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">calls and result</text>
-        <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">the result</text>
+      <svg viewBox="0 0 400 276" role="img" aria-label="ハンドラーを通してルールをテストすると、ストア、時計、カタログのモックと多くの準備コードが必要になる。decideをテストするなら、素の入力を渡して素の出力を確かめるだけで済む。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd">ハンドラー経由</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">decide経由</text>
+        <text x="16" y="56" class="t-sm">準備</text>
+        <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle" class="t-sm">モックが3つ</text>
+        <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">素のオブジェクト</text>
+        <text x="16" y="136" class="t-sm">呼び出し</text>
+        <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">ハンドラーを実行</text>
+        <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">decideを呼ぶ</text>
+        <text x="16" y="216" class="t-sm">確認</text>
+        <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">呼び出しと結果</text>
+        <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">結果だけ</text>
       </svg>
-      <figcaption>A pure decision takes plain input and returns a result the test can check directly. Database and handler setup belong to separate integration tests.</figcaption>
+      <figcaption>純粋な判断関数は素の入力を受け取り、テストが直接確かめられる結果を返します。データベースやハンドラーの準備は、別の結合テストで扱います。</figcaption>
     </figure>
-    <p>This is a functional core with an imperative shell. Reads and writes stay around the edge; rules operate on ordinary inputs. A direct test can pass a completed portion and assert an extra round without specifying which storage calls occurred.</p>
+    <p>これは「関数型のコアと命令型のシェル」と呼ばれる形です。読み書きは外縁に置き、ルールはふつうの入力に対して動きます。直接テストするなら、完了済みのノルマを渡して追加のラウンドになることを確かめればよく、どの保存処理が呼ばれたかを指定する必要はありません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Two kinds of failure</h2>
-    <p>A missing round, closed round or shortage of cards is an expected outcome represented by a Result value. The API maps it to a stable error code such as <code>ERR_ROUND_CLOSED</code>. Unexpected bugs are treated separately. Infrastructure failures also need handling in the shell rather than pretending they are domain decisions.</p>
-    <p>Time is another explicit input. A practice day depends on the learner's time zone and day-boundary hour, not the Lambda process's default UTC zone. Quickturn starts a practice day at 4 a.m. local time. Supplying those values makes the rule both correct for the learner and repeatable in tests.</p>
+    <h2 id="s2"><span class="no">02</span>二種類の失敗</h2>
+    <p>ラウンドが見つからない、ラウンドが終了している、カードが足りないといった状況は想定内の結果で、Result型の値として表します。APIはそれを<code>ERR_ROUND_CLOSED</code>のような安定したエラーコードに変換します。想定外のバグは別に扱います。インフラの障害も、ドメインの判断であるかのように装うのではなく、シェルの側で処理する必要があります。</p>
+    <p>時刻も明示的な入力です。練習の1日の区切りは、Lambdaのプロセスが既定で使うUTCではなく、学習者のタイムゾーンと日付の切り替え時刻で決まります。Quickturnでは、現地時間の午前4時から練習日が始まります。これらの値を外から渡すことで、ルールは学習者にとって正しく、テストでも再現できるものになります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>One shape, many callers</h2>
-    <p>A command consists of validated data and a request context identifying the actor. The same command can be called from HTTP, a grading worker or an agent tool. The entry adapter changes, while the rule stays in the domain.</p>
+    <h2 id="s3"><span class="no">03</span>一つの形を多くの呼び出し元で使う</h2>
+    <p>コマンドは、検証済みのデータと、操作する主体を示すリクエストコンテキストで構成されます。同じコマンドを、HTTP、採点用のワーカー、エージェントのツールのどこからでも呼べます。変わるのは入口のアダプターだけで、ルールはドメインに残ります。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="One command sits in the center; an HTTP route, tests, a queue worker and an agent tool all call it: the same shape for every caller.">
+      <svg viewBox="0 0 400 300" role="img" aria-label="中央に一つのコマンドがあり、HTTPルート、テスト、キューのワーカー、エージェントのツールのすべてがそれを呼ぶ。どの呼び出し元にも同じ形を使う。">
         <line x1="160" y1="128" x2="96" y2="64" class="ln"/>
         <line x1="240" y1="128" x2="304" y2="64" class="ln"/>
         <line x1="160" y1="172" x2="96" y2="236" class="ln"/>
         <line x1="240" y1="172" x2="304" y2="236" class="ln"/>
         <rect x="110" y="122" width="180" height="56" rx="8" class="node-acc"/>
-        <text x="200" y="157" text-anchor="middle" class="t-hd">One command</text>
-        <rect x="16" y="20" width="160" height="44" rx="6" class="node"/><text x="96" y="48" text-anchor="middle">HTTP route</text>
-        <rect x="224" y="20" width="160" height="44" rx="6" class="node"/><text x="304" y="48" text-anchor="middle">Tests</text>
-        <rect x="16" y="236" width="160" height="44" rx="6" class="node"/><text x="96" y="264" text-anchor="middle">Queue worker</text>
-        <rect x="224" y="236" width="160" height="44" rx="6" class="node"/><text x="304" y="264" text-anchor="middle">Agent tool</text>
+        <text x="200" y="157" text-anchor="middle" class="t-hd">一つのコマンド</text>
+        <rect x="16" y="20" width="160" height="44" rx="6" class="node"/><text x="96" y="48" text-anchor="middle">HTTPルート</text>
+        <rect x="224" y="20" width="160" height="44" rx="6" class="node"/><text x="304" y="48" text-anchor="middle">テスト</text>
+        <rect x="16" y="236" width="160" height="44" rx="6" class="node"/><text x="96" y="264" text-anchor="middle">キューのワーカー</text>
+        <rect x="224" y="236" width="160" height="44" rx="6" class="node"/><text x="304" y="264" text-anchor="middle">エージェントツール</text>
       </svg>
-      <figcaption>Four callers, one command. Because the command takes plain data and a context, none of them needs its own copy of the rules.</figcaption>
+      <figcaption>四つの呼び出し元に対して、コマンドは一つです。コマンドが素のデータとコンテキストを受け取るので、どの呼び出し元もルールのコピーを持たずに済みます。</figcaption>
     </figure>
-    <p>Quickturn distinguishes a learner, a system job and an agent with explicit grants. Authorization examines that context before an operation proceeds. An agent's ability to reach a tool does not independently grant access to the learner's data. A future entry point can reuse the command only if it supplies a trusted actor context and satisfies the same checks.</p>
+    <p>Quickturnは、学習者、システムのジョブ、エージェントを、明示的な権限付与によって区別します。認可は、操作を進める前にこのコンテキストを確認します。エージェントがツールにアクセスできるからといって、それだけで学習者のデータへのアクセスが認められるわけではありません。将来追加する入口がこのコマンドを再利用できるのは、信頼できる主体のコンテキストを渡し、同じチェックを満たす場合に限られます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What it costs</h2>
-    <p>A pure decision cannot fetch extra data halfway through. The shell must load its inputs first, sometimes including data that only one branch needs. Passing in a fetch callback would allow conditional reads, but it would also reintroduce I/O and failure into the core.</p>
-    <p>The separation takes practice, and it does not remove the need for integration tests. Store contracts check adapter behavior, and selected end-to-end tests exercise the whole path. For trivial CRUD, a separate decision function may add no value.</p>
-    <p>The related “impure–pure–impure sandwich” makes sense when the middle contains rules worth protecting. It is a way to locate complexity, not a requirement to split every function into three files.</p>
+    <h2 id="s4"><span class="no">04</span>この形のコスト</h2>
+    <p>純粋な判断関数は、処理の途中で追加のデータを取りに行けません。シェルが入力を先に読み込んでおく必要があり、一方の分岐でしか使わないデータまで読み込むこともあります。取得用のコールバックを渡せば条件に応じた読み込みもできますが、そうするとI/Oと障害がコアに戻ってきてしまいます。</p>
+    <p>この分離には慣れが必要で、結合テストが不要になるわけでもありません。ストアの契約テストがアダプターの振る舞いを確かめ、選んだエンドツーエンドテストが経路全体を通します。ささいなCRUDなら、判断関数を別に分けても得るものはないかもしれません。</p>
+    <p>関連する「不純–純粋–不純のサンドイッチ」という考え方が意味を持つのは、真ん中に守る価値のあるルールがあるときです。これは複雑さをどこに置くかを決める方法であって、すべての関数を3つのファイルに分けろという要求ではありません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Keep decisions in a pure decide function, and let a thin shell load and commit around it.</li>
-      <li>Return expected failures as values, handle unexpected faults separately, and supply time and time zones explicitly.</li>
-      <li>One command shape serves HTTP, workers and agent tools; the cost is loading up front and testing the shell.</li>
+      <li>判断は純粋なdecide関数に置き、その周りで薄いシェルが読み込みとコミットを担います。</li>
+      <li>想定内の失敗は値として返し、想定外の障害は別に扱い、時刻とタイムゾーンは明示的に渡します。</li>
+      <li>一つのコマンドの形がHTTP、ワーカー、エージェントのツールに対応し、その代わりに入力の先読みとシェルのテストというコストがかかります。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch07.html"><span>Previous</span><b>What is an aggregate, really?</b></a>
-    <a class="next" href="ch09.html"><span>Next</span><b>Do we need event sourcing to keep the history?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch07.html"><span>前へ</span><b>集約とは結局何なのか</b></a>
+    <a class="next" href="ch09.html"><span>次へ</span><b>履歴を残すにはイベントソーシングが必要か</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

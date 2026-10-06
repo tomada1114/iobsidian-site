@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 08 · Where evals run</title>
+<title>AI機能を本番で動かす 08 · 評価を動かす場所</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,26 +396,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 8 of 13</span></p>
-  <h1>Where do evals run: in CI, at night or in production?</h1>
-  <p class="lead">A prompt change can pass a small regression gate and still fail on new production inputs. Release checks and online investigation provide different evidence.</p>
-  <p class="meta"><span>About 3 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第8章 / 全13章</span></p>
+  <h1>評価はCI、夜間、本番のどこで動かすのか</h1>
+  <p class="lead">プロンプトの変更が小さな回帰ゲートを通っても、本番の新しい入力では失敗することがあります。リリース前の検査と、本番での調査からは、違う種類の証拠が得られます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>The pre-merge gate</li>
-      <li>A model as the judge</li>
-      <li>Online evaluation</li>
-      <li>Costs, and closing the loop</li>
+      <li>マージ前のゲート</li>
+      <li>モデルを評価者にする</li>
+      <li>オンライン評価</li>
+      <li>費用と、ループを閉じること</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The pre-merge gate</h2>
-    <p>Ordinary CI uses fakes and recordings for deterministic application checks. Changes to prompts, schemas or model configuration additionally trigger a small live evaluation using committed code and a spending cap. The subset emphasizes past failures, attacks and borderline cases.</p>
+    <h2 id="s1"><span class="no">01</span>マージ前のゲート</h2>
+    <p>通常のCIでは、フェイクと記録した応答を使って、アプリケーションの決定的な振る舞いを確かめます。プロンプト、スキーマ、モデルの設定が変わったときだけ、コミット済みのコードと支出の上限を使って、小さなライブ評価も走らせます。このサブセットでは、過去の失敗、攻撃、境界例を重点的に扱います。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="A pull request changes a prompt, a path filter selects the evaluation gate, a small subset runs against the real model under a spend cap, the results are compared with the recorded baseline, and the check passes or fails.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="プルリクエストがプロンプトを変更すると、パスフィルターが評価ゲートを選び、支出の上限のもとで小さなサブセットを実際のモデルに対して実行し、結果を記録済みのベースラインと比べ、チェックが合格か不合格になります。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -423,85 +423,85 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="256" r="7" class="f-acc"/>
       <circle cx="28" cy="328" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Pull request changes a prompt</text>
+      <text x="64" y="46">PRがプロンプトを変更</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Path filter picks the gate</text>
+      <text x="64" y="118">パスフィルターでゲートを選ぶ</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Small subset, capped spend</text>
+      <text x="64" y="190">小さなサブセット、支出に上限</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="262" class="t-hd">Compare with the baseline</text>
+      <text x="64" y="262" class="t-hd">ベースラインと比較</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Pass or fail</text>
+      <text x="64" y="334">合格か不合格</text>
     </svg>
-    <figcaption>The comparison uses a recorded baseline and a noise tolerance for each metric.</figcaption>
+    <figcaption>比較には、記録済みのベースラインと、指標ごとのノイズの許容幅を使います。</figcaption>
   </figure>
-    <p>Compare against a recorded baseline with metric-specific noise tolerance. Updating that baseline is a reviewed change, not an automatic way to make a failing candidate pass. A larger nightly or on-demand suite catches cases the small gate omits.</p>
+    <p>比較の相手は記録済みのベースラインで、許容するノイズの幅は指標ごとに決めます。ベースラインの更新はレビューを経る変更であり、落ちた候補を通すための自動の手段ではありません。小さなゲートで漏れるケースは、夜間や必要に応じて走らせる大きなスイートで拾います。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>A model as the judge</h2>
-    <p>An LLM judge can assess qualities that deterministic code cannot easily measure. Calibrate it against human labels, pin its model and rubric versions, and test biases such as favoring longer answers.</p>
-    <p>Use code for reliably decidable properties instead of paying a judge to guess them. Managed evaluation services can supplement the harness, while repository-owned cases, thresholds and configuration keep the release criterion reviewable.</p>
+    <h2 id="s2"><span class="no">02</span>モデルを評価者にする</h2>
+    <p>LLMを評価者にすれば、決定的なコードでは測りにくい性質も評価できます。人のラベルと照らして調整し、評価者のモデルとルーブリックのバージョンを固定し、長い答えをひいきするといった偏りをテストします。</p>
+    <p>確実に判定できる性質はコードで確かめ、お金を払って評価者に推測させないようにします。マネージドな評価サービスで評価の仕組みを補うことはできますが、リリース基準をレビューできる状態に保つのは、リポジトリが持つケース、閾値、設定です。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Online evaluation</h2>
-    <p>Pre-release tests cannot cover every production input. AgentCore evaluation can score selected or sampled sessions using traces, built-in criteria and custom evaluators. Quality signals complement latency and error metrics.</p>
+    <h2 id="s3"><span class="no">03</span>オンライン評価</h2>
+    <p>リリース前のテストで、本番のあらゆる入力を網羅することはできません。AgentCoreの評価機能は、選んだセッションやサンプリングしたセッションを、トレース、組み込みの基準、カスタムの評価器で採点できます。品質のシグナルは、レイテンシやエラーの指標を補います。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The pre-merge harness runs on a pull request, uses gold sets, answers whether this change will make things worse, and its thresholds are set in the repository; online evaluation runs after release, uses real sessions, answers whether things are getting worse out there, and its thresholds are set on a dashboard.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Pre-merge</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Online</text>
-      <text x="16" y="56" class="t-sm">When it runs</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">on a pull request</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">after release</text>
-      <text x="16" y="136" class="t-sm">Where inputs come from</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">gold sets</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">real sessions</text>
-      <text x="16" y="216" class="t-sm">The question it answers</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd t-acc">will this hurt?</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">is it slipping?</text>
-      <text x="16" y="296" class="t-sm">Who sets the threshold</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">the repository</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">a dashboard alarm</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="マージ前の評価はプルリクエストのときに走り、ゴールドセットを使い、この変更で悪くなるかを問い、閾値はリポジトリで決めます。オンライン評価はリリース後に走り、実際のセッションを使い、本番で悪くなっていないかを問い、閾値はダッシュボードで決めます。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">マージ前</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">オンライン</text>
+      <text x="16" y="56" class="t-sm">実行するタイミング</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">プルリクエスト時</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">リリース後</text>
+      <text x="16" y="136" class="t-sm">入力の出どころ</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">ゴールドセット</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">実際のセッション</text>
+      <text x="16" y="216" class="t-sm">答える問い</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd t-acc">悪くなるか</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">悪くなっているか</text>
+      <text x="16" y="296" class="t-sm">閾値を決める場所</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">リポジトリ</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">ダッシュボード</text>
     </svg>
-    <figcaption>The third row is why you need both. One asks about a change before it ships; the other asks about the live system over time.</figcaption>
+    <figcaption>両方が必要な理由は3行目にあります。一方は出荷前の変更について問い、もう一方は動いているシステムの時間的な変化について問います。</figcaption>
   </figure>
-    <p>Sampling controls evaluation cost, and low scores need investigation rather than automatic acceptance as truth. Online evaluation asks whether deployed behavior is worsening; a merge gate asks whether a proposed change meets the current release bar.</p>
+    <p>サンプリングで評価の費用を抑えられます。点数が低くても、それをそのまま事実として受け入れず、調査します。オンライン評価はデプロイ済みの振る舞いが悪くなっていないかを問い、マージのゲートは提案された変更が今のリリース基準を満たすかを問います。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Costs, and closing the loop</h2>
-    <p>Live gates cost money and time, judges can be biased, and production traces may contain sensitive conversations. Configure collection, access and retention deliberately.</p>
+    <h2 id="s4"><span class="no">04</span>費用と、ループを閉じること</h2>
+    <p>ライブのゲートにはお金と時間がかかり、評価者には偏りがありえます。本番のトレースには機密性のある会話が含まれることもあります。収集、アクセス権、保存期間は意図して設定します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 260" role="img" aria-label="Online scores help identify sessions to investigate. Reviewed, privacy-safe failures become regression cases that improve the next gate’s coverage.">
+    <svg viewBox="0 0 400 260" role="img" aria-label="オンラインの点数は、調べるべきセッションを見つける手がかりになります。レビューしてプライバシー上の問題を除いた失敗は回帰テストのケースになり、次のゲートでカバーできる範囲を広げます。">
       <rect x="16" y="16" width="168" height="64" rx="6" class="node"/>
-      <text x="100" y="54" text-anchor="middle">Production traces</text>
+      <text x="100" y="54" text-anchor="middle">本番のトレース</text>
       <rect x="216" y="16" width="168" height="64" rx="6" class="node"/>
-      <text x="300" y="54" text-anchor="middle">Online scores</text>
+      <text x="300" y="54" text-anchor="middle">オンラインの点数</text>
       <rect x="216" y="176" width="168" height="64" rx="6" class="node-acc"/>
-      <text x="300" y="204" text-anchor="middle" class="t-hd t-acc">Reviewed cases</text>
-      <text x="300" y="226" text-anchor="middle" class="t-sm">become gold cases</text>
+      <text x="300" y="204" text-anchor="middle" class="t-hd t-acc">レビュー済みの事例</text>
+      <text x="300" y="226" text-anchor="middle" class="t-sm">ゴールドの事例に</text>
       <rect x="16" y="176" width="168" height="64" rx="6" class="node"/>
-      <text x="100" y="214" text-anchor="middle">Gate tests case</text>
+      <text x="100" y="214" text-anchor="middle">ゲートで検証</text>
       <line x1="184" y1="48" x2="212" y2="48" class="ln" marker-end="url(#arw)"/>
       <line x1="300" y1="80" x2="300" y2="172" class="ln" marker-end="url(#arw)"/>
       <line x1="216" y1="208" x2="188" y2="208" class="ln" marker-end="url(#arw)"/>
       <line x1="100" y1="176" x2="100" y2="84" class="ln" marker-end="url(#arw)"/>
     </svg>
-    <figcaption>Investigated failures add relevant cases to the gold set. The gate can then exercise those cases without claiming to cover every future failure.</figcaption>
+    <figcaption>調査した失敗から、関連するケースをゴールドセットに加えます。そうすればゲートでそのケースを確かめられますが、将来のあらゆる失敗をカバーできるわけではありません。</figcaption>
   </figure>
-    <p>The feedback loop promotes investigated failures into reviewed test cases. A tool-selection regression can become a candidate pre-release case after investigation. Remove sensitive details and have a person establish the expected behavior. The loop improves coverage without pretending a gold set is complete.</p>
+    <p>このフィードバックループでは、調査した失敗をレビュー済みのテストケースへ格上げします。ツール選択の回帰も、調査を経てリリース前のケースの候補にできます。その際は機密性のある情報を取り除き、期待される振る舞いは人が決めます。このループはカバー範囲を広げますが、ゴールドセットが完全だというふりはしません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Run a small, capped real-model gate only when a prompt, schema or model changes, against a recorded baseline.</li>
-      <li>Run the full suite nightly, and score real sessions online after release.</li>
-      <li>Check any judge model against human labels, and turn production failures into gate cases.</li>
+      <li>プロンプト、スキーマ、モデルが変わったときだけ、支出に上限を設けた小さな実モデルのゲートを、記録済みのベースラインと比べて走らせる。</li>
+      <li>フルスイートは夜間に走らせ、リリース後は実際のセッションをオンラインで採点する。</li>
+      <li>評価者のモデルは人のラベルと照らして確かめ、本番の失敗はゲートのケースにする。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch07.html"><span>Previous</span><b>How would we know a prompt change made grading worse?</b></a>
-    <a class="next" href="ch09.html"><span>Next</span><b>What if a learner types 'ignore your instructions'?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch07.html"><span>前へ</span><b>プロンプトの変更で採点が悪くなったと、どうすれば分かるか</b></a>
+    <a class="next" href="ch09.html"><span>次へ</span><b>学習者が「指示を無視して」と入力したら</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 11 · What AgentCore adds</title>
+<title>AI機能を本番で動かす 11 · AgentCoreが加えるもの</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html" aria-current="page"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html" aria-current="page"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,60 +396,60 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 11 of 13</span></p>
-  <h1>What does AgentCore do that forty lines of code can't?</h1>
-  <p class="lead">The tutor loop runs on a laptop, but production needs trusted sessions, controlled tools and useful telemetry. Managed components shift parts of that operating work.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第11章 / 全13章</span></p>
+  <h1>AgentCoreは、40行のコードにできない何をするのか</h1>
+  <p class="lead">チューターのループはノートPCの上なら動きます。しかし本番には、信頼できるセッション、制御されたツール、役に立つテレメトリーが必要です。マネージドな部品を使うと、その運用作業の一部を任せられます。</p>
+  <p class="meta"><span>読了 約5分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Laptop versus production</li>
-      <li>The parts</li>
-      <li>How it&#x27;s billed</li>
-      <li>When it&#x27;s worth it</li>
+      <li>ノートPCと本番の違い</li>
+      <li>部品</li>
+      <li>課金のしくみ</li>
+      <li>使う価値があるとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Laptop versus production</h2>
-    <p>An agent loop may fit in forty lines, while its production environment needs authentication, isolated sessions, safe tools, memory and telemetry. AgentCore offers managed components around code the team still owns.</p>
-    <p>Quickturn's tutor uses a TypeScript agent implementation with selected managed services. A one-call grader does not need a conversational runtime simply because it uses a model.</p>
+    <h2 id="s1"><span class="no">01</span>ノートPCと本番の違い</h2>
+    <p>エージェントのループ自体は40行に収まるかもしれません。一方、それを動かす本番環境には、認証、分離されたセッション、安全なツール、記憶、テレメトリーが必要です。AgentCoreは、チームが引き続き持つコードの周りに、マネージドな部品を提供します。</p>
+    <p>Quickturnのチューターは、TypeScriptで書いたエージェントの実装に、選んだマネージドサービスを組み合わせています。1回呼ぶだけの採点者には、モデルを使うからといって会話用のランタイムは要りません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 340" role="img" aria-label="The agent code at the center, still yours, surrounded by seven parts: Runtime for isolated sessions, Gateway for tools as MCP, Identity for who is calling, Memory for remembering sessions, Policy to allow or stop tool calls, Observability to trace every step, and Evaluations to score sessions.">
+    <svg viewBox="0 0 400 340" role="img" aria-label="中央に、引き続き自分で書くエージェントのコードがあり、7つの部品が囲んでいます。分離されたセッションのRuntime、ツールをMCPとして公開するGateway、呼び出し元を特定するIdentity、セッションを記憶するMemory、ツール呼び出しを許可または停止するPolicy、すべてのステップを追跡するObservability、セッションを採点するEvaluationsです。">
       <line x1="100" y1="120" x2="200" y2="140" class="ln"/>
       <line x1="300" y1="120" x2="200" y2="140" class="ln"/>
       <line x1="100" y1="216" x2="200" y2="200" class="ln"/>
       <line x1="300" y1="216" x2="200" y2="200" class="ln"/>
       <line x1="200" y1="276" x2="200" y2="200" class="ln"/>
-      <rect x="6" y="8" width="188" height="52" rx="6" class="node"/><text x="100" y="30" text-anchor="middle" class="t-hd">Runtime</text><text x="100" y="50" text-anchor="middle" class="t-sm">isolated sessions</text>
-      <rect x="206" y="8" width="188" height="52" rx="6" class="node"/><text x="300" y="30" text-anchor="middle" class="t-hd">Gateway</text><text x="300" y="50" text-anchor="middle" class="t-sm">tools as MCP</text>
-      <rect x="6" y="68" width="188" height="52" rx="6" class="node"/><text x="100" y="90" text-anchor="middle" class="t-hd">Identity</text><text x="100" y="110" text-anchor="middle" class="t-sm">who is calling</text>
-      <rect x="206" y="68" width="188" height="52" rx="6" class="node"/><text x="300" y="90" text-anchor="middle" class="t-hd">Memory</text><text x="300" y="110" text-anchor="middle" class="t-sm">remembers sessions</text>
+      <rect x="6" y="8" width="188" height="52" rx="6" class="node"/><text x="100" y="30" text-anchor="middle" class="t-hd">Runtime</text><text x="100" y="50" text-anchor="middle" class="t-sm">分離されたセッション</text>
+      <rect x="206" y="8" width="188" height="52" rx="6" class="node"/><text x="300" y="30" text-anchor="middle" class="t-hd">Gateway</text><text x="300" y="50" text-anchor="middle" class="t-sm">ツールをMCPで公開</text>
+      <rect x="6" y="68" width="188" height="52" rx="6" class="node"/><text x="100" y="90" text-anchor="middle" class="t-hd">Identity</text><text x="100" y="110" text-anchor="middle" class="t-sm">呼び出し元の特定</text>
+      <rect x="206" y="68" width="188" height="52" rx="6" class="node"/><text x="300" y="90" text-anchor="middle" class="t-hd">Memory</text><text x="300" y="110" text-anchor="middle" class="t-sm">セッションを記憶</text>
       <rect x="110" y="140" width="180" height="60" rx="8" class="node-acc"/>
-      <text x="200" y="166" text-anchor="middle" class="t-hd t-acc">Agent code</text><text x="200" y="188" text-anchor="middle" class="t-sm">still yours</text>
-      <rect x="6" y="216" width="188" height="52" rx="6" class="node"/><text x="100" y="238" text-anchor="middle" class="t-hd">Policy</text><text x="100" y="258" text-anchor="middle" class="t-sm">allows or stops</text>
-      <rect x="206" y="216" width="188" height="52" rx="6" class="node"/><text x="300" y="238" text-anchor="middle" class="t-hd">Observability</text><text x="300" y="258" text-anchor="middle" class="t-sm">traces every step</text>
-      <rect x="106" y="276" width="188" height="52" rx="6" class="node"/><text x="200" y="298" text-anchor="middle" class="t-hd">Evaluations</text><text x="200" y="318" text-anchor="middle" class="t-sm">scores sessions</text>
+      <text x="200" y="166" text-anchor="middle" class="t-hd t-acc">エージェント</text><text x="200" y="188" text-anchor="middle" class="t-sm">コードは自分で書く</text>
+      <rect x="6" y="216" width="188" height="52" rx="6" class="node"/><text x="100" y="238" text-anchor="middle" class="t-hd">Policy</text><text x="100" y="258" text-anchor="middle" class="t-sm">許可または停止</text>
+      <rect x="206" y="216" width="188" height="52" rx="6" class="node"/><text x="300" y="238" text-anchor="middle" class="t-hd">Observability</text><text x="300" y="258" text-anchor="middle" class="t-sm">全ステップを追跡</text>
+      <rect x="106" y="276" width="188" height="52" rx="6" class="node"/><text x="200" y="298" text-anchor="middle" class="t-hd">Evaluations</text><text x="200" y="318" text-anchor="middle" class="t-sm">セッションを採点</text>
     </svg>
-    <figcaption>The boxes show available production services, rather than a mandatory bundle. Adopt the responsibilities this workload needs while keeping the agent’s behavior in owned code.</figcaption>
+    <figcaption>箱は利用できる本番向けのサービスを示しており、必ずセットで使うものではありません。エージェントの振る舞いは自分のコードに残し、そのワークロードに必要な責任だけを任せます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The parts</h2>
-    <p>Runtime hosts sessions, Gateway exposes controlled tools, and Identity handles credential flows. Memory stores configured conversational information, while Policy checks permitted Gateway actions. Observability and evaluations support investigation and quality measurement. Adopt the components the workload needs.</p>
+    <h2 id="s2"><span class="no">02</span>部品</h2>
+    <p>Runtimeはセッションをホストし、Gatewayは制御されたツールを公開し、Identityは認証情報のやり取りを扱います。Memoryは設定した会話の情報を保存し、PolicyはGatewayを通る操作が許可されているかを確かめます。ObservabilityとEvaluationsは、調査と品質の測定を支えます。採用するのは、ワークロードに必要な部品だけです。</p>
   <dl class="terms">
-    <dt>Runtime</dt><dd>A microVM per session, up to 8 hours. Without it: containers, routing, isolation.</dd>
-    <dt>Gateway</dt><dd>Many tool sources, one endpoint. Without it: tool plumbing per agent.</dd>
-    <dt>Identity</dt><dd>Who calls, and stored credentials. Without it: auth glue, secrets handling.</dd>
-    <dt>Memory</dt><dd>Short-term events, long-term records. Without it: a conversation store and summarizer.</dd>
-    <dt>Policy</dt><dd>Cedar rules checked before a tool call. Without it: checks scattered in tools.</dd>
-    <dt>Observability</dt><dd>OpenTelemetry traces and spans. Without it: tracing setup.</dd>
-    <dt>Evaluations</dt><dd>Online and on-demand scoring. Without it: a homemade judge pipeline.</dd>
+    <dt>Runtime</dt><dd>セッションごとのmicroVMで、最長8時間。なければ、コンテナ、ルーティング、分離を自前で用意する。</dd>
+    <dt>Gateway</dt><dd>多数のツールの提供元を1つのエンドポイントにまとめる。なければ、エージェントごとにツールの配線を書く。</dd>
+    <dt>Identity</dt><dd>呼び出し元の特定と、認証情報の保管。なければ、認証のつなぎ込みと秘密情報の扱いを自前で行う。</dd>
+    <dt>Memory</dt><dd>短期のイベントと長期の記録。なければ、会話の保存先と要約の仕組みを作る。</dd>
+    <dt>Policy</dt><dd>ツールを呼ぶ前に検査するCedarのルール。なければ、各ツールに検査が散らばる。</dd>
+    <dt>Observability</dt><dd>OpenTelemetryのトレースとスパン。なければ、トレースの仕組みを自前で整える。</dd>
+    <dt>Evaluations</dt><dd>オンラインと必要時の採点。なければ、評価者のパイプラインを自作する。</dd>
   </dl>
-    <p>A JWT-authorized Gateway routes selected tools to the application's operations. Inbound authentication and outbound AWS signing are different steps; their configured relationship determines which verified learner reaches the target.</p>
+    <p>JWTで認可するGatewayは、選んだツールをアプリケーションの操作へ振り分けます。受信時の認証と、送信時のAWS署名は別の段階です。両者をどう関係づけて設定するかで、どの検証済みの学習者がターゲットに届くかが決まります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="A client request passes an inbound identity check, enters a Runtime session, reaches the agent code which reads Memory, goes through a Policy check at the Gateway, and only then reaches a tool.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="クライアントのリクエストは受信時の認証を通ってRuntimeのセッションに入り、Memoryを読むエージェントのコードに届き、GatewayでのPolicyの検査を経て、ようやくツールに届きます。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -458,79 +458,79 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <circle cx="28" cy="400" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Client</text>
+      <text x="64" y="46">クライアント</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Inbound identity check</text>
+      <text x="64" y="118">受信時の認証</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Runtime session</text>
+      <text x="64" y="190">Runtimeのセッション</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Agent code, reads Memory</text>
+      <text x="64" y="262">エージェントのコード、Memory</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Policy check at the Gateway</text>
+      <text x="64" y="334" class="t-hd">GatewayでのPolicy検査</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="406">Tool</text>
+      <text x="64" y="406">ツール</text>
     </svg>
-    <figcaption>Configured telemetry supports investigation. Gateway Policy checks the actions routed through it; tool targets still enforce ownership and application rules.</figcaption>
+    <figcaption>テレメトリーを設定しておけば調査に使えます。GatewayのPolicyが検査するのはそこを通る操作で、所有権とアプリケーションのルールはツールのターゲット側でも確かめます。</figcaption>
   </figure>
-    <p>Memory can support conversation continuity while progress remains in the application database. Session isolation and namespace conventions still require correct identifiers and access policies; a service name does not automatically establish tenant ownership.</p>
+    <p>Memoryは会話の継続を支えられますが、学習の進み具合はアプリケーションのデータベースに置いたままにします。セッションの分離と名前空間の決まりがあっても、正しい識別子とアクセスポリシーは別に必要です。サービスの名前があるからといって、テナントの所有権が自動で確立されるわけではありません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>How it's billed</h2>
-    <p>AgentCore components have their own usage meters, separate from model inference. Runtime CPU and memory charges, Gateway calls and Memory operations should be considered together. The dated table is an example to validate against current Region and feature pricing.</p>
+    <h2 id="s3"><span class="no">03</span>課金のしくみ</h2>
+    <p>AgentCoreの部品には、モデルの推論とは別に、それぞれの使用量メーターがあります。RuntimeのCPUとメモリの料金、Gatewayの呼び出し、Memoryの操作は、まとめて考える必要があります。日付つきの表は一例で、現在のリージョンと機能の料金で確かめてください。</p>
   <table>
-    <thead><tr><th>Part</th><th>Price, checked 2026-09-23</th></tr></thead>
+    <thead><tr><th>部品</th><th>料金（2026-09-23時点）</th></tr></thead>
     <tbody>
-      <tr><td>Runtime</td><td>$0.1276 per vCPU-hour, $0.0169 per GB-hour</td></tr>
-      <tr><td>Gateway</td><td>$0.005 per 1,000 tool calls</td></tr>
-      <tr><td>Memory</td><td>$0.25 per 1,000 short-term events</td></tr>
+      <tr><td>Runtime</td><td>vCPU時間あたり$0.1276、GB時間あたり$0.0169</td></tr>
+      <tr><td>Gateway</td><td>ツール呼び出し1,000回あたり$0.005</td></tr>
+      <tr><td>Memory</td><td>短期イベント1,000件あたり$0.25</td></tr>
     </tbody>
   </table>
-    <p>Idle and maximum session durations are configurable within service limits. Configure them for the interaction and bound model turns separately. Waiting on I/O may reduce CPU charging without making retained memory or every other component free.</p>
+    <p>アイドル時間とセッションの最大時間は、サービスの制限の範囲で設定できます。やり取りの性質に合わせて設定し、モデルのターン数には別に上限を設けます。I/Oを待つ間はCPUの課金が減ることがありますが、保持しているメモリやほかの部品まで無料になるわけではありません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When it's worth it</h2>
-    <p>Self-hosting is possible, but the team then owns the same session, identity, tool and telemetry responsibilities. Managed services add platform conventions, deployment constraints and a learning curve.</p>
+    <h2 id="s4"><span class="no">04</span>使う価値があるとき</h2>
+    <p>自前でホストすることもできますが、その場合はセッション、アイデンティティ、ツール、テレメトリーに関する同じ責任をチームが負います。マネージドサービスを使えば、プラットフォームの決まり、デプロイの制約、学習コストが加わります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 516" role="img" aria-label="Self-hosted on Lambda or ECS, you build session isolation, long sessions, the inbound JWT check, tool policy and online evaluation yourself, and the minimum cost is low plus your time; on AgentCore each is provided, and there is no minimum fee.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Self-hosted</text>
+    <svg viewBox="0 0 400 516" role="img" aria-label="LambdaやECSで自前運用する場合は、セッションの分離、長時間のセッション、受信時のJWT検査、ツールのポリシー、オンライン評価を自分で作り、最低費用は安いものの自分の時間がかかります。AgentCoreではそれぞれが提供され、最低料金はありません。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">自前で運用</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">AgentCore</text>
-      <text x="16" y="56" class="t-sm">Session isolation</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">you build</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">microVM each</text>
-      <text x="16" y="136" class="t-sm">Long sessions</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">you build</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">up to 8 hours</text>
-      <text x="16" y="216" class="t-sm">Inbound JWT check</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">you build</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">authorizer</text>
-      <text x="16" y="296" class="t-sm">Tool policy</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">you build</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">Cedar, Gateway</text>
-      <text x="16" y="376" class="t-sm">Online evaluation</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">you build</text>
+      <text x="16" y="56" class="t-sm">セッションの分離</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="92" text-anchor="middle" class="t-hd t-acc">自分で作る</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">microVMで分離</text>
+      <text x="16" y="136" class="t-sm">長時間のセッション</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">自分で作る</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">最長8時間</text>
+      <text x="16" y="216" class="t-sm">受信時のJWT検査</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">自分で作る</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">オーソライザー</text>
+      <text x="16" y="296" class="t-sm">ツールのポリシー</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="332" text-anchor="middle">自分で作る</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">Cedar、Gateway</text>
+      <text x="16" y="376" class="t-sm">オンライン評価</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">自分で作る</text>
       <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">Evaluations</text>
-      <text x="16" y="456" class="t-sm">Minimum monthly cost</text>
-      <rect x="16" y="464" width="176" height="44" rx="6" class="node"/><text x="104" y="492" text-anchor="middle">low, plus your time</text>
-      <rect x="208" y="464" width="176" height="44" rx="6" class="node"/><text x="296" y="492" text-anchor="middle">no minimum</text>
+      <text x="16" y="456" class="t-sm">月々の最低費用</text>
+      <rect x="16" y="464" width="176" height="44" rx="6" class="node"/><text x="104" y="492" text-anchor="middle">安いが手間がかかる</text>
+      <rect x="208" y="464" width="176" height="44" rx="6" class="node"/><text x="296" y="492" text-anchor="middle">最低料金なし</text>
     </svg>
-    <figcaption>On the left, you build five of the six rows yourself. That's the real difference, more than the price in the last row.</figcaption>
+    <figcaption>左側では、6行のうち5行を自分で作ることになります。本当の違いは最後の行の料金よりも、そこにあります。</figcaption>
   </figure>
-    <p>Quickturn puts the open-ended tutor on AgentCore while leaving grading on a worker. Its deployment uses a separate agent stack and the network mode appropriate to its resources. Verify current architectures, Regions and service support before adopting a sample.</p>
-    <p>A successful laptop demo shows behavior on the cases tried. Production readiness requires evidence that the surrounding controls work too.</p>
+    <p>Quickturnは、自由度の高いチューターをAgentCoreに載せ、採点はワーカーに残しています。デプロイでは、エージェント用に別のスタックを用意し、使うリソースに合ったネットワークモードを選んでいます。サンプルを採用する前に、現在のアーキテクチャ、リージョン、サービスの対応状況を確認してください。</p>
+    <p>ノートPCでのデモがうまくいっても、分かるのは試したケースでの振る舞いだけです。本番に出せると言うには、周りの制御も機能しているという証拠が必要です。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>AgentCore doesn't build the agent; it provides the production parts around the loop.</li>
-      <li>Its parts are billed by use, with no minimum fee, and can be adopted one at a time.</li>
-      <li>Consider selected services when session, tool and operating needs justify their cost; a model call alone does not require an agent runtime.</li>
+      <li>AgentCoreはエージェントそのものを作るのではなく、ループの周りに要る本番用の部品を提供する。</li>
+      <li>部品は使った分だけ課金され、最低料金はなく、1つずつ採用できる。</li>
+      <li>セッション、ツール、運用の要件が費用に見合うときに、必要なサービスを選んで検討する。モデルを呼ぶだけならエージェントのランタイムは要らない。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch10.html"><span>Previous</span><b>Who pays for the tokens, and what stops a runaway bill?</b></a>
-    <a class="next" href="ch12.html"><span>Next</span><b>When an agent acts for a learner, whose rights does it use?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch10.html"><span>前へ</span><b>トークン代は誰が払い、請求の暴走は何が止めるのか</b></a>
+    <a class="next" href="ch12.html"><span>次へ</span><b>学習者の代わりに動くエージェントは、誰の権限を使うのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

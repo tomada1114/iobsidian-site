@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 03 · Inference profiles on Bedrock</title>
+<title>AI機能を本番で動かす 03 · Bedrockの推論プロファイル</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html" aria-current="page"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html" aria-current="page"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,117 +396,117 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 3 of 13</span></p>
-  <h1>Why does Bedrock want an inference profile, not a model?</h1>
-  <p class="lead">Quickturn wants to attribute grading costs and keep supported inference inside Japan. Model choice, profile routing and log storage must satisfy those needs together.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第3章 / 全13章</span></p>
+  <h1>Bedrockはなぜモデルではなく推論プロファイルを求めるのか</h1>
+  <p class="lead">Quickturnは、採点の費用を機能ごとに把握し、対応する推論を日本国内にとどめたいと考えています。モデルの選択、プロファイルの経路、ログの保存先は、この2つの要件を同時に満たす必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What Bedrock is</li>
-      <li>Inference profiles</li>
-      <li>On demand or batch</li>
-      <li>Residency against model choice</li>
+      <li>Bedrockとは何か</li>
+      <li>推論プロファイル</li>
+      <li>オンデマンドかバッチか</li>
+      <li>データの所在とモデル選択の綱引き</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What Bedrock is</h2>
-    <p>Bedrock exposes several model providers through AWS authentication, billing and service APIs. Quickturn uses Converse behind an adapter for a common message interface, while recognizing that supported model capabilities still differ.</p>
-    <p>Optional invocation logging can retain prompts and outputs in configured destinations. Turning it on requires decisions about sensitive content, access and retention. Model availability and permission prerequisites must be checked for the intended account and Region.</p>
+    <h2 id="s1"><span class="no">01</span>Bedrockとは何か</h2>
+    <p>Bedrockは、複数のモデル提供元のモデルを、AWSの認証、課金、サービスAPIを通して使えるようにするサービスです。Quickturnは共通のメッセージ形式を得るためにConverseをアダプターの裏で使っていますが、モデルごとに対応する機能が違うことは前提にしています。</p>
+    <p>任意で有効にできる呼び出しログは、プロンプトと出力を設定した保存先に残せます。有効にするなら、機密性のある内容、アクセス権、保存期間について決めておく必要があります。モデルが使えるかどうかと権限の前提条件は、実際に使うアカウントとリージョンで確認します。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Inference profiles</h2>
-    <p>An inference profile selects a supported inference route. Some models require a profile for on-demand use. Geographic profiles restrict processing to their documented destination set, while global profiles allow a broader set.</p>
+    <h2 id="s2"><span class="no">02</span>推論プロファイル</h2>
+    <p>推論プロファイルは、対応している推論の経路を選ぶものです。オンデマンドで使うのにプロファイルが必須のモデルもあります。地理的プロファイルは、処理先をドキュメントに記載された範囲に限定します。グローバルプロファイルは、より広い範囲への振り分けを認めます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="App code calls the Converse API, which goes through an application inference profile tagged per feature, then a jp. geographic profile, then reaches the model running inside Japan in Tokyo or Osaka.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="アプリのコードがConverse APIを呼び、機能ごとにタグを付けたアプリケーション推論プロファイル、jp.の地理的プロファイルを経て、東京または大阪で動く日本国内のモデルに届きます。">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="48">App code, in Tokyo</text>
+      <text x="32" y="48">アプリのコード（東京）</text>
       <rect x="16" y="76" width="368" height="52" rx="6" class="node"/>
       <text x="32" y="108">Converse API</text>
       <rect x="16" y="136" width="368" height="52" rx="6" class="node-acc"/>
-      <text x="32" y="168" class="t-hd t-acc">Application profile: who pays</text>
+      <text x="32" y="168" class="t-hd t-acc">アプリ用プロファイル：誰が払うか</text>
       <rect x="16" y="196" width="368" height="52" rx="6" class="node-acc"/>
-      <text x="32" y="228" class="t-hd t-acc">jp. profile: where it runs</text>
+      <text x="32" y="228" class="t-hd t-acc">jp.プロファイル：どこで動くか</text>
       <rect x="16" y="256" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="288">Model, in Tokyo or Osaka</text>
+      <text x="32" y="288">モデル（東京または大阪）</text>
     </svg>
-    <figcaption>In this supported Japan-route example, one layer attributes a feature and the other defines inference destinations. Log storage needs its own residency configuration.</figcaption>
+    <figcaption>日本国内の経路に対応したこの例では、一方の層が費用を機能に結びつけ、もう一方が推論の処理先を決めます。ログの保存先には、別途データの所在の設定が要ります。</figcaption>
   </figure>
-    <p>Quickturn's Japan-residency example uses a Japan geographic profile where the chosen model supports it. Confirm destination Regions for the exact profile before making a residency claim.</p>
+    <p>Quickturnの日本国内での処理の例では、選んだモデルが対応している場合に日本の地理的プロファイルを使います。データの所在を主張する前に、そのプロファイルの処理先リージョンを正確に確認します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 344" role="img" aria-label="The jp. profiles at the center, with an application inference profile per feature around it: grading, explanations and card generation; each profile's tag lets Cost Explorer split spend by feature.">
+    <svg viewBox="0 0 400 344" role="img" aria-label="中央にjp.プロファイルがあり、その周りに機能ごとのアプリケーション推論プロファイルがあります。採点、解説、カード生成です。各プロファイルのタグで、Cost Explorerは費用を機能別に分けられます。">
       <line x1="100" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="300" y1="80" x2="200" y2="172" class="ln"/>
       <line x1="200" y1="264" x2="200" y2="202" class="ln"/>
       <rect x="6" y="16" width="188" height="64" rx="6" class="node-acc"/>
-      <text x="100" y="44" text-anchor="middle" class="t-hd t-acc">Grading</text>
-      <text x="100" y="66" text-anchor="middle" class="t-sm">tag: grading</text>
+      <text x="100" y="44" text-anchor="middle" class="t-hd t-acc">採点</text>
+      <text x="100" y="66" text-anchor="middle" class="t-sm">タグ: grading</text>
       <rect x="206" y="16" width="188" height="64" rx="6" class="node"/>
-      <text x="300" y="44" text-anchor="middle" class="t-hd">Explanations</text>
-      <text x="300" y="66" text-anchor="middle" class="t-sm">tag: explain</text>
+      <text x="300" y="44" text-anchor="middle" class="t-hd">解説</text>
+      <text x="300" y="66" text-anchor="middle" class="t-sm">タグ: explain</text>
       <rect x="110" y="142" width="180" height="60" rx="8" class="node-soft"/>
-      <text x="200" y="178" text-anchor="middle">jp. profiles</text>
+      <text x="200" y="178" text-anchor="middle">jp.プロファイル</text>
       <rect x="96" y="264" width="208" height="64" rx="6" class="node"/>
-      <text x="200" y="292" text-anchor="middle" class="t-hd">Card generation</text>
-      <text x="200" y="314" text-anchor="middle" class="t-sm">tag: cards</text>
+      <text x="200" y="292" text-anchor="middle" class="t-hd">カード生成</text>
+      <text x="200" y="314" text-anchor="middle" class="t-sm">タグ: cards</text>
     </svg>
-    <figcaption>Every feature calls its model through its own tagged profile. Activated cost-allocation tags can then separate feature costs in delayed billing reports.</figcaption>
+    <figcaption>どの機能も、タグを付けた自分専用のプロファイルを通してモデルを呼びます。有効化したコスト配分タグを使えば、遅れて届く請求レポートで機能ごとの費用を分けられます。</figcaption>
   </figure>
-    <p>Application inference profiles wrap supported sources and provide feature-level tagging. Create and activate cost-allocation tags before relying on their billing reports. Delayed billing data is useful for attribution, not a real-time call budget.</p>
+    <p>アプリケーション推論プロファイルは、対応するプロファイルやモデルを包み、機能単位でタグを付けられるようにします。請求レポートを当てにする前に、コスト配分タグを作成して有効化しておきます。請求データは遅れて届くので、費用の振り分けには役立ちますが、リアルタイムに呼び出しを止める予算の代わりにはなりません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>On demand or batch</h2>
-    <p>On-demand inference serves interactive work. Batch inference places requests and results in S3 for work that can wait. Availability and discounted pricing depend on the supported model and route.</p>
+    <h2 id="s3"><span class="no">03</span>オンデマンドかバッチか</h2>
+    <p>オンデマンド推論は、対話的な処理に向いています。バッチ推論はリクエストと結果をS3に置く方式で、待てる処理に向いています。使えるかどうかと割引料金は、モデルと経路によって変わります。</p>
   <table>
-    <thead><tr><th></th><th>On demand</th><th>Batch</th></tr></thead>
+    <thead><tr><th></th><th>オンデマンド</th><th>バッチ</th></tr></thead>
     <tbody>
-      <tr><td>Answer</td><td>now</td><td>later</td></tr>
-      <tr><td>Price</td><td>per token</td><td>discount, if supported</td></tr>
-      <tr><td>Input</td><td>one request</td><td>a file in S3</td></tr>
-      <tr><td>Good for</td><td>grading an answer</td><td>cards overnight</td></tr>
+      <tr><td>回答</td><td>すぐ</td><td>あとで</td></tr>
+      <tr><td>料金</td><td>トークン単位</td><td>対応していれば割引</td></tr>
+      <tr><td>入力</td><td>1件のリクエスト</td><td>S3上のファイル</td></tr>
+      <tr><td>向いている用途</td><td>解答の採点</td><td>夜間のカード生成</td></tr>
     </tbody>
   </table>
-    <p>Card generation can wait; a requested explanation cannot. Track each batch result and retry failed records rather than regenerate successful cards. Confirm structured-output support for the selected batch path instead of assuming every Bedrock model has identical features.</p>
+    <p>カード生成は待てますが、学習者が求めた解説は待てません。バッチの結果は1件ずつ追跡し、成功したカードを作り直すのではなく、失敗したレコードだけを再試行します。Bedrockのどのモデルでも同じ機能が使えると決めつけず、選んだバッチの経路が構造化出力に対応しているかを確認します。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Residency against model choice</h2>
-    <p>Model choice and processing location must be evaluated together. A newer model with only a global route may not meet a Japan-only requirement. Quickturn's dated model examples illustrate that constraint; they are not a permanent availability list.</p>
+    <h2 id="s4"><span class="no">04</span>データの所在とモデル選択の綱引き</h2>
+    <p>モデルの選択と処理する場所は、一緒に評価する必要があります。新しいモデルがグローバルの経路でしか使えなければ、日本国内に限るという要件を満たせないかもしれません。Quickturnで挙げている日付つきのモデルの例はこの制約を示すためのもので、いつまでも有効な提供状況の一覧ではありません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="The illustrated Japan profile uses its documented Japan destinations. Global profiles can route more broadly across commercial AWS Regions; model availability and quotas need separate checks.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">jp. profile</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Global profile</text>
-      <text x="16" y="56" class="t-sm">Regions it may use</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">Tokyo, Osaka</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">broader set</text>
-      <text x="16" y="136" class="t-sm">Data residency</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="172" text-anchor="middle" class="t-hd t-acc">in Japan</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="172" text-anchor="middle">not Japan-only</text>
-      <text x="16" y="216" class="t-sm">Capacity</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">check quotas</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">check quotas</text>
-      <text x="16" y="296" class="t-sm">Newest models</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">check support</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">check support</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="例に挙げたjp.プロファイルは、ドキュメントに記載された日本国内の処理先を使います。グローバルプロファイルは商用のAWSリージョン全体へ広く振り分けられます。モデルの提供状況とクォータは別に確認が必要です。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">jp.プロファイル</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">グローバル</text>
+      <text x="16" y="56" class="t-sm">使いうるリージョン</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">東京、大阪</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">より広い範囲</text>
+      <text x="16" y="136" class="t-sm">データの所在</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="172" text-anchor="middle" class="t-hd t-acc">日本国内</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="172" text-anchor="middle">日本に限らない</text>
+      <text x="16" y="216" class="t-sm">処理能力</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">クォータを確認</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">クォータを確認</text>
+      <text x="16" y="296" class="t-sm">最新のモデル</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">対応を確認</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">対応を確認</text>
     </svg>
-    <figcaption>The residency row decides it for Quickturn. The last row is the price: a newer model may exist only on a global profile.</figcaption>
+    <figcaption>Quickturnにとって決め手になるのは、データの所在の行です。その代わりに最後の行の代償を払います。新しいモデルはグローバルプロファイルでしか使えないことがあります。</figcaption>
   </figure>
-    <p>Document both inference destinations and log storage. IAM integration and one bill are useful, but they do not by themselves establish data residency. Recheck support before each model or routing change.</p>
+    <p>推論の処理先とログの保存先は、両方とも文書に残します。IAMとの連携や請求の一本化は便利ですが、それだけではデータの所在の要件を満たしたことになりません。モデルや経路を変えるたびに、対応状況を確認し直します。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Bedrock puts many models behind one API shape, inside your account, with IAM, billing and logs.</li>
-      <li>An inference profile decides where a request runs; a tagged profile per feature splits the bill.</li>
-      <li>Supported noninteractive work can use discounted batch inference; residency requirements constrain model and route choice.</li>
+      <li>Bedrockは多くのモデルを、自分のアカウントの中で、IAM、課金、ログとともに同じ形のAPIで使えるようにする。</li>
+      <li>推論プロファイルはリクエストがどこで動くかを決め、機能ごとにタグを付けたプロファイルで請求を分けられる。</li>
+      <li>対応している非対話の処理には割引のあるバッチ推論を使え、データの所在の要件はモデルと経路の選択を縛る。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch02.html"><span>Previous</span><b>What am I actually paying for in one LLM call?</b></a>
-    <a class="next" href="ch04.html"><span>Next</span><b>Can an LLM return a type instead of a paragraph?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch02.html"><span>前へ</span><b>LLMを1回呼ぶと、何にお金を払っているのか</b></a>
+    <a class="next" href="ch04.html"><span>次へ</span><b>LLMに文章ではなく型を返させられるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html">Geographic cross-Region inference</a>.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成、2026年10月改訂。サービスの詳細：<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html">地理的クロスリージョン推論</a>。</p>
 </div>
 </div>
 <script>

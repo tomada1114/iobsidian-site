@@ -1,26 +1,26 @@
-<!-- title: AWS Foundation 07 · List the questions first | accent: run -->
+<!-- title: AWS の基礎 07 · 先に問い合わせを書き出す | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 7 of 14</span></p>
-  <h1>List the questions first, then design the table</h1>
-  <p class="lead">Fetching a round, its answers and thirty days of totals involves different questions. Key design starts with those reads and their ownership boundary.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第7章 / 全14章</span></p>
+  <h1>テーブルより先に、問い合わせを書き出す</h1>
+  <p class="lead">ラウンドを一つ取り出すのと、その回答を取り出すのと、30日分の集計を取り出すのとでは、問い合わせの中身が違います。キーの設計は、こうした読み取りと、データの持ち主の境界から始まります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Access patterns first</li>
-      <li>One table, overloaded keys</li>
-      <li>One partition per learner</li>
-      <li>When single-table is wrong</li>
+      <li>先にアクセスパターンを決める</li>
+      <li>一つのテーブルでキーを使い分ける</li>
+      <li>学習者ごとに一つのパーティション</li>
+      <li>単一テーブルが合わないとき</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Access patterns first</h2>
-    <p>Start with the questions: get learner settings, retrieve a round and its answers, or read card memory state. Add date-range tallies and account export or deletion to that list. Entity names alone do not say how those reads will run.</p>
-    <p>Quickturn aims to make each ordinary read a GetItem or a bounded Query. A pattern that cannot fit the keys signals a missing design decision, not a reason to add a filtered Scan silently.</p>
+    <h2 id="s1"><span class="no">01</span>先にアクセスパターンを決める</h2>
+    <p>まず問いから書き出します。学習者の設定を取得する、ラウンドとその回答を取り出す、カードの記憶状態を読む、といった問いです。そこに、日付の範囲での集計と、アカウントのエクスポートや削除を加えます。エンティティの名前を並べただけでは、これらの読み取りがどう実行されるかはわかりません。</p>
+    <p>Quickturn は、普段の読み取りがすべて GetItem か、範囲を絞った Query になることを目指しています。キーに収まらないパターンが出てきたら、設計上の判断が抜けている合図です。黙ってフィルタ付きの Scan を足す理由にはなりません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Write the question, name the items it returns, choose the partition key for whose data it is, choose the sort-key shape such as a prefix or a date, and choose GetItem or Query, including any result pages.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="問いを書き、返すアイテムを決め、誰のデータかでパーティションキーを選び、接頭辞や日付などソートキーの形を選び、結果のページも含めて GetItem か Query かを選ぶ。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -28,27 +28,27 @@
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Write the question</text>
+      <text x="64" y="46">問いを書く</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Name the items it returns</text>
+      <text x="64" y="118">返すアイテムを決める</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Partition key: whose data</text>
+      <text x="64" y="190">パーティションキー：誰のデータか</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Sort key: a prefix or a date</text>
+      <text x="64" y="262">ソートキー：接頭辞か日付か</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">GetItem or a paged Query</text>
+      <text x="64" y="334" class="t-hd">GetItem か、ページ分割した Query</text>
     </svg>
-    <figcaption>This is the target for ordinary reads. Pagination can require several requests, and a new question may justify another index or operation.</figcaption>
+    <figcaption>これが普段の読み取りの目標です。ページ分割のために複数回のリクエストが必要になることもあり、新しい問いが出てくれば、別のインデックスや操作を追加する理由になります。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>One table, overloaded keys</h2>
-    <p>Learner-owned items share a <code>LEARNER#</code> partition key. Sort-key prefixes distinguish singleton settings, rounds, answers, day tallies and item memory state. ISO dates make chronological ranges possible in a fixed date format.</p>
-    <p>A round prefix groups its header and answers, while an item discriminator identifies which records were returned. IDs are encoded before joining separators so an ID containing <code>#</code> cannot masquerade as part of the key structure.</p>
+    <h2 id="s2"><span class="no">02</span>一つのテーブルでキーを使い分ける</h2>
+    <p>学習者が持つアイテムは、<code>LEARNER#</code> で始まる同じパーティションキーを共有します。ソートキーの接頭辞で、一つしかない設定、ラウンド、回答、日ごとの集計、アイテムの記憶状態を区別します。日付を ISO 形式の固定の書式で持てば、時系列の範囲で取り出せます。</p>
+    <p>ラウンドの接頭辞はラウンドの見出しとその回答をまとめ、アイテムの種別を示す属性で、返ってきたレコードが何かを判別します。ID は区切り文字でつなぐ前にエンコードしておくので、<code>#</code> を含む ID がキー構造の一部になりすますことはありません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="One learner's partition holds the singletons PROFILE, SETTINGS and STATS, a round with its answer items, day items in date order and item states; the identity mapping item sits outside in its own partition; learner-owned items can be selected by one partition key, then processed across pages.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="一人の学習者のパーティションには、PROFILE、SETTINGS、STATS という単独のアイテム、回答のアイテムを持つラウンド、日付順に並ぶ日ごとのアイテム、アイテムの状態が入っている。ID の対応付けのアイテムは外側の別のパーティションにある。学習者が持つアイテムは一つのパーティションキーで選び、ページをまたいで処理できる。">
       <rect x="8" y="8" width="384" height="284" rx="10" class="node-acc"/>
-      <text x="24" y="36" class="t-hd t-acc">One learner's partition</text>
+      <text x="24" y="36" class="t-hd t-acc">一人の学習者のパーティション</text>
       <rect x="24" y="52" width="352" height="36" rx="6" class="node"/><text x="40" y="76" class="t-sm">PROFILE · SETTINGS · STATS</text>
       <rect x="24" y="96" width="352" height="84" rx="8" class="zone"/>
       <text x="40" y="118" class="t-sm">ROUND#r1</text>
@@ -57,51 +57,51 @@
       <rect x="24" y="188" width="352" height="36" rx="6" class="node"/><text x="40" y="212" class="t-sm">DAY#2026-09-28 · DAY#2026-09-29</text>
       <rect x="24" y="232" width="352" height="36" rx="6" class="node"/><text x="40" y="256" class="t-sm">ITEM#card#c203 · ITEM#…</text>
       <rect x="24" y="312" width="352" height="44" rx="6" class="node-soft"/>
-      <text x="40" y="340" class="t-sm">IDENTITY#sub → learner id (outside)</text>
+      <text x="40" y="340" class="t-sm">IDENTITY#sub → 学習者 ID（外側）</text>
     </svg>
-    <figcaption>Everything the learner owns is under one partition key. Only the sign-in mapping lives outside, in its own partition.</figcaption>
+    <figcaption>学習者が持つものは、すべて一つのパーティションキーの下にあります。外にあるのはサインイン用の対応付けだけで、これは専用のパーティションに置かれます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>One partition per learner</h2>
-    <p>A verified provider identity maps to an internal learner ID. Keeping that mapping separate makes replacing the identity provider possible without renaming all owned records. A learner-bound store inserts the partition key into every read and write.</p>
+    <h2 id="s3"><span class="no">03</span>学習者ごとに一つのパーティション</h2>
+    <p>検証済みの ID プロバイダーの ID は、内部の学習者 ID に対応付けられます。この対応付けを分けておけば、ID プロバイダーを入れ替えるときにも、学習者が持つすべてのレコードの名前を変えずに済みます。学習者に縛ったストアは、すべての読み書きにパーティションキーを差し込みます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="This comparison uses separate entity reads on the left and learner-key ranges on the right. Ranges may need pages; deletion needs write batches and identity-map cleanup.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Table per entity</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Single table</text>
-      <text x="16" y="56" class="t-sm">A round with its answers</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">two reads</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">paged Query</text>
-      <text x="16" y="136" class="t-sm">Last 30 days</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">an index needed</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">one BETWEEN</text>
-      <text x="16" y="216" class="t-sm">Delete a learner</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">visit each table</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">paged batches</text>
-      <text x="16" y="296" class="t-sm">Reading the schema</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">easy</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">needs the list</text>
+    <svg viewBox="0 0 400 356" role="img" aria-label="この比較では、左はエンティティごとに別々に読み取り、右は学習者のキーの範囲を使う。範囲の読み取りにはページ分割が必要になることがあり、削除には書き込みのバッチと ID の対応付けの後始末が要る。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">テーブルを分ける</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">単一テーブル</text>
+      <text x="16" y="56" class="t-sm">ラウンドとその回答</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">2回の読み取り</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">ページごとの Query</text>
+      <text x="16" y="136" class="t-sm">直近30日分</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">インデックスが必要</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">BETWEEN 1回</text>
+      <text x="16" y="216" class="t-sm">学習者の削除</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">各テーブルを回る</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">ページ単位のバッチ</text>
+      <text x="16" y="296" class="t-sm">スキーマの読みやすさ</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">読みやすい</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">一覧が必要</text>
     </svg>
-    <figcaption>A learner key selects the owned records without scanning unrelated learners. Deletion then follows every page and write batch, including the separate identity mapping.</figcaption>
+    <figcaption>学習者のキーを使えば、無関係な学習者をスキャンせずに、その学習者のレコードを選べます。削除では、そのうえですべてのページと書き込みのバッチをたどり、別に置いた ID の対応付けも消します。</figcaption>
   </figure>
-    <p>Account export or deletion can query the learner partition and remove its identity mapping, following all pages and handling batch limits. A shared table need not have secondary indexes if current access patterns already fit the primary key. That choice depends on actual learner data volume and request requirements.</p>
+    <p>アカウントのエクスポートや削除では、学習者のパーティションを Query し、ID の対応付けも削除します。その際はすべてのページをたどり、バッチの上限にも対応します。現在のアクセスパターンがプライマリキーに収まっているなら、共有のテーブルにセカンダリインデックスがなくてもかまいません。この判断は、学習者の実際のデータ量とリクエストの要件によって変わります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>When single-table is wrong</h2>
-    <p>The access-pattern list is part of the schema documentation. A new question may need another key, index or migration. Backfilling means rewriting existing data into the new shape.</p>
-    <p>A cross-learner leaderboard has a different workload. Quickturn can build a periodic result from an export rather than force every live write into a heavily shared date key. Different owners, retention or backup needs can justify separate tables. Single-table design is useful when data and access lifecycles align. Different lifecycles can justify moving records into separate tables.</p>
+    <h2 id="s4"><span class="no">04</span>単一テーブルが合わないとき</h2>
+    <p>アクセスパターンの一覧は、スキーマのドキュメントの一部です。新しい問いには、別のキー、インデックス、データ移行が必要になることがあります。その場合のバックフィルは、既存のデータを新しい形に書き直す作業です。</p>
+    <p>学習者をまたぐランキングは、性質の違うワークロードです。Quickturn は、すべての書き込みを多くの学習者が共有する日付のキーに集中させるのではなく、エクスポートから定期的に結果を作れます。持ち主、保持期間、バックアップの要件が違えば、テーブルを分ける理由になります。単一テーブル設計が役に立つのは、データとアクセスのライフサイクルがそろっているときで、ライフサイクルが食い違うなら、レコードを別のテーブルに移すことを検討します。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>List access patterns first, and target ordinary reads with GetItem or Query, including the pages each result may need.</li>
-      <li>Learner keys and bound stores support isolation; export and deletion follow the selected items across pages and batches.</li>
-      <li>The access-pattern list is part of the schema; use separate tables when lifecycles or owners diverge.</li>
+      <li>先にアクセスパターンを書き出し、普段の読み取りは、結果のページ分割も含めて GetItem か Query で済むようにします。</li>
+      <li>学習者のキーと学習者に縛ったストアが分離を支え、エクスポートと削除は、選んだアイテムをページとバッチをまたいでたどります。</li>
+      <li>アクセスパターンの一覧はスキーマの一部です。ライフサイクルや持ち主が食い違うなら、テーブルを分けます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch06.html"><span>Previous</span><b>Why DynamoDB and not PostgreSQL?</b></a>
-    <a class="next" href="ch08.html"><span>Next</span><b>What if the app crashes halfway through a write?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch06.html"><span>前へ</span><b>PostgreSQL ではなく DynamoDB を選んだ理由</b></a>
+    <a class="next" href="ch08.html"><span>次へ</span><b>書き込みの途中でアプリが落ちたらどうなるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成。</p>
 </div>

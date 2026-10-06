@@ -1,105 +1,105 @@
-<!-- title: Architecture 06 · Why not split it into microservices | accent: think -->
+<!-- title: アーキテクチャ 06 · なぜマイクロサービスに分けないのか | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Architecture</b><span>Page 6 of 11</span></p>
-  <h1>Why not split it into microservices?</h1>
-  <p class="lead">Practice and learning records have different responsibilities. Separate services would also turn their local calls into network calls, with new failure and operating costs.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：アーキテクチャ</b><span>第6章 / 全11章</span></p>
+  <h1>なぜマイクロサービスに分けないのか</h1>
+  <p class="lead">練習と学習記録は、それぞれ別の責務を持っています。ただし別々のサービスにすると、両者の間のローカル呼び出しがネットワーク呼び出しに変わり、新たな障害と運用のコストが生まれます。</p>
+  <p class="meta"><span>読了 約5分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Boundaries for a model</li>
-      <li>A context map in one codebase</li>
-      <li>Why not microservices now</li>
-      <li>What the monolith costs</li>
+      <li>モデルのための境界</li>
+      <li>一つのコードベースの中のコンテキストマップ</li>
+      <li>今マイクロサービスにしない理由</li>
+      <li>モノリスのコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Boundaries for a model</h2>
-    <p>A bounded context defines where a model and its vocabulary remain consistent; it does not specify a deployment unit. Quickturn has contexts for identity, catalog, practice, learning records, learner modeling, engagement, vocabulary, assessment and entitlements.</p>
-    <p>Identity holds learner settings, and the catalog supplies reviewed cards. Practice owns rounds and placement; the learning record keeps answers and memory state. Other contexts own cross-activity goals, model grading or usage accounting. References across these boundaries use IDs rather than sharing another context's internal object structures.</p>
+    <h2 id="s1"><span class="no">01</span>モデルのための境界</h2>
+    <p>境界づけられたコンテキストは、モデルとその語彙が一貫している範囲を定めるもので、デプロイの単位を決めるものではありません。Quickturnには、アイデンティティ、カタログ、練習、学習記録、学習者モデル、エンゲージメント、語彙、アセスメント、利用権のコンテキストがあります。</p>
+    <p>アイデンティティは学習者の設定を持ち、カタログはレビュー済みのカードを提供します。練習はラウンドとプレースメントを持ち、学習記録は回答と記憶状態を保持します。ほかのコンテキストは、アクティビティをまたぐ目標、モデルによる採点、利用量の計上を担当します。境界をまたいで参照するときはIDを使い、別のコンテキストの内部のオブジェクト構造は共有しません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>A context map in one codebase</h2>
-    <p>A context map shows the relationships among these models. Identity supplies information to the other contexts, and the catalog is read-only for consumers such as practice and learner modeling.</p>
+    <h2 id="s2"><span class="no">02</span>一つのコードベースの中のコンテキストマップ</h2>
+    <p>コンテキストマップは、これらのモデルの関係を示します。アイデンティティはほかのコンテキストに情報を提供し、カタログは、練習や学習者モデルといった利用側から見て読み取り専用です。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="The learning record sits in the center; practice and vocabulary write to it, and the learner model and engagement read from it: one history, many readers.">
+      <svg viewBox="0 0 400 300" role="img" aria-label="中央に学習記録がある。練習と語彙がそこへ書き込み、学習者モデルとエンゲージメントがそこから読む。一つの履歴を多くの読み手が使う。">
         <line x1="160" y1="128" x2="96" y2="64" class="ln"/>
         <line x1="240" y1="128" x2="304" y2="64" class="ln"/>
         <line x1="160" y1="172" x2="96" y2="236" class="ln"/>
         <line x1="240" y1="172" x2="304" y2="236" class="ln"/>
-        <text x="16" y="16" class="t-sm">write</text>
-        <text x="16" y="296" class="t-sm">read</text>
+        <text x="16" y="16" class="t-sm">書き込み</text>
+        <text x="16" y="296" class="t-sm">読み取り</text>
         <rect x="110" y="122" width="180" height="56" rx="8" class="node-acc"/>
-        <text x="200" y="157" text-anchor="middle" class="t-hd">Learning record</text>
-        <rect x="16" y="20" width="160" height="44" rx="6" class="node"/><text x="96" y="48" text-anchor="middle">Practice</text>
-        <rect x="224" y="20" width="160" height="44" rx="6" class="node"/><text x="304" y="48" text-anchor="middle">Vocabulary</text>
-        <rect x="16" y="236" width="160" height="44" rx="6" class="node"/><text x="96" y="264" text-anchor="middle">Learner model</text>
-        <rect x="224" y="236" width="160" height="44" rx="6" class="node"/><text x="304" y="264" text-anchor="middle">Engagement</text>
+        <text x="200" y="157" text-anchor="middle" class="t-hd">学習記録</text>
+        <rect x="16" y="20" width="160" height="44" rx="6" class="node"/><text x="96" y="48" text-anchor="middle">練習</text>
+        <rect x="224" y="20" width="160" height="44" rx="6" class="node"/><text x="304" y="48" text-anchor="middle">語彙</text>
+        <rect x="16" y="236" width="160" height="44" rx="6" class="node"/><text x="96" y="264" text-anchor="middle">学習者モデル</text>
+        <rect x="224" y="236" width="160" height="44" rx="6" class="node"/><text x="304" y="264" text-anchor="middle">エンゲージメント</text>
       </svg>
-      <figcaption>Two activities write answers into one learning record, and two contexts read from it. The history is kept once and serves many readers.</figcaption>
+      <figcaption>二つのアクティビティが一つの学習記録に回答を書き込み、二つのコンテキストがそこから読みます。履歴は一か所に保たれ、多くの読み手に使われます。</figcaption>
     </figure>
-    <p>Quickturn builds an API function and a background worker from one codebase. Calls between contexts are local function calls. This is a modular monolith: modules preserve conceptual ownership while the product remains one coordinated system.</p>
-    <p>Machine-enforced boundaries currently separate domain, application, adapters and contracts. Within a layer, each context has a public entry surface, and stored keys identify the kind of record. Those conventions aid review but do not physically prevent every shortcut import.</p>
+    <p>Quickturnは、APIの関数とバックグラウンドワーカーを一つのコードベースからビルドしています。コンテキスト間の呼び出しは、ローカルな関数呼び出しです。この形をモジュラーモノリスと呼びます。モジュールが概念上の担当範囲を保ちながら、プロダクト全体は一つの協調したシステムとして動きます。</p>
+    <p>現在、機械的に強制している境界は、ドメイン、アプリケーション、アダプター、契約の間にあります。同じ層の中では、各コンテキストが公開の入口を持ち、保存されるキーがレコードの種類を示します。こうした規約はレビューの助けになりますが、近道のimportをすべて物理的に防げるわけではありません。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 296" role="img" aria-label="One codebase contains the contexts and supports API and worker entry points. Public surfaces are intended entry points; review protects internal files.">
+      <svg viewBox="0 0 400 296" role="img" aria-label="一つのコードベースが各コンテキストを含み、APIとワーカーのエントリーポイントを支える。公開の入口が想定された入り口で、内部のファイルはレビューで守る。">
         <rect x="8" y="8" width="384" height="280" rx="10" class="zone-soft"/>
-        <text x="24" y="36" class="t-hd">One codebase</text>
+        <text x="24" y="36" class="t-hd">一つのコードベース</text>
         <rect x="24" y="52" width="352" height="112" rx="8" class="node"/>
-        <text x="40" y="78">Practice context</text>
+        <text x="40" y="78">練習コンテキスト</text>
         <rect x="40" y="92" width="152" height="56" rx="6" class="node-acc"/>
-        <text x="116" y="118" text-anchor="middle" class="t-hd t-acc">Public surface</text>
-        <text x="116" y="138" text-anchor="middle" class="t-sm">intended entry</text>
+        <text x="116" y="118" text-anchor="middle" class="t-hd t-acc">公開の入口</text>
+        <text x="116" y="138" text-anchor="middle" class="t-sm">想定された入り口</text>
         <rect x="208" y="92" width="152" height="56" rx="6" class="node-soft"/>
-        <text x="284" y="126" text-anchor="middle" class="t-sm">private files</text>
+        <text x="284" y="126" text-anchor="middle" class="t-sm">非公開のファイル</text>
         <rect x="24" y="176" width="352" height="96" rx="8" class="node-soft"/>
-        <text x="40" y="204">Other contexts</text>
-        <text x="40" y="228" class="t-sm">identity, catalog, learning record,</text>
-        <text x="40" y="250" class="t-sm">learner model, engagement…</text>
+        <text x="40" y="204">ほかのコンテキスト</text>
+        <text x="40" y="228" class="t-sm">アイデンティティ、カタログ、学習記録、</text>
+        <text x="40" y="250" class="t-sm">学習者モデル、エンゲージメント…</text>
       </svg>
-      <figcaption>The module convention gives each context a public entry surface; review protects internal files within the enforced layer boundaries.</figcaption>
+      <figcaption>モジュールの規約では、各コンテキストに公開の入口を一つ設けます。強制された層の境界の内側では、内部のファイルをレビューで守ります。</figcaption>
     </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Why not microservices now</h2>
-    <p>Turning each context into a service replaces local calls with network calls. Latency is only one cost: failures, retries, versioning, monitoring, deployment and permissions must also be handled across each connection. Independent scaling or separate team ownership can justify that cost. Quickturn's small team and traffic do not yet require it.</p>
+    <h2 id="s3"><span class="no">03</span>今マイクロサービスにしない理由</h2>
+    <p>各コンテキストをサービスにすると、ローカル呼び出しがネットワーク呼び出しに置き換わります。コストは遅延だけではありません。障害、リトライ、バージョン管理、監視、デプロイ、権限を、接続ごとに扱わなければならなくなります。独立したスケーリングや、チームごとの担当分けが必要なら、このコストを払う理由になります。Quickturnのチームの規模とトラフィックでは、まだその必要はありません。</p>
     <figure class="fig">
-      <svg viewBox="0 0 400 300" role="img" aria-label="A cross-context call in a modular monolith is a local function call within one coordinated codebase; in microservices it is a network call with retries, versioning, and a deploy and alarms per service.">
-        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">Modular monolith</text>
-        <text x="296" y="24" text-anchor="middle" class="t-hd">Microservices</text>
-        <text x="16" y="54" class="t-sm">The call</text>
-        <rect x="16" y="62" width="176" height="44" rx="6" class="node"/><text x="104" y="90" text-anchor="middle">function call</text>
-        <rect x="208" y="62" width="176" height="44" rx="6" class="node"/><text x="296" y="90" text-anchor="middle">network call</text>
-        <text x="16" y="132" class="t-sm">When it fails</text>
-        <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">an error value</text>
-        <rect x="208" y="140" width="176" height="44" rx="6" class="node"/><text x="296" y="168" text-anchor="middle">retries, versions</text>
-        <text x="16" y="210" class="t-sm">To run it</text>
-        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">shared codebase</text>
-        <rect x="208" y="218" width="176" height="44" rx="6" class="node"/><text x="296" y="246" text-anchor="middle">alarms each</text>
-        <text x="200" y="290" text-anchor="middle" class="t-sm">Every row differs; each costs people time</text>
+      <svg viewBox="0 0 400 300" role="img" aria-label="モジュラーモノリスでは、コンテキストをまたぐ呼び出しは一つのコードベース内のローカルな関数呼び出しになる。マイクロサービスではネットワーク呼び出しになり、リトライやバージョン管理、サービスごとのデプロイと監視が必要になる。">
+        <text x="104" y="24" text-anchor="middle" class="t-hd t-acc">モジュラーモノリス</text>
+        <text x="296" y="24" text-anchor="middle" class="t-hd">マイクロサービス</text>
+        <text x="16" y="54" class="t-sm">呼び出し</text>
+        <rect x="16" y="62" width="176" height="44" rx="6" class="node"/><text x="104" y="90" text-anchor="middle">関数呼び出し</text>
+        <rect x="208" y="62" width="176" height="44" rx="6" class="node"/><text x="296" y="90" text-anchor="middle">ネットワーク呼び出し</text>
+        <text x="16" y="132" class="t-sm">失敗したとき</text>
+        <rect x="16" y="140" width="176" height="44" rx="6" class="node"/><text x="104" y="168" text-anchor="middle">エラーの値</text>
+        <rect x="208" y="140" width="176" height="44" rx="6" class="node"/><text x="296" y="168" text-anchor="middle">リトライ、バージョン</text>
+        <text x="16" y="210" class="t-sm">運用</text>
+        <rect x="16" y="218" width="176" height="44" rx="6" class="node"/><text x="104" y="246" text-anchor="middle">共有のコードベース</text>
+        <rect x="208" y="218" width="176" height="44" rx="6" class="node"/><text x="296" y="246" text-anchor="middle">サービスごとの監視</text>
+        <text x="200" y="290" text-anchor="middle" class="t-sm">どの行も違い、どれも人の時間を使う</text>
       </svg>
-      <figcaption>The same call across two contexts, packaged two ways. Every row on the right is work a small team would pay for daily.</figcaption>
+      <figcaption>二つのコンテキストをまたぐ同じ呼び出しを、二通りにまとめた図です。右側の各行は、小さなチームが日々払い続けることになる手間です。</figcaption>
     </figure>
-    <p>Validated command data, consistent handler signatures and public context surfaces make future extraction easier. They do not make it free: cross-service consistency, authorization and partial failures still need redesign. Starting with a monolith lets the team learn which boundaries deserve independent operation before paying those costs.</p>
+    <p>検証済みのコマンドデータ、統一したハンドラーのシグネチャ、コンテキストごとの公開の入口があれば、将来サービスを切り出すのは楽になります。それでもタダにはなりません。サービスをまたぐ整合性、認可、部分的な障害は、設計し直す必要があります。モノリスから始めれば、そうしたコストを払う前に、どの境界が独立した運用に値するのかをチームが見極められます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What the monolith costs</h2>
-    <p>A modular monolith needs discipline, and one bad release can affect the whole system. Obvious entry points, ownership names, layer checks and review help make shortcuts visible. A stored key naming a round or memory record also makes an inappropriate cross-context access easier to spot.</p>
-    <p>Quickturn kept streaks within practice until vocabulary provided a second activity. Only then did engagement's cross-activity requirements become concrete. Creating every possible context early would have meant guessing those requirements.</p>
-    <p>Services that share assumptions and must release together form a distributed monolith. They incur network costs without gaining independent operation. Team structure and real change patterns should guide the split, rather than the expectation that serious software must use many services.</p>
+    <h2 id="s4"><span class="no">04</span>モノリスのコスト</h2>
+    <p>モジュラーモノリスには規律が必要で、一回の悪いリリースがシステム全体に影響することもあります。分かりやすい入口、担当を示す名前、層のチェック、レビューは、近道を見つけやすくします。ラウンドや記憶レコードであることを示す保存キーがあれば、コンテキストをまたぐ不適切なアクセスにも気づきやすくなります。</p>
+    <p>Quickturnでは、語彙という二つ目のアクティビティができるまで、連続記録を練習コンテキストの中に置いていました。そこで初めて、エンゲージメントに求められるアクティビティ横断の要件が具体的になりました。考えられるコンテキストを最初から全部作っていたら、その要件を推測で決めることになっていたはずです。</p>
+    <p>前提を共有していて一緒にリリースしなければならないサービス群は、分散モノリスと呼ばれます。ネットワークのコストを払いながら、独立した運用は手に入りません。分割の判断は、本格的なソフトウェアならサービスを多く使うものだという思い込みではなく、チームの構成と実際の変更のパターンに基づいて行います。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A bounded context is a boundary for a model and its words, not a deployment unit.</li>
-      <li>Quickturn keeps contexts as modules in one codebase, with local calls and API and worker entry points.</li>
-      <li>Independent scaling or ownership can justify services; define boundaries from concrete responsibilities rather than an assumed future need.</li>
+      <li>境界づけられたコンテキストはモデルとその言葉の境界であり、デプロイの単位ではありません。</li>
+      <li>Quickturnはコンテキストを一つのコードベースのモジュールとして保ち、ローカル呼び出しと、APIおよびワーカーのエントリーポイントで動かしています。</li>
+      <li>独立したスケーリングや担当分けはサービス化の理由になりますが、境界は想定した将来の必要ではなく、具体的な責務から決めます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>Isn't DDD just another architecture style?</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>What is an aggregate, really?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>DDDはアーキテクチャスタイルの一種なのか</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>集約とは結局何なのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

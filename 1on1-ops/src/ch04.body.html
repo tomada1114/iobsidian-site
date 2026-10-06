@@ -1,63 +1,63 @@
-<!-- title: Operations 04 · Reliable enough | accent: think -->
+<!-- title: 運用と品質 04 · 十分な信頼性 | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 4 of 12</span></p>
-  <h1>How reliable is reliable enough?</h1>
-  <p class="lead">Saved answers matter more to learners than a convenient reliability percentage. Define eligible events, user needs and a response policy before adopting the target.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第4章 / 全12章</span></p>
+  <h1>どこまで信頼できれば十分か</h1>
+  <p class="lead">学習者にとっては、都合のよい信頼性の数字よりも、回答が保存されることのほうが大事です。目標を採用する前に、対象とするイベント、利用者のニーズ、対応の方針を決めておきます。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Three terms from the ground up</li>
-      <li>The error budget</li>
-      <li>What an SLO costs</li>
-      <li>Reliability for an AI agent</li>
+      <li>三つの用語を基礎から</li>
+      <li>エラーバジェット</li>
+      <li>SLO の代償</li>
+      <li>AI エージェントの信頼性</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Three terms from the ground up</h2>
-    <p>An SLI defines the measured behavior, such as successful saves divided by eligible attempts. An SLO sets a target and observation window. An SLA is a contractual commitment with specified consequences. Those terms should not be treated as interchangeable.</p>
-    <p>The 99.5 percent over 28 days example illustrates the shape of an objective, not Quickturn's universal required target. Define what counts as good and which events enter the denominator before choosing a percentage.</p>
+    <h2 id="s1"><span class="no">01</span>三つの用語を基礎から</h2>
+    <p>SLI は、計測する振る舞いを定義します。たとえば「保存に成功した件数 ÷ 対象となる試行の件数」です。SLO は、その目標値と観測期間を決めます。SLA は、守れなかったときの扱いまで定めた契約上の約束です。この三つは、互いに言い換えられる言葉ではありません。</p>
+    <p>「28日間で99.5%」という例は目標の形を示すためのもので、Quickturn がどんな場合にも守るべき目標値ではありません。割合を選ぶ前に、何を「良い」とみなし、どのイベントを分母に入れるかを決めます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The boxes connect an external contractual commitment, an internal objective and the measured signal. Their specific thresholds depend on the chosen objective and contract.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="箱は、外部への契約上の約束、内部の目標、計測するシグナルをつないでいる。具体的なしきい値は、選んだ目標と契約によって決まる。">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
-      <text x="24" y="36" class="t-hd">SLA · a contract</text>
-      <text x="24" y="58" class="t-sm">contractual commitment</text>
+      <text x="24" y="36" class="t-hd">SLA · 契約</text>
+      <text x="24" y="58" class="t-sm">契約上の約束</text>
       <rect x="40" y="76" width="320" height="200" rx="10" class="node"/>
-      <text x="56" y="104" class="t-hd">SLO · our target</text>
-      <text x="56" y="126" class="t-sm">internal, over a window</text>
+      <text x="56" y="104" class="t-hd">SLO · 自分たちの目標</text>
+      <text x="56" y="126" class="t-sm">内部の目標、期間つき</text>
       <rect x="80" y="148" width="240" height="112" rx="8" class="node-acc"/>
-      <text x="200" y="196" text-anchor="middle" class="t-hd t-acc">SLI · the measurement</text>
-      <text x="200" y="222" text-anchor="middle" class="t-sm">good events ÷ all events</text>
+      <text x="200" y="196" text-anchor="middle" class="t-hd t-acc">SLI · 計測値</text>
+      <text x="200" y="222" text-anchor="middle" class="t-sm">良いイベント ÷ 全イベント</text>
     </svg>
-    <figcaption>The boxes show related roles, without requiring their percentages to follow a fixed order. Define eligible events before using the measurement to assess a target.</figcaption>
+    <figcaption>箱は互いに関係する役割を表しており、それぞれの割合が決まった大小関係にあるとは限りません。計測値で目標を評価する前に、対象となるイベントを定義します。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The error budget</h2>
-    <p>The error budget is the allowed fraction of unsuccessful events: 100 percent minus the objective. A team can agree in advance to reduce risky changes when that budget is depleted. With one million eligible requests and a 99.5% objective, the allowed unsuccessful count is 5,000.</p>
+    <h2 id="s2"><span class="no">02</span>エラーバジェット</h2>
+    <p>エラーバジェットは、失敗してよいイベントの割合で、100%から目標値を引いたものです。バジェットを使い切ったらリスクのある変更を減らす、とチームで前もって合意しておくことができます。対象のリクエストが100万件で目標が99.5%なら、失敗してよい件数は5,000件です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 236" role="img" aria-label="An example error budget over a 28-day window: 5,000 failed requests allowed; the first incident spent 2,000, the second spent 1,500, and 1,500 are left.">
-      <text x="16" y="36" class="t-sm">Allowed</text>
+    <svg viewBox="0 0 400 236" role="img" aria-label="28日間の期間でのエラーバジェットの例。失敗してよいリクエストは5,000件。1回目の障害で2,000件、2回目の障害で1,500件を使い、残りは1,500件。">
+      <text x="16" y="36" class="t-sm">許容量</text>
       <rect x="120" y="20" width="264" height="28" rx="4" class="node"/>
       <text x="376" y="40" text-anchor="end" class="t-sm">5,000</text>
-      <text x="16" y="92" class="t-sm">Incident 1</text>
+      <text x="16" y="92" class="t-sm">障害1</text>
       <rect x="120" y="76" width="106" height="28" rx="4" class="node-soft"/>
       <text x="236" y="96" class="t-sm">2,000</text>
-      <text x="16" y="148" class="t-sm">Incident 2</text>
+      <text x="16" y="148" class="t-sm">障害2</text>
       <rect x="120" y="132" width="79" height="28" rx="4" class="node-soft"/>
       <text x="209" y="152" class="t-sm">1,500</text>
-      <text x="16" y="204" class="t-hd t-acc">Left</text>
+      <text x="16" y="204" class="t-hd t-acc">残り</text>
       <rect x="120" y="188" width="79" height="28" rx="4" class="node-acc"/>
       <text x="209" y="208" class="t-hd t-acc">1,500</text>
     </svg>
-    <figcaption>These counts illustrate the defined objective and denominator. The remaining budget informs the agreed release policy alongside incident impact and recovery needs.</figcaption>
+    <figcaption>この件数は、定義した目標と分母に基づく例です。残りのバジェットは、障害の影響や復旧の必要とあわせて、合意したリリース方針の判断材料になります。</figcaption>
   </figure>
-    <p>Higher reliability consumes engineering work, and users notice some failure modes more than others. Quickturn prioritizes answers being saved and cards being available. Its device-side timer does not make lost saves harmless.</p>
-    <p>Measure the baseline and user needs before selecting a target. A target should express the desired experience and guide improvement, rather than simply match whatever current performance makes easy.</p>
+    <p>信頼性を高めるほどエンジニアリングの手間がかかり、利用者が気づく失敗とそうでない失敗もあります。Quickturn は、回答が保存されることと、カードが使えることを優先します。端末側にタイマーがあるからといって、保存が失われてもかまわないことにはなりません。</p>
+    <p>目標を選ぶ前に、現状の値と利用者のニーズを計測します。目標は、今の性能で楽に達成できる値に合わせるのではなく、目指す体験を表し、改善の方向を示すものにします。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Pick what users notice, measure the SLI, choose a target using measured behavior and user needs, alert when the budget burns fast, then tighten.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="利用者が気づくものを選び、SLI を計測し、計測した振る舞いと利用者のニーズから目標を選び、バジェットの消費が速いときにアラートを出し、そのあと目標を引き締める。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="7" class="f-acc"/>
@@ -65,40 +65,40 @@
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Pick what users notice</text>
+      <text x="64" y="46">利用者が気づくものを選ぶ</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="118" class="t-hd">Measure the SLI</text>
+      <text x="64" y="118" class="t-hd">SLI を計測する</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Choose target from needs</text>
+      <text x="64" y="190">ニーズから目標を選ぶ</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Alert on fast burn</text>
+      <text x="64" y="262">速い消費でアラートを出す</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">Tighten</text>
+      <text x="64" y="334">目標を引き締める</text>
     </svg>
-    <figcaption>The accented step keeps the target honest. Skip it, and the number is a guess.</figcaption>
+    <figcaption>アクセントをつけた段階が、目標を実態に即したものにします。ここを飛ばすと、数字はただの当て推量になります。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What an SLO costs</h2>
-    <p>The cost is honest measurement and a response policy. A 4xx may be a legitimate refusal or a bug affecting all clients; a slow 200 may still be unusable. The SLI definition must consider those cases.</p>
-    <p>Use production learner traffic for the objective, with suitable safeguards for low volume. Budget-burn alerts detect a meaningful failure rate. The team must accept the operational consequences, including prioritizing reliability work when the budget policy requires it.</p>
+    <h2 id="s3"><span class="no">03</span>SLO の代償</h2>
+    <p>払う代償は、ごまかしのない計測と、対応の方針です。4xx は正当な拒否かもしれませんし、すべてのクライアントに影響するバグかもしれません。200 を返していても、遅すぎて使えないこともあります。SLI を定義するときは、こうしたケースまで考えておく必要があります。</p>
+    <p>目標には本番の学習者のトラフィックを使い、量が少ないときのための安全策も用意します。バジェット消費のアラートは、意味のある失敗率を検知します。チームは、バジェットの方針が求めるときには信頼性の作業を優先するといった、運用上の帰結も受け入れなければなりません。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Reliability for an AI agent</h2>
-    <p>An agent can be available and still fail its task. Measure task completion under an explicit success rubric, escalation rate and end-to-end latency. Appropriate human escalation is not automatically a failure, so distinguish required escalation from an avoidable rescue.</p>
-    <p>Several individually fast calls can add up to a slow task. Service availability, task success and judged answer quality are complementary signals. Choose the measure that reflects what the user waits for and needs completed.</p>
+    <h2 id="s4"><span class="no">04</span>AI エージェントの信頼性</h2>
+    <p>エージェントは、稼働していてもタスクに失敗することがあります。明示した成功基準に照らしたタスク完了率、エスカレーション率、最初から最後までのレイテンシを計測します。人への適切なエスカレーションは必ずしも失敗ではないので、必要なエスカレーションと、避けられたはずの救済とを区別します。</p>
+    <p>一つずつは速い呼び出しも、積み重なれば遅いタスクになります。サービスの可用性、タスクの成功、評価した回答の品質は、互いを補い合うシグナルです。利用者が何を待っていて、何を完了してほしいのかを映す指標を選びます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>An SLI measures chosen behavior, an SLO sets its target, and an SLA states contractual commitments.</li>
-      <li>For this event ratio, the budget is 100% minus the objective. Failures consume it and influence release decisions.</li>
-      <li>Measure the baseline, choose a target from user needs, and assess agents at the whole-task level.</li>
+      <li>SLI は選んだ振る舞いを計測し、SLO はその目標を決め、SLA は契約上の約束を定めます。</li>
+      <li>このイベント比率なら、バジェットは100%から目標値を引いたものです。失敗がそれを消費し、リリースの判断に影響します。</li>
+      <li>現状を計測し、利用者のニーズから目標を選び、エージェントはタスク全体の単位で評価します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch03.html"><span>Previous</span><b>What should wake someone up at night?</b></a>
-    <a class="next" href="ch05.html"><span>Next</span><b>How do we see what a model call costs?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch03.html"><span>前へ</span><b>夜中に人を起こすべきアラームはどれか</b></a>
+    <a class="next" href="ch05.html"><span>次へ</span><b>モデル呼び出しのコストをどう見るか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

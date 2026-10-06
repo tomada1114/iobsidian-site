@@ -1,20 +1,20 @@
-<!-- title: Engineering Readers: Operations and Quality · Contents | accent: think -->
+<!-- title: エンジニアリング読本：運用と品質 · 目次 | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Contents · 12 pages</span></p>
-  <h1>Engineering Readers: Operations and Quality</h1>
-  <p class="lead">A learner reports a lost answer after a release. Quickturn needs evidence to investigate it, checks that protect changes and a recovery path for its data.</p>
-  <p class="meta"><span>12 pages</span><span>About 44 min</span><span>English, B2 · explanatory prose</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>目次 · 全12章</span></p>
+  <h1>エンジニアリング読本：運用と品質</h1>
+  <p class="lead">リリースのあと、学習者から「回答が消えた」と報告が届きます。Quickturn には、それを調べるための証拠と、変更を守るチェックと、データを取り戻す手段が必要です。</p>
+  <p class="meta"><span>全12章</span><span>約48分</span><span>図解・解説</span></p>
 </header>
 <div class="flow">
   <section aria-labelledby="case">
-    <h2 id="case">The example application</h2>
-    <p>Quickturn is a fictional language-learning application. A learner answers a card before a timer ends, then reviews progress and mistakes. Its web, iOS and Android clients share an API.</p>
-    <p>These chapters use that application to explain concrete engineering choices, their costs and the conditions that would justify a different design. Each chapter stands on its own; no conversation or earlier chapter is needed.</p>
+    <h2 id="case">題材のアプリケーション</h2>
+    <p>Quickturn は架空の語学学習アプリケーションです。学習者はタイマーが切れる前にカードに答え、あとで進み具合や間違えた問題を見直します。Web・iOS・Android の各クライアントが、一つの API を共有しています。</p>
+    <p>各章はこのアプリケーションを例に、エンジニアリング上の具体的な選択と、その代償、別の設計を選ぶべき条件を説明します。どの章も単独で読めるように書いてあり、前の章を読んでいる必要はありません。</p>
   </section>
   <section aria-labelledby="map">
-    <h2 id="map">How the pages fit together</h2>
+    <h2 id="map">この本の地図</h2>
     <figure class="fig">
-      <svg viewBox="0 0 400 386" role="img" aria-label="The pages build in five steps: seeing what production does; reliability and cost; tests; gates and deploys; and finally data and launch, which is where the series lands.">
+      <svg viewBox="0 0 400 386" role="img" aria-label="各章は五つの段階で積み上がる。本番の様子を見る、信頼性とコスト、テスト、ゲートとデプロイ、そして最後のデータと公開が、このシリーズの着地点になる。">
         <line x1="30" y1="44" x2="30" y2="342" class="ln"/>
         <circle cx="30" cy="44" r="6" class="dot"/>
         <circle cx="30" cy="118" r="6" class="dot"/>
@@ -22,42 +22,42 @@
         <circle cx="30" cy="266" r="6" class="dot"/>
         <circle cx="30" cy="342" r="8" class="f-acc"/>
         <rect x="56" y="16" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="40">Pages 1–3 · Seeing</text><text x="72" y="61" class="t-sm">observability, logs, alarms</text>
+        <text x="72" y="40">第1〜3章 · 見る</text><text x="72" y="61" class="t-sm">オブザーバビリティ、ログ、アラーム</text>
         <rect x="56" y="90" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="114">Pages 4–5 · Targets, cost</text><text x="72" y="135" class="t-sm">SLOs, model call records</text>
+        <text x="72" y="114">第4〜5章 · 目標とコスト</text><text x="72" y="135" class="t-sm">SLO、モデル呼び出しの記録</text>
         <rect x="56" y="164" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="188">Pages 6–8 · Tests</text><text x="72" y="209" class="t-sm">strategy, contracts, non-code</text>
+        <text x="72" y="188">第6〜8章 · テスト</text><text x="72" y="209" class="t-sm">戦略、契約、コード以外のもの</text>
         <rect x="56" y="238" width="328" height="56" rx="6" class="node"/>
-        <text x="72" y="262">Pages 9–10 · Gates, deploys</text><text x="72" y="283" class="t-sm">merge checks, delivery</text>
+        <text x="72" y="262">第9〜10章 · ゲートとデプロイ</text><text x="72" y="283" class="t-sm">マージ前のチェック、デリバリー</text>
         <rect x="56" y="314" width="328" height="56" rx="6" class="node-acc"/>
-        <text x="72" y="338" class="t-hd">Pages 11–12 · Data, launch</text><text x="72" y="359" class="t-sm">guards, readiness</text>
+        <text x="72" y="338" class="t-hd">第11〜12章 · データと公開</text><text x="72" y="359" class="t-sm">データの守り、公開の準備</text>
       </svg>
-      <figcaption>You can read any page alone. In order, the pages move from watching production to opening it to the public.</figcaption>
+      <figcaption>どの章も単独で読めます。順に読むと、本番を見守るところから一般公開するところまで進みます。</figcaption>
     </figure>
   </section>
   <section aria-labelledby="pages">
-    <h2 id="pages">The pages</h2>
+    <h2 id="pages">目次</h2>
     <ol>
-      <li><a href="ch01.html">Isn't observability just a fancy word for monitoring?</a> — Monitoring answers known questions; observability lets you ask new ones.</li>
-      <li><a href="ch02.html">What makes a log line actually useful?</a> — One structured line per request, with fixed fields and no payloads.</li>
-      <li><a href="ch03.html">What should wake someone up at night?</a> — Alarm on what users feel, and prove each alarm fires.</li>
-      <li><a href="ch04.html">How reliable is reliable enough?</a> — An SLO turns reliability into a budget you can spend on change.</li>
-      <li><a href="ch05.html">How do we see what a model call costs?</a> — Record every call with its model, prompt version, tokens and cost.</li>
-      <li><a href="ch06.html">Is a testing strategy just 'write more unit tests'?</a> — Each kind of test buys different confidence at a different price.</li>
-      <li><a href="ch07.html">How do we know the fake database behaves like the real one?</a> — One contract suite runs against every store.</li>
-      <li><a href="ch08.html">How do you test things that aren't plain code?</a> — Generated files, templates, types and imports each get a cheap check.</li>
-      <li><a href="ch09.html">What actually stops a bad change from merging?</a> — Layered gates running the same scripts, and nobody weakens them.</li>
-      <li><a href="ch10.html">Should every merge go straight to production?</a> — Continuous delivery isn't auto-deploy: dev deploys itself, prod waits for a person.</li>
-      <li><a href="ch11.html">What happens to a learner's data when things go wrong?</a> — Each guard covers a different failure, chosen per stage.</li>
-      <li><a href="ch12.html">What has to be true before we open to the public?</a> — A readiness list, plus what you chose to skip.</li>
+      <li><a href="ch01.html">オブザーバビリティは監視の言い換えなのか</a> — 監視はあらかじめ決めた問いに答え、オブザーバビリティは新しい問いを投げられるようにします。</li>
+      <li><a href="ch02.html">役に立つログの1行には何が要るか</a> — リクエストごとに構造化した1行を書き、項目を固定して、ペイロードは入れません。</li>
+      <li><a href="ch03.html">夜中に人を起こすべきアラームはどれか</a> — 利用者が感じる症状でアラームを出し、一つずつ実際に鳴ることを確かめます。</li>
+      <li><a href="ch04.html">どこまで信頼できれば十分か</a> — SLO は、信頼性を変更に使える予算に変えます。</li>
+      <li><a href="ch05.html">モデル呼び出しのコストをどう見るか</a> — 呼び出しごとに、モデル、プロンプトのバージョン、トークン数、コストを記録します。</li>
+      <li><a href="ch06.html">テスト戦略とは「単体テストを増やす」ことなのか</a> — テストの種類ごとに、得られる確信と払う代償が違います。</li>
+      <li><a href="ch07.html">フェイクのデータベースが本物と同じように動くと、どう確かめるか</a> — 一つの契約スイートを、すべてのストアに対して実行します。</li>
+      <li><a href="ch08.html">コードではないものをどうテストするか</a> — 生成ファイル、テンプレート、型、import に、それぞれ安く済むチェックを用意します。</li>
+      <li><a href="ch09.html">悪い変更のマージを実際に止めるのは何か</a> — 同じスクリプトを走らせる何層ものゲートと、それを誰も緩めないことです。</li>
+      <li><a href="ch10.html">マージしたものはすべて、そのまま本番に出すべきか</a> — 継続的デリバリーは自動デプロイとは違います。dev は自動でデプロイし、prod は人の承認を待ちます。</li>
+      <li><a href="ch11.html">障害が起きたとき、学習者のデータはどうなるか</a> — 守りはそれぞれ別の障害を受け持ち、環境ごとに選びます。</li>
+      <li><a href="ch12.html">一般公開の前に何がそろっていればよいか</a> — 準備のチェックリストと、あえて見送ったものの記録です。</li>
     </ol>
   </section>
   <div class="aside note">
-    <p class="label">How to read this</p>
-    <p>Read a chapter in a few minutes, using the diagrams and code examples alongside the explanation. The summaries collect the main decisions; the examples show where those decisions apply.</p>
+    <p class="label">読み方</p>
+    <p>どの章も数分で読めます。説明は、図やコード例と合わせて読んでください。章末の3行まとめには主な判断を集め、本文の例ではその判断が当てはまる場面を示しています。</p>
   </div>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="../index.html"><span>Previous</span><b>Bookshelf</b></a>
-    <a class="next" href="ch01.html"><span>Next</span><b>Isn't observability just a fancy word for monitoring?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="../index.html"><span>前へ</span><b>本棚</b></a>
+    <a class="next" href="ch01.html"><span>次へ</span><b>オブザーバビリティは監視の言い換えなのか</b></a>
   </nav>
 </div>

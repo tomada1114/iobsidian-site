@@ -1,52 +1,52 @@
-<!-- title: AI in Production 13 · A machine reviewing cards | accent: guard -->
+<!-- title: AI機能を本番で動かす 13 · 機械によるカードのレビュー | accent: guard -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 13 of 13</span></p>
-  <h1>Can a machine review the cards a machine wrote?</h1>
-  <p class="lead">A generated card passes format checks but sounds unnatural. A second model needs qualified comparison with human decisions before its approval can support publication.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第13章 / 全13章</span></p>
+  <h1>機械が書いたカードを、機械がレビューできるか</h1>
+  <p class="lead">生成されたカードが、形式の検査は通ったのに、不自然な言い回しになっています。2つ目のモデルの承認を公開の根拠にするには、その判断を、資格のある人の判断と比べておく必要があります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Where it started</li>
-      <li>The pipeline</li>
-      <li>Trusting the reviewer</li>
-      <li>Costs, and the same pattern elsewhere</li>
+      <li>出発点</li>
+      <li>パイプライン</li>
+      <li>レビュー役を信頼するには</li>
+      <li>代償と、ほかの場面での同じ型</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Where it started</h2>
-    <p>Quickturn's early card process combined model generation, format and duplicate checks, human review and a publication stamp. Rejected cards retained specific reasons, such as unnatural phrasing or a missing valid alternative.</p>
-    <p>Those records provide evaluation material for a later automated reviewer. They do not establish that a second model must be capable of replacing the person who reviewed them.</p>
+    <h2 id="s1"><span class="no">01</span>出発点</h2>
+    <p>Quickturnの初期のカード作成は、モデルによる生成、形式と重複の検査、人によるレビュー、公開の承認スタンプを組み合わせたものでした。却下したカードには、不自然な言い回しや、正しい別解の欠落といった具体的な理由を残していました。</p>
+    <p>この記録は、のちに自動のレビュー役を評価する材料になります。ただし、それだけでは、2つ目のモデルがレビューした人の代わりを務められるとは言えません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="On a person's machine, a person runs it, it handles one batch at a time, progress is visible only to them, retries are by hand, and only a person reviews; in the pipeline, a state machine runs it, bulk work goes to batch, every run is visible, each step retries on its own, and a machine reviews once trusted.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">A person's machine</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">The pipeline</text>
-      <text x="16" y="56" class="t-sm">Who runs it</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">a person</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a state machine</text>
-      <text x="16" y="136" class="t-sm">Scale</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">one batch</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">bulk, in batch</text>
-      <text x="16" y="216" class="t-sm">Visibility</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">on one screen</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">every run</text>
-      <text x="16" y="296" class="t-sm">Retries</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">by hand</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">per step</text>
-      <text x="16" y="376" class="t-sm">Who reviews</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">a person only</text>
-      <rect x="208" y="384" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="412" text-anchor="middle" class="t-hd t-acc">trusted machine</text>
+    <svg viewBox="0 0 400 436" role="img" aria-label="人の手元のマシンでは、人が実行し、一度に1バッチを扱い、進み具合は本人にしか見えず、再試行は手作業で、レビューは人だけが行います。パイプラインでは、ステートマシンが実行し、大量の処理はバッチに回し、すべての実行が見え、各ステップが個別に再試行し、信頼できるようになった機械がレビューします。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">人の手元</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">パイプライン</text>
+      <text x="16" y="56" class="t-sm">実行するのは</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">人</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">ステートマシン</text>
+      <text x="16" y="136" class="t-sm">規模</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">1バッチずつ</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">バッチで大量に</text>
+      <text x="16" y="216" class="t-sm">見える範囲</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">1つの画面</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">すべての実行</text>
+      <text x="16" y="296" class="t-sm">再試行</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">手作業</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">ステップごと</text>
+      <text x="16" y="376" class="t-sm">レビューするのは</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="412" text-anchor="middle">人だけ</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="412" text-anchor="middle" class="t-hd t-acc">信頼できる機械</text>
     </svg>
-    <figcaption>The last row is the hard one. The other rows are engineering; that one is a question of trust.</figcaption>
+    <figcaption>難しいのは最後の行です。ほかの行はエンジニアリングで解決できますが、最後の行は信頼の問題です。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The pipeline</h2>
-    <p>A state machine coordinates generation, deterministic checks, review and publication decisions. Step Functions Standard workflows retain execution history and support long-running orchestration. Explicit retries can execute tasks again, so downstream writes and publication steps still need idempotency.</p>
+    <h2 id="s2"><span class="no">02</span>パイプライン</h2>
+    <p>ステートマシンが、生成、決定的な検査、レビュー、公開の判断を取りまとめます。Step FunctionsのStandardワークフローは実行履歴を残し、長時間のオーケストレーションに対応しています。明示的な再試行ではタスクがもう一度実行されることがあるので、下流の書き込みや公開のステップには、やはり冪等性が必要です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="Plan, generate in batch, lint and deduplicate, automated review, then a supervised stamp or a trusted publish, and finally the catalog; the review gate sits just before the catalog.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="計画し、バッチで生成し、lintと重複排除を行い、自動レビューを経て、人の承認スタンプか信頼済みの公開に進み、最後にカタログに入ります。レビューのゲートはカタログの直前にあります。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -55,61 +55,61 @@
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <circle cx="28" cy="400" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Plan</text>
+      <text x="64" y="46">計画</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Generate, in batch</text>
+      <text x="64" y="118">バッチで生成</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Lint and deduplicate</text>
+      <text x="64" y="190">lintと重複排除</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Automated review</text>
+      <text x="64" y="262">自動レビュー</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Stamp, or trusted publish</text>
+      <text x="64" y="334" class="t-hd">承認スタンプか信頼済みの公開</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="406">Catalog</text>
+      <text x="64" y="406">カタログ</text>
     </svg>
-    <figcaption>The fifth step is the review gate. Nothing reaches the catalog, and so no learner, without passing it.</figcaption>
+    <figcaption>5つ目のステップがレビューのゲートです。ここを通らなければ、どのカードもカタログに入らず、学習者にも届きません。</figcaption>
   </figure>
-    <p>Code chooses catalog gaps and requested card counts. The model does not independently decide what the curriculum needs. Supported batch inference can process noninteractive work, and failed records are handled separately.</p>
-    <p>Near-duplicate detection catches cards that differ only superficially. Workflow and model pricing must be checked for the chosen Region; the dated examples show meters rather than permanent quotes.</p>
+    <p>カタログの足りない部分と、作るカードの枚数はコードが決めます。カリキュラムに何が必要かを、モデルが独断で決めることはありません。対応しているバッチ推論で非対話の処理を行い、失敗したレコードは別に扱います。</p>
+    <p>表面的にしか違わないカードは、類似の重複検出で見つけます。ワークフローとモデルの料金は選んだリージョンで確かめる必要があり、日付つきの例が示しているのは課金のメーターであって、いつまでも有効な見積もりではありません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Trusting the reviewer</h2>
-    <p>Calibrate the reviewer on accepted cards and rejected cards with human reasons. A dataset dominated by accepts can make an always-accepting reviewer look strong, so false acceptance of known defects is a critical measure.</p>
+    <h2 id="s3"><span class="no">03</span>レビュー役を信頼するには</h2>
+    <p>レビュー役は、承認されたカードと、人が理由を付けて却下したカードで調整します。承認が大半を占めるデータセットでは、何でも承認するレビュー役が優秀に見えてしまいます。そのため、既知の欠陥を誤って承認する率が決定的に重要な指標になります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of the machine reviewer's decision against the team's past decision: machine and team both accept is agreement; machine rejects what the team accepted is extra work; machine and team both reject is agreement; machine accepts what the team rejected must be near zero before the reviewer is trusted.">
-      <text x="44" y="18" class="t-sm">↑ Machine accepted</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="機械のレビュー役の判断と、チームの過去の判断の2軸の図です。機械もチームも承認なら一致、チームが承認したものを機械が却下すれば余分な作業、機械もチームも却下なら一致です。チームが却下したものを機械が承認する率は、レビュー役を信頼する前にほぼゼロでなければなりません。">
+      <text x="44" y="18" class="t-sm">↑ 機械が承認</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Team rejected →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">チームは却下 →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="112" text-anchor="middle">Agree</text>
+      <text x="134" y="112" text-anchor="middle">一致</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-acc"/>
-      <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">Bad card</text><text x="302" y="124" text-anchor="middle" class="t-hd t-acc">slips through</text><text x="302" y="148" text-anchor="middle" class="t-sm">must be near zero</text>
+      <text x="302" y="100" text-anchor="middle" class="t-hd t-acc">悪いカードが</text><text x="302" y="124" text-anchor="middle" class="t-hd t-acc">すり抜ける</text><text x="302" y="148" text-anchor="middle" class="t-sm">ほぼゼロが条件</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">Extra work</text><text x="134" y="272" text-anchor="middle" class="t-sm">good card held</text>
+      <text x="134" y="248" text-anchor="middle">余分な作業</text><text x="134" y="272" text-anchor="middle" class="t-sm">良いカードを保留</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="260" text-anchor="middle">Agree</text>
+      <text x="302" y="260" text-anchor="middle">一致</text>
     </svg>
-    <figcaption>A good card held back costs a little work. A bad card let through reaches learners, so false acceptance deserves particular attention alongside language-pair evidence and continuing audits.</figcaption>
+    <figcaption>良いカードを保留しても、少し手間が増えるだけです。悪いカードを通すと学習者に届くので、誤った承認には、言語の組み合わせごとの証拠や継続的な監査と並んで、特に注意を払います。</figcaption>
   </figure>
-    <p>Check reasons as well as labels. Agreement on Japanese-to-English data does not prove quality for a language pair the team cannot read. That pair needs qualified evidence and audit before autonomous publication. Where a person can supervise, the machine can prioritize their attention rather than remove the review gate.</p>
+    <p>ラベルだけでなく、理由も確かめます。日本語から英語のデータで判断が一致しても、チームが読めない言語の組み合わせで品質が保てることの証明にはなりません。その組み合わせで自動公開に踏み切るには、資格のある人による証拠と監査が必要です。人が監督できる場面では、機械はレビューのゲートを取り除くのではなく、人がどこに注意を向けるべきかの優先順位付けに使えます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Costs, and the same pattern elsewhere</h2>
-    <p>The writer and reviewer may share blind spots, especially within the same model family. Different prompts or models help but do not guarantee independence. Sampled human audits and learner reports provide additional evidence.</p>
-    <p>Rerun evaluation when the reviewer changes and preserve new rejection reasons. Similar extraction workflows for invoices or claims can route uncertain items to a person. Historical human decisions become useful test data when their scope and quality are understood.</p>
+    <h2 id="s4"><span class="no">04</span>代償と、ほかの場面での同じ型</h2>
+    <p>書き手とレビュー役は、特に同じ系統のモデルだと、同じ盲点を共有しているかもしれません。プロンプトやモデルを変えれば助けにはなりますが、独立性は保証されません。サンプリングした人による監査や、学習者からの報告が、追加の証拠になります。</p>
+    <p>レビュー役を変えたら評価をやり直し、新しい却下理由を残していきます。請求書や保険金請求の抽出のような似たワークフローでも、判断に迷う項目は人に回せます。過去の人の判断は、その範囲と質が分かっていれば、役に立つテストデータになります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Move content generation into a pipeline that records, retries and resumes each step.</li>
-      <li>Calibrate review for each language pair, prioritize known defects, and retain qualified audit evidence.</li>
-      <li>Guard against shared blind spots with a different reviewer prompt or model and sampled human audits.</li>
+      <li>コンテンツの生成は、各ステップを記録し、再試行し、再開できるパイプラインに移す。</li>
+      <li>レビューは言語の組み合わせごとに調整し、既知の欠陥を優先して見て、資格のある人による監査の証拠を残す。</li>
+      <li>共有された盲点には、別のレビュー用プロンプトやモデルと、サンプリングした人による監査で備える。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch12.html"><span>Previous</span><b>When an agent acts for a learner, whose rights does it use?</b></a>
-    <a class="next" href="ch00.html"><span>Next</span><b>Contents</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch12.html"><span>前へ</span><b>学習者の代わりに動くエージェントは、誰の権限を使うのか</b></a>
+    <a class="next" href="ch00.html"><span>次へ</span><b>目次</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html">Step Functions execution guarantees</a>.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成、2026年10月改訂。サービスの詳細：<a href="https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html">Step Functionsの実行の保証</a>。</p>
 </div>

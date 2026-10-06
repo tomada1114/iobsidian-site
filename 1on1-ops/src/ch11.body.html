@@ -1,93 +1,93 @@
-<!-- title: Operations 11 · When data goes wrong | accent: think -->
+<!-- title: 運用と品質 11 · データに問題が起きたとき | accent: think -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: Operations and Quality</b><span>Page 11 of 12</span></p>
-  <h1>What happens to a learner's data when things go wrong?</h1>
-  <p class="lead">A bad write, a table deletion and a learner’s account deletion are different events. Each needs its own protection or repeatable recovery path.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：運用と品質</b><span>第11章 / 全12章</span></p>
+  <h1>障害が起きたとき、学習者のデータはどうなるか</h1>
+  <p class="lead">誤った書き込み、テーブルの削除、学習者自身によるアカウントの削除は、それぞれ別の出来事です。どれにも、専用の守りか、繰り返し使える復旧の手順が必要です。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Different failures, different guards</li>
-      <li>Choices per stage</li>
-      <li>The accepted risk</li>
-      <li>Deletion and export as features</li>
+      <li>障害ごとに違う守り</li>
+      <li>環境ごとの選択</li>
+      <li>受け入れたリスク</li>
+      <li>機能としての削除とエクスポート</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Different failures, different guards</h2>
-    <p>Point-in-time recovery, deletion protection and stack retention address different failures. Recovery helps with corrupted data by restoring another table. Deletion protection blocks a delete until disabled. Retention protects an existing resource when its stack is deleted or replaced.</p>
+    <h2 id="s1"><span class="no">01</span>障害ごとに違う守り</h2>
+    <p>ポイントインタイムリカバリー、削除保護、スタックの保持設定は、それぞれ別の障害に対処します。リカバリーは、別のテーブルに復元することで壊れたデータに対処します。削除保護は、無効にするまでテーブルの削除を受け付けません。保持設定は、スタックが削除されたり置き換えられたりしたときに、既存のリソースを残します。</p>
 <dl class="terms">
-  <dt>A bug writes wrong data</dt><dd>Point-in-time recovery, into a new table.</dd>
-  <dt>Someone deletes the table</dt><dd>Deletion protection refuses the call.</dd>
-  <dt>A stack would replace or remove it</dt><dd>A Retain policy keeps the table.</dd>
-  <dt>A learner asks to leave</dt><dd>Deletion and export, as features.</dd>
+  <dt>バグが誤ったデータを書き込む</dt><dd>ポイントインタイムリカバリーで、新しいテーブルに復元する。</dd>
+  <dt>誰かがテーブルを削除する</dt><dd>削除保護が、その呼び出しを拒否する。</dd>
+  <dt>スタックの変更でテーブルが置き換わる、または消える</dt><dd>Retain ポリシーがテーブルを残す。</dd>
+  <dt>学習者が退会を申し出る</dt><dd>機能として用意した削除とエクスポートで応じる。</dd>
 </dl>
-    <p>None substitutes for the others. Recovery does not keep the app online automatically, and retention does not undo a bad write. Account export and deletion are separate product operations that also need a designed path.</p>
+    <p>どの守りも、ほかの守りの代わりにはなりません。リカバリーをしてもアプリが自動でオンラインに保たれるわけではなく、保持設定では誤った書き込みを取り消せません。アカウントのエクスポートと削除は別のプロダクトの操作で、これにも設計された経路が必要です。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Choices per stage</h2>
-    <p>Quickturn sets retain-on-delete and retain-on-replacement in both stages, with production table protection and recovery enabled from creation. The available recovery window starts only after recovery is active.</p>
-    <p>Identity resources deserve separate care. A replacement pool issues new provider identities, requiring mapping migration to reach existing learners. It is not enough to restore table records. Tests check these stage-specific protections, while drills test the recovery procedure.</p>
+    <h2 id="s2"><span class="no">02</span>環境ごとの選択</h2>
+    <p>Quickturn は、両方の環境で削除時と置き換え時の保持を設定し、本番ではテーブルの削除保護とリカバリーを作成時から有効にしています。復元できる期間は、リカバリーを有効にした時点から始まります。</p>
+    <p>ID 関連のリソースには、別の配慮が必要です。ユーザープールを置き換えると、新しいプールはプロバイダー側の ID を新しく発行するので、既存の学習者にたどり着くには対応表の移行が必要になります。テーブルのレコードを戻すだけでは足りません。環境ごとのこうした保護はテストで確かめ、復旧の手順は訓練で確かめます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="Dev and prod compared. Retain policy: on in both. Deletion protection: off in dev, on in prod. Point-in-time recovery: off in dev, on in prod. User pool protection: on in both. Whose data: the team's own in dev, learners' in prod.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Dev</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Prod</text>
-      <text x="16" y="56" class="t-sm">Retain policy</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">on</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">on</text>
-      <text x="16" y="136" class="t-sm">Deletion protection</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">off</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd t-acc">on</text>
-      <text x="16" y="216" class="t-sm">Point-in-time recovery</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">off</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">on</text>
-      <text x="16" y="296" class="t-sm">User pool protection</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">on</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">on</text>
-      <text x="16" y="376" class="t-sm">Whose data</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">the team's</text>
-      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">learners'</text>
+    <svg viewBox="0 0 400 436" role="img" aria-label="dev と prod の比較。Retain ポリシーは両方で有効。削除保護は dev では無効、prod では有効。ポイントインタイムリカバリーは dev では無効、prod では有効。ユーザープールの保護は両方で有効。誰のデータかは、dev ではチーム自身のもの、prod では学習者のもの。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">dev</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">prod</text>
+      <text x="16" y="56" class="t-sm">Retain ポリシー</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">有効</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">有効</text>
+      <text x="16" y="136" class="t-sm">削除保護</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="172" text-anchor="middle">無効</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="172" text-anchor="middle" class="t-hd t-acc">有効</text>
+      <text x="16" y="216" class="t-sm">ポイントインタイムリカバリー</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">無効</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd t-acc">有効</text>
+      <text x="16" y="296" class="t-sm">ユーザープールの保護</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">有効</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">有効</text>
+      <text x="16" y="376" class="t-sm">誰のデータか</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">チームのもの</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">学習者のもの</text>
     </svg>
-    <figcaption>The last row explains the accented ones. Prod holds other people's data, so it gets the guards that cost money.</figcaption>
+    <figcaption>最後の行が、アクセントの行の理由です。prod には他人のデータがあるので、費用のかかる守りを入れます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>The accepted risk</h2>
-    <p>Development accepts losing the team's test history; that is a stated risk rather than an omitted setting. Production recovery retains recoverable copies for a configured period, so deletion and privacy descriptions must include that lifecycle.</p>
-    <p>A restore drill creates a protected replacement table and checks counts and representative records. It measures time and tests the planned cutover or repair process. Restore access must remain controlled because the new copy contains production information.</p>
+    <h2 id="s3"><span class="no">03</span>受け入れたリスク</h2>
+    <p>開発環境では、チームのテスト履歴が失われることを受け入れています。これは設定の漏れではなく、明示したリスクです。本番のリカバリーは、設定した期間、復元できるコピーを保持します。そのため、削除やプライバシーについての説明には、このコピーのライフサイクルも含める必要があります。</p>
+    <p>復元の訓練では、保護をかけた代わりのテーブルを作り、件数と代表的なレコードを確かめます。かかった時間を計り、計画した切り替えや修復の手順も試します。新しいコピーには本番の情報が含まれるので、復元の権限は引き続き管理しておく必要があります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Deletion and export as features</h2>
-    <p>A learner-bound partition simplifies export and deletion, but the operation must follow pagination and batch limits and include identity mappings. Tests make it a repeatable feature rather than a script someone remembers to run.</p>
+    <h2 id="s4"><span class="no">04</span>機能としての削除とエクスポート</h2>
+    <p>学習者ごとのパーティションにしておくとエクスポートと削除は簡単になりますが、その処理はページネーションとバッチの上限に従い、ID の対応表まで含める必要があります。テストがあることで、誰かが思い出して走らせるスクリプトではなく、繰り返し使える機能になります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Nested boxes: the table, containing one partition per learner, containing that learner's items. One learner's partition is the unit of deletion and export.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="入れ子の箱。テーブルの中に学習者ごとのパーティションがあり、その中にその学習者の項目がある。一人の学習者のパーティションが、削除とエクスポートの単位になる。">
       <rect x="8" y="8" width="384" height="284" rx="12" class="zone-soft"/>
-      <text x="24" y="36" class="t-hd">The table</text>
+      <text x="24" y="36" class="t-hd">テーブル</text>
       <rect x="40" y="52" width="320" height="224" rx="10" class="node"/>
-      <text x="56" y="80" class="t-hd">One learner's partition</text>
-      <text x="56" y="102" class="t-sm">the unit of delete and export</text>
+      <text x="56" y="80" class="t-hd">一人の学習者のパーティション</text>
+      <text x="56" y="102" class="t-sm">削除とエクスポートの単位</text>
       <rect x="80" y="124" width="240" height="132" rx="8" class="node-acc"/>
-      <text x="200" y="176" text-anchor="middle" class="t-hd t-acc">Their items</text>
-      <text x="200" y="202" text-anchor="middle" class="t-sm">reviews, records, the</text>
-      <text x="200" y="224" text-anchor="middle" class="t-sm">learner model</text>
+      <text x="200" y="176" text-anchor="middle" class="t-hd t-acc">その学習者の項目</text>
+      <text x="200" y="202" text-anchor="middle" class="t-sm">復習、記録、</text>
+      <text x="200" y="224" text-anchor="middle" class="t-sm">学習者モデル</text>
     </svg>
-    <figcaption>The learner key targets primary owned records without scanning unrelated learners. The operation also follows identity mappings and the inventory of derived copies.</figcaption>
+    <figcaption>学習者のキーを使えば、ほかの学習者のデータを走査せずに、その人の主要なレコードを対象にできます。この処理は、ID の対応表と、派生したコピーの一覧もたどります。</figcaption>
   </figure>
-    <p>Derived copies include exports, logs, embeddings and conversation memory. Maintain an inventory and an explicit retention or deletion policy for each. Restoring a backup must also respect deletions made after its recovery point. Keeping progress in the main record makes that inventory smaller without removing responsibility for the remaining copies.</p>
+    <p>派生したコピーには、エクスポート、ログ、埋め込み、会話の記憶があります。その一覧を管理し、それぞれに保持か削除かの方針をはっきり決めておきます。バックアップから復元するときも、復元時点より後に行われた削除を尊重しなければなりません。進捗をメインのレコードにまとめておけば一覧は小さくなりますが、残るコピーへの責任がなくなるわけではありません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Recovery, deletion protection and Retain policies each guard against a different failure.</li>
-      <li>Each guard is a per-stage choice; a skipped one is a risk written down, not an oversight.</li>
-      <li>Deletion and export are tested features over one partition, and must reach every derived copy.</li>
+      <li>リカバリー、削除保護、Retain ポリシーは、それぞれ別の障害を防ぎます。</li>
+      <li>どの守りを入れるかは環境ごとの選択です。見送ったものは、見落としではなく書き留めたリスクです。</li>
+      <li>削除とエクスポートは一つのパーティションを対象にしたテスト済みの機能で、派生したコピーのすべてに届かなければなりません。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch10.html"><span>Previous</span><b>Should every merge go straight to production?</b></a>
-    <a class="next" href="ch12.html"><span>Next</span><b>What has to be true before we open to the public?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch10.html"><span>前へ</span><b>マージしたものはすべて、そのまま本番に出すべきか</b></a>
+    <a class="next" href="ch12.html"><span>次へ</span><b>一般公開の前に何がそろっていればよいか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、エンジニアリング上の判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

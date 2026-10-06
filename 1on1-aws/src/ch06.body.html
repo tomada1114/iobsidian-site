@@ -1,26 +1,26 @@
-<!-- title: AWS Foundation 06 · Why DynamoDB, not PostgreSQL | accent: run -->
+<!-- title: AWS の基礎 06 · PostgreSQL でなく DynamoDB | accent: run -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 6 of 14</span></p>
-  <h1>Why DynamoDB and not PostgreSQL?</h1>
-  <p class="lead">Quickturn must isolate, export and delete learner-owned records while spending little when idle. Those needs guide its database comparison before product preferences.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第6章 / 全14章</span></p>
+  <h1>PostgreSQL ではなく DynamoDB を選んだ理由</h1>
+  <p class="lead">Quickturn には、学習者ごとのレコードを分離し、エクスポートし、削除できることが求められます。使われていないときの費用も小さく抑えたいところです。データベースの比較では、製品の好みより先に、こうした要件を手がかりにします。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Drivers before products</li>
-      <li>The options side by side</li>
-      <li>What DynamoDB costs</li>
-      <li>Both, and how to defend it</li>
+      <li>製品より先に判断の軸を決める</li>
+      <li>候補を並べて比べる</li>
+      <li>DynamoDB の代償</li>
+      <li>両方を使う場合と、選択の説明</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Drivers before products</h2>
-    <p>Quickturn lists its drivers before comparing products: learner isolation, straightforward export and deletion, and low idle cost. It also needs manageable Lambda access, conditional writes and enough history to rebuild derived state.</p>
-    <p>These are application needs rather than a preference for SQL or NoSQL. The comparison is useful only if each candidate is judged against the same needs and operational assumptions.</p>
+    <h2 id="s1"><span class="no">01</span>製品より先に判断の軸を決める</h2>
+    <p>Quickturn は、製品を比べる前に判断の軸を書き出します。学習者の分離、素直なエクスポートと削除、使われていないときの低い費用の三つです。加えて、Lambda から扱いやすいアクセス、条件付き書き込み、派生した状態を作り直せるだけの履歴も必要です。</p>
+    <p>これらはアプリの要件であって、SQL や NoSQL への好みではありません。比較が役に立つのは、どの候補も同じ要件と同じ運用の前提で評価したときだけです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="List the drivers, list the options, judge each option on each driver, choose, and write down what would make you revisit the choice.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="判断の軸を書き出し、候補を書き出し、各候補を軸ごとに評価し、選び、どうなったら選択を見直すかを書いておく。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -28,84 +28,84 @@
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">List the drivers</text>
+      <text x="64" y="46">判断の軸を書き出す</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">List the options</text>
+      <text x="64" y="118">候補を書き出す</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Judge each option on each driver</text>
+      <text x="64" y="190">各候補を軸ごとに評価する</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Choose</text>
+      <text x="64" y="262">選ぶ</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Write when you'd revisit</text>
+      <text x="64" y="334" class="t-hd">見直す条件を書いておく</text>
     </svg>
-    <figcaption>The last step is the one teams skip. A written condition for revisiting turns a choice into something the team can check later.</figcaption>
+    <figcaption>最後の手順は、チームが飛ばしがちなところです。見直す条件を書いておけば、その選択を、あとでチームが確かめられるものに変えられます。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The options side by side</h2>
-    <p>The candidates include DynamoDB on-demand, Aurora DSQL, Aurora Serverless v2 and RDS PostgreSQL. They differ in idle behavior, network and connection requirements, transaction semantics and local testing options.</p>
+    <h2 id="s2"><span class="no">02</span>候補を並べて比べる</h2>
+    <p>候補は、オンデマンドの DynamoDB、Aurora DSQL、Aurora Serverless v2、RDS for PostgreSQL です。使われていないときのふるまい、ネットワークと接続の要件、トランザクションの意味論、ローカルでのテスト方法が、それぞれ異なります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 436" role="img" aria-label="DynamoDB and Aurora DSQL avoid always-on instance charges in this comparison and are reachable from Lambda without a VPC; this comparison uses a learner-key store for DynamoDB and learner predicates for DSQL; DSQL has transaction limits and a different local engine.">
+    <svg viewBox="0 0 400 436" role="img" aria-label="この比較では、DynamoDB と Aurora DSQL はどちらも常時のインスタンス料金がかからず、Lambda から VPC なしで接続できる。DynamoDB では学習者のキーで分けたストアを、DSQL では学習者を指定する条件をクエリごとに使う。DSQL にはトランザクションの上限があり、ローカルでは別のエンジンを使うことになる。">
       <text x="104" y="24" text-anchor="middle" class="t-hd">DynamoDB</text>
       <text x="296" y="24" text-anchor="middle" class="t-hd">Aurora DSQL</text>
-      <text x="16" y="56" class="t-sm">Cost when idle</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">no instance bill</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">no instance bill</text>
-      <text x="16" y="136" class="t-sm">Reached from Lambda</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">no VPC</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">no VPC</text>
-      <text x="16" y="216" class="t-sm">Learner selection</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">one partition key</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">a filter per query</text>
-      <text x="16" y="296" class="t-sm">Transactions</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">conditions</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">SQL, own limits</text>
-      <text x="16" y="376" class="t-sm">Local development</text>
-      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">same model</text>
-      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">another engine</text>
+      <text x="16" y="56" class="t-sm">使われていないときの費用</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">常時の課金なし</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">常時の課金なし</text>
+      <text x="16" y="136" class="t-sm">Lambda からの接続</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">VPC 不要</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">VPC 不要</text>
+      <text x="16" y="216" class="t-sm">学習者の選び方</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle" class="t-hd">キー1つで選ぶ</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="296" y="252" text-anchor="middle">クエリごとの条件</text>
+      <text x="16" y="296" class="t-sm">トランザクション</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">条件付きで書く</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">SQL、独自の上限</text>
+      <text x="16" y="376" class="t-sm">ローカル開発</text>
+      <rect x="16" y="384" width="176" height="44" rx="6" class="node"/><text x="104" y="412" text-anchor="middle">同じモデル</text>
+      <rect x="208" y="384" width="176" height="44" rx="6" class="node"/><text x="296" y="412" text-anchor="middle">別のエンジン</text>
     </svg>
-    <figcaption>The learner-key model supports Quickturn’s bound-store design. Export and deletion still require paged reads, writes and authorization; the key alone does not enforce ownership.</figcaption>
+    <figcaption>学習者のキーで分けるモデルは、学習者に縛ったストアという Quickturn の設計と相性がよいものです。それでもエクスポートと削除には、ページ単位の読み取り、書き込み、認可が必要で、キーだけで所有権が守られるわけではありません。</figcaption>
   </figure>
-    <p>A PostgreSQL-compatible service is not necessarily identical to PostgreSQL in every transaction or supported feature. A decision must check the actual engine, version, limits and required network path. Quickturn prefers DynamoDB’s learner-key model and its tested conditional commit contract for this workload. Other workloads can favor relational serverless services.</p>
+    <p>PostgreSQL 互換のサービスが、トランザクションや対応機能のすべてで PostgreSQL と同じとは限りません。判断の際には、実際のエンジン、バージョン、上限、必要なネットワーク経路を確かめる必要があります。このワークロードについて Quickturn が選んだのは、DynamoDB の学習者キーのモデルと、テスト済みの条件付きコミットの約束事です。ほかのワークロードなら、リレーショナルなサーバーレスサービスのほうが有利になることもあります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What DynamoDB costs</h2>
-    <p>DynamoDB requires a key design for each live read, exports for ad hoc reporting and maintenance of derived projections. A complete answer log helps repair projections, but a missed update can still cause drift.</p>
-    <p>Relational storage can be a faster starting point when access patterns are uncertain or many-to-many relationships need constraints. A SQL-fluent team’s exploratory reporting needs can also favor it. Quickturn's early local prototype used SQL; multi-learner operation introduced a different set of drivers.</p>
+    <h2 id="s3"><span class="no">03</span>DynamoDB の代償</h2>
+    <p>DynamoDB では、リクエスト経路での読み取りごとにキーを設計し、場当たり的なレポートにはエクスポートを使い、派生した集計（プロジェクション）を保守しなければなりません。回答のログが完全に残っていれば集計の修復に役立ちますが、更新を一度取りこぼせば、ずれが生じることもあります。</p>
+    <p>アクセスパターンが定まっていない場合や、多対多の関係に制約をかける必要がある場合は、リレーショナルなストレージのほうが早く始められます。SQL に慣れたチームが探索的なレポートを必要とする場合も、リレーショナルが有利です。Quickturn も、初期のローカルのプロトタイプでは SQL を使っていました。複数の学習者で運用するようになって、判断の軸が入れ替わりました。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether access patterns are known up front against whether you need joins and ad hoc queries: known patterns with few joins suit a key-value store; known patterns with joins can go either way; unknown patterns with few joins suit relational to start and learn; unknown patterns with joins suit relational.">
-      <text x="44" y="18" class="t-sm">↑ Access patterns: known up front</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="アクセスパターンが事前にわかるかと、結合や場当たり的なクエリが必要かの二軸。パターンがわかっていて結合が少なければキーバリューストア、パターンがわかっていて結合が多ければどちらでもよく、パターンが不明で結合が少なければまずリレーショナルで始めて学び、パターンが不明で結合が多ければリレーショナルが向く。">
+      <text x="44" y="18" class="t-sm">↑ アクセスパターン：事前にわかる</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Joins, ad hoc queries →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">結合、場当たり的なクエリ →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-acc"/>
-      <text x="134" y="100" text-anchor="middle" class="t-hd t-acc">Key-value</text><text x="134" y="124" text-anchor="middle" class="t-sm">Quickturn</text>
+      <text x="134" y="100" text-anchor="middle" class="t-hd t-acc">キーバリュー</text><text x="134" y="124" text-anchor="middle" class="t-sm">Quickturn</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="302" y="100" text-anchor="middle">Either</text><text x="302" y="124" text-anchor="middle" class="t-sm">team skills decide</text>
+      <text x="302" y="100" text-anchor="middle">どちらでも</text><text x="302" y="124" text-anchor="middle" class="t-sm">チームの技能次第</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">Relational</text><text x="134" y="272" text-anchor="middle" class="t-sm">start and learn</text>
+      <text x="134" y="248" text-anchor="middle">リレーショナル</text><text x="134" y="272" text-anchor="middle" class="t-sm">始めながら学ぶ</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="248" text-anchor="middle">Relational</text><text x="302" y="272" text-anchor="middle" class="t-sm">rich relations</text>
+      <text x="302" y="248" text-anchor="middle">リレーショナル</text><text x="302" y="272" text-anchor="middle" class="t-sm">関係が豊富</text>
     </svg>
-    <figcaption>Known questions and few joins point to a key-value store. When the questions are still unknown, a relational database lets you learn them first.</figcaption>
+    <figcaption>問いがわかっていて結合が少なければ、キーバリューストアが候補になります。問いがまだわからないなら、リレーショナルデータベースで先に問いを見つけるほうが進めやすくなります。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Both, and how to defend it</h2>
-    <p>Relational and key-value databases can serve different workloads. Running both adds a second operational system and may require synchronizing two copies. Add the second store for an observed requirement.</p>
-    <p>Defend the chosen database by stating drivers, rejected alternatives and a revisit condition. For Quickturn, a history lifecycle or reporting need that diverges from learner records could justify a separate log table. Reopen the decision when a driver changes, rather than whenever a new product appears.</p>
+    <h2 id="s4"><span class="no">04</span>両方を使う場合と、選択の説明</h2>
+    <p>リレーショナルデータベースとキーバリューデータベースは、それぞれ別のワークロードを受け持てます。ただし両方を動かせば、運用するシステムがもう一つ増え、二つのコピーを同期させる必要も出てきます。二つ目のストアは、実際に確認された要件があるときに追加してください。</p>
+    <p>選んだデータベースの妥当性は、判断の軸、退けた候補、見直す条件を示して説明します。Quickturn の場合、履歴のライフサイクルやレポートの要件が学習者のレコードと食い違ってくれば、別のログテーブルを設ける理由になります。新しい製品が登場するたびではなく、判断の軸が変わったときに、この判断を見直します。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Choose a database from written decision drivers, and judge every option against the same list.</li>
-      <li>DynamoDB won on a structural learner boundary; its price is designing every question as a key first.</li>
-      <li>Pick relational when questions are unknown or relations are rich, and write down what would make you revisit.</li>
+      <li>データベースは書き出した判断の軸から選び、どの候補も同じ一覧で評価します。</li>
+      <li>DynamoDB の決め手は学習者の境界を構造として持てることで、その代償はすべての問いを先にキーとして設計することです。</li>
+      <li>問いがわからないときや関係が豊富なときはリレーショナルを選び、どうなったら見直すかを書いておきます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>How does DynamoDB find my data so fast?</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>List the questions first, then design the table</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>DynamoDB はなぜデータをすばやく見つけられるのか</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>テーブルより先に、問い合わせを書き出す</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成。</p>
 </div>

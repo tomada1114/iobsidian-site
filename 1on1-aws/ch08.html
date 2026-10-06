@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AWS Foundation 08 · A crash halfway through a write</title>
+<title>AWS の基礎 08 · 書き込みの途中で落ちたら</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-3">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS の基礎">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AWS</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">AWS の基礎</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,24 +365,24 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AWS Foundation pages">
-  <h2><a href="ch00.html">Engineering Readers: AWS Foundation</a></h2>
+<aside class="side" id="side" aria-label="小さなアプリで学ぶ AWS の基礎 pages">
+  <h2><a href="ch00.html">小さなアプリで学ぶ AWS の基礎</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>What am I responsible for on AWS</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Why our deploy has no AWS keys</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>What we give up on Lambda</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Why Quickturn has no VPC</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>How DynamoDB finds data fast</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Why DynamoDB, not PostgreSQL</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>List the questions first</span></a></li>
-    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>A crash halfway through a write</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>Why infrastructure as code</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Split what breaks from what lasts</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What happens at sign-in</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Where a web app keeps tokens</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>Keeping learners apart</span></a></li>
-    <li><a href="ch14.html"><span class="n">14</span><span>Cost when nobody uses it</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>自分たちが責任を持つ範囲</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>デプロイにキーを置かない理由</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Lambda で手放すもの</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>VPC を置かない理由</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>DynamoDB が速く見つける仕組み</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>PostgreSQL でなく DynamoDB</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>先に問い合わせを書き出す</span></a></li>
+    <li><a href="ch08.html" aria-current="page"><span class="n">08</span><span>書き込みの途中で落ちたら</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>インフラをコードで書く理由</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>壊すものと残すものを分ける</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>サインインで起きること</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>トークンの置き場所</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>学習者どうしを分ける</span></a></li>
+    <li><a href="ch14.html"><span class="n">14</span><span>使われないときの費用</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../aws.html">← AWS</a><br>
@@ -397,107 +397,107 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 8 of 14</span></p>
-  <h1>What if the app crashes halfway through a write?</h1>
-  <p class="lead">An accepted answer changes both history and points. If only one write succeeds, later reads disagree about what the learner did.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第8章 / 全14章</span></p>
+  <h1>書き込みの途中でアプリが落ちたらどうなるか</h1>
+  <p class="lead">受け付けた回答は、履歴とポイントの両方を変えます。片方の書き込みしか成功しなければ、あとで読んだときに、学習者が何をしたのかについて記録どうしが食い違います。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Half-done writes</li>
-      <li>One commit with conditions</li>
-      <li>What transactions cost</li>
-      <li>Conditions that guard money</li>
+      <li>中途半端な書き込み</li>
+      <li>条件付きの一つのコミット</li>
+      <li>トランザクションの代償</li>
+      <li>お金を守る条件</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Half-done writes</h2>
-    <p>Saving an answer and updating points in separate writes creates a partial-success problem. A crash between them leaves the log and derived totals disagreeing, and retrying can duplicate one side rather than repair it.</p>
-    <p>Quickturn treats the answer log as history and points, day counts and memory state as projections. The commit must include every change required for the accepted answer's meaning.</p>
+    <h2 id="s1"><span class="no">01</span>中途半端な書き込み</h2>
+    <p>回答の保存とポイントの更新を別々の書き込みで行うと、一部だけ成功するという問題が生じます。二つの書き込みのあいだでアプリが落ちれば、ログと派生した集計が食い違います。リトライしても修復にはならず、片方が二重になることさえあります。</p>
+    <p>Quickturn は、回答のログを履歴として扱い、ポイント、日ごとの回数、記憶状態をそこから派生するプロジェクションとして扱います。コミットには、受け付けた回答の意味を成り立たせるのに必要な変更を、すべて含めなければなりません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="With two separate writes, a crash after the first leaves the answer without points, a resent answer is counted twice, and two devices can overwrite each other; with one commit, the submitted writes apply together or not at all, a repeated answer is detected by its condition and a second device is detected by its version.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Two writes</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">One commit</text>
-      <text x="16" y="56" class="t-sm">Crash after the first</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">log and points split</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">all or none</text>
-      <text x="16" y="136" class="t-sm">Answer resent</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">counted twice</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">fails harmlessly</text>
-      <text x="16" y="216" class="t-sm">Two devices at once</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">last write wins</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">version conflict</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="別々の2回の書き込みでは、1回目のあとで落ちると回答にポイントが付かず、再送された回答は二重に数えられ、2台の端末が互いの書き込みを上書きしうる。1回のコミットでは、送った書き込みはすべて反映されるか何も反映されないかのどちらかで、繰り返された回答は条件で、2台目の端末はバージョンで検出される。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">2回の書き込み</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">1回のコミット</text>
+      <text x="16" y="56" class="t-sm">1回目のあとで落ちた</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">記録が食い違う</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd">全部か、何もなし</text>
+      <text x="16" y="136" class="t-sm">回答が再送された</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">二重に数える</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">無害に失敗する</text>
+      <text x="16" y="216" class="t-sm">2台の端末から同時に</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">後の書き込みが勝つ</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">バージョンの衝突</text>
     </svg>
-    <figcaption>The first row is the one to remember. One transaction prevents partial application of its submitted changes. A lost response can still leave the client uncertain whether all of them committed.</figcaption>
+    <figcaption>覚えておきたいのは「1回目のあとで落ちた」の行です。一つのトランザクションにすれば、送った変更の一部だけが反映されることはありません。それでもレスポンスが失われると、すべてコミットされたかどうかがクライアントにはわからないことがあります。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>One commit with conditions</h2>
-    <p>TransactWriteItems groups up to 100 actions with a 4 MB aggregate item limit. Actions cannot target the same item twice. A new answer carries a nonexistence condition; an updated aggregate carries its expected version. A condition check can guard a record that is not being changed.</p>
+    <h2 id="s2"><span class="no">02</span>条件付きの一つのコミット</h2>
+    <p>TransactWriteItems は、最大100個のアクションを、アイテムの合計 4 MB までの範囲でまとめます。同じアイテムを二度対象にすることはできません。新しい回答には「まだ存在しない」という条件を付け、更新する集計には期待するバージョンを付けます。変更しないレコードを、条件チェックだけで守ることもできます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The application reads items with their versions, decides in pure code and submits one commit to DynamoDB; if a condition fails, it reads again and decides again, up to three attempts; an exhausted retry returns a conflict instead of promising success.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="アプリはバージョン付きでアイテムを読み、純粋なコードで判断して、DynamoDB に一つのコミットを送る。条件が満たされなければ、読み直して判断し直し、最大3回まで試す。リトライを使い切ったら、成功を約束する代わりに競合を返す。">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
-      <text x="96" y="82" text-anchor="middle" class="t-hd">Application</text>
-      <text x="96" y="104" text-anchor="middle" class="t-sm">read, decide</text>
+      <text x="96" y="82" text-anchor="middle" class="t-hd">アプリ</text>
+      <text x="96" y="104" text-anchor="middle" class="t-sm">読む、判断する</text>
       <rect x="224" y="56" width="160" height="60" rx="6" class="node"/>
       <text x="304" y="82" text-anchor="middle" class="t-hd">DynamoDB</text>
-      <text x="304" y="104" text-anchor="middle" class="t-sm">check conditions</text>
+      <text x="304" y="104" text-anchor="middle" class="t-sm">条件を確認する</text>
       <path d="M 140 56 C 160 12, 240 12, 260 56" class="ln" fill="none" marker-end="url(#arw)"/>
-      <text x="200" y="50" text-anchor="middle" class="t-sm">commit</text>
+      <text x="200" y="50" text-anchor="middle" class="t-sm">コミット</text>
       <path d="M 260 116 C 240 160, 160 160, 140 116" class="ln" fill="none" marker-end="url(#arw)"/>
-      <text x="200" y="180" text-anchor="middle" class="t-sm">condition failed:</text>
-      <text x="200" y="200" text-anchor="middle" class="t-sm">read again, decide again</text>
+      <text x="200" y="180" text-anchor="middle" class="t-sm">条件が満たされない：</text>
+      <text x="200" y="200" text-anchor="middle" class="t-sm">読み直して、判断し直す</text>
       <rect x="64" y="224" width="272" height="56" rx="6" class="node-acc"/>
-      <text x="200" y="258" text-anchor="middle" class="t-hd">Commit accepted</text>
+      <text x="200" y="258" text-anchor="middle" class="t-hd">コミットが受理される</text>
     </svg>
-    <figcaption>No lock is held while the code thinks. The database only checks, at the end, that nothing changed since the read.</figcaption>
+    <figcaption>コードが判断しているあいだ、ロックは保持しません。データベースは最後に、読み取ってから何も変わっていないことを確かめるだけです。</figcaption>
   </figure>
-    <p>The application loads, decides and sends a complete conditional commit rather than holding an open database transaction while running its rule. On conflict it reloads and recomputes, with a bounded three-attempt policy.</p>
-    <p>The in-memory store and local DynamoDB adapter run the same contract cases. Tests reject oversized commits, duplicate target keys and attempts to mutate append-only answers. The fake provides evidence about those tested semantics, not every cloud failure mode.</p>
+    <p>アプリは、ルールを実行するあいだデータベースのトランザクションを開いたままにするのではなく、読み込み、判断し、条件付きの完全なコミットを送ります。競合したら読み込み直して計算し直し、試行は3回までに制限しています。</p>
+    <p>インメモリのストアと、ローカルの DynamoDB 用アダプターは、同じ契約テストのケースを実行します。テストでは、大きすぎるコミット、対象キーの重複、追記専用の回答を書き換えようとする操作が拒否されることを確かめます。このフェイクが裏付けるのはテストした意味論までで、クラウドで起こりうるすべての障害ではありません。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What transactions cost</h2>
-    <p>Transactional capacity costs more than ordinary writes and imposes limits on command size. A shared learner-totals item can also create contention if many writers update it. Count actual actions when chunking offline answers.</p>
-    <p>Atomicity covers only the submitted actions. A forgotten projection remains a logic bug, so command tests and rebuild tooling still matter. Single-item changes may need only an atomic update; asynchronous projections can suit reports whose readers accept lag.</p>
+    <h2 id="s3"><span class="no">03</span>トランザクションの代償</h2>
+    <p>トランザクションで消費するキャパシティは通常の書き込みより多く、コマンドの大きさにも上限があります。学習者の合計を持つ共有のアイテムは、多くの書き手が更新すると競合の原因にもなります。オフラインで溜まった回答を分割して送るときは、実際のアクションの数を数えてください。</p>
+    <p>アトミック性が及ぶのは、送ったアクションだけです。プロジェクションの更新を書き忘れれば、それはロジックのバグとして残ります。そのため、コマンドのテストと再構築の道具は引き続き欠かせません。一つのアイテムだけの変更ならアトミックな更新で足りることもありますし、読み手が遅れを許容できるレポートには、非同期のプロジェクションが向くこともあります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>Conditions that guard money</h2>
-    <p>Model-call accounting has a similar conditional boundary. Reserve the maximum affordable amount before starting and record the attempt under a stable job key. Then settle actual cost or reconcile a failed attempt.</p>
+    <h2 id="s4"><span class="no">04</span>お金を守る条件</h2>
+    <p>モデル呼び出しの費用の管理にも、同じような条件付きの境界があります。呼び出しを始める前に支払える上限額を予約し、試行を安定したジョブのキーで記録します。そのあとで実際の費用を精算するか、失敗した試行を突き合わせて整理します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="Reserve the maximum cost only if the balance covers it, call the model, settle by refunding the unused part, and expire any reservation that never settles.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="残高で賄えるときだけ上限額を予約し、モデルを呼び出し、使わなかった分を返して精算し、精算されなかった予約は失効させる。">
       <line x1="28" y1="40" x2="28" y2="256" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="7" class="f-acc"/>
       <circle cx="28" cy="256" r="6" class="dot"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Reserve if balance covers max</text>
+      <text x="64" y="46">残高が上限を賄えるときだけ予約</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Call the model</text>
+      <text x="64" y="118">モデルを呼び出す</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="190" class="t-hd">Settle: refund the unused part</text>
+      <text x="64" y="190" class="t-hd">精算：使わなかった分を返す</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Expire reservations never settled</text>
+      <text x="64" y="262">精算されない予約を失効させる</text>
     </svg>
-    <figcaption>The conditional reservation checks the balance against the planned maximum. Attempt coordination, settlement and recovery must preserve that accounting when provider work or retries fail.</figcaption>
+    <figcaption>条件付きの予約は、計画した上限額に対して残高を確かめます。プロバイダー側の処理やリトライが失敗しても、試行の調整、精算、復旧によって、この帳尻を保たなければなりません。</figcaption>
   </figure>
-    <p>Conditions can prevent a repeated job from charging the learner twice. They do not themselves stop a provider call already in flight. Reservation expiry, attempt coordination and recovery must therefore be designed alongside the transaction.</p>
+    <p>条件を使えば、同じジョブが繰り返されても、学習者に二重に課金せずに済みます。ただし、すでに送信中のプロバイダーへの呼び出しを、条件そのものが止めるわけではありません。そのため、予約の失効、試行の調整、復旧は、トランザクションと一緒に設計する必要があります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Commit a log entry and the summaries derived from it in one transaction, so all apply or none do.</li>
-      <li>Conditions make it safe: new items must not exist, and updates must still be at the version read.</li>
-      <li>Transactions cost double and allow 100 actions, which shapes how commands are cut.</li>
+      <li>ログのエントリと、そこから派生する集計は一つのトランザクションでコミットし、すべて反映されるか、何も反映されないかのどちらかにします。</li>
+      <li>条件が安全を支えます。新しいアイテムはまだ存在してはならず、更新は読み取ったときのバージョンのままでなければなりません。</li>
+      <li>トランザクションは通常の2倍の費用がかかり、アクションは100個までです。この制約がコマンドの区切り方を決めます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch07.html"><span>Previous</span><b>List the questions first, then design the table</b></a>
-    <a class="next" href="ch09.html"><span>Next</span><b>Why write infrastructure as code at all?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch07.html"><span>前へ</span><b>テーブルより先に、問い合わせを書き出す</b></a>
+    <a class="next" href="ch09.html"><span>次へ</span><b>インフラをコードで書くのはなぜか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026; revised in October 2026. Service details: <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html">DynamoDB transactions</a>.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成、2026年10月改訂。サービスの詳細（英語）：<a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html">DynamoDB のトランザクション</a>。</p>
 </div>
 </div>
 <script>

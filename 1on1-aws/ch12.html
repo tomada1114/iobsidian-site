@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AWS Foundation 12 · Where a web app keeps tokens</title>
+<title>AWS の基礎 12 · トークンの置き場所</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-3">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-aws" data-label="AWS の基礎">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AWS</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">AWS の基礎</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,24 +365,24 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AWS Foundation pages">
-  <h2><a href="ch00.html">Engineering Readers: AWS Foundation</a></h2>
+<aside class="side" id="side" aria-label="小さなアプリで学ぶ AWS の基礎 pages">
+  <h2><a href="ch00.html">小さなアプリで学ぶ AWS の基礎</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>What am I responsible for on AWS</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Why our deploy has no AWS keys</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>What we give up on Lambda</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Why Quickturn has no VPC</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>How DynamoDB finds data fast</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Why DynamoDB, not PostgreSQL</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>List the questions first</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>A crash halfway through a write</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>Why infrastructure as code</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Split what breaks from what lasts</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What happens at sign-in</span></a></li>
-    <li><a href="ch12.html" aria-current="page"><span class="n">12</span><span>Where a web app keeps tokens</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>Keeping learners apart</span></a></li>
-    <li><a href="ch14.html"><span class="n">14</span><span>Cost when nobody uses it</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>自分たちが責任を持つ範囲</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>デプロイにキーを置かない理由</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Lambda で手放すもの</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>VPC を置かない理由</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>DynamoDB が速く見つける仕組み</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>PostgreSQL でなく DynamoDB</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>先に問い合わせを書き出す</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>書き込みの途中で落ちたら</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>インフラをコードで書く理由</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>壊すものと残すものを分ける</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>サインインで起きること</span></a></li>
+    <li><a href="ch12.html" aria-current="page"><span class="n">12</span><span>トークンの置き場所</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>学習者どうしを分ける</span></a></li>
+    <li><a href="ch14.html"><span class="n">14</span><span>使われないときの費用</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../aws.html">← AWS</a><br>
@@ -397,74 +397,74 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AWS Foundation</b><span>Page 12 of 14</span></p>
-  <h1>Where should a web app keep its tokens?</h1>
-  <p class="lead">An injected script can steal a token from browser storage. HttpOnly cookies reduce direct token theft while leaving authenticated requests and CSRF to protect.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第12章 / 全14章</span></p>
+  <h1>Web アプリはトークンをどこに置くべきか</h1>
+  <p class="lead">注入されたスクリプトは、ブラウザのストレージからトークンを盗めます。HttpOnly Cookie を使えばトークンを直接盗まれる危険は減りますが、認証済みのリクエストの悪用と CSRF への対策は残ります。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>The risk in localStorage</li>
-      <li>The backend and its cookies</li>
-      <li>Forged requests</li>
-      <li>What it costs</li>
+      <li>localStorage の危険</li>
+      <li>バックエンドと Cookie</li>
+      <li>偽造されたリクエスト</li>
+      <li>この構成の代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>The risk in localStorage</h2>
-    <p>JavaScript on a page can read localStorage, including injected scripts or compromised dependencies. Persisting a refresh token there can turn a browser compromise into continued access after the page closes.</p>
+    <h2 id="s1"><span class="no">01</span>localStorage の危険</h2>
+    <p>ページ上の JavaScript は localStorage を読めます。注入されたスクリプトや、乗っ取られた依存パッケージも例外ではありません。そこにリフレッシュトークンを保存すると、ブラウザが一度侵害されただけで、ページを閉じたあとも攻撃者がアクセスし続けられるおそれがあります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 356" role="img" aria-label="A token in localStorage can be read by page scripts, is attached by the app's code, can be stolen by an XSS bug, and has different CSRF risks when sent explicitly as a Bearer token; a token in an HttpOnly cookie cannot be read by scripts, is attached by the browser, can still authorize requests made by injected code, and does need a CSRF defense.">
+    <svg viewBox="0 0 400 356" role="img" aria-label="localStorage のトークンは、ページのスクリプトから読め、アプリのコードが付けて送り、XSS のバグがあれば盗まれうる。Bearer トークンとして明示的に送る場合、CSRF の危険の性質は異なる。HttpOnly Cookie のトークンは、スクリプトから読めず、ブラウザが付けて送るが、注入されたコードが送るリクエストは認可されてしまい、CSRF 対策も必要になる。">
       <text x="104" y="24" text-anchor="middle" class="t-hd">localStorage</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">HttpOnly cookie</text>
-      <text x="16" y="56" class="t-sm">Can page scripts read it?</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">yes</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">no</text>
-      <text x="16" y="136" class="t-sm">Who attaches it?</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">our code</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the browser</text>
-      <text x="16" y="216" class="t-sm">After an XSS bug</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">token stolen</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">requests abused</text>
-      <text x="16" y="296" class="t-sm">Needs CSRF defense?</text>
-      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">depends on use</text>
-      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">yes</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">HttpOnly Cookie</text>
+      <text x="16" y="56" class="t-sm">ページのスクリプトから読めるか</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="92" text-anchor="middle">読める</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="92" text-anchor="middle" class="t-hd t-acc">読めない</text>
+      <text x="16" y="136" class="t-sm">誰が付けて送るか</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">自分たちのコード</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">ブラウザ</text>
+      <text x="16" y="216" class="t-sm">XSS のバグがあると</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">トークンを盗まれる</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">リクエストを悪用</text>
+      <text x="16" y="296" class="t-sm">CSRF 対策は必要か</text>
+      <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">使い方による</text>
+      <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">必要</text>
     </svg>
-    <figcaption>HttpOnly blocks direct cookie reads by scripts. Authenticated request abuse remains possible, and automatic cookie delivery introduces a separate CSRF responsibility.</figcaption>
+    <figcaption>HttpOnly は、スクリプトが Cookie を直接読むことを防ぎます。それでも認証済みのリクエストは悪用されえますし、Cookie が自動で送られる以上、CSRF への対策という別の責任が生じます。</figcaption>
   </figure>
-    <p>An HttpOnly cookie prevents direct script reads of that cookie value. It does not make XSS harmless: injected code can still issue authenticated requests, read permitted responses and exfiltrate data. Use cookie protection together with injection defenses and appropriately scoped sessions.</p>
+    <p>HttpOnly Cookie にすると、スクリプトはその Cookie の値を直接読めなくなります。ただし、XSS が無害になるわけではありません。注入されたコードは、認証済みのリクエストを送り、読み取りが許されたレスポンスを読み、データを外へ持ち出せます。Cookie による保護は、スクリプト注入への対策や、範囲を適切に絞ったセッションと組み合わせて使ってください。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The backend and its cookies</h2>
-    <p>Quickturn's API also acts as a backend-for-frontend for login, callback, refresh and logout. It keeps client secrets server-side and sets access, refresh and temporary sign-in cookies with explicit lifetimes and attributes.</p>
+    <h2 id="s2"><span class="no">02</span>バックエンドと Cookie</h2>
+    <p>Quickturn の API は、ログイン、コールバック、更新、ログアウトを受け持つ BFF（Backend for Frontend）も兼ねています。クライアントシークレットはサーバー側に置き、アクセストークン用、リフレッシュトークン用、サインイン中だけ使う一時的な Cookie を、有効期間と属性を明示して設定します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 360" role="img" aria-label="The __Host-access-token cookie in the center; HttpOnly means no script access, Secure means HTTPS only, SameSite=Lax means it is not sent on cross-site POSTs, and having no Domain means no sibling host can set it.">
+    <svg viewBox="0 0 400 360" role="img" aria-label="中央に __Host-access-token Cookie がある。HttpOnly はスクリプトから読めないこと、Secure は HTTPS でしか送らないこと、SameSite=Lax はクロスサイトの POST では送らないこと、Domain 属性がないことは兄弟ホストから設定できないことを意味する。">
       <line x1="100" y1="88" x2="200" y2="180" class="ln"/>
       <line x1="300" y1="88" x2="200" y2="180" class="ln"/>
       <line x1="100" y1="272" x2="200" y2="180" class="ln"/>
       <line x1="300" y1="272" x2="200" y2="180" class="ln"/>
       <rect x="6" y="16" width="188" height="72" rx="6" class="node"/>
       <text x="100" y="46" text-anchor="middle" class="t-hd">HttpOnly</text>
-      <text x="100" y="70" text-anchor="middle" class="t-sm">no script access</text>
+      <text x="100" y="70" text-anchor="middle" class="t-sm">スクリプトから読めない</text>
       <rect x="206" y="16" width="188" height="72" rx="6" class="node"/>
       <text x="300" y="46" text-anchor="middle" class="t-hd">Secure</text>
-      <text x="300" y="70" text-anchor="middle" class="t-sm">HTTPS only</text>
+      <text x="300" y="70" text-anchor="middle" class="t-sm">HTTPS のみ</text>
       <rect x="85" y="150" width="230" height="60" rx="8" class="node-acc"/>
       <text x="200" y="186" text-anchor="middle" class="t-hd t-acc">__Host-access-token</text>
       <rect x="6" y="272" width="188" height="72" rx="6" class="node"/>
       <text x="100" y="302" text-anchor="middle" class="t-hd">SameSite=Lax</text>
-      <text x="100" y="326" text-anchor="middle" class="t-sm">no cross-site POST</text>
+      <text x="100" y="326" text-anchor="middle" class="t-sm">クロスサイト POST なし</text>
       <rect x="206" y="272" width="188" height="72" rx="6" class="node"/>
-      <text x="300" y="302" text-anchor="middle" class="t-hd">No Domain</text>
-      <text x="300" y="326" text-anchor="middle" class="t-sm">no sibling hosts</text>
+      <text x="300" y="302" text-anchor="middle" class="t-hd">Domain なし</text>
+      <text x="300" y="326" text-anchor="middle" class="t-sm">兄弟ホストから設定不可</text>
     </svg>
-    <figcaption>Each attribute addresses a particular risk. The __Host- prefix makes supporting browsers enforce Secure, Path=/ and the absence of a Domain attribute.</figcaption>
+    <figcaption>属性はそれぞれ、特定の危険に対処します。__Host- という接頭辞を付けると、対応するブラウザは Secure、Path=/、Domain 属性なしの三つを強制します。</figcaption>
   </figure>
-    <p>A <code>__Host-</code> cookie requires Secure, Path=/ and no Domain attribute, reducing cookie injection from sibling subdomains. Refresh rotation and a short concurrency grace period help manage renewal, but access-token revocation behavior must be evaluated separately.</p>
+    <p><code>__Host-</code> の Cookie には Secure と Path=/ が必須で、Domain 属性は付けられません。これにより、兄弟関係にあるサブドメインから Cookie を注入される危険が減ります。リフレッシュトークンのローテーションと、同時更新に備えた短い猶予期間は更新の管理に役立ちますが、アクセストークンの失効がどう振る舞うかは別に評価する必要があります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 444" role="img" aria-label="The access token expires, the API answers 401, the page posts to refresh with its Origin checked, the backend exchanges the old refresh token, new tokens are set as cookies, and the original request is retried and succeeds.">
+    <svg viewBox="0 0 400 444" role="img" aria-label="アクセストークンの期限が切れ、API が 401 を返す。ページは Origin の確認を受けたうえで refresh に POST し、バックエンドが古いリフレッシュトークンを交換する。新しいトークンが Cookie に設定され、元のリクエストを再試行すると成功する。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -473,45 +473,45 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="328" r="6" class="dot"/>
       <circle cx="28" cy="400" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Access token expires</text>
+      <text x="64" y="46">アクセストークンの期限が切れる</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">API answers 401</text>
+      <text x="64" y="118">API が 401 を返す</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Page posts to refresh</text>
+      <text x="64" y="190">ページが refresh に POST する</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Old refresh token swapped</text>
+      <text x="64" y="262">古いリフレッシュトークンを交換</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="334">New cookies set</text>
+      <text x="64" y="334">新しい Cookie を設定</text>
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="406" class="t-hd">The retry succeeds</text>
+      <text x="64" y="406" class="t-hd">再試行が成功する</text>
     </svg>
-    <figcaption>The page tries a refresh once. If that also fails, it sends the browser to sign in again.</figcaption>
+    <figcaption>ページが更新を試みるのは1回だけです。それも失敗したら、ブラウザをサインインの画面に送り直します。</figcaption>
   </figure>
-    <p>Refresh and logout are state-changing POSTs. Expired or unusable refresh credentials send the user through sign-in again. Same-origin app and API routing simplifies delivery of these cookies.</p>
+    <p>更新とログアウトは、状態を変える POST です。リフレッシュ用の認証情報が期限切れか使えない場合は、ユーザーにもう一度サインインしてもらいます。アプリと API を同じオリジンで振り分けているので、これらの Cookie の受け渡しは単純になります。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Forged requests</h2>
-    <p>Cookies are attached automatically, which creates CSRF risk. Quickturn combines SameSite=Lax with an exact Origin allowlist on state-changing requests and a validated state value for the sign-in callback. The callback needs its own protection because it is a navigation from the identity provider.</p>
-    <p>Safe reads must not change state. Bearer-token paths have different CSRF properties because another site does not automatically possess their Authorization header. XSS and token leakage remain separate threats even when CSRF checks are correct.</p>
+    <h2 id="s3"><span class="no">03</span>偽造されたリクエスト</h2>
+    <p>Cookie は自動で付けて送られるため、CSRF の危険が生じます。Quickturn は、SameSite=Lax に加えて、状態を変えるリクエストでは Origin を許可リストと完全一致で照合し、サインインのコールバックでは検証済みの state の値を使います。コールバックは ID プロバイダーからの画面遷移なので、専用の保護が必要です。</p>
+    <p>安全なはずの読み取りで、状態を変えてはいけません。Bearer トークンを使う経路は、CSRF に対する性質が異なります。ほかのサイトは、その Authorization ヘッダーを自動的には手に入れられないからです。CSRF の確認が正しくても、XSS とトークンの漏えいは別の脅威として残ります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What it costs</h2>
-    <p>The backend now owns login, cookies and renewal, and both cookie and Bearer paths need equivalent authorization tests. Cookie size limits and local HTTPS behavior also affect implementation. Separate production origins require revisiting cookie and CORS policy rather than assuming this arrangement transfers unchanged.</p>
-    <p>An in-memory browser token can suit some threat models, while native apps use platform secure storage. Choose persistence and session design from actual risks and interaction needs. No storage choice replaces protecting the application from script injection.</p>
+    <h2 id="s4"><span class="no">04</span>この構成の代償</h2>
+    <p>この構成では、ログイン、Cookie、更新をバックエンドが受け持つことになり、Cookie と Bearer の両方の経路に同等の認可テストが必要です。Cookie のサイズの上限や、ローカル環境での HTTPS の扱いも実装に影響します。本番でオリジンを分けるなら、この構成がそのまま通用すると考えず、Cookie と CORS の方針を見直してください。</p>
+    <p>脅威モデルによっては、ブラウザのメモリ上にだけトークンを置く方法が合うこともあります。ネイティブアプリは、プラットフォームの安全なストレージを使います。トークンの保存方法とセッションの設計は、実際の危険と操作の要件から選んでください。どの保存方法を選んでも、スクリプト注入からアプリを守ることの代わりにはなりません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Tokens in localStorage can be read by any script on the page, including a compromised dependency.</li>
-      <li>A backend-for-frontend keeps tokens in HttpOnly, Secure, SameSite cookies with the __Host- prefix.</li>
-      <li>Cookies are sent automatically, so add CSRF defenses and rotate the refresh token.</li>
+      <li>localStorage のトークンは、乗っ取られた依存パッケージを含め、ページ上のどのスクリプトからも読めます。</li>
+      <li>BFF は、トークンを __Host- 接頭辞付きの HttpOnly、Secure、SameSite な Cookie に入れて扱います。</li>
+      <li>Cookie は自動で送られるので、CSRF 対策を加え、リフレッシュトークンをローテーションします。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch11.html"><span>Previous</span><b>What actually happens when a learner signs in?</b></a>
-    <a class="next" href="ch13.html"><span>Next</span><b>How do we prove one learner can't see another's data?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch11.html"><span>前へ</span><b>学習者がサインインするとき、実際に何が起きているか</b></a>
+    <a class="next" href="ch13.html"><span>次へ</span><b>ある学習者が他人のデータを見られないことを、どう確かめるか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計上の判断を説明するための架空のアプリです。2026年9月作成。</p>
 </div>
 </div>
 <script>

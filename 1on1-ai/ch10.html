@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 10 · Who pays for the tokens</title>
+<title>AI機能を本番で動かす 10 · トークン代は誰が払うか</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html" aria-current="page"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html" aria-current="page"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,100 +396,100 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 10 of 13</span></p>
-  <h1>Who pays for the tokens, and what stops a runaway bill?</h1>
-  <p class="lead">A short request can produce many tokens, so counting requests alone misses its cost. Learner entitlement and the provider’s bill need distinct records and controls.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第10章 / 全13章</span></p>
+  <h1>トークン代は誰が払い、請求の暴走は何が止めるのか</h1>
+  <p class="lead">短いリクエストでも大量のトークンを生むことがあるので、リクエストを数えるだけでは費用を見落とします。学習者の利用枠と提供元からの請求には、別々の記録と制御が必要です。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Attribution first</li>
-      <li>The ledger</li>
-      <li>Rate limits and the kill switch</li>
-      <li>What the ledger costs</li>
+      <li>まず費用の帰属を記録する</li>
+      <li>台帳</li>
+      <li>レート制限とキルスイッチ</li>
+      <li>台帳の代償</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Attribution first</h2>
-    <p>Record usage per call before trying to control it. Quickturn associates model and prompt versions, token categories, latency and estimated cost with the task and learner that caused the call.</p>
+    <h2 id="s1"><span class="no">01</span>まず費用の帰属を記録する</h2>
+    <p>使用量を制御しようとする前に、呼び出しごとに記録します。Quickturnは、モデルとプロンプトのバージョン、トークンの種類ごとの数、レイテンシ、推定費用を、その呼び出しを生んだタスクと学習者に結びつけています。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 332" role="img" aria-label="One graded answer's cost record at the center, with its attributes around it: feature, model, prompt version, tokens, learner and job key; the job key links the record to the ledger.">
+    <svg viewBox="0 0 400 332" role="img" aria-label="中央に採点1件分の費用の記録があり、その周りに属性が並びます。機能、モデル、プロンプトのバージョン、トークン、学習者、ジョブキーです。ジョブキーがこの記録を台帳に結びつけます。">
       <line x1="68" y1="72" x2="200" y2="136" class="ln"/>
       <line x1="200" y1="72" x2="200" y2="136" class="ln"/>
       <line x1="332" y1="72" x2="200" y2="136" class="ln"/>
       <line x1="68" y1="260" x2="200" y2="196" class="ln"/>
       <line x1="200" y1="260" x2="200" y2="196" class="ln"/>
       <line x1="332" y1="260" x2="200" y2="196" class="ln"/>
-      <rect x="6" y="16" width="124" height="56" rx="6" class="node"/><text x="68" y="50" text-anchor="middle">Feature</text>
-      <rect x="138" y="16" width="124" height="56" rx="6" class="node"/><text x="200" y="50" text-anchor="middle">Model</text>
-      <rect x="270" y="16" width="124" height="56" rx="6" class="node"/><text x="332" y="50" text-anchor="middle">Prompt ver.</text>
+      <rect x="6" y="16" width="124" height="56" rx="6" class="node"/><text x="68" y="50" text-anchor="middle">機能</text>
+      <rect x="138" y="16" width="124" height="56" rx="6" class="node"/><text x="200" y="50" text-anchor="middle">モデル</text>
+      <rect x="270" y="16" width="124" height="56" rx="6" class="node"/><text x="332" y="50" text-anchor="middle">プロンプト版</text>
       <rect x="100" y="136" width="200" height="60" rx="8" class="node-soft"/>
-      <text x="200" y="172" text-anchor="middle" class="t-hd">One graded answer</text>
-      <rect x="6" y="260" width="124" height="56" rx="6" class="node"/><text x="68" y="294" text-anchor="middle">Tokens</text>
-      <rect x="138" y="260" width="124" height="56" rx="6" class="node"/><text x="200" y="294" text-anchor="middle">Learner</text>
-      <rect x="270" y="260" width="124" height="56" rx="6" class="node-acc"/><text x="332" y="294" text-anchor="middle" class="t-hd t-acc">Job key</text>
+      <text x="200" y="172" text-anchor="middle" class="t-hd">採点1件の記録</text>
+      <rect x="6" y="260" width="124" height="56" rx="6" class="node"/><text x="68" y="294" text-anchor="middle">トークン</text>
+      <rect x="138" y="260" width="124" height="56" rx="6" class="node"/><text x="200" y="294" text-anchor="middle">学習者</text>
+      <rect x="270" y="260" width="124" height="56" rx="6" class="node-acc"/><text x="332" y="294" text-anchor="middle" class="t-hd t-acc">ジョブキー</text>
     </svg>
-    <figcaption>Each record also carries an estimated cost. The job key is the link to the ledger, so reconciliation can compare the recorded attempt with its reservation and settlement.</figcaption>
+    <figcaption>各記録には推定費用も入ります。ジョブキーが台帳とのつながりになるので、突き合わせの際に、記録された試行をその予約と精算に照らせます。</figcaption>
   </figure>
-    <p>Tagged application inference profiles support feature-level billing attribution. Those delayed reports answer a different question from call telemetry. Activate tags before relying on future costs to appear under them.</p>
+    <p>タグを付けたアプリケーション推論プロファイルを使えば、請求を機能単位で振り分けられます。ただし遅れて届くそのレポートが答える問いは、呼び出しごとのテレメトリーとは別のものです。今後の費用がタグごとに表示されることを当てにするなら、先にタグを有効化しておきます。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The ledger</h2>
-    <p>The usage ledger reserves an upper bound before starting billed work. A conditional write succeeds only if the learner's balance can cover the reservation. Input size, output cap and the applicable price rules must be included in the estimate.</p>
+    <h2 id="s2"><span class="no">02</span>台帳</h2>
+    <p>使用量の台帳は、課金される処理を始める前に、その上限額を予約します。条件付き書き込みは、学習者の残高で予約額を賄える場合にだけ成功します。見積もりには、入力のサイズ、出力の上限、適用される料金のルールを含める必要があります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 228" role="img" aria-label="Reserve with a conditional write that succeeds only if the balance covers the maximum cost, call Bedrock, then settle by giving back the maximum minus the actual cost.">
+    <svg viewBox="0 0 400 228" role="img" aria-label="残高が最大費用を賄える場合にだけ成功する条件付き書き込みで予約し、Bedrockを呼び、最大費用と実際の費用の差額を戻して精算します。">
       <line x1="28" y1="40" x2="28" y2="184" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
       <circle cx="28" cy="184" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Reserve if balance covers max</text>
+      <text x="64" y="46">残高が最大額を賄えれば予約</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Call Bedrock</text>
+      <text x="64" y="118">Bedrockを呼ぶ</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="190" class="t-hd">Settle: give back the rest</text>
+      <text x="64" y="190" class="t-hd">精算：残りを戻す</text>
     </svg>
-    <figcaption>The successful path records actual usage and releases any unused reservation. A crashed attempt follows the reconciliation policy below.</figcaption>
+    <figcaption>成功した経路では、実際の使用量を記録し、使わなかった予約分を解放します。途中で落ちた試行は、あとで述べる突き合わせの方針に従います。</figcaption>
   </figure>
-    <p>A stable job key identifies the reservation and eventual settlement. Successful work replaces the estimate with actual usage; failed or abandoned work needs an explicit reconciliation policy. Expiry alone does not prove that the provider performed no paid work.</p>
-    <p>Refills, including payments or monthly allowances, must also be idempotent. The ledger controls learner entitlement while the application separately bears and measures provider costs.</p>
+    <p>安定したジョブキーが、予約とその後の精算を識別します。処理が成功すれば見積もりを実際の使用量に置き換えますが、失敗した処理や放棄された処理には、明示的な突き合わせの方針が必要です。予約が期限切れになっただけでは、提供元が課金される処理をしなかった証明にはなりません。</p>
+    <p>支払いや毎月の付与枠を含め、残高の補充も冪等にする必要があります。台帳が管理するのは学習者の利用枠で、提供元への費用はアプリケーションが別に負担し、測定します。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Rate limits and the kill switch</h2>
-    <p>A request rate limit measures throughput, not token spending. Edge throttles help control traffic; application reservations control entitlement; an account-wide budget action contains wider failures.</p>
+    <h2 id="s3"><span class="no">03</span>レート制限とキルスイッチ</h2>
+    <p>リクエストのレート制限が測るのはスループットで、トークンの支出ではありません。エッジのスロットリングはトラフィックの制御に役立ち、アプリケーションの予約は利用枠を制御し、アカウント全体の予算アクションはより広い障害を食い止めます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 212" role="img" aria-label="Three guards from edge to account: an edge rate limit counts requests per client, the application ledger counts money per learner, and a Budgets action is the whole-account kill switch.">
+    <svg viewBox="0 0 400 212" role="img" aria-label="エッジからアカウントまでの3つの防御です。エッジのレート制限はクライアントごとのリクエストを数え、アプリケーションの台帳は学習者ごとの金額を数え、Budgetsアクションはアカウント全体のキルスイッチです。">
       <rect x="16" y="16" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="48">Edge rate limit: requests</text>
+      <text x="32" y="48">エッジのレート制限：リクエスト数</text>
       <rect x="16" y="76" width="368" height="52" rx="6" class="node-acc"/>
-      <text x="32" y="108" class="t-hd t-acc">Ledger: money per learner</text>
+      <text x="32" y="108" class="t-hd t-acc">台帳：学習者ごとの金額</text>
       <rect x="16" y="136" width="368" height="52" rx="6" class="node"/>
-      <text x="32" y="168">Budgets action: kill switch</text>
+      <text x="32" y="168">Budgetsアクション：キルスイッチ</text>
     </svg>
-    <figcaption>Only the middle layer knows both who is spending and how much. The three layers measure different signals, so the ledger still needs reconciliation with provider usage.</figcaption>
+    <figcaption>誰が使っているかと、いくら使っているかの両方を知っているのは、真ん中の層だけです。3つの層はそれぞれ違うシグナルを測るので、台帳と提供元の使用量の突き合わせは引き続き必要です。</figcaption>
   </figure>
-    <p>Billing lag means the account switch can activate after additional spend has occurred. It is a last resort, with a tested policy and recovery procedure, rather than an exact real-time ceiling. The three controls operate on different signals and should be used together.</p>
+    <p>請求には遅れがあるため、アカウントのスイッチが作動するのは、追加の支出が発生したあとかもしれません。これは最後の手段であり、テスト済みの方針と復旧手順を備えたものです。リアルタイムで正確に効く上限ではありません。3つの制御は違うシグナルに基づいて動くので、組み合わせて使います。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What the ledger costs</h2>
-    <p>Ledger writes, concurrency tests, expiry handling and replay protection add real work. Reserving the maximum can reject a call whose eventual actual price would have been affordable. That conservative trade prevents promising work before funds are available.</p>
-    <p>The account switch can stop legitimate use for everyone. Alerts on spending rate and per-run token limits help identify a runaway experiment sooner than a delayed monthly total. Test those limits as operational behavior, not only as arithmetic.</p>
+    <h2 id="s4"><span class="no">04</span>台帳の代償</h2>
+    <p>台帳への書き込み、並行処理のテスト、期限切れの処理、再処理の防止には、それなりの作業がかかります。最大額で予約すると、実際の料金なら払えたはずの呼び出しを断ってしまうこともあります。この保守的なトレードオフによって、資金が確保される前に処理を約束することを防いでいます。</p>
+    <p>アカウントのスイッチは、全員の正当な利用まで止めてしまうことがあります。支出の速さに対するアラートや、1回の実行あたりのトークン上限があれば、遅れて届く月の合計より早く暴走した実験に気づけます。これらの上限は計算として確かめるだけでなく、運用上の振る舞いとしてテストします。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Record every call's cost against a feature and a learner, and tag a profile per feature.</li>
-      <li>Reserve the maximum before a call and settle the actual cost after, keyed by the job.</li>
-      <li>Rate limits count requests, the ledger counts money, and a delayed Budgets action can deny later calls.</li>
+      <li>すべての呼び出しの費用を機能と学習者に結びつけて記録し、機能ごとにプロファイルへタグを付ける。</li>
+      <li>呼び出しの前に最大額を予約し、呼び出しのあとに実際の費用で精算する。どちらもジョブをキーにする。</li>
+      <li>レート制限はリクエストを数え、台帳は金額を数え、遅れて効くBudgetsアクションはそれ以降の呼び出しを拒否できる。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch09.html"><span>Previous</span><b>What if a learner types 'ignore your instructions'?</b></a>
-    <a class="next" href="ch11.html"><span>Next</span><b>What does AgentCore do that forty lines of code can't?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch09.html"><span>前へ</span><b>学習者が「指示を無視して」と入力したら</b></a>
+    <a class="next" href="ch11.html"><span>次へ</span><b>AgentCoreは、40行のコードにできない何をするのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

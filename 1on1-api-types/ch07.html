@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>API and TypeScript 07 · Where the API contract lives</title>
+<title>API と TypeScript 07 · API 契約のありか</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API &amp; TypeScript">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API と TypeScript">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>API &amp; TypeScript</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">API と TypeScript</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,21 +365,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
-  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：API と TypeScript pages">
+  <h2><a href="ch00.html">エンジニアリング読本：API と TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Which compiler flags matter</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Why not another boolean flag</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Should a function throw</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>Trust nothing at the boundary</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>REST, GraphQL or RPC</span></a></li>
-    <li><a href="ch07.html" aria-current="page"><span class="n">07</span><span>Where the API contract lives</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Change an API without breaking</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>The same request twice</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Offline when the server rules</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>Why a static SPA</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>実行時に消える型</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>効くコンパイラオプション</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>フラグでなくユニオン型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>例外か、失敗を返すか</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>境界で一度だけパース</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>REST・GraphQL・RPC</span></a></li>
+    <li><a href="ch07.html" aria-current="page"><span class="n">07</span><span>API 契約のありか</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>壊さずに API を変える</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>同じリクエストが二度</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>オフラインとサーバーのルール</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>静的 SPA を選ぶ理由</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -394,26 +394,26 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 7 of 11</span></p>
-  <h1>Where does the API contract actually live?</h1>
-  <p class="lead">A request schema changes, but the committed API document still describes its earlier shape. A shared source helps only when its generated copies and implementation agree.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第7章 / 全11章</span></p>
+  <h1>API の契約は、実際にはどこにあるのか</h1>
+  <p class="lead">リクエストのスキーマを変えたのに、コミット済みの API ドキュメントは以前の形のままです。共有の定義元が役に立つのは、そこから生成したコピーと実装が一致しているときだけです。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>One chain from one source</li>
-      <li>Design-first or code-first</li>
-      <li>Commit it, then test it</li>
-      <li>What owning the chain costs</li>
+      <li>一つの定義元からつながる流れ</li>
+      <li>デザインファーストかコードファーストか</li>
+      <li>コミットしてテストする</li>
+      <li>流れを自前で持つコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>One chain from one source</h2>
-    <p>Quickturn derives its OpenAPI document from the schemas used to parse requests. A route table supplies method, path, request, success response and error codes. The document then feeds client generation.</p>
+    <h2 id="s1"><span class="no">01</span>一つの定義元からつながる流れ</h2>
+    <p>Quickturn は、リクエストのパースに使うスキーマから OpenAPI のドキュメントを導き出しています。ルート表には、メソッド、パス、リクエスト、成功時のレスポンス、エラーコードを書きます。そのドキュメントから、クライアントのコードを生成します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Shared schemas generate a committed API document and client types. Incompatible requests can fail compilation when client code uses those changed types.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="共有スキーマから、コミットされる API ドキュメントとクライアントの型が生成されます。変更された型をクライアントのコードが使うと、互換性のないリクエストはコンパイルで失敗します。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -421,88 +421,88 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">zod schema, the server checks it</text>
+      <text x="64" y="46">zod スキーマ：サーバーが検査に使う</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">JSON Schema, made by zod</text>
+      <text x="64" y="118">zod から作る JSON Schema</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">OpenAPI document, committed</text>
+      <text x="64" y="190">OpenAPI ドキュメント（コミット済み）</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Generated client types</text>
+      <text x="64" y="262">生成されたクライアントの型</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Incompatible use fails compile</text>
+      <text x="64" y="334" class="t-hd">非互換な使い方はコンパイルで失敗</text>
     </svg>
-    <figcaption>Shared schemas reduce duplicated shape definitions. Conversion, route metadata and implementation still need checks before the document can accurately describe server behavior.</figcaption>
+    <figcaption>共有スキーマを使えば、形の定義を重複して書く量が減ります。それでも、ドキュメントがサーバーの振る舞いを正確に表すには、変換、ルートのメタデータ、実装をそれぞれ検査する必要があります。</figcaption>
   </figure>
-    <p>OpenAPI 3.1 uses JSON Schema for body shapes. The schema conversion must support the features the project uses; runtime-only transformations need special care. Web request objects are checked with satisfies against generated types, while Swift and Kotlin consume the same published contract.</p>
-    <pre><code>// breaks if the path or the request shape changes
+    <p>OpenAPI 3.1 は、ボディの形を表すのに JSON Schema を使います。スキーマの変換は、プロジェクトが使う機能に対応していなければならず、実行時にしか働かない変換には特に注意が必要です。Web のリクエストオブジェクトは生成された型に対して satisfies で検査し、Swift と Kotlin は同じ公開済みの契約を使います。</p>
+    <pre><code>// パスかリクエストの形が変わるとコンパイルが通らなくなる
 const settings = await call&lt;GetSettingsResponses&gt;(
   "GET",
   { url: "/v1/settings" } satisfies GetSettingsData,
 );</code></pre>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Design-first or code-first</h2>
-    <p>Design-first starts with a specification that several teams can review before implementation. Code-first derives it from code and reduces duplication between the validator and document. Quickturn writes schemas in a dedicated contract package before handlers, combining an early contract discussion with generation from executable definitions.</p>
+    <h2 id="s2"><span class="no">02</span>デザインファーストかコードファーストか</h2>
+    <p>デザインファーストでは、まず仕様書を書き、実装の前に複数のチームでレビューします。コードファーストでは、仕様をコードから導き出し、バリデーターとドキュメントの重複を減らします。Quickturn は、ハンドラーより先に専用の契約パッケージでスキーマを書きます。早い段階で契約について議論しつつ、実行可能な定義から生成するという、両方の利点を組み合わせたやり方です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="Design-first keeps the spec as the source of truth and teams review the spec, but drift can happen between the spec and the code; code-first keeps the schemas as the source and reviewers read code and the generated diff, and drift can happen between generated files and the source.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Design-first</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd">Code-first</text>
-      <text x="16" y="56" class="t-sm">Source of truth</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">the spec</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">the schemas</text>
-      <text x="16" y="136" class="t-sm">Reviewers read</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">the spec</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">the generated diff</text>
-      <text x="16" y="216" class="t-sm">Where drift can happen</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle">spec vs code</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle">files vs source</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="デザインファーストでは仕様書が唯一の正で、チームは仕様書をレビューしますが、仕様書とコードのあいだでずれが起こりえます。コードファーストではスキーマが唯一の正で、レビューする人はコードと生成された差分を読み、生成されたファイルと定義元のあいだでずれが起こりえます。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">デザインファースト</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd">コードファースト</text>
+      <text x="16" y="56" class="t-sm">唯一の正</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">仕様書</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">スキーマ</text>
+      <text x="16" y="136" class="t-sm">レビューで読むもの</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">仕様書</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">生成された差分</text>
+      <text x="16" y="216" class="t-sm">ずれが起こりうる場所</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="104" y="252" text-anchor="middle">仕様書とコード</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle">ファイルと定義元</text>
     </svg>
-    <figcaption>Neither side wins everywhere. The bottom row decides: each approach has one gap where copies can disagree, and you need a test on that gap.</figcaption>
+    <figcaption>どちらが常に優れているわけではありません。決め手は「ずれが起こりうる場所」の行です。どちらの方式にも、コピー同士が食い違いうる隙間が一つあり、その隙間にはテストが必要です。</figcaption>
   </figure>
-    <p>Generation still leaves a possible gap between source and committed artifacts. A schema edit does not automatically mean the published document or client types have been refreshed. That gap needs a check.</p>
+    <p>生成を使っても、定義元とコミットされた生成物のあいだには隙間が残りえます。スキーマを編集しても、公開されるドキュメントやクライアントの型が自動で更新されるとは限りません。この隙間にはチェックが必要です。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Commit it, then test it</h2>
-    <p>Committed generated files make the externally visible change reviewable. CI regenerates the document and client types in a temporary location and compares them with their committed versions. It fails on drift instead of silently rewriting or committing output.</p>
+    <h2 id="s3"><span class="no">03</span>コミットしてテストする</h2>
+    <p>生成したファイルをコミットしておけば、外から見える変更をレビューできます。CI はドキュメントとクライアントの型を一時的な場所に生成し直し、コミット済みのものと比較します。ずれがあれば、出力を黙って書き換えたりコミットしたりせず、失敗として報告します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="A developer edits a schema and pushes; CI regenerates and compares; on a mismatch it sends the change back, the developer runs the generate command and commits, and CI passes with the diff in the pull request.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="開発者がスキーマを編集して push すると、CI が生成し直して比較します。食い違いがあれば変更を差し戻し、開発者が生成コマンドを実行してコミットすると、CI が通り、差分がプルリクエストに載ります。">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
-      <text x="96" y="82" text-anchor="middle" class="t-hd">Developer</text>
-      <text x="96" y="104" text-anchor="middle" class="t-sm">edits a schema</text>
+      <text x="96" y="82" text-anchor="middle" class="t-hd">開発者</text>
+      <text x="96" y="104" text-anchor="middle" class="t-sm">スキーマを編集</text>
       <rect x="224" y="56" width="160" height="60" rx="6" class="node"/>
       <text x="304" y="82" text-anchor="middle" class="t-hd">CI</text>
-      <text x="304" y="104" text-anchor="middle" class="t-sm">regenerates</text>
+      <text x="304" y="104" text-anchor="middle" class="t-sm">生成し直す</text>
       <path d="M 140 56 C 160 12, 240 12, 260 56" class="ln" fill="none" marker-end="url(#arw)"/>
       <text x="200" y="50" text-anchor="middle" class="t-sm">push</text>
       <path d="M 260 116 C 240 160, 160 160, 140 116" class="ln" fill="none" marker-end="url(#arw)"/>
-      <text x="200" y="180" text-anchor="middle" class="t-sm">mismatch: run generate,</text>
-      <text x="200" y="200" text-anchor="middle" class="t-sm">commit the new file</text>
+      <text x="200" y="180" text-anchor="middle" class="t-sm">不一致なら生成コマンドを実行し、</text>
+      <text x="200" y="200" text-anchor="middle" class="t-sm">新しいファイルをコミット</text>
       <rect x="64" y="224" width="272" height="56" rx="6" class="node-acc"/>
-      <text x="200" y="258" text-anchor="middle" class="t-hd">CI passes, diff in the PR</text>
+      <text x="200" y="258" text-anchor="middle" class="t-hd">CI が通り、差分が PR に載る</text>
     </svg>
-    <figcaption>The loop only ends when the committed file matches the schemas. When it ends, the contract change is in the pull request for review.</figcaption>
+    <figcaption>このループは、コミットされたファイルがスキーマと一致したときにだけ終わります。終わった時点で、契約の変更はプルリクエストに入り、レビューを受けられる状態になっています。</figcaption>
   </figure>
-    <p>Locally, a regeneration command updates the files so the author can inspect and commit the intended contract diff. That step prevents an accidental rename from appearing only as an unreviewed bot correction.</p>
-    <p>Compile-time agreement between response schemas and application view types checks shape, not population. An optional field that is never actually filled still requires a behavioral test.</p>
+    <p>ローカルでは、生成コマンドでファイルを更新し、意図どおりの契約の差分になっているかを作成者が確かめてからコミットします。この手順があるので、うっかりした名前の変更が、誰もレビューしていないボットの修正としてだけ現れることを防げます。</p>
+    <p>レスポンスのスキーマとアプリケーションのビューの型がコンパイル時に一致していても、確かめられるのは形だけで、値が実際に入るかどうかではありません。省略可能なフィールドに実際には一度も値が入らないといった問題は、振る舞いのテストで確かめる必要があります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What owning the chain costs</h2>
-    <p>Owning a small document builder avoids another integration dependency but creates maintenance work. Security schemes, headers and examples must be represented explicitly, and generated diffs need review.</p>
-    <p>Several consumer teams may favor specification-first review. Either approach needs a checked chain from agreed contract to validator and client output. A handwritten specification beside independent, unchecked validators leaves two sources that can drift.</p>
+    <h2 id="s4"><span class="no">04</span>流れを自前で持つコスト</h2>
+    <p>小さなドキュメント生成の仕組みを自前で持てば、連携のための依存を一つ増やさずに済みますが、保守の仕事が生まれます。セキュリティスキーム、ヘッダー、例を明示的に表現する必要があり、生成された差分のレビューも欠かせません。</p>
+    <p>利用する側のチームが複数あるなら、仕様書を先に書いてレビューするやり方が向くかもしれません。どちらの方式でも、合意した契約からバリデーターとクライアントの出力までが、チェックされた流れでつながっている必要があります。手書きの仕様書の横に、チェックされていない独立したバリデーターがあると、ずれうる定義元が二つ残ります。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Shared schemas and route definitions generate the document and client types; drift checks and behavioral tests verify different parts of that chain.</li>
-      <li>Commit the generated files so every contract change is a diff that reviewers read.</li>
-      <li>Test every generated copy for drift; design-first fits when several teams must agree first.</li>
+      <li>共有のスキーマとルート定義から、ドキュメントとクライアントの型を生成します。ずれのチェックと振る舞いのテストは、その流れの別々の部分を確かめます。</li>
+      <li>生成したファイルをコミットし、契約の変更がすべて、レビューで読まれる差分になるようにします。</li>
+      <li>生成したコピーはすべてずれをテストします。複数のチームが先に合意しなければならないなら、デザインファーストが向いています。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch06.html"><span>Previous</span><b>REST, GraphQL or RPC: how do you choose?</b></a>
-    <a class="next" href="ch08.html"><span>Next</span><b>How do you change an API without breaking old apps?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch06.html"><span>前へ</span><b>REST・GraphQL・RPC をどう選ぶか</b></a>
+    <a class="next" href="ch08.html"><span>次へ</span><b>古いアプリを壊さずに API を変えるには</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>

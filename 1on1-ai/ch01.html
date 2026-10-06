@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>AI in Production 01 · Does it need to be an agent</title>
+<title>AI機能を本番で動かす 01 · エージェントは必要か</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-4">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="AI in Production">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-ai" data-label="本番のAI">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>AI in Production</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">本番のAI</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,23 +365,23 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: AI in Production pages">
-  <h2><a href="ch00.html">Engineering Readers: AI in Production</a></h2>
+<aside class="side" id="side" aria-label="AI機能を本番で動かす pages">
+  <h2><a href="ch00.html">AI機能を本番で動かす</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html" aria-current="page"><span class="n">01</span><span>Does it need to be an agent</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Paying for one LLM call</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Inference profiles on Bedrock</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>A type instead of a paragraph</span></a></li>
-    <li><a href="ch05.html"><span class="n">05</span><span>One port per LLM task</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>Keep the grader off the drill</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Knowing grading got worse</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Where evals run</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>When a learner attacks the prompt</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Who pays for the tokens</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>What AgentCore adds</span></a></li>
-    <li><a href="ch12.html"><span class="n">12</span><span>Whose rights an agent uses</span></a></li>
-    <li><a href="ch13.html"><span class="n">13</span><span>A machine reviewing cards</span></a></li>
+    <li><a href="ch01.html" aria-current="page"><span class="n">01</span><span>エージェントは必要か</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>LLM呼び出し1回の費用</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>Bedrockの推論プロファイル</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>文章ではなく型を返す</span></a></li>
+    <li><a href="ch05.html"><span class="n">05</span><span>タスクごとのポート</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>ドリルを採点から切り離す</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>採点の悪化に気づく</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>評価を動かす場所</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>学習者がプロンプトを攻撃したら</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>トークン代は誰が払うか</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>AgentCoreが加えるもの</span></a></li>
+    <li><a href="ch12.html"><span class="n">12</span><span>エージェントが使う権限</span></a></li>
+    <li><a href="ch13.html"><span class="n">13</span><span>機械によるカードのレビュー</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -396,49 +396,49 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: AI in Production</b><span>Page 1 of 13</span></p>
-  <h1>Does every AI feature need to be an agent?</h1>
-  <p class="lead">Grading has a known input and verdict, while a tutor may need different lookups for each question. Those tasks need different amounts of model control.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>AI機能を本番で動かす</b><span>第1章 / 全13章</span></p>
+  <h1>AI機能はすべてエージェントにすべきか</h1>
+  <p class="lead">採点では入力も返す判定も決まっていますが、チューターは質問ごとに違う情報を調べる必要があるかもしれません。この2つの仕事では、モデルに任せる判断の量が違います。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Three words, plainly</li>
-      <li>The ladder</li>
-      <li>What an agent costs</li>
-      <li>A helpdesk that split its traffic</li>
+      <li>3つの言葉を平たく言うと</li>
+      <li>はしごの段</li>
+      <li>エージェントにかかるコスト</li>
+      <li>問い合わせを振り分けたヘルプデスク</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Three words, plainly</h2>
-    <p>Quickturn needs to grade a typed answer against a rubric. That task may require one model call: input goes in and a verdict comes back. A workflow coordinates several steps whose order is determined by code. An agent gives the model some choice about the next step or tool.</p>
+    <h2 id="s1"><span class="no">01</span>3つの言葉を平たく言うと</h2>
+    <p>Quickturnでは、入力された解答をルーブリックに照らして採点する必要があります。この仕事なら、モデルの呼び出しは1回で足りるかもしれません。入力を渡せば、判定が返ってきます。ワークフローは複数のステップを組み合わせたもので、その順序はコードが決めます。エージェントでは、次のステップや使うツールをある程度モデルが選びます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The model asks for a tool, the harness runs it and returns the result, and the loop repeats until the model decides to stop and answer.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="モデルがツールを要求し、ハーネスがそれを実行して結果を返します。モデルが止めて答えると決めるまで、このループが繰り返されます。">
       <rect x="16" y="56" width="160" height="60" rx="6" class="node"/>
-      <text x="96" y="82" text-anchor="middle" class="t-hd">Model</text>
-      <text x="96" y="104" text-anchor="middle" class="t-sm">picks next step</text>
+      <text x="96" y="82" text-anchor="middle" class="t-hd">モデル</text>
+      <text x="96" y="104" text-anchor="middle" class="t-sm">次の手を選ぶ</text>
       <rect x="224" y="56" width="160" height="60" rx="6" class="node"/>
-      <text x="304" y="82" text-anchor="middle" class="t-hd">Harness</text>
-      <text x="304" y="104" text-anchor="middle" class="t-sm">runs the tool</text>
+      <text x="304" y="82" text-anchor="middle" class="t-hd">ハーネス</text>
+      <text x="304" y="104" text-anchor="middle" class="t-sm">ツールを実行</text>
       <path d="M 140 56 C 160 26, 240 26, 260 56" class="ln" fill="none" marker-end="url(#arw)"/>
-      <text x="200" y="22" text-anchor="middle" class="t-sm">asks for a tool</text>
+      <text x="200" y="22" text-anchor="middle" class="t-sm">ツールを要求</text>
       <path d="M 260 116 C 240 160, 160 160, 140 116" class="ln" fill="none" marker-end="url(#arw)"/>
-      <text x="200" y="180" text-anchor="middle" class="t-sm">tool result</text>
+      <text x="200" y="180" text-anchor="middle" class="t-sm">ツールの結果</text>
       <line x1="96" y1="116" x2="96" y2="224" class="ln" marker-end="url(#arw)"/>
       <rect x="64" y="224" width="272" height="56" rx="6" class="node-acc"/>
-      <text x="200" y="258" text-anchor="middle" class="t-hd">Model decides to stop</text>
+      <text x="200" y="258" text-anchor="middle" class="t-hd">モデルが終了を決める</text>
     </svg>
-    <figcaption>Everything in the loop is ordinary code except one step. The model chooses a next action or a finish signal within limits enforced by the harness.</figcaption>
+    <figcaption>ループの中は、1つのステップを除いて普通のコードです。モデルは、ハーネスが課す制限の範囲で、次の行動か終了の合図を選びます。</figcaption>
   </figure>
-    <p>The surrounding harness executes requested tools, returns their results and enforces limits. A tutor may choose whether to inspect recent mistakes before answering. A grader with a known input and output does not need that open-ended loop.</p>
+    <p>モデルを取り巻くハーネスは、要求されたツールを実行し、結果を返し、制限を守らせます。チューターなら、答える前に最近の間違いを確認するかどうかを自分で選べます。入力と出力が決まっている採点には、こうした自由なループは要りません。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>The ladder</h2>
-    <p>Start with the simplest adequate interaction: one call, a chain, a router or a controlled workflow. Parallel calls and a second model checking output can still be workflows when code owns the plan.</p>
+    <h2 id="s2"><span class="no">02</span>はしごの段</h2>
+    <p>まずは用が足りるいちばん単純なやり取りから始めます。1回の呼び出し、チェーン、ルーター、管理されたワークフローのいずれかです。呼び出しを並列にしたり、別のモデルに出力を確認させたりしても、計画をコードが握っている限りはワークフローです。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="A ladder from a single call, to a prompt chain, to a router, to a fixed workflow, to an agent; these examples give the model different decisions, while the surrounding code defines their limits.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="1回の呼び出し、プロンプトチェーン、ルーター、固定のワークフロー、エージェントと並ぶはしごです。どの形でもモデルが決める内容は違い、その範囲は周りのコードが決めます。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -446,60 +446,60 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Single call: the answer</text>
+      <text x="64" y="46">1回の呼び出し：答え</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">Chain: each step's output</text>
+      <text x="64" y="118">チェーン：各ステップの出力</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">Router: which path to take</text>
+      <text x="64" y="190">ルーター：どの経路に進むか</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Workflow: parts inside fixed steps</text>
+      <text x="64" y="262">ワークフロー：固定手順の一部</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">Agent: the steps themselves</text>
+      <text x="64" y="334" class="t-hd">エージェント：手順そのもの</text>
     </svg>
-    <figcaption>Each label identifies a possible model decision. These shapes are alternatives to compare, rather than required stages on a path toward an agent.</figcaption>
+    <figcaption>各ラベルは、モデルに任せうる判断を示しています。これらは見比べて選ぶ候補であり、エージェントへ向かって順に通る段階ではありません。</figcaption>
   </figure>
-    <p>Quickturn uses one call for grading, a generation-and-review workflow for cards, and an agent for the tutor's variable multi-turn lookups. Its core timed drill remains a deterministic application flow.</p>
+    <p>Quickturnでは、採点に1回の呼び出し、カードには生成とレビューのワークフロー、チューターの毎回違う複数ターンの調べものにはエージェントを使っています。中心となる時間制限つきのドリルは、決定的なアプリケーションの処理のままです。</p>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>What an agent costs</h2>
-    <p>An agent can take different paths for the same request, increasing variable latency, cost and testing difficulty. Each tool adds an action that untrusted input might influence. Define turn, time and spending limits even when the model is allowed to choose steps.</p>
+    <h2 id="s3"><span class="no">03</span>エージェントにかかるコスト</h2>
+    <p>エージェントは同じ依頼に対して違う経路をたどることがあり、そのぶんレイテンシと費用がばらつき、テストも難しくなります。ツールを1つ足すたびに、信頼できない入力に左右されうる操作も1つ増えます。手順の選択をモデルに任せる場合でも、ターン数、時間、支出の上限は決めておきます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of whether the steps are unknown in advance against whether the task needs several turns with tools: known steps in one turn is a single call or a fixed workflow, where grading and card generation sit; unknown steps in one turn is a router; known steps over several turns is a scripted chat; unknown steps over several turns is an agent, where the tutor sits.">
-      <text x="44" y="18" class="t-sm">↑ Several turns with tools</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="手順が事前に分からないかどうかと、ツールを使う複数ターンが必要かどうかの2軸の図です。手順が分かっていて1ターンなら1回の呼び出しか固定のワークフローで、採点とカード生成がここに入ります。手順が分からず1ターンならルーター、手順が分かっていて複数ターンなら台本どおりの会話、手順が分からず複数ターンならエージェントで、チューターがここに入ります。">
+      <text x="44" y="18" class="t-sm">↑ ツールを使う複数ターン</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Steps unknown in advance →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">手順が事前に分からない →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="112" text-anchor="middle">Scripted chat</text>
+      <text x="134" y="112" text-anchor="middle">台本どおりの会話</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="302" y="100" text-anchor="middle">Agent</text><text x="302" y="124" text-anchor="middle" class="t-sm">the tutor</text>
+      <text x="302" y="100" text-anchor="middle">エージェント</text><text x="302" y="124" text-anchor="middle" class="t-sm">チューター</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-acc"/>
-      <text x="134" y="224" text-anchor="middle" class="t-hd t-acc">One call or</text><text x="134" y="248" text-anchor="middle" class="t-hd t-acc">workflow</text><text x="134" y="276" text-anchor="middle" class="t-sm">grading,</text><text x="134" y="298" text-anchor="middle" class="t-sm">card generation</text>
+      <text x="134" y="224" text-anchor="middle" class="t-hd t-acc">1回の呼び出し</text><text x="134" y="248" text-anchor="middle" class="t-hd t-acc">かワークフロー</text><text x="134" y="276" text-anchor="middle" class="t-sm">採点、</text><text x="134" y="298" text-anchor="middle" class="t-sm">カード生成</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="302" y="260" text-anchor="middle">Router</text>
+      <text x="302" y="260" text-anchor="middle">ルーター</text>
     </svg>
-    <figcaption>Most of Quickturn's AI work sits bottom left. The tutor’s variable tool use makes the agent option relevant; conversation length alone does not decide it.</figcaption>
+    <figcaption>QuickturnのAIの仕事の大半は左下に入ります。チューターでエージェントが候補になるのは、使うツールが毎回変わるからです。会話が長いことだけでは決まりません。</figcaption>
   </figure>
-    <p>A fixed workflow is easier to compare against expected results. A router can handle variation without giving every request a general agent. A helpdesk, for example, may route ordinary password resets to a known workflow and reserve open-ended investigation for unusual cases.</p>
+    <p>固定のワークフローなら、期待する結果と比べて確かめやすくなります。ルーターを使えば、すべての依頼に汎用のエージェントを割り当てなくても、ばらつきに対応できます。たとえばヘルプデスクなら、よくあるパスワードの再設定は決まったワークフローへ回し、自由な調査は珍しいケースのために取っておけます。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>A helpdesk that split its traffic</h2>
-    <p>The helpdesk example also needs evaluation of the router. Past tickets can be labeled with the route a person chose; uncertain cases can escalate. Measure latency, cost and task success by route rather than assume the agent is always the more capable option.</p>
-    <p>A multi-turn conversation does not itself require an agent. Guided sign-up can span several turns while code determines each step. Introduce model-directed tool use when the possible next actions genuinely depend on information that cannot be planned beforehand.</p>
+    <h2 id="s4"><span class="no">04</span>問い合わせを振り分けたヘルプデスク</h2>
+    <p>このヘルプデスクの例では、ルーター自体の評価も必要です。過去のチケットに担当者が選んだ経路をラベルとして付けておき、判断に迷うケースは人に回せるようにします。エージェントのほうが常に有能だと決めつけず、経路ごとにレイテンシ、費用、タスクの成功率を測ります。</p>
+    <p>複数ターンの会話だからといって、それだけでエージェントが必要になるわけではありません。会員登録の案内は何ターンにもわたりますが、各ステップはコードが決めています。モデルにツールを選ばせるのは、次に取りうる行動が、事前に計画できない情報に本当に左右されるときです。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>A call answers once, a workflow runs steps our code chooses, and an agent lets the model choose the steps.</li>
-      <li>Give the model the decisions the task requires, and keep planned steps and limits in code.</li>
-      <li>Consider an agent when variable tool choices are useful, and evaluate its cost and success against simpler routes.</li>
+      <li>1回の呼び出しは一度だけ答え、ワークフローはコードが選んだステップを実行し、エージェントはステップの選択をモデルに任せる。</li>
+      <li>モデルにはタスクに必要な判断だけを渡し、計画済みの手順と制限はコードに残す。</li>
+      <li>エージェントは毎回違うツール選択が役立つときに検討し、その費用と成功率をより単純な経路と比べて評価する。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch00.html"><span>Previous</span><b>Contents</b></a>
-    <a class="next" href="ch02.html"><span>Next</span><b>What am I actually paying for in one LLM call?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch00.html"><span>前へ</span><b>目次</b></a>
+    <a class="next" href="ch02.html"><span>次へ</span><b>LLMを1回呼ぶと、何にお金を払っているのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturnは、設計判断を説明するための架空のアプリケーションです。2026年9月作成。</p>
 </div>
 </div>
 <script>

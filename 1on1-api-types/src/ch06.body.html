@@ -1,89 +1,89 @@
-<!-- title: API and TypeScript 06 · REST, GraphQL or RPC | accent: reach -->
+<!-- title: API と TypeScript 06 · REST・GraphQL・RPC | accent: reach -->
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 6 of 11</span></p>
-  <h1>REST, GraphQL or RPC: how do you choose?</h1>
-  <p class="lead">Quickturn serves TypeScript, Swift and Kotlin clients with predictable screen reads. Those clients need a contract they can share without sharing the server language.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第6章 / 全11章</span></p>
+  <h1>REST・GraphQL・RPC をどう選ぶか</h1>
+  <p class="lead">Quickturn は、TypeScript・Swift・Kotlin のクライアントに、画面ごとに決まった形のデータを返しています。これらのクライアントには、サーバーと同じ言語を使わなくても共有できる契約が必要です。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>What REST really is</li>
-      <li>Three families side by side</li>
-      <li>Why we chose REST</li>
-      <li>An agent calls the same commands</li>
+      <li>REST とは何か</li>
+      <li>三つの方式を並べる</li>
+      <li>REST を選んだ理由</li>
+      <li>エージェントも同じコマンドを呼ぶ</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>What REST really is</h2>
-    <p>REST is an architectural style, not merely JSON with GET and POST. Its constraints include a uniform interface, stateless interactions and cache semantics. Quickturn uses resource URLs, standard HTTP methods and statuses, with a published OpenAPI contract.</p>
-    <p>It does not implement hypermedia-driven navigation, so its API follows a common resource-oriented subset rather than every constraint of Fielding's REST model. The useful design question is which interaction and compatibility needs that subset serves.</p>
+    <h2 id="s1"><span class="no">01</span>REST とは何か</h2>
+    <p>REST はアーキテクチャのスタイルであり、JSON を GET と POST でやり取りすることだけを指すわけではありません。その制約には、統一インターフェース、ステートレスなやり取り、キャッシュのセマンティクスが含まれます。Quickturn は、リソースの URL、標準の HTTP メソッドとステータスを使い、OpenAPI の契約を公開しています。</p>
+    <p>ハイパーメディアによる遷移は実装していないので、Quickturn の API は Fielding の REST モデルの制約をすべて満たすわけではありません。広く使われている、リソース指向の部分集合に従っています。設計で問うべきなのは、その部分集合がどんなやり取りと互換性の要件に応えるのかです。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Three families side by side</h2>
-    <p>REST, GraphQL and RPC offer different ways to expose capabilities. GraphQL lets consumers choose fields; RPC names operations directly. TypeScript-oriented RPC tools can closely connect server and browser types.</p>
+    <h2 id="s2"><span class="no">02</span>三つの方式を並べる</h2>
+    <p>REST・GraphQL・RPC は、機能を公開する方法がそれぞれ異なります。GraphQL では利用側がフィールドを選び、RPC では操作を直接名前で呼びます。TypeScript 向けの RPC ツールを使うと、サーバーとブラウザの型を密接につなげられます。</p>
   <dl class="terms">
-    <dt>REST with OpenAPI</dt><dd>Any client language. The contract is an OpenAPI document. The server fixes each read's shape. HTTP caching works as normal. The server team runs ordinary HTTP routes.</dd>
-    <dt>GraphQL</dt><dd>Any client language. The contract is a GraphQL schema. The client asks for exactly the fields it wants. HTTP caching is harder, since most queries are POSTs to one URL. The server team runs resolvers, one small function per field.</dd>
-    <dt>RPC</dt><dd>The tRPC library serves TypeScript clients only. It shares types straight from the server code. The gRPC framework serves many languages, with a contract in protocol buffers. Browsers need a proxy or a special protocol to call it.</dd>
+    <dt>OpenAPI を使う REST</dt><dd>クライアントの言語を選びません。契約は OpenAPI のドキュメントです。読み取りの形はサーバーが決め、HTTP キャッシュは通常どおり使えます。サーバー側のチームは、ふつうの HTTP ルートを運用します。</dd>
+    <dt>GraphQL</dt><dd>クライアントの言語を選びません。契約は GraphQL のスキーマです。クライアントは必要なフィールドだけを指定して取得します。ほとんどのクエリが一つの URL への POST になるため、HTTP キャッシュは使いにくくなります。サーバー側のチームは、フィールドごとの小さな関数であるリゾルバーを運用します。</dd>
+    <dt>RPC</dt><dd>tRPC ライブラリが対応するのは TypeScript のクライアントだけで、サーバーのコードから型をそのまま共有します。gRPC フレームワークは多くの言語に対応し、契約を Protocol Buffers で書きます。ブラウザから呼ぶには、プロキシか専用のプロトコルが必要です。</dd>
   </dl>
-    <p>Quickturn has TypeScript, Swift and Kotlin clients and a small number of predictable screen shapes. TypeScript types alone do not provide native clients with a language-neutral contract. GraphQL would support all three, but much of its flexible query surface would currently go unused.</p>
+    <p>Quickturn には TypeScript・Swift・Kotlin のクライアントがあり、画面のデータの形は少数で予測しやすいものです。TypeScript の型だけでは、ネイティブのクライアントに言語に依存しない契約を渡せません。GraphQL なら三つすべてに対応できますが、柔軟なクエリ機能の多くは、今のところ使われないままになります。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 366" role="img" aria-label="A two-by-two of client languages against read shapes: TypeScript clients with few fixed reads suit tRPC, several languages with few fixed reads suit REST with OpenAPI, several languages with many varied reads suit GraphQL, and TypeScript with many reads suits tRPC or GraphQL.">
-      <text x="44" y="18" class="t-sm">↑ Read shapes: many, varied</text>
+    <svg viewBox="0 0 400 366" role="img" aria-label="クライアントの言語と読み取りの形を軸にした2×2の図です。TypeScript のクライアントで決まった読み取りが少なければ tRPC、複数の言語で決まった読み取りが少なければ OpenAPI を使う REST、複数の言語で多様な読み取りが多ければ GraphQL、TypeScript で読み取りが多ければ tRPC か GraphQL が向いています。">
+      <text x="44" y="18" class="t-sm">↑ 読み取りの形：多く、多様</text>
       <line x1="44" y1="330" x2="44" y2="28" class="ln-base" marker-end="url(#arw)"/>
       <line x1="44" y1="330" x2="390" y2="330" class="ln-base" marker-end="url(#arw)"/>
-      <text x="390" y="356" text-anchor="end" class="t-sm">Client languages: several →</text>
+      <text x="390" y="356" text-anchor="end" class="t-sm">クライアントの言語：複数 →</text>
       <rect x="54" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="134" y="100" text-anchor="middle">tRPC or</text><text x="134" y="124" text-anchor="middle">GraphQL</text>
+      <text x="134" y="100" text-anchor="middle">tRPC か</text><text x="134" y="124" text-anchor="middle">GraphQL</text>
       <rect x="222" y="36" width="160" height="140" rx="6" class="node-soft"/>
-      <text x="302" y="100" text-anchor="middle">GraphQL</text><text x="302" y="124" text-anchor="middle" class="t-sm">many clients</text>
+      <text x="302" y="100" text-anchor="middle">GraphQL</text><text x="302" y="124" text-anchor="middle" class="t-sm">多数のクライアント</text>
       <rect x="54" y="184" width="160" height="138" rx="6" class="node-soft"/>
-      <text x="134" y="248" text-anchor="middle">tRPC</text><text x="134" y="272" text-anchor="middle" class="t-sm">TypeScript only</text>
+      <text x="134" y="248" text-anchor="middle">tRPC</text><text x="134" y="272" text-anchor="middle" class="t-sm">TypeScript のみ</text>
       <rect x="222" y="184" width="160" height="138" rx="6" class="node-acc"/>
       <text x="302" y="248" text-anchor="middle" class="t-hd t-acc">REST+OpenAPI</text><text x="302" y="272" text-anchor="middle" class="t-sm">Quickturn</text>
     </svg>
-    <figcaption>Client languages and read shapes help compare these options. Quickturn's predictable reads and multiple languages favor the shown HTTP contract, alongside its ownership requirements.</figcaption>
+    <figcaption>クライアントの言語と読み取りの形を軸にすると、これらの方式を比べやすくなります。Quickturn は読み取りが予測しやすく、クライアントの言語も複数なので、誰が何を管理するかという要件も踏まえて、REST+OpenAPI の HTTP 契約が向いています。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Why we chose REST</h2>
-    <p>Quickturn chose HTTP resource endpoints and OpenAPI because independently deployed clients can generate types or clients from the same document. GraphQL would add resolvers and another caching model; browser gRPC would add protocol or proxy considerations.</p>
-    <p>REST can over-fetch or require several calls. Quickturn uses a fixed view endpoint for each screen, such as one home response containing the required data. The cost is more endpoint contracts to keep compatible.</p>
-    <p>A TypeScript-only internal tool controlled by one team could reasonably choose tRPC. The decision follows client languages, ownership and expected lifetime.</p>
+    <h2 id="s3"><span class="no">03</span>REST を選んだ理由</h2>
+    <p>Quickturn が HTTP のリソースエンドポイントと OpenAPI を選んだのは、別々にデプロイされるクライアントが、同じドキュメントから型やクライアントを生成できるからです。GraphQL ならリゾルバーと別のキャッシュモデルが増え、ブラウザからの gRPC ならプロトコルやプロキシについての検討が増えます。</p>
+    <p>REST では、余分なデータまで取得したり、何度も呼び出しが必要になったりすることがあります。Quickturn は画面ごとに、決まった形のビュー用エンドポイントを用意しています。たとえばホーム画面には、必要なデータをまとめた一つのレスポンスを返します。その代わり、互換性を保たなければならないエンドポイントの契約が増えます。</p>
+    <p>一つのチームが管理する TypeScript だけの社内ツールなら、tRPC を選ぶのも妥当です。判断は、クライアントの言語、誰が管理するか、どれだけ長く使うかで決まります。</p>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>An agent calls the same commands</h2>
-    <p>The tutor agent exposes selected commands and queries through MCP tools. A gateway adapts those tool calls to the same application operations used by ordinary clients.</p>
+    <h2 id="s4"><span class="no">04</span>エージェントも同じコマンドを呼ぶ</h2>
+    <p>チューターエージェントは、選んだコマンドとクエリを MCP のツールとして公開しています。ゲートウェイがそのツール呼び出しを、通常のクライアントが使うのと同じアプリケーションの操作に変換します。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="One API of commands and queries sits in the center; the web app and the mobile apps above it and the tutor agent through MCP tools below it all reach the same rules and the same authorization check.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="中央にコマンドとクエリからなる一つの API があります。上の Web アプリとモバイルアプリも、下の MCP ツール経由のチューターエージェントも、同じルールと同じ認可チェックにたどり着きます。">
       <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
       <line x1="296" y1="76" x2="240" y2="118" class="ln"/>
       <line x1="200" y1="166" x2="200" y2="196" class="ln"/>
-      <rect x="16" y="28" width="176" height="48" rx="6" class="node"/><text x="104" y="58" text-anchor="middle">Web app</text>
-      <rect x="208" y="28" width="176" height="48" rx="6" class="node"/><text x="296" y="58" text-anchor="middle">iOS, Android</text>
+      <rect x="16" y="28" width="176" height="48" rx="6" class="node"/><text x="104" y="58" text-anchor="middle">Web アプリ</text>
+      <rect x="208" y="28" width="176" height="48" rx="6" class="node"/><text x="296" y="58" text-anchor="middle">iOS・Android</text>
       <rect x="64" y="118" width="272" height="48" rx="8" class="node-acc"/>
-      <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">Commands and queries</text>
-      <rect x="92" y="196" width="216" height="48" rx="6" class="node"/><text x="200" y="226" text-anchor="middle">Tutor via MCP tools</text>
-      <text x="200" y="280" text-anchor="middle" class="t-sm">one set of rules, one authorization check</text>
+      <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">コマンドとクエリ</text>
+      <rect x="92" y="196" width="216" height="48" rx="6" class="node"/><text x="200" y="226" text-anchor="middle">MCP 経由のチューター</text>
+      <text x="200" y="280" text-anchor="middle" class="t-sm">ルールも認可チェックも一つだけ</text>
     </svg>
-    <figcaption>Every client, including the agent, reaches the same commands. The rules and the authorization decision exist once.</figcaption>
+    <figcaption>エージェントを含むすべてのクライアントが、同じコマンドにたどり着きます。ルールと認可の判断は一か所にしかありません。</figcaption>
   </figure>
-    <p>Every transport must supply validated command data and a trusted actor context. The model does not choose the learner by passing an arbitrary learner ID. Identity comes from the verified session, and the same authorization decision applies before the command runs.</p>
-    <p>Sharing the command implementation avoids separate agent rules. It does not eliminate the need to secure the gateway, delegated identity and tool permissions.</p>
+    <p>どの経路からでも、検証済みのコマンドのデータと、信頼できるアクターのコンテキストを渡す必要があります。モデルが任意の学習者 ID を渡して、対象の学習者を選ぶことはできません。ID は検証済みのセッションから取り出し、コマンドの実行前には同じ認可の判断が適用されます。</p>
+    <p>コマンドの実装を共有すれば、エージェント専用のルールを別に持たずに済みます。ただし、ゲートウェイ、委任された ID、ツールの権限を守る必要がなくなるわけではありません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>REST names resources with URLs and uses standard methods; a published contract makes it work across languages.</li>
-      <li>Choose from your clients: several languages and few fixed reads favor REST, varied reads favor GraphQL, TypeScript-only favors tRPC.</li>
-      <li>Commands as plain data let apps and an agent's tools share one set of rules and one authorization check.</li>
+      <li>REST は URL でリソースに名前を付け、標準のメソッドを使います。契約を公開すれば、言語をまたいで使えます。</li>
+      <li>方式はクライアントから選びます。言語が複数で決まった読み取りが少なければ REST、読み取りが多様なら GraphQL、TypeScript だけなら tRPC が向いています。</li>
+      <li>コマンドを単純なデータとして扱えば、アプリとエージェントのツールが、一つのルールと一つの認可チェックを共有できます。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch05.html"><span>Previous</span><b>Trust nothing at the boundary: parse it once</b></a>
-    <a class="next" href="ch07.html"><span>Next</span><b>Where does the API contract actually live?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch05.html"><span>前へ</span><b>境界では何も信用せず、一度だけパースする</b></a>
+    <a class="next" href="ch07.html"><span>次へ</span><b>API の契約は、実際にはどこにあるのか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>

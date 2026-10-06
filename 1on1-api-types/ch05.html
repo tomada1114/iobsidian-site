@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +48,7 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
-<title>API and TypeScript 05 · Trust nothing at the boundary</title>
+<title>API と TypeScript 05 · 境界で一度だけパース</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -354,9 +354,9 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 </style>
 </head>
 <body class="has-side acc-2">
-<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API &amp; TypeScript">
+<header class="site-head" lang="en" data-root="../" data-reader="1on1-api-types" data-label="API と TypeScript">
 <div class="bar">
-  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span>API &amp; TypeScript</span></span>
+  <a class="brand" href="../index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a><span class="here"><span lang="ja">API と TypeScript</span></span>
   <div class="head-actions"><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -365,21 +365,21 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button></div>
 </div>
 </header>
-<aside class="side" id="side" aria-label="Engineering Readers: API and TypeScript pages">
-  <h2><a href="ch00.html">Engineering Readers: API and TypeScript</a></h2>
+<aside class="side" id="side" aria-label="エンジニアリング読本：API と TypeScript pages">
+  <h2><a href="ch00.html">エンジニアリング読本：API と TypeScript</a></h2>
   <ol>
     <li><a href="ch00.html"><span class="n"></span><span>Contents</span></a></li>
-    <li><a href="ch01.html"><span class="n">01</span><span>If types vanish at runtime</span></a></li>
-    <li><a href="ch02.html"><span class="n">02</span><span>Which compiler flags matter</span></a></li>
-    <li><a href="ch03.html"><span class="n">03</span><span>Why not another boolean flag</span></a></li>
-    <li><a href="ch04.html"><span class="n">04</span><span>Should a function throw</span></a></li>
-    <li><a href="ch05.html" aria-current="page"><span class="n">05</span><span>Trust nothing at the boundary</span></a></li>
-    <li><a href="ch06.html"><span class="n">06</span><span>REST, GraphQL or RPC</span></a></li>
-    <li><a href="ch07.html"><span class="n">07</span><span>Where the API contract lives</span></a></li>
-    <li><a href="ch08.html"><span class="n">08</span><span>Change an API without breaking</span></a></li>
-    <li><a href="ch09.html"><span class="n">09</span><span>The same request twice</span></a></li>
-    <li><a href="ch10.html"><span class="n">10</span><span>Offline when the server rules</span></a></li>
-    <li><a href="ch11.html"><span class="n">11</span><span>Why a static SPA</span></a></li>
+    <li><a href="ch01.html"><span class="n">01</span><span>実行時に消える型</span></a></li>
+    <li><a href="ch02.html"><span class="n">02</span><span>効くコンパイラオプション</span></a></li>
+    <li><a href="ch03.html"><span class="n">03</span><span>フラグでなくユニオン型</span></a></li>
+    <li><a href="ch04.html"><span class="n">04</span><span>例外か、失敗を返すか</span></a></li>
+    <li><a href="ch05.html" aria-current="page"><span class="n">05</span><span>境界で一度だけパース</span></a></li>
+    <li><a href="ch06.html"><span class="n">06</span><span>REST・GraphQL・RPC</span></a></li>
+    <li><a href="ch07.html"><span class="n">07</span><span>API 契約のありか</span></a></li>
+    <li><a href="ch08.html"><span class="n">08</span><span>壊さずに API を変える</span></a></li>
+    <li><a href="ch09.html"><span class="n">09</span><span>同じリクエストが二度</span></a></li>
+    <li><a href="ch10.html"><span class="n">10</span><span>オフラインとサーバーのルール</span></a></li>
+    <li><a href="ch11.html"><span class="n">11</span><span>静的 SPA を選ぶ理由</span></a></li>
   </ol>
   <div class="all" lang="en">
     <a href="../engineering.html">← Engineering</a><br>
@@ -394,47 +394,47 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </defs>
 </svg>
 <header class="page-head">
-  <p class="kicker"><b>Engineering Readers: API and TypeScript</b><span>Page 5 of 11</span></p>
-  <h1>Trust nothing at the boundary: parse it once</h1>
-  <p class="lead">The app reads an answer from browser storage that an older version wrote. Its own earlier write does not establish the shape of this new input.</p>
-  <p class="meta"><span>About 4 min read</span><span>Quickturn case study</span></p>
+  <p class="kicker"><b>エンジニアリング読本：API と TypeScript</b><span>第5章 / 全11章</span></p>
+  <h1>境界では何も信用せず、一度だけパースする</h1>
+  <p class="lead">アプリが、古いバージョンの書いた回答をブラウザのストレージから読み込みます。以前に自分で書き込んだデータであっても、この新しい入力の形が保証されるわけではありません。</p>
+  <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
-  <nav class="toc" aria-label="In this page">
-    <p class="label">In this page</p>
+  <nav class="toc" aria-label="このページの内容">
+    <p class="label">このページの内容</p>
     <ul>
-      <li>Where outside data comes in</li>
-      <li>Parse, don't validate</li>
-      <li>Once, at the edge</li>
-      <li>What parsing costs</li>
+      <li>外部データはどこから入るか</li>
+      <li>検証ではなくパースする</li>
+      <li>入口で一度だけ</li>
+      <li>パースのコスト</li>
     </ul>
   </nav>
   <section aria-labelledby="s1">
-    <h2 id="s1"><span class="no">01</span>Where outside data comes in</h2>
-    <p>Data written to browser storage does not remain under the running program's sole control. An older app version, developer tools or another same-origin script can change its shape. Reading it back is a new boundary crossing.</p>
-    <p>The same applies to request bodies, environment variables, files, service responses and model replies. Start with unknown, then produce a trusted representation. Quickturn's answer queue checks stored entries and drops malformed ones according to its recovery policy.</p>
+    <h2 id="s1"><span class="no">01</span>外部データはどこから入るか</h2>
+    <p>ブラウザのストレージに書いたデータは、実行中のプログラムだけが管理しているわけではありません。古いバージョンのアプリや開発者ツール、同じオリジンの別のスクリプトが、その形を変えることがあります。読み戻す操作は、境界をもう一度越えることになります。</p>
+    <p>リクエストボディ、環境変数、ファイル、他サービスの応答、モデルの応答も同じです。まず unknown として受け取り、そこから信頼できる表現を作ります。Quickturn の回答キューは保存されたエントリーを検査し、形の崩れたものは復旧方針に従って捨てます。</p>
   </section>
   <section aria-labelledby="s2">
-    <h2 id="s2"><span class="no">02</span>Parse, don't validate</h2>
-    <p>A parser returns a useful typed value or a failure. A bare yes/no check can leave later code without a representation of what was established. “Parse, don't validate” encourages carrying the result forward so callers do not repeatedly reconstruct the same guarantee.</p>
+    <h2 id="s2"><span class="no">02</span>検証ではなくパースする</h2>
+    <p>パーサーは、型の付いた使える値か、失敗のどちらかを返します。はい・いいえだけを返すチェックでは、何が確かめられたのかを表すものが後続のコードに残りません。「Parse, don't validate（検証せずにパースせよ）」は、パースの結果を後ろへ持ち回り、呼び出し側が同じ保証を何度も組み立て直さずに済むようにする考え方です。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 276" role="img" aria-label="A boolean-only check does not return a checked representation. A parser returns the typed value or an explicit failure for later code to use.">
-      <text x="104" y="24" text-anchor="middle" class="t-hd">Validate</text>
-      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">Parse</text>
-      <text x="16" y="56" class="t-sm">Returns</text>
-      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">true or false</text>
-      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">a value or failure</text>
-      <text x="16" y="136" class="t-sm">The value's type after</text>
-      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">still unknown</text>
-      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">a precise type</text>
-      <text x="16" y="216" class="t-sm">The next function</text>
-      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">checks again</text>
-      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">trusts the type</text>
+    <svg viewBox="0 0 400 276" role="img" aria-label="真偽値だけを返すチェックは、検査済みの表現を返しません。パーサーは型の付いた値か明示的な失敗を返し、後続のコードはそれを使えます。">
+      <text x="104" y="24" text-anchor="middle" class="t-hd">検証</text>
+      <text x="296" y="24" text-anchor="middle" class="t-hd t-acc">パース</text>
+      <text x="16" y="56" class="t-sm">戻り値</text>
+      <rect x="16" y="64" width="176" height="44" rx="6" class="node"/><text x="104" y="92" text-anchor="middle">true か false</text>
+      <rect x="208" y="64" width="176" height="44" rx="6" class="node"/><text x="296" y="92" text-anchor="middle">値か失敗</text>
+      <text x="16" y="136" class="t-sm">検査後の値の型</text>
+      <rect x="16" y="144" width="176" height="44" rx="6" class="node"/><text x="104" y="172" text-anchor="middle">unknown のまま</text>
+      <rect x="208" y="144" width="176" height="44" rx="6" class="node"/><text x="296" y="172" text-anchor="middle">正確な型</text>
+      <text x="16" y="216" class="t-sm">次の関数は</text>
+      <rect x="16" y="224" width="176" height="44" rx="6" class="node-soft"/><text x="104" y="252" text-anchor="middle">もう一度検査する</text>
+      <rect x="208" y="224" width="176" height="44" rx="6" class="node-acc"/><text x="296" y="252" text-anchor="middle" class="t-hd">型を信頼する</text>
     </svg>
-    <figcaption>The parser returns the value whose shape it checked. Later code can use that representation without repeating the same parsing step.</figcaption>
+    <figcaption>パーサーは、形を検査した値そのものを返します。後続のコードはその表現を使えるので、同じパースを繰り返す必要がありません。</figcaption>
   </figure>
-    <p>A Zod schema supplies a runtime parser and an inferred static type. Successful <code>safeParse</code> yields checked data; failure remains explicit. A hand-written type guard can narrow a small shape without a schema-library dependency, but its correctness is the programmer's responsibility.</p>
-    <p><code>satisfies</code> checks values authored in code. It does not parse runtime JSON. An assertion with <code>as</code> makes a claim rather than performing a check.</p>
+    <p>Zod のスキーマは、実行時のパーサーと推論された静的な型の両方を提供します。<code>safeParse</code> が成功すれば検査済みのデータが得られ、失敗した場合もそれが明示されます。小さな形なら、手書きの型ガードでスキーマライブラリに依存せずに絞り込めますが、その正しさはプログラマーの責任になります。</p>
+    <p><code>satisfies</code> が検査するのは、コードの中で書いた値です。実行時の JSON はパースしません。<code>as</code> によるアサーションは、検査をせずに主張をするだけです。</p>
     <pre><code>const StartRound = z.object({
   kind: z.enum(["first", "retry"]),
   roundId: z.string().uuid(),
@@ -446,10 +446,10 @@ if (!parsed.success) return badRequest();
 parsed.data.kind; // "first" | "retry"</code></pre>
   </section>
   <section aria-labelledby="s3">
-    <h2 id="s3"><span class="no">03</span>Once, at the edge</h2>
-    <p>Quickturn parses requests before calling commands and returns fixed error messages that do not echo raw input. This reduces the chance that secrets or hostile content are carried into responses and log viewers.</p>
+    <h2 id="s3"><span class="no">03</span>入口で一度だけ</h2>
+    <p>Quickturn は、コマンドを呼ぶ前にリクエストをパースし、生の入力を含まない固定のエラーメッセージを返します。こうすると、秘密情報や悪意のある内容がレスポンスやログビューアーに運ばれる可能性を減らせます。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 372" role="img" aria-label="Request bytes are read under a size cap, parsed as JSON into an unknown value, then parsed by a schema into a typed command or refused with a code.">
+    <svg viewBox="0 0 400 372" role="img" aria-label="リクエストのバイト列はサイズの上限のもとで読み込まれ、JSON としてパースされて unknown の値になります。そのあとスキーマでパースされ、型付きのコマンドになるか、コード付きで拒否されます。">
       <line x1="28" y1="40" x2="28" y2="328" class="ln"/>
       <circle cx="28" cy="40" r="6" class="dot"/>
       <circle cx="28" cy="112" r="6" class="dot"/>
@@ -457,55 +457,55 @@ parsed.data.kind; // "first" | "retry"</code></pre>
       <circle cx="28" cy="256" r="6" class="dot"/>
       <circle cx="28" cy="328" r="7" class="f-acc"/>
       <rect x="48" y="16" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="46">Bytes, read under a size cap</text>
+      <text x="64" y="46">バイト列をサイズ上限つきで読む</text>
       <rect x="48" y="88" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="118">JSON parse</text>
+      <text x="64" y="118">JSON のパース</text>
       <rect x="48" y="160" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="190">An unknown value</text>
+      <text x="64" y="190">unknown の値</text>
       <rect x="48" y="232" width="336" height="48" rx="6" class="node"/>
-      <text x="64" y="262">Schema parse, or a refusal code</text>
+      <text x="64" y="262">スキーマでパース、または拒否</text>
       <rect x="48" y="304" width="336" height="48" rx="6" class="node-acc"/>
-      <text x="64" y="334" class="t-hd">A typed command</text>
+      <text x="64" y="334" class="t-hd">型付きのコマンド</text>
     </svg>
-    <figcaption>The value is <code>unknown</code> until the schema step. The command at the end never sees unchecked data.</figcaption>
+    <figcaption>スキーマの段階までは、値は <code>unknown</code> のままです。最後のコマンドが、検査されていないデータを目にすることはありません。</figcaption>
   </figure>
-    <p>Environment settings are read in one startup module. It reports invalid variable names together, without revealing values, and refuses to start with unusable configuration. Hosted secrets come from the chosen secret or parameter service, with access controls, rather than being treated as ordinary public settings.</p>
-    <p>Parsing at each entry point lets the core use checked values. A new boundary still needs its own check; “once” applies within a trusted path, not forever after data was first written.</p>
+    <p>環境設定は、起動時に一つのモジュールで読み込みます。不正な変数名は値を表に出さずにまとめて報告し、使えない設定のままでは起動を拒否します。ホスティング環境の秘密情報は通常の公開設定として扱わず、アクセス制御のある秘密情報管理サービスやパラメーターサービスから取得します。</p>
+    <p>入口ごとにパースしておけば、中核のコードは検査済みの値を使えます。それでも、新しい境界にはその境界のためのチェックが必要です。「一度だけ」は信頼できる経路の中での話で、データを最初に書いたときに一度検査すれば以後ずっと安全、という意味ではありません。</p>
   <figure class="fig">
-    <svg viewBox="0 0 400 300" role="img" aria-label="The edge sits in the center; request bodies and session storage above it, environment variables and model output below it, each parsed once at the edge.">
+    <svg viewBox="0 0 400 300" role="img" aria-label="中央に入口があり、上にリクエストボディとセッションストレージ、下に環境変数とモデルの出力があります。どれも入口で一度だけパースされます。">
       <line x1="104" y1="76" x2="160" y2="118" class="ln"/>
       <line x1="296" y1="76" x2="240" y2="118" class="ln"/>
       <line x1="104" y1="182" x2="160" y2="166" class="ln"/>
       <line x1="296" y1="182" x2="240" y2="166" class="ln"/>
-      <rect x="16" y="28" width="176" height="48" rx="6" class="node"/><text x="104" y="58" text-anchor="middle">Request body</text>
-      <rect x="208" y="28" width="176" height="48" rx="6" class="node"/><text x="296" y="58" text-anchor="middle">Session storage</text>
+      <rect x="16" y="28" width="176" height="48" rx="6" class="node"/><text x="104" y="58" text-anchor="middle">リクエストボディ</text>
+      <rect x="208" y="28" width="176" height="48" rx="6" class="node"/><text x="296" y="58" text-anchor="middle">セッションストレージ</text>
       <rect x="120" y="118" width="160" height="48" rx="8" class="node-acc"/>
-      <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">The edge</text>
-      <rect x="16" y="182" width="176" height="48" rx="6" class="node"/><text x="104" y="212" text-anchor="middle">Env variables</text>
-      <rect x="208" y="182" width="176" height="48" rx="6" class="node"/><text x="296" y="212" text-anchor="middle">Model output</text>
-      <text x="200" y="272" text-anchor="middle" class="t-sm">each is parsed once, here</text>
+      <text x="200" y="148" text-anchor="middle" class="t-hd t-acc">入口</text>
+      <rect x="16" y="182" width="176" height="48" rx="6" class="node"/><text x="104" y="212" text-anchor="middle">環境変数</text>
+      <rect x="208" y="182" width="176" height="48" rx="6" class="node"/><text x="296" y="212" text-anchor="middle">モデルの出力</text>
+      <text x="200" y="272" text-anchor="middle" class="t-sm">どれもここで一度だけパースする</text>
     </svg>
-    <figcaption>Each incoming source needs a parsing boundary. Inside a trusted path, code can use the checked shape while still enforcing domain rules.</figcaption>
+    <figcaption>入ってくるデータの出どころごとに、パースの境界が必要です。信頼できる経路の中では、検査済みの形を使いながら、ドメインのルールは引き続き適用します。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s4">
-    <h2 id="s4"><span class="no">04</span>What parsing costs</h2>
-    <p>Repeated parsing adds code and CPU cost without necessarily adding new evidence. Unknown fields also need an explicit compatibility policy: reject, strip or preserve them. Rejecting a field from a newer client can break an otherwise compatible request.</p>
-    <p>Schema libraries add browser weight, so small stored shapes may use a careful type guard. Model output is parsed at its incoming boundary too. A failed parse requires a bounded retry, a safe fallback or a visible failure, rather than a cast that hides invalid data.</p>
+    <h2 id="s4"><span class="no">04</span>パースのコスト</h2>
+    <p>パースを何度も繰り返すと、新しい根拠は増えないのに、コードと CPU のコストだけが増えることがあります。未知のフィールドについても、拒否する・取り除く・残すのどれにするか、互換性の方針を明示しておく必要があります。新しいクライアントから来たフィールドを拒否すると、それ以外は互換性のあるリクエストまで失敗させてしまいます。</p>
+    <p>スキーマライブラリはブラウザに読み込むコードを増やすので、保存データの小さな形には、慎重に書いた型ガードを使うこともあります。モデルの出力も、入ってくる境界でパースします。パースに失敗したら、回数を限ったリトライ、安全なフォールバック、目に見える失敗のいずれかで対処し、不正なデータを隠すキャストでごまかしません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
-    <p class="label" id="sum">Summary in three lines</p>
+    <p class="label" id="sum">3行まとめ</p>
     <ol>
-      <li>Every value from outside the process, even browser storage, is <code>unknown</code> on the way in.</li>
-      <li>Parse incoming data into a precise type or a refusal; check it again when it crosses a new trust boundary.</li>
-      <li>Read configuration in one module at startup, and refuse to start with every bad name listed.</li>
+      <li>プロセスの外から来る値は、ブラウザのストレージに保存したものであっても、入ってくる時点では <code>unknown</code> です。</li>
+      <li>入ってくるデータは正確な型か拒否のどちらかにパースし、新しい信頼の境界を越えるときにはもう一度検査します。</li>
+      <li>設定は起動時に一つのモジュールで読み込み、不正な名前をすべて挙げたうえで起動を拒否します。</li>
     </ol>
   </section>
-  <nav class="pager" aria-label="Page navigation">
-    <a class="prev" href="ch04.html"><span>Previous</span><b>Should a function throw, or return its failure?</b></a>
-    <a class="next" href="ch06.html"><span>Next</span><b>REST, GraphQL or RPC: how do you choose?</b></a>
+  <nav class="pager" aria-label="ページ送り">
+    <a class="prev" href="ch04.html"><span>前へ</span><b>関数は例外を投げるべきか、失敗を返すべきか</b></a>
+    <a class="next" href="ch06.html"><span>次へ</span><b>REST・GraphQL・RPC をどう選ぶか</b></a>
   </nav>
-  <p class="fine">Quickturn is a fictional application used to explain engineering decisions. Written in September 2026.</p>
+  <p class="fine">Quickturn は、設計判断を説明するための架空のアプリケーションです。2026年9月執筆。</p>
 </div>
 </div>
 <script>
