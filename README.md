@@ -19,7 +19,6 @@
 | Engineering Readers: AI in Production（英語・B2・解説文） | `1on1-ai/ch00.html` |
 | Engineering Readers: Operations and Quality（英語・B2・解説文） | `1on1-ops/ch00.html` |
 | AgentCore Reader（英語・B2・08〜13は解説文、01〜07は対話） | `agentcore-reader/ch00.html` |
-| Easy Reads（英語・A2+〜B1、毎朝6本追加。`easy-reads` スキル） | `easy-reads/index.html` |
 | 一拍おいて話す（日本語・Quick Book・解説型） | `book-pause-before-speaking/ch00.html` |
 | キャリアの移り目（日本語・Quick Book・解説型） | `book-career-transitions/ch00.html` |
 | 貯めるより、使いきる設計（日本語・Quick Book・解説型） | `book-spend-by-design/ch00.html` |

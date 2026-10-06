@@ -17,7 +17,6 @@ SITE = pathlib.Path(__file__).resolve().parent.parent
 
 # (slug, short label for navigation and reading history, entry page inside the slug folder)
 READERS = [
-    ("easy-reads", "Easy Reads", "index.html"),
     ("1on1-architecture", "Architecture", "ch00.html"),
     ("1on1-api-types", "API & TypeScript", "ch00.html"),
     ("1on1-aws", "AWS", "ch00.html"),
@@ -320,7 +319,6 @@ def chapter_items(src_dir):
 # ---------- bookshelf (index.html) ----------
 # Categories in display order: (key, heading, one-line note, page accent 1-4)
 CATEGORIES = [
-    ("english", "English Reading", "Short, easy English for daily reading practice.", 3),
     ("cloud-ai", "AWS", "Cloud foundations and building agents with AgentCore.", 2),
     ("software", "Engineering", "Architecture, code, APIs, production AI and operations.", 1),
     ("work", "Work & Careers", "Choosing work, building a career and leading teams.", 1),
@@ -331,7 +329,7 @@ CATEGORIES = [
     ("life", "Life & Wellbeing", "Time, habits, health and making room for life.", 4),
 ]
 CATEGORY_PAGES = {
-    "english": "english.html", "cloud-ai": "aws.html", "software": "engineering.html",
+    "cloud-ai": "aws.html", "software": "engineering.html",
     "work": "work.html", "relationships": "relationships.html", "money": "money.html",
     "learning": "learning.html", "thinking": "thinking.html", "life": "life.html",
 }
@@ -339,10 +337,9 @@ CATEGORY_PAGES = {
 # Bookshelf entry per reader slug: category key, series kicker, title, blurb, reading time, level (may be ""),
 # language of the reader's content (a key of LANGS; it must match LANG in the reader's build.py).
 # Kicker, title and blurb are written in that language; the rest of the UI stays English.
-# The page count is read from the reader's src/ (chapters other than ch00, or Easy Reads' reads).
+# The page count is read from the reader's src/ (chapters other than ch00).
 LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
 BOOKS = {
-    "easy-reads": ("english", "", "Easy Reads", "Short and easy English reads on many topics. Six new ones every morning.", "3 to 4 min each", "A2+ to B1", "en"),
     "1on1-architecture": ("software", "Engineering Readers", "Architecture", "What architecture is for: dependency rules, ports and adapters, DDD, and how to choose.", "About 46 min", "B2 · prose", "en"),
     "1on1-api-types": ("software", "Engineering Readers", "API and TypeScript", "Types and APIs that last: parsing at the boundary, contracts, versioning, retries and offline.", "About 44 min", "B2 · prose", "en"),
     "1on1-ops": ("software", "Engineering Readers", "Operations and Quality", "Running and changing a product safely: logs, alarms, SLOs, tests, gates, deploys and launch.", "About 44 min", "B2 · prose", "en"),
@@ -570,8 +567,6 @@ applyHidden();
 def page_count(slug):
     """Counted from the sources, so it is right before the reader is built."""
     src = SITE / slug / "src"
-    if (src / "reads").is_dir():
-        return len(list((src / "reads").glob("*.body.html"))), "reads"
     return len([f for f in src.glob("ch[0-9][0-9].body.html") if not f.name.startswith("ch00")]), "pages"
 
 
