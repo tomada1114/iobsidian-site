@@ -24,6 +24,7 @@
 | エンジニアリング読本: AWS の基礎（日本語・解説文） | `1on1-aws/ch00.html` |
 | エンジニアリング読本: AI機能を本番で動かす（日本語・解説文） | `1on1-ai/ch00.html` |
 | エンジニアリング読本: 運用と品質（日本語・解説文） | `1on1-ops/ch00.html` |
+| AWS エージェント学習ロードマップ（日本語・リンク集1ページ） | `aws-agent-roadmap/ch00.html` |
 | AgentCore Reader（英語・B2・08〜13は解説文、01〜07は対話） | `agentcore-reader/ch00.html` |
 | 一拍おいて話す（日本語・Quick Book・解説型） | `book-pause-before-speaking/ch00.html` |
 | キャリアの移り目（日本語・Quick Book・解説型） | `book-career-transitions/ch00.html` |

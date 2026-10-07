@@ -28,6 +28,7 @@ READERS = [
     ("1on1-aws", "AWS の基礎", "ch00.html"),
     ("1on1-ai", "本番のAI", "ch00.html"),
     ("1on1-ops", "運用と品質", "ch00.html"),
+    ("aws-agent-roadmap", "AWS 学習ロードマップ", "ch00.html"),
     ("agentcore-reader", "AgentCore", "ch00.html"),
     ("book-pause-before-speaking", "一拍おいて話す", "ch00.html"),
     ("book-career-transitions", "キャリアの移り目", "ch00.html"),
@@ -459,6 +460,7 @@ BOOKS = {
     "1on1-ops": ("software", "エンジニアリング読本", "運用と品質", "架空の語学アプリ Quickturn を例に、オブザーバビリティ、アラーム、SLO、テスト、デプロイ、データ保護、公開の準備を図解で読み解く12章。", "About 48 min", "", "ja"),
     "1on1-aws": ("cloud-ai", "エンジニアリング読本", "小さなアプリで学ぶ AWS の基礎", "小さなアプリを AWS で動かす。権限、Lambda、DynamoDB、インフラのコード化、サインイン、費用までを一つの例でたどる。", "About 1 hour", "", "ja"),
     "1on1-ai": ("software", "エンジニアリング読本", "AI機能を本番で動かす", "架空の語学アプリを例に、LLM呼び出しの費用、型つき出力、評価、インジェクション対策、費用の上限、AgentCore、権限までを本番の設計判断として説明します。", "About 55 min", "", "ja"),
+    "aws-agent-roadmap": ("cloud-ai", "学習ロードマップ", "AWS エージェント学習ロードマップ", "AgentCore の教材、マイクロ資格3本、AIP-C01 までのリンク集。段階ごとに次の教材へ直接飛べる。", "Link list", "", "ja"),
     "agentcore-reader": ("cloud-ai", "", "AgentCore Reader", "Building AI agents for companies on AWS, part by part, before the hands-on study.", "About 1.5 hours", "B2 · prose (8–13)", "en"),
     "book-pause-before-speaking": ("relationships", "", "一拍おいて話す", "口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。", "About 1 hour", "", "ja"),
     "book-career-transitions": ("work", "", "キャリアの移り目", "人生100年時代、働く途中の学び直しや休む期間をどう計画し、どう説明し、誰と支え合うか。", "About 1 hour", "", "ja"),
@@ -746,7 +748,8 @@ if(A){if(sync)sync.textContent="Checking GitHub…";A.refresh().then(showSync)}
 def page_count(slug):
     """Counted from the sources, so it is right before the reader is built."""
     src = SITE / slug / "src"
-    return len([f for f in src.glob("ch[0-9][0-9].body.html") if not f.name.startswith("ch00")]), "pages"
+    n = len([f for f in src.glob("ch[0-9][0-9].body.html") if not f.name.startswith("ch00")])
+    return (n or 1), "pages"  # a single-page reader has only ch00
 
 
 def catalogue():

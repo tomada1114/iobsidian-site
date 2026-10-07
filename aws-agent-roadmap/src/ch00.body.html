@@ -1,0 +1,104 @@
+<!-- title: AWS エージェント学習ロードマップ · 教材リンク | accent: reach -->
+<header class="page-head">
+  <p class="kicker"><b>AWS エージェント学習ロードマップ</b><span>教材リンク</span></p>
+  <h1>AWS でエージェントを作る力を、資格で区切りながら育てる</h1>
+  <p class="lead">AgentCore と Strands Agents を手を動かして学び、無料のマイクロ資格を中間目標にして、最後に AIP-C01 を受けます。各段階の教材へここから直接飛べます。</p>
+  <p class="meta"><span>S1〜S5 の5段階</span><span>マイクロ資格3本＋AIP-C01</span><span>2026年10月時点</span></p>
+</header>
+<div class="flow">
+  <section aria-labelledby="goal">
+    <h2 id="goal">ゴールと中間目標</h2>
+    <ol class="steps">
+      <li><b>マイクロ資格① Agentic AI Demonstrated</b>：S2 を終えたら受けます。AgentCore の Runtime・Gateway・Memory を時間内に直す実技です。</li>
+      <li><b>マイクロ資格② Securing Agent Identities Demonstrated</b>：S3 の認証・認可（3-6）を終えたら受けます。</li>
+      <li><b>マイクロ資格③ Databases for Agentic AI Demonstrated</b>：S3 のコンテキストとメモリ（3-5）と、書籍の RAG の章（4-2）を終えたら受けます。</li>
+      <li><b>AIP-C01 の公式模試で合格ラインを越える</b>：本番前の最後の区切りです。</li>
+      <li><b>AIP-C01（Generative AI Developer – Professional）</b>：最終目標です。</li>
+    </ol>
+    <div class="tbl"><table>
+      <thead><tr><th>資格</th><th>形式</th><th>リンク</th></tr></thead>
+      <tbody>
+        <tr><td class="key">マイクロ資格（3本共通）</td><td>無料・実技・Skill Builder で受験</td><td><a href="https://skillbuilder.aws/search?searchText=Demonstrated">Skill Builder で探す</a> / <a href="https://aws.amazon.com/blogs/training-and-certification/prove-your-agentic-ai-skills-two-new-microcredentials-now-available/">AWS の案内</a></td></tr>
+        <tr><td class="key">① Agentic AI</td><td>実技</td><td><a href="https://skillbuilder.aws/search?searchText=AWS%20Agentic%20AI%20Demonstrated">Skill Builder</a> / <a href="https://www.credly.com/org/amazon-web-services/badge/aws-agentic-ai-demonstrated">バッジ</a></td></tr>
+        <tr><td class="key">② Agent Identities</td><td>実技</td><td><a href="https://skillbuilder.aws/search?searchText=AWS%20Securing%20Agent%20Identities%20Demonstrated">Skill Builder</a></td></tr>
+        <tr><td class="key">③ Databases</td><td>実技</td><td><a href="https://skillbuilder.aws/search?searchText=AWS%20Databases%20for%20Agentic%20AI%20Demonstrated">Skill Builder</a></td></tr>
+        <tr><td class="key">練習</td><td>形式に慣れる</td><td><a href="https://skillbuilder.aws/search?searchText=Microcredential%20Preview%20Experience">Microcredential Preview Experience</a></td></tr>
+        <tr><td class="key">AIP-C01</td><td>選択式・$300・有効3年</td><td><a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/ja_JP/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf">試験ガイド（日本語PDF）</a> / <a href="https://aws.amazon.com/certification/certified-generative-ai-developer-professional/">AWS 公式ページ</a></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">S1 全体像を掴む（座学）</h2>
+    <dl class="terms">
+      <dt>1-1 <a href="https://skillbuilder.aws/learn/DNBD5MT8ZD/introduction-to-agentic-ai-on-aws/WAKAFK6UFY">Introduction to Agentic AI on AWS</a></dt>
+      <dd>Skill Builder・無料・1.5時間。エージェントの種類、MCP・A2A、AWS の関連サービスの地図。</dd>
+      <dt>1-2 <a href="https://skillbuilder.aws/learn/SXMNDA9AJ1/amazon-bedrock-agentcore-getting-started/6SGJD8ZV9A">Amazon Bedrock AgentCore Getting Started</a></dt>
+      <dd>Skill Builder・無料・1時間。AgentCore の各サービスが何を肩代わりするか。</dd>
+      <dt>1-3・1-4 <a href="https://www.sbcr.jp/product/4815641238/">書籍『Amazon Bedrock AgentCore 実践入門』</a> 1〜4章</dt>
+      <dd>基礎編と Strands Agents 編。Strands でリサーチエージェントを作る。</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">S2 手を動かして一周する → マイクロ資格①</h2>
+    <dl class="terms">
+      <dt>2-1 <a href="https://catalog.us-east-1.prod.workshops.aws/workshops/083b80d7-5a90-402b-9bb4-19fb53092808/en-US">Strands Agents Hands-On: Build Your First Agent</a></dt>
+      <dd>ワークショップ・無料サンドボックス・約90分。ループ、ツール、Runtime へのデプロイ。</dd>
+      <dt>2-2 <a href="https://catalog.workshops.aws/agentcore-getting-started/ja-JP">Getting Started with Amazon Bedrock AgentCore</a></dt>
+      <dd>公式ワークショップ・日本語・無料サンドボックス・3.5時間。メモリ、Gateway、デプロイ、評価、ポリシーを積み上げる。</dd>
+      <dt>2-3・2-4 書籍 5〜13章（AgentCore 編）</dt>
+      <dd>Runtime、Memory、Identity、Gateway、Policy、組み込みツール、可観測性、評価。</dd>
+      <dt>無料サンドボックスの申し込み</dt>
+      <dd><a href="https://builder.aws.com/build/workshops">AWS Builder Center のワークショップ一覧</a></dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">S3 自分で掘る → マイクロ資格②③</h2>
+    <p>公式ワークショップ <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US">Diving Deep with Amazon Bedrock AgentCore</a> を自分の AWS アカウントで進めます（少額の料金がかかります）。</p>
+    <dl class="terms">
+      <dt>3-1 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/00-prerequisites">準備（Prerequisites）</a></dt><dd>us-east-1。Code Editor と Claude Code の環境。</dd>
+      <dt>3-2 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/11-harness">Harness</a></dt><dd>エージェントの実行系。</dd>
+      <dt>3-3 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/12-host-your-agent">Host your agent</a></dt><dd>Runtime。</dd>
+      <dt>3-4 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/13-connect-your-agent-to-anything">Connect your agent to anything</a></dt><dd>Gateway と MCP。</dd>
+      <dt>3-5 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/14-manage-context-of-your-agent">Manage context of your agent</a></dt><dd>コンテキストとメモリ。終えたらマイクロ資格③の準備へ。</dd>
+      <dt>3-6 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/15-authenticate-and-authorize">Authenticate and authorize</a></dt><dd>Identity。終えたらマイクロ資格②。</dd>
+      <dt>3-7 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/16-observe-evaluate-optimize-your-agent">Observe, evaluate, optimize</a></dt><dd>可観測性・評価・最適化。</dd>
+      <dt>3-8 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/17-centralize-and-govern-your-ai-infrastructure">Centralize and govern</a></dt><dd>ガバナンス。</dd>
+      <dt>3-9 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/10-feature-deep-dive/18-agents-that-transact">Agents that transact</a></dt><dd>決済。</dd>
+      <dt>3-10 <a href="https://catalog.workshops.aws/agentcore-deep-dive/en-US/20-build-with-skills">Build with Skills</a>（任意）</dt><dd>自分のユースケースを Claude Code と作る。</dd>
+      <dt>3-11 <a href="https://www.udemy.com/course/mastering-amazon-bedrock-agentcore-bring-your-poc-to-prod/">Udemy: Mastering Amazon Bedrock AgentCore</a>（任意）</dt><dd>Udemy サブスク内・約6時間。</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">S4 設計の目を持つ</h2>
+    <dl class="terms">
+      <dt>4-1 <a href="https://skillbuilder.aws/search?searchText=Building%20Your%20Agentic%20Applications%20the%20Well-Architected%20Way">Building Your Agentic Applications the Well-Architected Way</a></dt><dd>Skill Builder・無料・2時間。Generative AI Lens で設計を点検する観点。</dd>
+      <dt>4-2 書籍 14〜16章（応用編）</dt><dd>RAG で社内データを使う、CDK、業務への導入。</dd>
+      <dt>4-3 <a href="https://github.com/aws-samples/generative-ai-use-cases">GenU（generative-ai-use-cases）</a>を読む</dt><dd>企業向け生成AIアプリの実物。認証、セキュリティ設定、AgentCore Runtime の取り込み。</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">S5 資格で総仕上げ（AIP-C01）</h2>
+    <dl class="terms">
+      <dt>5-1 <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/ja_JP/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf">AIP-C01 試験ガイド（日本語PDF）</a></dt><dd>まだ触っていない範囲の洗い出し。</dd>
+      <dt>5-2 <a href="https://www.udemy.com/course/ultimate-aws-certified-generative-ai-developer-professional/">Udemy: Ultimate AWS Certified Generative AI Developer Professional</a></dt><dd>Udemy サブスク内・約25時間。試験範囲の全体。</dd>
+      <dt>5-3 <a href="https://skillbuilder.aws/search?searchText=Exam%20Prep%20Plan%20AWS%20Certified%20Generative%20AI%20Developer%20Professional">Exam Prep Plan: AIP-C01</a></dt><dd>Skill Builder。復習動画は無料、演習と公式模試は有料。</dd>
+      <dt>5-4 <a href="https://www.udemy.com/course/practice-exams-aws-certified-generative-ai-developer-pro/">Udemy: [Practice Exams] AWS Certified Generative AI Developer Pro</a></dt><dd>Udemy サブスク内・本番形式の問題演習。</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="udemy">
+    <h2 id="udemy">Udemy のリスト</h2>
+    <p>登録済みの講座は <a href="https://www.udemy.com/home/my-courses/lists/">My learning → My Lists</a> から開けます。サブスクで登録した講座は Purchased タブには出ません。</p>
+    <ul>
+      <li><b>AWS Agent / AIP-C01</b>：上の 3-11・5-2 と <a href="https://www.udemy.com/course/amazon-bedrock-agentcore-build-ai-agents-on-aws-hands-on/">Amazon Bedrock AgentCore: Build &amp; Deploy any AI Agent on AWS</a></li>
+      <li><b>LLM / AI Engineering</b>：Ed Donner の Core・Agentic・Production Track、Evaluation for LLM Applications</li>
+      <li><b>System Design / Architecture</b>：設計面接と大規模システム設計の3講座</li>
+      <li><b>SRE / Platform (検討中)</b>：CKA、Terraform Associate</li>
+    </ul>
+  </section>
+</div>
