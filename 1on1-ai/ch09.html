@@ -398,7 +398,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>AI機能を本番で動かす</b><span>第9章 / 全13章</span></p>
   <h1>学習者が「指示を無視して」と入力したら</h1>
-  <p class="lead">学習者の解答に、ルーブリックを無視するよう採点者へ命じる文が入っていました。指示がその文に負けた場合でも、使える機能の範囲が限られているように設計する必要があります。</p>
+  <p class="lead">学習者の解答に、ルーブリックを無視するよう採点者へ命じる文が入っていました。モデルが本来の指示よりその文に従ってしまった場合でも、使える機能の範囲が限られているように設計する必要があります。</p>
   <p class="meta"><span>読了 約4分</span><span>Quickturnの事例</span></p>
 </header>
 <div class="flow">
@@ -463,7 +463,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="478">採点結果を保存</text>
     </svg>
-    <figcaption>入口の層は攻撃を難しくします。出口の検査は不正な形やドメインの値をはじけますが、もっともらしい採点結果やフィードバックの文がすべて正しいとまでは保証できません。</figcaption>
+    <figcaption>入口の層は攻撃を難しくします。出口の検査は不正な形やドメインのルールに合わない値をはじけますが、もっともらしい採点結果やフィードバックの文がすべて正しいとまでは保証できません。</figcaption>
   </figure>
     <p>出口では、応答をパースしてドメインルールを確かめます。モデルのテキストはHTMLとして埋め込んだり実行したりせず、安全に表示します。プロンプトをチームが書いていても、出力は信頼できないデータとして扱います。</p>
   </section>

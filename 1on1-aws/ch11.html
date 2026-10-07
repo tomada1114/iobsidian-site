@@ -399,7 +399,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 <header class="page-head">
   <p class="kicker"><b>小さなアプリで学ぶ AWS の基礎</b><span>第11章 / 全14章</span></p>
   <h1>学習者がサインインするとき、実際に何が起きているか</h1>
-  <p class="lead">トークンは学習者を名乗っていますが、読める内容があるだけでは、本人だと確かめたことにはなりません。サインインの流れと API での検証が、この信頼のそれぞれ別の部分を受け持ちます。</p>
+  <p class="lead">トークンには学習者を示すクレームが入っていますが、読める内容があるだけでは、本人だと確かめたことにはなりません。サインインの流れと API での検証が、この信頼のそれぞれ別の部分を受け持ちます。</p>
   <p class="meta"><span>読了 約4分</span><span>Quickturn の事例</span></p>
 </header>
 <div class="flow">
@@ -442,7 +442,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="376" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="406" class="t-hd">トークンはバックエンドへ</text>
     </svg>
-    <figcaption>Web のバックエンドが、コールバックで受け取ったコードをトークンと交換します。トークンの値はページのスクリプトに渡さず、以後のブラウザは保護されたセッション Cookie を送ります。</figcaption>
+    <figcaption>Web のバックエンドが、コールバックで受け取ったコードをトークンと交換します。トークンの値はページのスクリプトに渡さず、以後、ブラウザは保護されたセッション Cookie を送ります。</figcaption>
   </figure>
     <p>バックエンドは state を検証し、verifier と自分のクライアント認証情報を添えてコードを交換します。ネイティブのクライアントは、アプリにシークレットを埋め込まず、システムのブラウザと PKCE を使います。state、リダイレクトの扱い、verifier との結び付けは、それぞれ別の攻撃を防ぐもので、どれも正しく実装しなければなりません。</p>
   </section>
@@ -466,7 +466,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">短い</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">短い</text>
     </svg>
-    <figcaption>どちらのトークンも学習者を指しています。API を開けるためのものは、アクセストークンだけです。</figcaption>
+    <figcaption>どちらのトークンも学習者を指しています。API の利用を認可するのは、アクセストークンだけです。</figcaption>
   </figure>
     <p>検証では、信頼できる鍵による署名、有効期限、発行者、トークンの用途、想定するクライアントやリソースを確かめます。Cognito のアクセストークンには client_id が含まれ、リソースへの結び付けを要求した場合は aud クレームが入ることもあります。</p>
   <figure class="fig">
@@ -498,7 +498,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>マネージドサービスの代償</h2>
     <p>マネージドなサインインを使えば、パスワードやアカウント復旧の作業は減りますが、プロバイダー固有の設定、料金プランの選択、移行の問題が加わります。Quickturn は、プロバイダーの subject を自分たちの学習者 ID に対応付けています。ユーザープールを入れ替えても、学習者が持つレコードの名前を変える必要はありません。ただし、ID の対応付けは移行しなければなりません。</p>
-    <p>トークンの検証は、Cookie での認証と Bearer での認証が共有する経路に置きます。ログには、どの確認で失敗したかを残し、トークン自体は含めません。読み取れるトークンは、実際の有効期限が来るか、失効の仕組みが効くまでは、そのまま使える認証情報になりえます。</p>
+    <p>トークンの検証は、Cookie での認証と Bearer での認証が共有する経路に置きます。ログには、どの確認で失敗したかを残し、トークン自体は含めません。読み取れるトークンは、実際の有効期限が来るか、失効の仕組みで無効になるまでは、そのまま使える認証情報になりえます。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
     <p class="label" id="sum">3行まとめ</p>

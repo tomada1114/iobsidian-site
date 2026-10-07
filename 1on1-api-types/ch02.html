@@ -427,7 +427,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="40" y="282" class="t-sm">noPropertyAccessFromIndexSignature</text>
       <text x="40" y="304" class="t-sm">verbatimModuleSyntax</text>
     </svg>
-    <figcaption>コードの書き方を変える四つのオプションは <code>strict</code> の外にあります。<code>strict</code> を有効にするだけでは、この四つは手に入りません。</figcaption>
+    <figcaption>コードの書き方を変える四つのオプションは <code>strict</code> の外にあります。<code>strict</code> を有効にするだけでは、この四つは有効になりません。</figcaption>
   </figure>
     <p>これらのオプションは、それぞれ別の種類の失敗に対応します。書式を指示するためのものではなく、値が欠けているかもしれない箇所や、変換後に消える型の import を明示させるためのものです。</p>
   <dl class="terms">
@@ -469,7 +469,7 @@ const b: Settings = { sound: undefined }; // エラー</code></pre>
       <rect x="16" y="224" width="176" height="44" rx="6" class="node"/><text x="104" y="252" text-anchor="middle">ゲートが弱まる</text>
       <rect x="208" y="224" width="176" height="44" rx="6" class="node"/><text x="296" y="252" text-anchor="middle">小さなモジュール1つ</text>
     </svg>
-    <figcaption>どちらの案でも型チェックは残るので、変更された契約の誤った使い方は検出できます。「型だけ生成」の案は、それに加えて、設定したゲートをすべてのファイルで揃えられます。</figcaption>
+    <figcaption>どちらの案でも型チェックは残るので、変更された契約の誤った使い方は検出できます。「型だけ生成」の案なら、それに加えて、設定したゲートをすべてのファイルで揃えられます。</figcaption>
   </figure>
     <p>Quickturn は型だけを生成し、<code>satisfies</code> で検査する小さな fetch モジュールを手で保守しています。<code>satisfies</code> は、値の推論された型を置き換えずに、互換性だけを検査する演算子です。このモジュールには保守の手間がかかるので、互換性のあるジェネレーターが出れば判断を見直す価値があります。</p>
     <p>インデックスの読み取りでエラーが出たら、パッケージ全体のチェックを外すのではなく、値がない場合を扱って直すのが基本です。例外を認めるなら、どの保護を失うのかを理解したうえで決めます。</p>

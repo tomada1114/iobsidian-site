@@ -429,7 +429,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="234" y="152" width="150" height="100" rx="6" class="node-acc"/>
       <text x="309" y="208" text-anchor="middle" class="t-hd t-acc">検証済みフェイク</text>
     </svg>
-    <figcaption>下に行くほど、実際の振る舞いについての確信が高くなります。アクセントの角は、対象の契約ケースと一致するフェイクを使った、役に立つ速いテストです。それでも、意味のあるアサーションと、ほかの結合テストの証拠は欠かせません。</figcaption>
+    <figcaption>下に行くほど、実際の振る舞いについての確信が高くなります。色をつけた角は、対象の契約ケースと一致するフェイクを使った、役に立つ速いテストです。それでも、意味のあるアサーションと、ほかの結合テストの証拠は欠かせません。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -459,7 +459,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   </section>
   <section aria-labelledby="s4">
     <h2 id="s4"><span class="no">04</span>出力が一つに決まらないとき</h2>
-    <p>モデルの出力は一つに決まらないので、2種類の証拠が必要です。決定的なテストでは、フェイクや記録した応答を使って、パース、リトライの振る舞い、冪等な結果、失敗時の動きを確かめます。実際のモデルを使う評価では、今の構成で人手のラベルとどれだけ一致するかと、品質を見積もります。</p>
+    <p>モデルの出力は一つに決まらないので、2種類の証拠が必要です。決定的なテストでは、フェイクや記録した応答を使って、パース、リトライの振る舞い、冪等な結果、失敗時の動きを確かめます。実際のモデルを使う評価では、今の構成について、人手のラベルとの一致度と品質を見積もります。</p>
     <p>どちらも、本番のタスクと同じ経路を通す必要があります。記録した応答は現在の品質評価の代わりにならず、評価のスコアはアプリケーションの失敗処理のテストの代わりになりません。</p>
   </section>
   <section class="summary" aria-labelledby="sum">
@@ -467,7 +467,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <ol>
       <li>テストの種類ごとに、得られる確信と払う代償が違います。組み合わせは、リスクがどこにあるかで選びます。</li>
       <li>モックよりフェイクを選び、モックは境界でだけ使い、呼び出しではなく振る舞いをアサートします。</li>
-      <li>出力が一つに決まらないときは、テストで配管を確かめ、評価で品質を測ります。</li>
+      <li>出力が一つに決まらないときは、テストで出力を扱う処理を確かめ、評価で品質を測ります。</li>
     </ol>
   </section>
   <nav class="pager" aria-label="ページ送り">

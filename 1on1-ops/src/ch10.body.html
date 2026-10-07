@@ -36,7 +36,7 @@
       <rect x="16" y="304" width="176" height="44" rx="6" class="node"/><text x="104" y="332" text-anchor="middle">prod</text>
       <rect x="208" y="304" width="176" height="44" rx="6" class="node"/><text x="296" y="332" text-anchor="middle">dev</text>
     </svg>
-    <figcaption>最初の行は共通で、そこがどちらも CD と呼ばれる理由です。アクセントの行が、本当の違いです。</figcaption>
+    <figcaption>最初の行は共通で、そこがどちらも CD と呼ばれる理由です。色をつけた行に、本当の違いがあります。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s2">
@@ -67,7 +67,7 @@
       <rect x="48" y="448" width="336" height="48" rx="6" class="node"/>
       <text x="64" y="478">prod にデプロイ</text>
     </svg>
-    <figcaption>dev は、手でコマンドを一つも実行しないまま、アクセントの段階で完了します。prod は、人が承認したあとにだけ先へ進みます。</figcaption>
+    <figcaption>dev は、手でコマンドを一つも実行しないまま、色をつけた段階で完了します。prod は、人が承認したあとにだけ先へ進みます。</figcaption>
   </figure>
     <p>デプロイは直列に実行し、新しい実行が進行中の CloudFormation の更新と競合しないようにします。ランナーを止めても、その更新が止まるとは限りません。信頼条件とワークフローの権限は、保護された本番環境の OIDC のサブジェクトも含めて、あわせてレビューします。</p>
   </section>
@@ -89,7 +89,7 @@
       <rect x="234" y="152" width="150" height="100" rx="6" class="node"/>
       <text x="309" y="208" text-anchor="middle">少しずつ展開</text>
     </svg>
-    <figcaption>下に行くほど影響範囲が大きくなります。アクセントの角は、チェックと復旧の備えが十分なときに、自動デプロイが向きうる変更です。</figcaption>
+    <figcaption>下に行くほど影響範囲が大きくなります。色をつけた角は、チェックと復旧の備えが十分なときに、自動デプロイに向きうる変更です。</figcaption>
   </figure>
     <p>CloudFormation は失敗した更新をロールバックできますが、ロールバックは保証されたものではなく、任意のデータ変更を元に戻すこともできません。コードは revert して再デプロイすれば戻せますが、状態の移行には専用の復旧計画が必要です。カナリアリリースやフィーチャーフラグを使えば、変更を広げる前に、影響を受ける利用者の数を抑えられます。</p>
   </section>

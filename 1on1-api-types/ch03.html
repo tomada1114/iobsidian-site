@@ -470,7 +470,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <text x="296" y="230" text-anchor="middle" class="t-sm">onBehalfOf, grants</text>
       <text x="200" y="280" text-anchor="middle" class="t-sm">どのアクターも、学習者一人のために動く</text>
     </svg>
-    <figcaption>ユニオン型のどのメンバーも、学習者を一人指定します。このルールは誰かが覚えておくべきチェックではなく、型の形そのものに含まれています。</figcaption>
+    <figcaption>ユニオン型のどのメンバーも、学習者を一人指定します。このルールは、誰かが覚えておくべきチェックとしてではなく、型の形そのものとして表されています。</figcaption>
   </figure>
   </section>
   <section aria-labelledby="s3">
@@ -501,7 +501,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
       <rect x="48" y="232" width="336" height="48" rx="6" class="node-acc"/>
       <text x="64" y="262" class="t-hd">網羅性チェックが通る</text>
     </svg>
-    <figcaption>網羅性チェックが漏れを報告するのは、チェックの対象になっている switch だけです。それ以外のコードパスや意図した振る舞いは、引き続きレビューとテストで確かめます。</figcaption>
+    <figcaption>網羅性チェックが報告するのは、チェックの対象になっている switch の漏れだけです。それ以外のコードパスや意図した振る舞いは、引き続きレビューとテストで確かめます。</figcaption>
   </figure>
     <p>自分たちが管理するコードでは、何でも受け止める default 節が、振る舞いの抜けを隠してしまうことがあります。一方、公開 API の向こう側では、インストール済みのクライアントが、自分のリリース後に追加された選択肢を受け取る可能性があります。そのため、安全なフォールバックが必要です。</p>
     <p>Quickturn が enum ではなく文字列のユニオン型を使うのは、ランタイムが消去可能な TypeScript 構文を前提にしているためです。enum は JavaScript のコード出力を必要とすることがあり、型を取り除くだけのランタイムはそれを生成しません。特定の文字列なら、そのまま JSON にも対応します。</p>

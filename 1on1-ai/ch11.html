@@ -447,7 +447,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
     <dt>Observability</dt><dd>OpenTelemetryのトレースとスパン。なければ、トレースの仕組みを自前で整える。</dd>
     <dt>Evaluations</dt><dd>オンラインと必要時の採点。なければ、評価者のパイプラインを自作する。</dd>
   </dl>
-    <p>JWTで認可するGatewayは、選んだツールをアプリケーションの操作へ振り分けます。受信時の認証と、送信時のAWS署名は別の段階です。両者をどう関係づけて設定するかで、どの検証済みの学習者がターゲットに届くかが決まります。</p>
+    <p>JWTで認可するGatewayは、選んだツールをアプリケーションの操作へ振り分けます。受信時の認証と、送信時のAWS署名は別の段階です。両者をどう関係づけて設定するかで、どの検証済みの学習者のアイデンティティがターゲットに届くかが決まります。</p>
   <figure class="fig">
     <svg viewBox="0 0 400 444" role="img" aria-label="クライアントのリクエストは受信時の認証を通ってRuntimeのセッションに入り、Memoryを読むエージェントのコードに届き、GatewayでのPolicyの検査を経て、ようやくツールに届きます。">
       <line x1="28" y1="40" x2="28" y2="400" class="ln"/>
