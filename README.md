@@ -10,6 +10,12 @@
 - 検索エンジンには載せない（各ページの `noindex` と `robots.txt`）。URL を知っていれば誰でも読める
 - ヘッダー（全ページ）は本棚へのリンクと現在の読み物を一行で表示する。読み物のサイドバー（章一覧。PC は左固定、スマホは Contents ボタンのドロワー）には所属カテゴリと本棚へ戻るリンクを置く。本棚 `index.html` とテーマ別のカテゴリページも `_shared/nav.py` が生成する。読み物を足したら `READERS` と `BOOKS`（カテゴリ・一言説明・所要時間・レベル・本文の言語 `en`/`ja`）に1行ずつ足し、新しいカテゴリなら `CATEGORIES` と `CATEGORY_PAGES` にも足して、`python3 _shared/nav.py` と全読み物の `src/build.py` を実行する。UI は英語、読み物の本文は日本語でもよい（日本語の読み物は `build.py` の `LANG = "ja"`、`BOOKS` も `"ja"`）
 - ホーム画面に追加できる Web アプリで、オフラインでも読める。`sw.js`（service worker）・`manifest.webmanifest`・`icons/` はサイト直下。本棚・カテゴリページの「Save all for offline」ボタンで本棚・全カテゴリ・全読み物の全ページを端末に保存し、サイトから消えたページは端末からも消す。オンラインで本棚を開くと未保存の新ページ数と消えたページ数が出るので、そのときに押し直す。一度開いたページも自動で保存される。iPad・iPhone では、ホーム画面に追加したアプリの中でボタンを押す（Safari とホーム画面のアプリは保存領域が別）
+- 読み終えた本はアーカイブできる。本棚・カテゴリページの各行の Archive ボタン（または読み物のサイドバーの Archive this book）で、その本を本棚・全カテゴリページ・Continue reading・オフライン保存の対象から外す。アーカイブした本は `archive.html`（ヘッダーの Archive、Browse collections から開く）に並び、Restore で戻せる。読み物のページ自体は URL で開ける
+  - 一覧はリポジトリ直下の `archive.json`（`{"archived": ["<reader-slug>", …]}`）が正。ブラウザから GitHub REST API（Contents API）で読み書きするので、どの端末・ブラウザでも同じ一覧になり、再ビルドも Pages の反映待ちも要らない。最後に読んだ一覧はブラウザに保存され、オフラインでもその一覧で隠す
+  - 書き込みは 1 回ごとに `main` へのコミット（`Archive <slug>` / `Restore <slug>`）になる。ローカルの `Site/` から push する前に `git pull --rebase origin main` で取り込む。`archive.json` は手で編集してもよい
+  - アーカイブ・復元には、ブラウザごとに一度トークンを登録する。GitHub の Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token（<https://github.com/settings/personal-access-tokens/new>）で、Resource owner を tomada1114、Repository access を Only select repositories で `tomada1114/iobsidian-site` だけにし、Permissions の Repository permissions で Contents を Read and write にして作る（Metadata: Read-only は自動で付く）。有効期限は任意。発行したトークンを `archive.html` の GitHub access に貼って Save token を押す。トークンはそのブラウザの localStorage にだけ置かれ、リポジトリには入らない。Remove token from this browser で消せる。期限が切れたら作り直して貼り直す
+  - トークンがなくても一覧は見られる（未認証の API は 1 時間 60 回まで。超えたら保存済みの一覧で表示する）
+  - 以前の Hide ボタン（その端末だけで隠す）で隠した本は、`archive.html` の Hidden on this device に出る。Archive で全端末共通のアーカイブに移すか、Return to shelf で戻す
 
 | 読み物 | 目次 |
 |---|---|

@@ -48,6 +48,68 @@ window.addEventListener("pageshow",function(){
 });
 })();
 </script>
+<script id="site-archive">
+window.siteArchive=(function(){
+var API="https://api.github.com/repos/tomada1114/iobsidian-site/contents/archive.json",COPY="../archive.json",
+  CACHE="bookshelf:archive",TOKEN="bookshelf:github-token",EVENT="site-archive",writes=0,pending=null,state=load();
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);return true}catch(e){return false}}
+function clean(a){return Array.isArray(a)?a.filter(function(s,i){return typeof s==="string"&&s!==""&&a.indexOf(s)===i}):[]}
+function load(){try{var v=JSON.parse(get(CACHE)||"null");if(v&&typeof v==="object"&&Array.isArray(v.archived))return v}catch(e){}return {archived:[],at:0}}
+function list(){return clean(state.archived)}
+function emit(changed){try{window.dispatchEvent(new CustomEvent(EVENT,{detail:{changed:changed}}))}catch(e){}}
+function store(next,sha,wrote){var before=list().join(" ");
+  state={archived:clean(next),sha:sha||"",at:Date.now(),wrote:wrote?Date.now():state.wrote||0};put(CACHE,JSON.stringify(state));emit(list().join(" ")!==before)}
+function fail(code,status){var e=new Error(code);e.code=code;e.status=status||0;return e}
+function headers(token){var h={Accept:"application/vnd.github+json"};if(token)h.Authorization="Bearer "+token;return h}
+function decode(b64){var bin=atob(String(b64).replace(/\s/g,"")),bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes)}
+function encode(text){var bytes=new TextEncoder().encode(text),bin="";for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin)}
+function parse(text){var v=JSON.parse(text);return clean(v&&v.archived)}
+async function remote(token){var r;
+  try{r=await fetch(API+"?ref=main",{headers:headers(token),cache:"no-store"})}catch(e){throw fail("network")}
+  if(r.status===404)return {list:[],sha:""};
+  if(r.status===401)throw fail("auth",401);
+  if(r.status===403||r.status===429)throw fail(r.status===429||r.headers.get("x-ratelimit-remaining")==="0"?"limit":"permission",r.status);
+  if(!r.ok)throw fail("http",r.status);
+  var j=await r.json();return {list:parse(decode(j.content||"")),sha:j.sha||""}}
+function refresh(){if(pending)return pending;var gen=writes;
+  pending=(async function(){var token=get(TOKEN)||"";
+    try{var r;try{r=await remote(token)}catch(e){if(token&&e.code==="auth")r=await remote("");else throw e}
+      // Keep a write made moments ago if the API still answers with an older copy.
+      if(gen===writes&&!(state.wrote&&Date.now()-state.wrote<15000&&r.sha!==state.sha))store(r.list,r.sha);
+      return {ok:true}}
+    catch(e){
+      if(!state.at){try{var c=await fetch(COPY,{cache:"no-store"});if(c.ok&&gen===writes){store(parse(await c.text()),"");return {ok:true,copy:true}}}catch(x){}}
+      return {ok:false,error:e}}
+  })();
+  pending.then(function(){pending=null});return pending}
+async function change(slug,on){var token=get(TOKEN)||"";if(!token)throw fail("token");writes++;
+  for(var attempt=0;attempt<2;attempt++){
+    var cur=await remote(token);
+    if((cur.list.indexOf(slug)>=0)===on){store(cur.list,cur.sha);return list()}
+    var next=on?[slug].concat(cur.list):cur.list.filter(function(s){return s!==slug}),
+      body={message:(on?"Archive ":"Restore ")+slug,content:encode(JSON.stringify({archived:next},null,2)+"\n"),branch:"main"},r;
+    if(cur.sha)body.sha=cur.sha;
+    try{r=await fetch(API,{method:"PUT",headers:Object.assign(headers(token),{"Content-Type":"application/json"}),body:JSON.stringify(body)})}catch(e){throw fail("network")}
+    if(r.ok){var j=await r.json().catch(function(){return {}});store(next,j.content&&j.content.sha,true);return list()}
+    if(r.status===409||r.status===422)continue;
+    throw fail(r.status===401?"auth":r.status===403||r.status===404?"permission":"http",r.status)}
+  throw fail("conflict")}
+async function verify(token){try{await remote(token);return "ok"}catch(e){return e.code}}
+var TEXT={token:"Archiving needs a GitHub token in this browser.",
+  auth:"GitHub rejected the saved token. It may have expired; replace it on the Archive page.",
+  permission:"The saved token cannot change archive.json. It needs Contents: Read and write on tomada1114/iobsidian-site.",
+  limit:"GitHub's hourly limit for reading without a token was reached. Try again later, or add a token.",
+  network:"Could not reach GitHub. Check your connection and try again.",
+  conflict:"archive.json changed on GitHub at the same moment. Try again."};
+function describe(e){var c=e&&e.code;return TEXT[c]||"GitHub returned an error"+(e&&e.status?" ("+e.status+")":"")+". Try again."}
+window.addEventListener("storage",function(e){if(e.key!==CACHE&&e.key!==TOKEN&&e.key!==null)return;var before=list().join(" ");state=load();emit(list().join(" ")!==before)});
+window.addEventListener("pageshow",function(e){if(e.persisted){state=load();emit(true)}});
+return {list:list,refresh:refresh,change:change,verify:verify,describe:describe,
+  syncedAt:function(){return state.at||0},token:function(){return get(TOKEN)||""},
+  setToken:function(t){var ok=put(TOKEN,t);emit(false);return ok},clearToken:function(){put(TOKEN,null);emit(false)}};
+})();
+</script>
 <title>富を積み上げる人の考え方 02 · 長く続けることの差</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -308,10 +370,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .theme-btn .theme-light-icon,:root[data-theme="dark"] .theme-btn .theme-dark-icon{display:none}
 :root[data-theme="dark"] .theme-btn .theme-light-icon{display:block}
+.head-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
+  background:var(--nav-bg);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;text-decoration:none;flex:none}
+.head-link:hover{background:var(--nav-hover)}
+.head-link[aria-current]{background:var(--nav-surface);border-color:var(--nav-accent);font-weight:700}
+.head-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .menu-btn{display:none;align-items:center;justify-content:center;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
   background:var(--nav-surface);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;flex:none}
 .menu-btn:hover{background:var(--nav-hover)}
-.site-head :is(a,button):focus-visible,.side a:focus-visible,.shelf :is(a,button,input,select):focus-visible{outline-color:var(--nav-focus)}
+.site-head :is(a,button):focus-visible,.side :is(a,button):focus-visible,.shelf :is(a,button,input,select):focus-visible{outline-color:var(--nav-focus)}
 .skip-link{position:fixed;left:16px;top:-100px;z-index:100;padding:8px 16px;background:var(--bg);color:var(--text);border:2px solid var(--accent)}
 .skip-link:focus{top:8px}
 .side{font-size:var(--fs-small);line-height:var(--lh-tight);background:var(--nav-bg)}
@@ -325,6 +392,15 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
 .side li a[aria-current] .n{color:var(--nav-accent)}
 .side .all{margin-top:24px;padding-top:16px;border-top:1px solid var(--nav-line)}
 .side .all a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);text-decoration:none}
+.side-archive-box{margin-top:12px}
+.side-archive{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
+  background:transparent;color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.side-archive:hover{background:var(--nav-hover)}
+.side-archive[hidden]{display:none}
+.side-archive:disabled{opacity:.6;cursor:progress}
+.side-archive-note{margin:8px 0 0;font-size:var(--fs-caption);line-height:1.5;color:var(--nav-muted)}
+.side-archive-note:empty{display:none}
+.side .all .side-archive-note a{display:inline;min-height:0;text-decoration:underline;text-underline-offset:3px}
 @media (min-width:1080px){
   .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
   .side{position:fixed;top:65px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--nav-line)}
@@ -342,6 +418,8 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   .site-caption{font-size:12px}
   .theme-btn{padding:0;width:44px}
   .theme-btn .theme-label{display:none}
+  .head-link{padding:0;width:44px}
+  .head-link .head-label{display:none}
   .side{top:57px}
   .brand-icon{width:18px;height:18px}
 }
@@ -380,6 +458,7 @@ blockquote{border-left:2px solid var(--line-strong);padding-left:14px;color:var(
   <div class="all" lang="en">
     <a href="../money.html">← Money</a><br>
     <a href="../index.html">← Bookshelf</a>
+    <div class="side-archive-box"><button class="side-archive" type="button" data-side-archive="book-wealth-mindset" hidden>Archive this book</button><p class="side-archive-note" aria-live="polite"></p></div>
   </div>
 </aside>
 <div class="page acc-1">
@@ -509,7 +588,7 @@ function set(o){o=o&&small.matches;document.body.classList.toggle("nav-open",o);
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
 document.addEventListener("keydown",function(e){if(!document.body.classList.contains("nav-open"))return;
   if(e.key==="Escape"){e.preventDefault();set(false)}
-  if(e.key==="Tab"){var links=side.querySelectorAll("a[href]"),last=links[links.length-1],first=document.querySelector(".theme-btn:not([hidden])")||b;
+  if(e.key==="Tab"){var links=side.querySelectorAll("a[href],button:not([hidden]):not(:disabled)"),last=links[links.length-1],first=document.querySelector(".theme-btn:not([hidden])")||b;
     if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
 });
@@ -522,6 +601,21 @@ r=r.filter(function(e){return e&&e.s!==s});
 r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
 try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
+(function(){var b=document.querySelector("[data-side-archive]"),A=window.siteArchive,h=document.querySelector(".site-head");if(!b||!A||!h)return;
+var slug=b.dataset.sideArchive,note=document.querySelector(".side-archive-note"),page=new URL((h.dataset.root||"./")+"archive.html",location.href).href,busy=false;
+function on(){return A.list().indexOf(slug)>=0}
+function say(text,link,href){note.replaceChildren(text);if(link){var a=document.createElement("a");a.href=href;a.textContent=link;note.append(" ",a)}}
+function render(){if(busy)return;b.hidden=false;b.textContent=on()?"Restore to bookshelf":"Archive this book";
+  if(!note.dataset.said)on()?say("Archived: hidden from the bookshelf.","Open the Archive",page):note.replaceChildren()}
+b.addEventListener("click",async function(){if(busy)return;var next=!on();note.dataset.said="1";
+  if(!A.token()){say("Archiving needs a GitHub token in this browser.","Set it up on the Archive page",page+"#access");return}
+  busy=true;b.disabled=true;b.textContent=next?"Archiving…":"Restoring…";
+  try{await A.change(slug,next);next?say("Archived. It no longer appears on the bookshelf.","Open the Archive",page):say("Restored to the bookshelf.")}
+  catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix?"Open the Archive page":"",page+"#access")}
+  finally{busy=false;b.disabled=false;render()}});
+window.addEventListener("site-archive",render);render();
+if(A.token()||/\/ch00\.html$/.test(location.pathname))A.refresh();
+})();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
 navigator.serviceWorker.register(root+"sw.js").catch(function(){});
@@ -533,7 +627,8 @@ function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
 async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
-  var catalog=JSON.parse(source.textContent),lists=await Promise.all(catalog.readers.map(async function(book){
+  var catalog=JSON.parse(source.textContent),skip=window.siteArchive?window.siteArchive.list():[],
+    lists=await Promise.all(catalog.readers.filter(function(book){return skip.indexOf(book.slug)<0}).map(async function(book){
     var u=clean(book.href,root),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
   return uniq([].concat.apply(catalog.pages.map(function(p){return clean(p,root)}),lists))}
@@ -549,7 +644,7 @@ async function show(){label.textContent=saved()?"Update offline copy":"Save all 
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(saved()&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    if(saved()&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" saved page"+(g>1?"s":"")+" no longer on the shelf":""].filter(Boolean).join(", ")+". Press the button to update.";
     else if(saved())note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
@@ -557,6 +652,7 @@ btn.addEventListener("click",async function(){btn.disabled=true;
   catch(e){note.textContent="Could not save. Check your connection and try again."}
   finally{btn.disabled=false}});
 box.hidden=false;show();
+window.addEventListener("site-archive",function(e){if(e.detail&&e.detail.changed&&!btn.disabled)show()});
 })();
 </script>
 </body>

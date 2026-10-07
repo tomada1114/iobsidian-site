@@ -9,6 +9,12 @@ icons, JS registers sw.js, and the bookshelf's "Save all for offline" button sto
 every page in the service worker's cache. Opened online, the bookshelf counts new pages not
 yet saved and removed pages still saved, so the reader knows when to press it again.
 
+Archive: archived readers are listed in archive.json at the repository root. Pages read it from the
+GitHub Contents API (cached in localStorage so lists render instantly and offline) and hide those readers
+from the bookshelf, category pages, Continue reading and the offline save. Archiving and restoring write
+archive.json through the same API with a fine-grained token kept in each browser's localStorage
+(set on archive.html). No rebuild is needed when the archive changes.
+
     python3 _shared/nav.py   # regenerates the bookshelf from the catalogue below
 """
 import html, json, pathlib, re
@@ -95,10 +101,15 @@ CSS = """
 .theme-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .theme-btn .theme-light-icon,:root[data-theme="dark"] .theme-btn .theme-dark-icon{display:none}
 :root[data-theme="dark"] .theme-btn .theme-light-icon{display:block}
+.head-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
+  background:var(--nav-bg);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;text-decoration:none;flex:none}
+.head-link:hover{background:var(--nav-hover)}
+.head-link[aria-current]{background:var(--nav-surface);border-color:var(--nav-accent);font-weight:700}
+.head-link svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .menu-btn{display:none;align-items:center;justify-content:center;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
   background:var(--nav-surface);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;flex:none}
 .menu-btn:hover{background:var(--nav-hover)}
-.site-head :is(a,button):focus-visible,.side a:focus-visible,.shelf :is(a,button,input,select):focus-visible{outline-color:var(--nav-focus)}
+.site-head :is(a,button):focus-visible,.side :is(a,button):focus-visible,.shelf :is(a,button,input,select):focus-visible{outline-color:var(--nav-focus)}
 .skip-link{position:fixed;left:16px;top:-100px;z-index:100;padding:8px 16px;background:var(--bg);color:var(--text);border:2px solid var(--accent)}
 .skip-link:focus{top:8px}
 .side{font-size:var(--fs-small);line-height:var(--lh-tight);background:var(--nav-bg)}
@@ -112,6 +123,15 @@ CSS = """
 .side li a[aria-current] .n{color:var(--nav-accent)}
 .side .all{margin-top:24px;padding-top:16px;border-top:1px solid var(--nav-line)}
 .side .all a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);text-decoration:none}
+.side-archive-box{margin-top:12px}
+.side-archive{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;
+  background:transparent;color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.side-archive:hover{background:var(--nav-hover)}
+.side-archive[hidden]{display:none}
+.side-archive:disabled{opacity:.6;cursor:progress}
+.side-archive-note{margin:8px 0 0;font-size:var(--fs-caption);line-height:1.5;color:var(--nav-muted)}
+.side-archive-note:empty{display:none}
+.side .all .side-archive-note a{display:inline;min-height:0;text-decoration:underline;text-underline-offset:3px}
 @media (min-width:1080px){
   .has-side .page{margin-left:max(300px,calc((100% - var(--measure))/2))}
   .side{position:fixed;top:65px;bottom:0;left:0;width:272px;overflow-y:auto;padding:28px 16px 40px 20px;border-right:1px solid var(--nav-line)}
@@ -129,6 +149,8 @@ CSS = """
   .site-caption{font-size:12px}
   .theme-btn{padding:0;width:44px}
   .theme-btn .theme-label{display:none}
+  .head-link{padding:0;width:44px}
+  .head-link .head-label{display:none}
   .side{top:57px}
   .brand-icon{width:18px;height:18px}
 }
@@ -148,7 +170,7 @@ function set(o){o=o&&small.matches;document.body.classList.toggle("nav-open",o);
 b.addEventListener("click",function(){set(!document.body.classList.contains("nav-open"))});
 document.addEventListener("keydown",function(e){if(!document.body.classList.contains("nav-open"))return;
   if(e.key==="Escape"){e.preventDefault();set(false)}
-  if(e.key==="Tab"){var links=side.querySelectorAll("a[href]"),last=links[links.length-1],first=document.querySelector(".theme-btn:not([hidden])")||b;
+  if(e.key==="Tab"){var links=side.querySelectorAll("a[href],button:not([hidden]):not(:disabled)"),last=links[links.length-1],first=document.querySelector(".theme-btn:not([hidden])")||b;
     if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
     else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
 });
@@ -161,6 +183,21 @@ r=r.filter(function(e){return e&&e.s!==s});
 r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
 try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
+(function(){var b=document.querySelector("[data-side-archive]"),A=window.siteArchive,h=document.querySelector(".site-head");if(!b||!A||!h)return;
+var slug=b.dataset.sideArchive,note=document.querySelector(".side-archive-note"),page=new URL((h.dataset.root||"./")+"archive.html",location.href).href,busy=false;
+function on(){return A.list().indexOf(slug)>=0}
+function say(text,link,href){note.replaceChildren(text);if(link){var a=document.createElement("a");a.href=href;a.textContent=link;note.append(" ",a)}}
+function render(){if(busy)return;b.hidden=false;b.textContent=on()?"Restore to bookshelf":"Archive this book";
+  if(!note.dataset.said)on()?say("Archived: hidden from the bookshelf.","Open the Archive",page):note.replaceChildren()}
+b.addEventListener("click",async function(){if(busy)return;var next=!on();note.dataset.said="1";
+  if(!A.token()){say("Archiving needs a GitHub token in this browser.","Set it up on the Archive page",page+"#access");return}
+  busy=true;b.disabled=true;b.textContent=next?"Archiving…":"Restoring…";
+  try{await A.change(slug,next);next?say("Archived. It no longer appears on the bookshelf.","Open the Archive",page):say("Restored to the bookshelf.")}
+  catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix?"Open the Archive page":"",page+"#access")}
+  finally{busy=false;b.disabled=false;render()}});
+window.addEventListener("site-archive",render);render();
+if(A.token()||/\/ch00\.html$/.test(location.pathname))A.refresh();
+})();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
 navigator.serviceWorker.register(root+"sw.js").catch(function(){});
@@ -172,7 +209,8 @@ function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
 function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
 async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
-  var catalog=JSON.parse(source.textContent),lists=await Promise.all(catalog.readers.map(async function(book){
+  var catalog=JSON.parse(source.textContent),skip=window.siteArchive?window.siteArchive.list():[],
+    lists=await Promise.all(catalog.readers.filter(function(book){return skip.indexOf(book.slug)<0}).map(async function(book){
     var u=clean(book.href,root),r=await fetch(u,{cache:"no-cache"});if(!r.ok)throw new Error(u);
     return [u].concat(pages(new DOMParser().parseFromString(await r.text(),"text/html"),u))}));
   return uniq([].concat.apply(catalog.pages.map(function(p){return clean(p,root)}),lists))}
@@ -188,7 +226,7 @@ async function show(){label.textContent=saved()?"Update offline copy":"Save all 
   if(!navigator.onLine){note.textContent="Offline. "+last();return}
   note.textContent=last();
   try{var list=await urls(),d=await diff(list),m=d.missing.length,g=d.gone.length;
-    if(saved()&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" removed page"+(g>1?"s":"")+" still saved":""].filter(Boolean).join(", ")+". Press the button to update.";
+    if(saved()&&(m||g))note.textContent=[m?m+" new page"+(m>1?"s":"")+" not saved":"",g?g+" saved page"+(g>1?"s":"")+" no longer on the shelf":""].filter(Boolean).join(", ")+". Press the button to update.";
     else if(saved())note.textContent="All "+list.length+" pages are saved. "+last()}catch(e){}}
 btn.addEventListener("click",async function(){btn.disabled=true;
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
@@ -196,6 +234,7 @@ btn.addEventListener("click",async function(){btn.disabled=true;
   catch(e){note.textContent="Could not save. Check your connection and try again."}
   finally{btn.disabled=false}});
 box.hidden=false;show();
+window.addEventListener("site-archive",function(e){if(e.detail&&e.detail.changed&&!btn.disabled)show()});
 })();
 </script>"""
 
@@ -239,13 +278,85 @@ window.addEventListener("pageshow",function(){
 </script>"""
 
 
+ARCHIVE_REPO = "tomada1114/iobsidian-site"
+
+# window.siteArchive: the archived reader slugs, shared across browsers through archive.json on GitHub.
+# list() answers from the localStorage cache at once; refresh() reads the Contents API (with the saved token
+# when there is one); change(slug, on) rereads the file and writes it back with its sha, retrying once on a
+# conflict. Every update fires a "site-archive" event on window (detail.changed: the list differs).
+ARCHIVE_HEAD = r"""<script id="site-archive">
+window.siteArchive=(function(){
+var API="https://api.github.com/repos/__REPO__/contents/archive.json",COPY="__ROOT__archive.json",
+  CACHE="bookshelf:archive",TOKEN="bookshelf:github-token",EVENT="site-archive",writes=0,pending=null,state=load();
+function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);return true}catch(e){return false}}
+function clean(a){return Array.isArray(a)?a.filter(function(s,i){return typeof s==="string"&&s!==""&&a.indexOf(s)===i}):[]}
+function load(){try{var v=JSON.parse(get(CACHE)||"null");if(v&&typeof v==="object"&&Array.isArray(v.archived))return v}catch(e){}return {archived:[],at:0}}
+function list(){return clean(state.archived)}
+function emit(changed){try{window.dispatchEvent(new CustomEvent(EVENT,{detail:{changed:changed}}))}catch(e){}}
+function store(next,sha,wrote){var before=list().join(" ");
+  state={archived:clean(next),sha:sha||"",at:Date.now(),wrote:wrote?Date.now():state.wrote||0};put(CACHE,JSON.stringify(state));emit(list().join(" ")!==before)}
+function fail(code,status){var e=new Error(code);e.code=code;e.status=status||0;return e}
+function headers(token){var h={Accept:"application/vnd.github+json"};if(token)h.Authorization="Bearer "+token;return h}
+function decode(b64){var bin=atob(String(b64).replace(/\s/g,"")),bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes)}
+function encode(text){var bytes=new TextEncoder().encode(text),bin="";for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);return btoa(bin)}
+function parse(text){var v=JSON.parse(text);return clean(v&&v.archived)}
+async function remote(token){var r;
+  try{r=await fetch(API+"?ref=main",{headers:headers(token),cache:"no-store"})}catch(e){throw fail("network")}
+  if(r.status===404)return {list:[],sha:""};
+  if(r.status===401)throw fail("auth",401);
+  if(r.status===403||r.status===429)throw fail(r.status===429||r.headers.get("x-ratelimit-remaining")==="0"?"limit":"permission",r.status);
+  if(!r.ok)throw fail("http",r.status);
+  var j=await r.json();return {list:parse(decode(j.content||"")),sha:j.sha||""}}
+function refresh(){if(pending)return pending;var gen=writes;
+  pending=(async function(){var token=get(TOKEN)||"";
+    try{var r;try{r=await remote(token)}catch(e){if(token&&e.code==="auth")r=await remote("");else throw e}
+      // Keep a write made moments ago if the API still answers with an older copy.
+      if(gen===writes&&!(state.wrote&&Date.now()-state.wrote<15000&&r.sha!==state.sha))store(r.list,r.sha);
+      return {ok:true}}
+    catch(e){
+      if(!state.at){try{var c=await fetch(COPY,{cache:"no-store"});if(c.ok&&gen===writes){store(parse(await c.text()),"");return {ok:true,copy:true}}}catch(x){}}
+      return {ok:false,error:e}}
+  })();
+  pending.then(function(){pending=null});return pending}
+async function change(slug,on){var token=get(TOKEN)||"";if(!token)throw fail("token");writes++;
+  for(var attempt=0;attempt<2;attempt++){
+    var cur=await remote(token);
+    if((cur.list.indexOf(slug)>=0)===on){store(cur.list,cur.sha);return list()}
+    var next=on?[slug].concat(cur.list):cur.list.filter(function(s){return s!==slug}),
+      body={message:(on?"Archive ":"Restore ")+slug,content:encode(JSON.stringify({archived:next},null,2)+"\n"),branch:"main"},r;
+    if(cur.sha)body.sha=cur.sha;
+    try{r=await fetch(API,{method:"PUT",headers:Object.assign(headers(token),{"Content-Type":"application/json"}),body:JSON.stringify(body)})}catch(e){throw fail("network")}
+    if(r.ok){var j=await r.json().catch(function(){return {}});store(next,j.content&&j.content.sha,true);return list()}
+    if(r.status===409||r.status===422)continue;
+    throw fail(r.status===401?"auth":r.status===403||r.status===404?"permission":"http",r.status)}
+  throw fail("conflict")}
+async function verify(token){try{await remote(token);return "ok"}catch(e){return e.code}}
+var TEXT={token:"Archiving needs a GitHub token in this browser.",
+  auth:"GitHub rejected the saved token. It may have expired; replace it on the Archive page.",
+  permission:"The saved token cannot change archive.json. It needs Contents: Read and write on __REPO__.",
+  limit:"GitHub's hourly limit for reading without a token was reached. Try again later, or add a token.",
+  network:"Could not reach GitHub. Check your connection and try again.",
+  conflict:"archive.json changed on GitHub at the same moment. Try again."};
+function describe(e){var c=e&&e.code;return TEXT[c]||"GitHub returned an error"+(e&&e.status?" ("+e.status+")":"")+". Try again."}
+window.addEventListener("storage",function(e){if(e.key!==CACHE&&e.key!==TOKEN&&e.key!==null)return;var before=list().join(" ");state=load();emit(list().join(" ")!==before)});
+window.addEventListener("pageshow",function(e){if(e.persisted){state=load();emit(true)}});
+return {list:list,refresh:refresh,change:change,verify:verify,describe:describe,
+  syncedAt:function(){return state.at||0},token:function(){return get(TOKEN)||""},
+  setToken:function(t){var ok=put(TOKEN,t);emit(false);return ok},clearToken:function(){put(TOKEN,null);emit(false)}};
+})();
+</script>"""
+
+
 def head(root):
-    """App links and theme initialization, run before the page's first paint."""
+    """App links, theme initialization and the archive client, run before the page's first paint."""
+    archive = ARCHIVE_HEAD.replace("__ROOT__", root).replace("__REPO__", ARCHIVE_REPO)
     return f"""<link rel="manifest" href="{root}manifest.webmanifest">
 <link rel="apple-touch-icon" href="{root}icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Bookshelf">
 <meta name="mobile-web-app-capable" content="yes">
-{THEME_HEAD}"""
+{THEME_HEAD}
+{archive}"""
 
 
 def offline_box():
@@ -262,12 +373,17 @@ def lang_attr(slug):
     return "" if lang == "en" else f' lang="{lang}"'
 
 
-def header(root, current=None, with_side=False):
-    """root: relative path from the page to Site/ ("" or "../" or "../../")."""
+def header(root, current=None, with_side=False, archive_current=False):
+    """root: relative path from the page to Site/ ("" or "../" or "../../").
+    Bookshelf pages (with_side False) also link to the Archive; archive_current marks that page."""
     label = next((label for slug, label, _ in READERS if slug == current), "")
     here = f'<span class="here"><span{lang_attr(current)}>{html.escape(label)}</span></span>' if with_side else ""
     btn = '\n  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button>' if with_side else ""
     caption = "" if with_side else '<span class="site-caption">Personal library</span>'
+    archive = "" if with_side else f"""<a class="head-link" href="{root}archive.html"{CUR if archive_current else ""} aria-label="Archive">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></svg>
+    <span class="head-label">Archive</span>
+  </a>"""
     theme = """<button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -278,7 +394,7 @@ def header(root, current=None, with_side=False):
     return f"""{skip}<header class="site-head" lang="en" data-root="{root}"{data}>
 <div class="bar">
   <a class="brand" href="{root}index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a>{here}
-  <div class="head-actions">{caption}{theme}{btn}</div>
+  <div class="head-actions">{caption}{archive}{theme}{btn}</div>
 </div>
 </header>"""
 
@@ -293,6 +409,8 @@ def sidebar(title, home, items, current, root, reader_slug):
         category = BOOKS[reader_slug][0]
         category_name = next(name for key, name, *_ in CATEGORIES if key == category)
         category_link = f'<a href="{root}{CATEGORY_PAGES[category]}">← {html.escape(category_name)}</a><br>'
+    archive = (f'\n    <div class="side-archive-box"><button class="side-archive" type="button" data-side-archive="{html.escape(reader_slug, quote=True)}" hidden>Archive this book</button>'
+               '<p class="side-archive-note" aria-live="polite"></p></div>') if reader_slug in BOOKS else ""
     return f"""<aside class="side" id="side" aria-label="{html.escape(title)} pages">
   <h2><a href="{home}">{html.escape(title)}</a></h2>
   <ol>
@@ -300,7 +418,7 @@ def sidebar(title, home, items, current, root, reader_slug):
   </ol>
   <div class="all" lang="en">
     {category_link}
-    <a href="{root}index.html">← Bookshelf</a>
+    <a href="{root}index.html">← Bookshelf</a>{archive}
   </div>
 </aside>"""
 
@@ -402,20 +520,31 @@ SHELF_CSS = """
 .shelf-head h1{font-size:clamp(32px,4vw,40px);line-height:1.2;letter-spacing:-.04em;font-weight:600;text-wrap:balance;color:var(--nav-text)}
 .shelf-head .lead{font-size:16px;line-height:1.6;margin-top:12px;color:var(--text-muted);max-width:55ch}
 .library-stats{margin-top:12px;font-size:13px;color:var(--text-subtle)}
-.shelf-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin:16px 0 20px}
 .library-action,.book-action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
-.library-action:hover,.book-action:hover,.restore-book:hover{background:var(--nav-hover)}
-.library-feedback{margin:0;font-size:12px;line-height:1.5;color:var(--nav-muted)}
-.hidden-books{margin:0 0 32px;padding:16px 0 0;border-top:1px solid var(--nav-line)}
-.hidden-books h2{font-size:16px;color:var(--nav-text)}
-.hidden-empty{margin-top:8px;font-size:13px;color:var(--text-muted)}
-.hidden-list{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--nav-line)}
-.hidden-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--nav-line)}
-.hidden-book-copy{display:grid;gap:3px;min-width:0}
-.hidden-book-title{color:var(--nav-text);font-size:15px;font-weight:600;line-height:1.5;text-decoration:none}
-.hidden-book-title:hover{text-decoration:underline;text-underline-offset:3px}
-.hidden-book-category{font-size:12px;color:var(--nav-muted)}
-.restore-book{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:transparent;color:var(--nav-text);font:500 13px/1.3 system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+.library-action:hover,.book-action:hover{background:var(--nav-hover)}
+.library-action:disabled,.book-action:disabled{opacity:.6;cursor:progress}
+.library-feedback{position:fixed;z-index:20;left:50%;bottom:16px;transform:translateX(-50%);width:min(560px,calc(100% - 32px));margin:0;padding:12px 16px;
+  border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--nav-bg);color:var(--nav-text);font-size:13px;line-height:1.5}
+.library-feedback:empty{display:none}
+.library-feedback a,.archive-note a,.empty-collection a{color:var(--nav-accent);text-underline-offset:3px}
+.archive-section{margin:0 0 40px}
+.archive-section h2+.archive-note{margin-top:8px}
+.archive-note,.archive-empty,.archive-sync{margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--text-muted);max-width:62ch}
+.archive-sync:empty{display:none}
+.archive-list{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
+.archive-list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--nav-line)}
+.archive-book{display:grid;gap:3px;min-width:0}
+.archive-title{color:var(--nav-text);font-size:15px;font-weight:600;line-height:1.5;text-decoration:none}
+.archive-title:lang(ja){word-break:auto-phrase}
+.archive-title:hover{text-decoration:underline;text-underline-offset:3px}
+.archive-category{font-size:12px;color:var(--nav-muted)}
+.archive-actions{display:flex;flex-wrap:wrap;gap:8px}
+.access-form{display:grid;gap:8px;margin-top:16px;max-width:560px}
+.access-form label{font-size:13px;font-weight:600;color:var(--nav-text)}
+.access-row{display:flex;flex-wrap:wrap;gap:8px}
+.access-row input{flex:1 1 240px;min-width:0;min-height:44px;padding:0 12px;border:1px solid var(--nav-line-strong);border-radius:6px;background:var(--bg);color:var(--text);font:400 14px/1.3 var(--font-mono)}
+.access-more{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:12px}
+.access-more a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);font-size:13px;text-underline-offset:3px}
 .shelf-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--nav-accent)}
 .category-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
 .category-list,.book-list,.recent ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--nav-line)}
@@ -434,6 +563,7 @@ SHELF_CSS = """
 .category-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .category-nav a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid var(--nav-line-strong);border-radius:6px;color:var(--nav-text);text-decoration:none;font-size:13px;font-weight:500}
 .category-nav a:hover{background:var(--nav-hover)}
+.category-nav .archive-link{border-style:dashed}
 .category-nav a[aria-current]{background:var(--nav-surface);border-color:var(--nav-accent);font-weight:700}
 .breadcrumb{display:inline-flex;min-height:44px;align-items:center;margin-bottom:12px;color:var(--nav-accent);font-size:13px;text-decoration:none}
 .recent{margin-bottom:36px}
@@ -466,6 +596,7 @@ SHELF_CSS = """
 .shelf-foot p{margin:0}
 .shelf-foot a{display:inline-flex;align-items:center;min-height:44px;color:var(--nav-accent);text-decoration:none}
 .shelf :is(a,button):focus-visible{outline:2px solid var(--nav-focus);outline-offset:4px}
+.shelf input:focus-visible{outline:2px solid var(--nav-focus);outline-offset:2px}
 .shelf button{touch-action:manipulation}
 @media(max-width:700px){
  .shelf .page{padding:28px 4px 24px}
@@ -479,9 +610,7 @@ SHELF_CSS = """
  .category-row .row-arrow{grid-column:3;grid-row:1}
  .category-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
  .category-nav a{padding:8px 10px}
- .shelf-tools{margin:12px 0 18px}
- .hidden-list li{grid-template-columns:minmax(0,1fr);gap:4px;padding:12px 4px}
- .restore-book{justify-self:start}
+ .archive-list li{grid-template-columns:minmax(0,1fr);gap:8px;padding:12px 4px}
  .book-row{grid-template-columns:24px minmax(0,1fr) 16px;gap:12px;padding:20px 0}
  .book-item{gap:4px}
  .book-action{padding:0 8px}
@@ -500,19 +629,29 @@ SHELF_CSS = """
 
 SHELF_JS = r"""<script>
 (function(){
-var HIDDEN_KEY="bookshelf:hidden-books",RECENT_KEY="bookshelf:recent";
-var box=document.querySelector(".recent"),source=document.getElementById("shelf-catalog");
-if(!box||!source)return;
-var catalog=JSON.parse(source.textContent),books=new Map(),valid=new Set();
-catalog.readers.forEach(function(book){books.set(book.slug,book);valid.add(book.slug)});
-var category=box.dataset.category;
+var LEGACY="bookshelf:hidden-books",RECENT_KEY="bookshelf:recent",A=window.siteArchive;
+var source=document.getElementById("shelf-catalog");if(!source)return;
+var catalog=JSON.parse(source.textContent),books=new Map();
+catalog.readers.forEach(function(book){books.set(book.slug,book)});
+var box=document.querySelector(".recent"),category=box?box.dataset.category:"",feedback=document.querySelector(".library-feedback"),main=document.getElementById("library");
+var archiveList=document.querySelector("[data-archive-list]"),legacyList=document.querySelector("[data-legacy-list]"),legacyBox=document.querySelector(".legacy-hidden"),sync=document.querySelector(".archive-sync");
+var form=document.querySelector("[data-access-form]"),tokenInput=document.getElementById("access-token"),clearToken=document.querySelector("[data-access-clear]"),access=document.querySelector("[data-access-status]");
+var archiveUrl=new URL("archive.html",location.href).href;
 var fmt=window.Intl&&Intl.RelativeTimeFormat?new Intl.RelativeTimeFormat("en",{numeric:"auto"}):null;
 function ago(t){if(!fmt)return "Recently";var h=Math.round((t-Date.now())/36e5);return h>-1?"Just now":h>-24?fmt.format(h,"hour"):fmt.format(Math.round(h/24),"day")}
 var recentEntries=[];try{var recent=JSON.parse(localStorage.getItem(RECENT_KEY)||"[]");if(Array.isArray(recent))recentEntries=recent}catch(e){}
-function readHidden(){try{var value=JSON.parse(localStorage.getItem(HIDDEN_KEY)||"[]");return Array.isArray(value)?Array.from(new Set(value.filter(function(slug){return valid.has(slug)}))):[]}catch(e){return []}}
-function saveHidden(value){try{localStorage.setItem(HIDDEN_KEY,JSON.stringify(value));return true}catch(e){return false}}
-var hidden=readHidden(),hiddenToggle=document.querySelector(".library-action"),hiddenPanel=document.querySelector(".hidden-books"),hiddenList=document.querySelector(".hidden-list"),emptyHidden=document.querySelector(".hidden-empty"),feedback=document.querySelector(".library-feedback");
-function renderRecent(){
+function known(list){return list.filter(function(slug,i){return books.has(slug)&&list.indexOf(slug)===i})}
+// Books hidden with the older device-only Hide button stay hidden until they are archived or returned.
+function readLegacy(){try{var value=JSON.parse(localStorage.getItem(LEGACY)||"[]");return Array.isArray(value)?known(value):[]}catch(e){return []}}
+function saveLegacy(value){try{if(value.length)localStorage.setItem(LEGACY,JSON.stringify(value));else localStorage.removeItem(LEGACY);return true}catch(e){return false}}
+function archived(){return A?known(A.list()):[]}
+var legacy=readLegacy(),hidden=[],sayTimer=0;
+function say(text,link,href){if(!feedback)return;feedback.replaceChildren();clearTimeout(sayTimer);
+  // A short notice at the bottom of the screen, near any row; it clears itself.
+  sayTimer=setTimeout(function(){if(!feedback.contains(document.activeElement))feedback.replaceChildren()},link?20000:8000);
+  if(Array.isArray(text))text.forEach(function(part){if(typeof part==="string")feedback.append(part);else{var s=document.createElement("span");s.textContent=part.text;s.lang=part.lang;feedback.append(s)}});else feedback.append(text);
+  if(link){var a=document.createElement("a");a.href=href||archiveUrl+"#access";a.textContent=link;feedback.append(" ",a)}}
+function renderRecent(){if(!box)return;
   var list=box.querySelector("ol");list.replaceChildren();var shown=0;
   recentEntries.forEach(function(e){if(!e||shown>=1||!books.has(e.s)||!Number.isFinite(e.at)||hidden.indexOf(e.s)>=0)return;
     var book=books.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
@@ -526,40 +665,84 @@ function renderRecent(){
   box.hidden=!shown;
 }
 function updateCounts(){
-  var countByCategory=new Map(),visible=catalog.readers.length-hidden.length;
-  catalog.readers.forEach(function(book){if(hidden.indexOf(book.slug)<0)countByCategory.set(book.category,(countByCategory.get(book.category)||0)+1)});
+  var countByCategory=new Map(),visible=0;
+  catalog.readers.forEach(function(book){if(hidden.indexOf(book.slug)<0){visible++;countByCategory.set(book.category,(countByCategory.get(book.category)||0)+1)}});
   document.querySelectorAll("[data-category-count]").forEach(function(el){var n=countByCategory.get(el.dataset.categoryCount)||0;el.textContent=n+" reader"+(n===1?"":"s")});
-  var stats=document.querySelector(".library-stats");
+  var stats=document.querySelector(".library-stats:not([data-archive-stats])");
   if(stats){if(category){var n=countByCategory.get(category)||0;stats.textContent=n+" reader"+(n===1?"":"s")}else stats.textContent=catalog.categories.length+" collections · "+visible+" readers"}
-  var count=hiddenToggle&&hiddenToggle.querySelector("[data-hidden-count]");if(count)count.textContent=hidden.length;
 }
-function renderHidden(){
-  if(!hiddenList)return;
-  hiddenList.replaceChildren();
-  hidden.forEach(function(slug){var book=books.get(slug);if(!book)return;
-    var li=document.createElement("li"),copy=document.createElement("div"),link=document.createElement("a"),group=document.createElement("span"),button=document.createElement("button");
-    copy.className="hidden-book-copy";link.className="hidden-book-title";link.href=book.href;link.textContent=book.title;link.lang=book.lang;group.className="hidden-book-category";group.textContent=book.categoryName;
-    button.className="restore-book";button.type="button";button.dataset.restoreBook=slug;button.textContent="Return to shelf";button.setAttribute("aria-label","Return "+book.title+" to the shelf");
-    copy.append(link,group);li.append(copy,button);hiddenList.appendChild(li);
-  });
-  if(emptyHidden)emptyHidden.hidden=hidden.length>0;
+function item(book,actions){
+  var li=document.createElement("li"),copy=document.createElement("div"),link=document.createElement("a"),group=document.createElement("span"),buttons=document.createElement("div");
+  li.dataset.bookSlug=book.slug;copy.className="archive-book";link.className="archive-title";link.href=book.href;link.textContent=book.title;link.lang=book.lang;
+  group.className="archive-category";group.textContent=book.categoryName;buttons.className="archive-actions";
+  actions.forEach(function(a){var b=document.createElement("button");b.className="library-action";b.type="button";b.dataset[a[1]]=book.slug;b.textContent=a[0];b.setAttribute("aria-label",a[2]);buttons.appendChild(b)});
+  copy.append(link,group);li.append(copy,buttons);return li}
+function renderArchive(){
+  if(archiveList){var list=archived();archiveList.replaceChildren();
+    list.forEach(function(slug){var book=books.get(slug);archiveList.appendChild(item(book,[["Restore","restoreBook","Restore "+book.title+" to the bookshelf"]]))});
+    var empty=document.querySelector(".archive-empty");if(empty)empty.hidden=list.length>0;
+    var stats=document.querySelector("[data-archive-stats]");if(stats)stats.textContent=list.length+" archived book"+(list.length===1?"":"s")}
+  if(legacyList){var only=legacy.filter(function(slug){return archived().indexOf(slug)<0});legacyList.replaceChildren();
+    only.forEach(function(slug){var book=books.get(slug);legacyList.appendChild(item(book,[["Archive","archiveBook","Archive "+book.title],["Return to shelf","unhideBook","Return "+book.title+" to the shelf on this device"]]))});
+    if(legacyBox)legacyBox.hidden=!only.length}
+  if(access){var has=A&&A.token();
+    access.textContent=!A?"Archiving is not available in this browser.":has?"A token is saved in this browser. Archive and Restore update archive.json on GitHub.":"No token in this browser. The archive is still shown, but archiving and restoring need a token.";
+    if(clearToken)clearToken.hidden=!has;var submit=form&&form.querySelector("button[type=submit]");if(submit)submit.textContent=has?"Replace token":"Save token"}
 }
-function applyHidden(){
+function apply(){
+  var a=archived();legacy=readLegacy();hidden=a.concat(legacy.filter(function(slug){return a.indexOf(slug)<0}));
   document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){row.hidden=hidden.indexOf(row.dataset.bookSlug)>=0});
   var number=0;document.querySelectorAll(".book-item:not([hidden]) .book-number").forEach(function(el){el.textContent=String(++number).padStart(2,"0")});
-  var emptyCollection=document.querySelector(".empty-collection");if(emptyCollection)emptyCollection.hidden=number>0;
-  updateCounts();renderHidden();renderRecent();
+  var emptyCollection=document.querySelector(".empty-collection");if(emptyCollection)emptyCollection.hidden=number>0||!document.querySelector(".book-item");
+  updateCounts();renderArchive();renderRecent();
 }
-if(hiddenToggle&&hiddenPanel)hiddenToggle.addEventListener("click",function(){var open=hiddenPanel.hidden;hiddenPanel.hidden=!open;hiddenToggle.setAttribute("aria-expanded",String(open))});
+function position(button){var li=button.closest("li"),list=li&&li.parentElement;if(!list)return null;
+  var shown=Array.prototype.filter.call(list.children,function(el){return !el.hidden});return {list:list,index:shown.indexOf(li)}}
+function focusNear(at){if(!at){if(main)main.focus();return}
+  var shown=Array.prototype.filter.call(at.list.children,function(el){return !el.hidden}),target=shown[at.index]||shown[at.index-1];
+  var f=target&&target.querySelector("button");if(f)f.focus();else if(main)main.focus()}
+async function change(button,slug,on){
+  var book=books.get(slug);if(!book)return;
+  if(!A){say("Archiving is not available in this browser.");return}
+  if(!A.token()){say("Archiving needs a GitHub token in this browser.",tokenInput?"":"Set it up on the Archive page");if(tokenInput)tokenInput.focus();return}
+  var label=button.textContent,at=position(button);button.disabled=true;button.textContent=on?"Archiving…":"Restoring…";
+  try{await A.change(slug,on);
+    if(legacy.indexOf(slug)>=0){legacy=legacy.filter(function(s){return s!==slug});saveLegacy(legacy)}
+    apply();
+    if(on)say(["Archived: ",{text:book.title,lang:book.lang},"."],archiveList?"":"Open the Archive",archiveUrl);
+    else say(["Restored to the bookshelf: ",{text:book.title,lang:book.lang},"."]);
+    focusNear(at)}
+  catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix&&!tokenInput?"Open the Archive page":"")}
+  finally{if(button.isConnected){button.disabled=false;button.textContent=label}}
+}
 document.addEventListener("click",function(event){
   var target=event.target;if(!target||!target.closest)return;
-  var hide=target.closest("[data-hide-book]"),restore=target.closest("[data-restore-book]");
-  if(hide){var slug=hide.dataset.hideBook;if(hidden.indexOf(slug)>=0)return;var title=books.get(slug).title,next=[slug].concat(hidden);if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Hidden: "+title;hiddenToggle.focus()}
-  if(restore){var restored=restore.dataset.restoreBook,title=books.get(restored).title,next=hidden.filter(function(slug){return slug!==restored});if(!saveHidden(next)){if(feedback)feedback.textContent="Could not save hidden books in this browser.";return}hidden=next;applyHidden();if(feedback)feedback.textContent="Returned to the shelf: "+title;var action=null;document.querySelectorAll(".book-item[data-book-slug]").forEach(function(row){if(row.dataset.bookSlug===restored)action=row.querySelector(".book-row")});(action||hiddenToggle).focus()}
+  var archive=target.closest("[data-archive-book]"),restore=target.closest("[data-restore-book]"),unhide=target.closest("[data-unhide-book]");
+  if(archive&&!archive.disabled)change(archive,archive.dataset.archiveBook,true);
+  if(restore&&!restore.disabled)change(restore,restore.dataset.restoreBook,false);
+  if(unhide){var slug=unhide.dataset.unhideBook,book=books.get(slug),at=position(unhide),next=legacy.filter(function(s){return s!==slug});
+    if(!saveLegacy(next)){say("Could not update this browser's storage.");return}
+    apply();if(book)say(["Returned to the shelf on this device: ",{text:book.title,lang:book.lang},"."]);focusNear(at)}
 });
-window.addEventListener("storage",function(event){if(event.key===HIDDEN_KEY||event.key===null){hidden=readHidden();applyHidden()}});
-window.addEventListener("pageshow",function(){hidden=readHidden();applyHidden()});
-applyHidden();
+if(form&&A)form.addEventListener("submit",async function(event){event.preventDefault();
+  var value=tokenInput.value.trim(),submit=form.querySelector("button[type=submit]");
+  if(!value){say("Paste a token first.");tokenInput.focus();return}
+  submit.disabled=true;say("Checking the token with GitHub…");
+  var result=await A.verify(value);submit.disabled=false;
+  if(result==="auth"){say("GitHub rejected this token. Check that it was copied in full and has not expired.");tokenInput.focus();return}
+  if(!A.setToken(value)){say("Could not save the token: this browser blocks site storage.");return}
+  tokenInput.value="";
+  say(result==="ok"?"Token saved in this browser.":"Token saved, but GitHub could not check it now ("+A.describe({code:result})+")");
+  A.refresh().then(showSync)});
+if(clearToken&&A)clearToken.addEventListener("click",function(){A.clearToken();say("Token removed from this browser.");if(tokenInput)tokenInput.focus()});
+function showSync(result){if(!sync||!A)return;
+  if(result&&!result.ok){sync.textContent=A.describe(result.error)+(A.syncedAt()?" Showing the list this browser last saw.":"");return}
+  sync.textContent=A.syncedAt()?"Up to date with GitHub.":""}
+window.addEventListener("site-archive",apply);
+window.addEventListener("storage",function(event){if(event.key===LEGACY||event.key===null)apply()});
+window.addEventListener("pageshow",function(event){apply();if(event.persisted&&A)A.refresh().then(showSync)});
+apply();
+if(A){if(sync)sync.textContent="Checking GitHub…";A.refresh().then(showSync)}
 })();
 </script>"""
 
@@ -573,7 +756,7 @@ def page_count(slug):
 def catalogue():
     """All readers, independent of which category is currently displayed."""
     category_names = {key: name for key, name, *_ in CATEGORIES}
-    data = {"pages": ["index.html", *CATEGORY_PAGES.values()],
+    data = {"pages": ["index.html", *CATEGORY_PAGES.values(), ARCHIVE_PAGE],
         "categories": [{"key": key, "name": name} for key, name, *_ in CATEGORIES], "readers": [
         {"slug": slug, "href": f"{slug}/{entry}", "category": BOOKS[slug][0],
          "categoryName": category_names[BOOKS[slug][0]], "title": BOOKS[slug][2], "lang": BOOKS[slug][6]}
@@ -596,8 +779,57 @@ def book_rows(category):
   <span class="book-number" aria-hidden="true">{len(rows)+1:02d}</span>
   <span class="book-copy"><span class="book-title"{lt}>{html.escape(title)}{series_label}</span><span class="book-blurb"{lt}>{html.escape(blurb)}</span></span>
   <span class="book-facts">{''.join(f'<span>{html.escape(f)}</span>' for f in facts)}</span>
-  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-hide-book="{html.escape(slug, quote=True)}" aria-label="Hide {html.escape(title, quote=True)}">Hide</button></li>""")
+  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-archive-book="{html.escape(slug, quote=True)}" aria-label="Archive {html.escape(title, quote=True)}">Archive</button></li>""")
     return '<ul class="book-list">' + "\n".join(rows) + '</ul>'
+
+
+ARCHIVE_PAGE = "archive.html"
+
+
+def collection_menu(current=None):
+    """Collapsed links between category pages, ending with the Archive."""
+    links = ''.join(f'<a href="{CATEGORY_PAGES[key]}"{CUR if key == current else ""}>{html.escape(name)}</a>' for key, name, *_ in CATEGORIES)
+    links += f'<a class="archive-link" href="{ARCHIVE_PAGE}"{CUR if current == "archive" else ""}>Archive</a>'
+    return f'<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories">{links}</nav></details>'
+
+
+def shelf_footer():
+    return f"""<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div>{offline_box()}</footer>
+{catalogue()}
+{SHELF_JS}"""
+
+
+def archive_page():
+    """Archived readers with Restore, books hidden by the older device-only Hide, and the GitHub token setting."""
+    return f"""<main class="library-main" id="library" tabindex="-1" aria-labelledby="shelf-title">
+<header class="shelf-head" id="shelf-top"><a class="breadcrumb" href="index.html">← Bookshelf</a>
+  <h1 id="shelf-title">Archive</h1><p class="lead">Books you have finished. Archived books are hidden from the bookshelf on every device; restore one to put it back.</p><p class="library-stats" data-archive-stats>Archived books</p>
+</header>
+{collection_menu("archive")}
+<p class="library-feedback" aria-live="polite"></p>
+<section class="archive-section" aria-labelledby="archived-title">
+  <h2 class="shelf-label" id="archived-title">Archived books</h2>
+  <ul class="archive-list" data-archive-list></ul>
+  <p class="archive-empty">No archived books. Use Archive on a book in a collection to move it here.</p>
+  <p class="archive-sync" aria-live="polite"></p>
+</section>
+<section class="archive-section legacy-hidden" aria-labelledby="legacy-title" hidden>
+  <h2 class="shelf-label" id="legacy-title">Hidden on this device</h2>
+  <p class="archive-note">These books were hidden with the older Hide button, which only worked in this browser. Archive them to hide them on every device, or return them to the shelf.</p>
+  <ul class="archive-list" data-legacy-list></ul>
+</section>
+<section class="archive-section" id="access" aria-labelledby="access-title">
+  <h2 class="shelf-label" id="access-title">GitHub access</h2>
+  <p class="archive-note" data-access-status aria-live="polite">Archiving and restoring need a GitHub token in this browser.</p>
+  <p class="archive-note">Archive and Restore save <code>archive.json</code> in the {ARCHIVE_REPO} repository. Use a fine-grained personal access token limited to that repository, with Contents: Read and write. The token stays in this browser only; add it once on each device you archive from.</p>
+  <form class="access-form" data-access-form autocomplete="off">
+    <label for="access-token">Fine-grained token</label>
+    <div class="access-row"><input id="access-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"><button class="library-action" type="submit">Save token</button></div>
+  </form>
+  <div class="access-more"><button class="library-action" type="button" data-access-clear hidden>Remove token from this browser</button><a href="https://github.com/settings/personal-access-tokens/new" rel="noopener">Create a token on GitHub</a></div>
+</section>
+</main>
+{shelf_footer()}"""
 
 
 def shelf(category=None):
@@ -607,8 +839,7 @@ def shelf(category=None):
         count = sum(b[0] == category for b in BOOKS.values())
         breadcrumb = '<a class="breadcrumb" href="index.html">← Bookshelf</a>'
         stats = f'{count} reader' + ('s' if count != 1 else '')
-        nav_links = ''.join(f'<a href="{CATEGORY_PAGES[key]}"{CUR if key == category else ""}>{html.escape(name)}</a>' for key, name, *_ in CATEGORIES)
-        content = f'<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories">{nav_links}</nav></details>' + book_rows(category) + '<p class="empty-collection" hidden>All books in this collection are hidden. Use Hidden books above to return them.</p>'
+        content = collection_menu(category) + book_rows(category) + f'<p class="empty-collection" hidden>Every book in this collection is archived. <a href="{ARCHIVE_PAGE}">Open the Archive</a></p>'
     else:
         title, note, breadcrumb = "Bookshelf", "Readers for daily practice, technical study and new ideas.", ""
         stats = f'{len(CATEGORIES)} collections · {len(BOOKS)} readers'
@@ -627,20 +858,10 @@ def shelf(category=None):
 <section class="recent" data-category="{category or ''}" aria-labelledby="recent-title" hidden>
   <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
 </section>
-<div class="shelf-tools">
-  <button class="library-action" type="button" aria-controls="hidden-books" aria-expanded="false">Hidden books (<span data-hidden-count>0</span>)</button>
-  <p class="library-feedback" aria-live="polite"></p>
-</div>
-<section class="hidden-books" id="hidden-books" aria-labelledby="hidden-title" hidden>
-  <h2 id="hidden-title">Hidden books</h2>
-  <p class="hidden-empty">No books are hidden.</p>
-  <ul class="hidden-list"></ul>
-</section>
+<p class="library-feedback" aria-live="polite"></p>
 {content}
 </main>
-<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div>{offline_box()}</footer>
-{catalogue()}
-{SHELF_JS}"""
+{shelf_footer()}"""
 
 
 def patch_index():
@@ -653,10 +874,14 @@ def patch_index():
     template = re.sub(r'\n<style id="site-nav">.*?</style>', "", template, flags=re.S)
     template = re.sub(r'<!-- app -->.*?<!-- /app -->\n', "", template, flags=re.S)
     template = template.replace("</head>", f'<style id="site-nav">{CSS}{SHELF_CSS}</style>\n<!-- app -->\n{head("")}\n<!-- /app -->\n</head>')
-    for category, filename in [(None, "index.html"), *CATEGORY_PAGES.items()]:
-        title = "tomada's Bookshelf" if category is None else next(c[1] for c in CATEGORIES if c[0] == category) + " | Bookshelf"
+    for category, filename in [(None, "index.html"), *CATEGORY_PAGES.items(), ("archive", ARCHIVE_PAGE)]:
+        if category == "archive":
+            title, body, head_html = "Archive | Bookshelf", archive_page(), header("", archive_current=True)
+        else:
+            title = "tomada's Bookshelf" if category is None else next(c[1] for c in CATEGORIES if c[0] == category) + " | Bookshelf"
+            body, head_html = shelf(category), header("")
         page_head = re.sub(r'<title>.*?</title>', f'<title>{html.escape(title)}</title>', template)
-        (SITE / filename).write_text(page_head + f'<body class="shelf acc-1">\n{header("")}\n<div class="page">\n{shelf(category)}\n</div>\n{JS}\n</body>\n</html>\n')
+        (SITE / filename).write_text(page_head + f'<body class="shelf acc-1">\n{head_html}\n<div class="page">\n{body}\n</div>\n{JS}\n</body>\n</html>\n')
         print("built", filename)
 
 

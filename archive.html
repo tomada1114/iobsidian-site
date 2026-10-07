@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131615" media="(prefers-color-scheme: dark)">
 <meta name="robots" content="noindex">
-<title>Communication &amp; Relationships | Bookshelf</title>
+<title>Archive | Bookshelf</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDGothic:wght@400;700&family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -543,7 +543,7 @@ return {list:list,refresh:refresh,change:change,verify:verify,describe:describe,
 <header class="site-head" lang="en" data-root="">
 <div class="bar">
   <a class="brand" href="index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a>
-  <div class="head-actions"><span class="site-caption">Personal library</span><a class="head-link" href="archive.html" aria-label="Archive">
+  <div class="head-actions"><span class="site-caption">Personal library</span><a class="head-link" href="archive.html" aria-current="page" aria-label="Archive">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></svg>
     <span class="head-label">Archive</span>
   </a><button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
@@ -556,27 +556,31 @@ return {list:list,refresh:refresh,change:change,verify:verify,describe:describe,
 <div class="page">
 <main class="library-main" id="library" tabindex="-1" aria-labelledby="shelf-title">
 <header class="shelf-head" id="shelf-top"><a class="breadcrumb" href="index.html">← Bookshelf</a>
-  <h1 id="shelf-title">Communication &amp; Relationships</h1><p class="lead">Speaking, listening and understanding other people.</p><p class="library-stats">3 readers</p>
+  <h1 id="shelf-title">Archive</h1><p class="lead">Books you have finished. Archived books are hidden from the bookshelf on every device; restore one to put it back.</p><p class="library-stats" data-archive-stats>Archived books</p>
 </header>
-<section class="recent" data-category="relationships" aria-labelledby="recent-title" hidden>
-  <h2 class="shelf-label" id="recent-title">Continue reading</h2><ol></ol>
-</section>
+<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories"><a href="aws.html">AWS</a><a href="engineering.html">Engineering</a><a href="work.html">Work &amp; Careers</a><a href="relationships.html">Communication &amp; Relationships</a><a href="money.html">Money</a><a href="learning.html">Learning &amp; Language</a><a href="thinking.html">Thinking &amp; Society</a><a href="life.html">Life &amp; Wellbeing</a><a class="archive-link" href="archive.html" aria-current="page">Archive</a></nav></details>
 <p class="library-feedback" aria-live="polite"></p>
-<details class="collection-menu"><summary>Browse collections</summary><nav class="category-nav" aria-label="Library categories"><a href="aws.html">AWS</a><a href="engineering.html">Engineering</a><a href="work.html">Work &amp; Careers</a><a href="relationships.html" aria-current="page">Communication &amp; Relationships</a><a href="money.html">Money</a><a href="learning.html">Learning &amp; Language</a><a href="thinking.html">Thinking &amp; Society</a><a href="life.html">Life &amp; Wellbeing</a><a class="archive-link" href="archive.html">Archive</a></nav></details><ul class="book-list"><li class="book-item" data-book-slug="book-pause-before-speaking"><a class="book-row" href="book-pause-before-speaking/ch00.html">
-  <span class="book-number" aria-hidden="true">01</span>
-  <span class="book-copy"><span class="book-title" lang="ja">一拍おいて話す</span><span class="book-blurb" lang="ja">口を開く前の数秒で信頼は決まる。指摘・報告・相談の場面で、話す前に何を確かめるか。</span></span>
-  <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-archive-book="book-pause-before-speaking" aria-label="Archive 一拍おいて話す">Archive</button></li>
-<li class="book-item" data-book-slug="book-being-heard"><a class="book-row" href="book-being-heard/ch00.html">
-  <span class="book-number" aria-hidden="true">02</span>
-  <span class="book-copy"><span class="book-title" lang="ja">話を聞いてもらうと、なぜ人は変わるのか</span><span class="book-blurb" lang="ja">カウンセリングで聞き手は何をしていて、相談した人はどう変わるのか。相談するときにも聞くときにも使える見方。</span></span>
-  <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-archive-book="book-being-heard" aria-label="Archive 話を聞いてもらうと、なぜ人は変わるのか">Archive</button></li>
-<li class="book-item" data-book-slug="book-adler-relationships"><a class="book-row" href="book-adler-relationships/ch00.html">
-  <span class="book-number" aria-hidden="true">03</span>
-  <span class="book-copy"><span class="book-title" lang="ja">アドラー心理学で人間関係をほどく</span><span class="book-blurb" lang="ja">過去の失敗、上司との関係、人からの評価。アドラー心理学の考え方を職場の場面に当てはめて、悩みをほどく。</span></span>
-  <span class="book-facts"><span>About 1 hour</span><span>7 pages</span><span>Japanese</span></span>
-  <span class="row-arrow" aria-hidden="true">→</span></a><button class="book-action" type="button" data-archive-book="book-adler-relationships" aria-label="Archive アドラー心理学で人間関係をほどく">Archive</button></li></ul><p class="empty-collection" hidden>Every book in this collection is archived. <a href="archive.html">Open the Archive</a></p>
+<section class="archive-section" aria-labelledby="archived-title">
+  <h2 class="shelf-label" id="archived-title">Archived books</h2>
+  <ul class="archive-list" data-archive-list></ul>
+  <p class="archive-empty">No archived books. Use Archive on a book in a collection to move it here.</p>
+  <p class="archive-sync" aria-live="polite"></p>
+</section>
+<section class="archive-section legacy-hidden" aria-labelledby="legacy-title" hidden>
+  <h2 class="shelf-label" id="legacy-title">Hidden on this device</h2>
+  <p class="archive-note">These books were hidden with the older Hide button, which only worked in this browser. Archive them to hide them on every device, or return them to the shelf.</p>
+  <ul class="archive-list" data-legacy-list></ul>
+</section>
+<section class="archive-section" id="access" aria-labelledby="access-title">
+  <h2 class="shelf-label" id="access-title">GitHub access</h2>
+  <p class="archive-note" data-access-status aria-live="polite">Archiving and restoring need a GitHub token in this browser.</p>
+  <p class="archive-note">Archive and Restore save <code>archive.json</code> in the tomada1114/iobsidian-site repository. Use a fine-grained personal access token limited to that repository, with Contents: Read and write. The token stays in this browser only; add it once on each device you archive from.</p>
+  <form class="access-form" data-access-form autocomplete="off">
+    <label for="access-token">Fine-grained token</label>
+    <div class="access-row"><input id="access-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…"><button class="library-action" type="submit">Save token</button></div>
+  </form>
+  <div class="access-more"><button class="library-action" type="button" data-access-clear hidden>Remove token from this browser</button><a href="https://github.com/settings/personal-access-tokens/new" rel="noopener">Create a token on GitHub</a></div>
+</section>
 </main>
 <footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div><div class="offline" hidden>
   <button class="save-btn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></svg><span class="save-label">Save all for offline</span></button>
