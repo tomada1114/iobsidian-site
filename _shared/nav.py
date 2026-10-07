@@ -375,15 +375,11 @@ def lang_attr(slug):
 
 def header(root, current=None, with_side=False, archive_current=False):
     """root: relative path from the page to Site/ ("" or "../" or "../../").
-    Bookshelf pages (with_side False) also link to the Archive; archive_current marks that page."""
+    archive_current is accepted for the Archive page; the Archive is linked from Browse collections."""
     label = next((label for slug, label, _ in READERS if slug == current), "")
     here = f'<span class="here"><span{lang_attr(current)}>{html.escape(label)}</span></span>' if with_side else ""
     btn = '\n  <button class="menu-btn" type="button" aria-controls="side" aria-expanded="false">Contents</button>' if with_side else ""
     caption = "" if with_side else '<span class="site-caption">Personal library</span>'
-    archive = "" if with_side else f"""<a class="head-link" href="{root}archive.html"{CUR if archive_current else ""} aria-label="Archive">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v4H3zM5 8v12h14V8M10 12h4"/></svg>
-    <span class="head-label">Archive</span>
-  </a>"""
     theme = """<button class="theme-btn" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" hidden>
     <svg class="theme-dark-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg>
     <svg class="theme-light-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -394,7 +390,7 @@ def header(root, current=None, with_side=False, archive_current=False):
     return f"""{skip}<header class="site-head" lang="en" data-root="{root}"{data}>
 <div class="bar">
   <a class="brand" href="{root}index.html"><svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5h5a6 6 0 0 1 4 1.5 6 6 0 0 1 4-1.5h5V20h-5a6 6 0 0 0-4 1.5A6 6 0 0 0 8 20H3zM12 6v15.5"/></svg>Bookshelf</a>{here}
-  <div class="head-actions">{caption}{archive}{theme}{btn}</div>
+  <div class="head-actions">{caption}{theme}{btn}</div>
 </div>
 </header>"""
 
@@ -794,7 +790,7 @@ def collection_menu(current=None):
 
 
 def shelf_footer():
-    return f"""<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a></div>{offline_box()}</footer>
+    return f"""<footer class="shelf-foot"><div><p>A personal library by tomada.</p><a href="#shelf-top">Back to top ↑</a> · <a href="{ARCHIVE_PAGE}">Archived books</a></div>{offline_box()}</footer>
 {catalogue()}
 {SHELF_JS}"""
 
