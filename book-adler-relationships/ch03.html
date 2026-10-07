@@ -619,7 +619,7 @@ function render(){if(busy)return;b.hidden=false;b.textContent=on()?"Restore to b
 b.addEventListener("click",async function(){if(busy)return;var next=!on();note.dataset.said="1";
   if(!A.token()){say("Archiving needs a GitHub token in this browser.","Set it up on the Archive page",page+"#access");return}
   busy=true;b.disabled=true;b.textContent=next?"Archiving…":"Restoring…";
-  try{await A.change(slug,next);next?say("Archived. It no longer appears on the bookshelf.","Open the Archive",page):say("Restored to the bookshelf.")}
+  try{await A.change(slug,next);if(next){say("Archived. Returning to the bookshelf…");location.assign(new URL((h.dataset.root||"./")+"index.html",location.href).href);return}say("Restored to the bookshelf.")}
   catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix?"Open the Archive page":"",page+"#access")}
   finally{busy=false;b.disabled=false;render()}});
 window.addEventListener("site-archive",render);render();
