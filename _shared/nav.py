@@ -23,8 +23,8 @@ SITE = pathlib.Path(__file__).resolve().parent.parent
 
 # (slug, short label for navigation and reading history, entry page inside the slug folder)
 READERS = [
-    ("new-testament", "新約聖書を読む", "ch00.html"),
-    ("new-testament-john", "ヨハネの福音書", "ch00.html"),
+    ("new-testament", "新約聖書を読む", ""),
+    ("new-testament/john", "ヨハネの福音書", "ch00.html"),
     ("1on1-architecture", "アーキテクチャ", "ch00.html"),
     ("1on1-api-types", "API と TypeScript", "ch00.html"),
     ("1on1-aws", "AWS の基礎", "ch00.html"),
@@ -183,7 +183,7 @@ var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&win
 (function(){var h=document.querySelector(".site-head"),s=h&&h.dataset.reader;if(!s||!document.body.classList.contains("has-side"))return;
 var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
 r=r.filter(function(e){return e&&e.s!==s});
-r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/(?:ch00|index)\.html$|\/$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
 try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
 (function(){var b=document.querySelector("[data-side-archive]"),A=window.siteArchive,h=document.querySelector(".site-head");if(!b||!A||!h)return;
@@ -199,7 +199,7 @@ b.addEventListener("click",async function(){if(busy)return;var next=!on();note.d
   catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix?"Open the Archive page":"",page+"#access")}
   finally{busy=false;b.disabled=false;render()}});
 window.addEventListener("site-archive",render);render();
-if(A.token()||/\/ch00\.html$/.test(location.pathname))A.refresh();
+if(A.token()||/\/(?:ch00|index)\.html$|\/$/.test(location.pathname))A.refresh();
 })();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
@@ -210,7 +210,7 @@ function saved(){try{return localStorage.getItem(K)}catch(e){return null}}
 function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
-function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+function isPage(u){return u.indexOf(root)===0&&/\.html$|\/$/.test(u)}
 async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
   var catalog=JSON.parse(source.textContent),skip=window.siteArchive?window.siteArchive.list():[],
     lists=await Promise.all(catalog.readers.filter(function(book){return skip.indexOf(book.slug)<0}).map(async function(book){
@@ -460,7 +460,7 @@ CATEGORY_PAGES = {
 LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
 BOOKS = {
     "new-testament": ("religion", "新約聖書を読む", "新約聖書の入口と読む前の地図", "27書の収録一覧と、人物・地域・習慣・言葉を理解するための短い案内。", "About 7 min", "", "ja"),
-    "new-testament-john": ("religion", "新約聖書を読む", "ヨハネの福音書", "全21章を現代の日本語で再構成。物語の流れ、文化的背景、重要な教えを一緒に読む。", "About 75 min", "", "ja"),
+    "new-testament/john": ("religion", "新約聖書を読む", "ヨハネの福音書", "全21章を現代の日本語で再構成。物語の流れ、文化的背景、重要な教えを一緒に読む。", "About 75 min", "", "ja"),
     "1on1-architecture": ("software", "エンジニアリング読本", "アーキテクチャ", "アーキテクチャは何のためにあるのか。依存のルール、ポートとアダプター、DDD、そしてどう選ぶか。", "About 57 min", "", "ja"),
     "1on1-api-types": ("software", "エンジニアリング読本", "API と TypeScript", "壊れにくい型と API の設計。境界でのパース、契約、バージョン管理、再送、オフラインまで。", "About 45 min", "", "ja"),
     "1on1-ops": ("software", "エンジニアリング読本", "運用と品質", "架空の語学アプリ Quickturn を例に、オブザーバビリティ、アラーム、SLO、テスト、デプロイ、データ保護、公開の準備を図解で読み解く12章。", "About 48 min", "", "ja"),
@@ -659,7 +659,7 @@ function renderRecent(){if(!box)return;
   var list=box.querySelector("ol");list.replaceChildren();var shown=0;
   recentEntries.forEach(function(e){if(!e||shown>=1||!books.has(e.s)||!Number.isFinite(e.at)||hidden.indexOf(e.s)>=0)return;
     var book=books.get(e.s),url;if(category&&book.category!==category)return;try{url=new URL(e.u,location.href)}catch(err){return}
-    var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||!url.pathname.endsWith(".html"))return;
+    var readerRoot=new URL("./",new URL(book.href,location.href));if(url.origin!==location.origin||!url.pathname.startsWith(readerRoot.pathname)||(!url.pathname.endsWith(".html")&&url.pathname!==readerRoot.pathname))return;
     var li=document.createElement("li"),a=document.createElement("a"),copy=document.createElement("span"),title=document.createElement("b"),page=document.createElement("span"),when=document.createElement("time"),arrow=document.createElement("span");
     li.dataset.bookSlug=book.slug;a.href=url.pathname;a.setAttribute("aria-label","Continue reading "+book.title+": "+(e.t||"Contents"));copy.className="resume-copy";
     title.textContent=book.title;title.lang=book.lang;page.textContent=e.t||"Contents";page.lang=e.t&&e.t!=="Contents"?book.lang:"en";

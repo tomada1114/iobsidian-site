@@ -1,0 +1,137 @@
+[
+  {
+    "slug": "matthew",
+    "title": "マタイの福音書",
+    "group": "gospels"
+  },
+  {
+    "slug": "mark",
+    "title": "マルコの福音書",
+    "group": "gospels"
+  },
+  {
+    "slug": "luke",
+    "title": "ルカの福音書",
+    "group": "gospels"
+  },
+  {
+    "slug": "john",
+    "title": "ヨハネの福音書",
+    "group": "gospels"
+  },
+  {
+    "slug": "acts",
+    "title": "使徒言行録（使徒の働き）",
+    "group": "acts"
+  },
+  {
+    "slug": "romans",
+    "title": "ローマの信徒への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "1-corinthians",
+    "title": "コリントの信徒への手紙一",
+    "group": "letters"
+  },
+  {
+    "slug": "2-corinthians",
+    "title": "コリントの信徒への手紙二",
+    "group": "letters"
+  },
+  {
+    "slug": "galatians",
+    "title": "ガラテヤの信徒への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "ephesians",
+    "title": "エフェソの信徒への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "philippians",
+    "title": "フィリピの信徒への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "colossians",
+    "title": "コロサイの信徒への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "1-thessalonians",
+    "title": "テサロニケの信徒への手紙一",
+    "group": "letters"
+  },
+  {
+    "slug": "2-thessalonians",
+    "title": "テサロニケの信徒への手紙二",
+    "group": "letters"
+  },
+  {
+    "slug": "1-timothy",
+    "title": "テモテへの手紙一",
+    "group": "letters"
+  },
+  {
+    "slug": "2-timothy",
+    "title": "テモテへの手紙二",
+    "group": "letters"
+  },
+  {
+    "slug": "titus",
+    "title": "テトスへの手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "philemon",
+    "title": "フィレモンへの手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "hebrews",
+    "title": "ヘブライ人への手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "james",
+    "title": "ヤコブの手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "1-peter",
+    "title": "ペトロの手紙一",
+    "group": "letters"
+  },
+  {
+    "slug": "2-peter",
+    "title": "ペトロの手紙二",
+    "group": "letters"
+  },
+  {
+    "slug": "1-john",
+    "title": "ヨハネの手紙一",
+    "group": "letters"
+  },
+  {
+    "slug": "2-john",
+    "title": "ヨハネの手紙二",
+    "group": "letters"
+  },
+  {
+    "slug": "3-john",
+    "title": "ヨハネの手紙三",
+    "group": "letters"
+  },
+  {
+    "slug": "jude",
+    "title": "ユダの手紙",
+    "group": "letters"
+  },
+  {
+    "slug": "revelation",
+    "title": "ヨハネの黙示録",
+    "group": "revelation"
+  }
+]

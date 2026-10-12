@@ -619,7 +619,7 @@ var c=document.querySelector(".side [aria-current]");if(c&&c.scrollIntoView&&win
 (function(){var h=document.querySelector(".site-head"),s=h&&h.dataset.reader;if(!s||!document.body.classList.contains("has-side"))return;
 var r;try{r=JSON.parse(localStorage.getItem("bookshelf:recent")||"[]")}catch(e){r=[]}if(!Array.isArray(r))r=[];
 r=r.filter(function(e){return e&&e.s!==s});
-r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/ch00\.html$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
+r.unshift({s:s,l:h.dataset.label,u:location.pathname,t:/\/(?:ch00|index)\.html$|\/$/.test(location.pathname)?"Contents":document.title.replace(/ \| .*$/,"").replace(/^.*? (\d\d) · /,"$1 · "),at:Date.now()});
 try{localStorage.setItem("bookshelf:recent",JSON.stringify(r.slice(0,8)))}catch(e){}
 })();
 (function(){var b=document.querySelector("[data-side-archive]"),A=window.siteArchive,h=document.querySelector(".site-head");if(!b||!A||!h)return;
@@ -635,7 +635,7 @@ b.addEventListener("click",async function(){if(busy)return;var next=!on();note.d
   catch(e){var fix=e.code==="token"||e.code==="auth"||e.code==="permission";say(A.describe(e),fix?"Open the Archive page":"",page+"#access")}
   finally{busy=false;b.disabled=false;render()}});
 window.addEventListener("site-archive",render);render();
-if(A.token()||/\/ch00\.html$/.test(location.pathname))A.refresh();
+if(A.token()||/\/(?:ch00|index)\.html$|\/$/.test(location.pathname))A.refresh();
 })();
 (function(){var h=document.querySelector(".site-head");if(!h||!("serviceWorker" in navigator)||!window.caches)return;
 var root=new URL(h.dataset.root||"./",location.href).href;
@@ -646,7 +646,7 @@ function saved(){try{return localStorage.getItem(K)}catch(e){return null}}
 function clean(u,base){u=new URL(u,base);return u.origin+u.pathname}
 function pages(doc,base){return Array.prototype.map.call(doc.querySelectorAll(".side ol a"),function(a){return clean(a.getAttribute("href"),base)})}
 function uniq(a){return a.filter(function(u,i){return a.indexOf(u)===i})}
-function isPage(u){return u.indexOf(root)===0&&/\.html$/.test(u)}
+function isPage(u){return u.indexOf(root)===0&&/\.html$|\/$/.test(u)}
 async function urls(){var source=document.getElementById("shelf-catalog");if(!source)throw new Error("Missing catalogue");
   var catalog=JSON.parse(source.textContent),skip=window.siteArchive?window.siteArchive.list():[],
     lists=await Promise.all(catalog.readers.filter(function(book){return skip.indexOf(book.slug)<0}).map(async function(book){
