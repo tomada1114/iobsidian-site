@@ -23,6 +23,8 @@ SITE = pathlib.Path(__file__).resolve().parent.parent
 
 # (slug, short label for navigation and reading history, entry page inside the slug folder)
 READERS = [
+    ("new-testament", "新約聖書を読む", "ch00.html"),
+    ("new-testament-john", "ヨハネの福音書", "ch00.html"),
     ("1on1-architecture", "アーキテクチャ", "ch00.html"),
     ("1on1-api-types", "API と TypeScript", "ch00.html"),
     ("1on1-aws", "AWS の基礎", "ch00.html"),
@@ -434,6 +436,7 @@ def chapter_items(src_dir):
 # ---------- bookshelf (index.html) ----------
 # Categories in display order: (key, heading, one-line note, page accent 1-4)
 CATEGORIES = [
+    ("religion", "Religion & Texts", "Scripture, religious traditions and their historical context.", 2),
     ("cloud-ai", "AWS", "Cloud foundations and building agents with AgentCore.", 2),
     ("software", "Engineering", "Architecture, code, APIs, production AI and operations.", 1),
     ("work", "Work & Careers", "Choosing work, building a career and leading teams.", 1),
@@ -444,6 +447,7 @@ CATEGORIES = [
     ("life", "Life & Wellbeing", "Time, habits, health and making room for life.", 4),
 ]
 CATEGORY_PAGES = {
+    "religion": "religion.html",
     "cloud-ai": "aws.html", "software": "engineering.html",
     "work": "work.html", "relationships": "relationships.html", "money": "money.html",
     "learning": "learning.html", "thinking": "thinking.html", "life": "life.html",
@@ -455,6 +459,8 @@ CATEGORY_PAGES = {
 # The page count is read from the reader's src/ (chapters other than ch00).
 LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
 BOOKS = {
+    "new-testament": ("religion", "新約聖書を読む", "新約聖書の入口と読む前の地図", "27書の収録一覧と、人物・地域・習慣・言葉を理解するための短い案内。", "About 7 min", "", "ja"),
+    "new-testament-john": ("religion", "新約聖書を読む", "ヨハネの福音書", "全21章を現代の日本語で再構成。物語の流れ、文化的背景、重要な教えを一緒に読む。", "About 75 min", "", "ja"),
     "1on1-architecture": ("software", "エンジニアリング読本", "アーキテクチャ", "アーキテクチャは何のためにあるのか。依存のルール、ポートとアダプター、DDD、そしてどう選ぶか。", "About 57 min", "", "ja"),
     "1on1-api-types": ("software", "エンジニアリング読本", "API と TypeScript", "壊れにくい型と API の設計。境界でのパース、契約、バージョン管理、再送、オフラインまで。", "About 45 min", "", "ja"),
     "1on1-ops": ("software", "エンジニアリング読本", "運用と品質", "架空の語学アプリ Quickturn を例に、オブザーバビリティ、アラーム、SLO、テスト、デプロイ、データ保護、公開の準備を図解で読み解く12章。", "About 48 min", "", "ja"),

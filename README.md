@@ -58,3 +58,5 @@
 | 論理はひとつではない（日本語・Quick Book・解説型） | `book-many-logics/ch00.html` |
 | 流行に左右されない作り手の心得（日本語・Quick Book・解説型） | `book-lasting-craft/ch00.html` |
 | 全部はできない前提で、時間を使う（日本語・Quick Book・解説型） | `book-finite-time/ch00.html` |
+| 新約聖書の入口と読む前の地図（日本語） | `new-testament/ch00.html` |
+| ヨハネの福音書・全21章（日本語） | `new-testament-john/ch00.html` |
