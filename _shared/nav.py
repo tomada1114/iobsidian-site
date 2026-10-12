@@ -460,7 +460,7 @@ CATEGORY_PAGES = {
 LANGS = {"en": ("English", "english"), "ja": ("Japanese", "japanese 日本語")}  # code -> (label, extra search words)
 BOOKS = {
     "new-testament": ("religion", "新約聖書を読む", "新約聖書の入口と読む前の地図", "27書の収録一覧と、人物・地域・習慣・言葉を理解するための短い案内。", "About 7 min", "", "ja"),
-    "new-testament/john": ("religion", "新約聖書を読む", "ヨハネの福音書", "全21章を現代の日本語で再構成。物語の流れ、文化的背景、重要な教えを一緒に読む。", "About 75 min", "", "ja"),
+    "new-testament/john": ("religion", "新約聖書を読む", "ヨハネの福音書", "全21章を、出来事と対話の流れを追える現代日本語の読み物に再構成。", "About 150 min", "", "ja"),
     "1on1-architecture": ("software", "エンジニアリング読本", "アーキテクチャ", "アーキテクチャは何のためにあるのか。依存のルール、ポートとアダプター、DDD、そしてどう選ぶか。", "About 57 min", "", "ja"),
     "1on1-api-types": ("software", "エンジニアリング読本", "API と TypeScript", "壊れにくい型と API の設計。境界でのパース、契約、バージョン管理、再送、オフラインまで。", "About 45 min", "", "ja"),
     "1on1-ops": ("software", "エンジニアリング読本", "運用と品質", "架空の語学アプリ Quickturn を例に、オブザーバビリティ、アラーム、SLO、テスト、デプロイ、データ保護、公開の準備を図解で読み解く12章。", "About 48 min", "", "ja"),
